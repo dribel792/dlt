@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fund Flow Mechanism — Nexo · Tangany · DLT</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3352;
+      --accent: #4f7cff;
+      --accent2: #a78bfa;
+      --green: #34d399;
+      --amber: #fbbf24;
+      --red: #f87171;
+      --text: #e2e8f0;
+      --muted: #8892b0;
+      --nexo: #4f7cff;
+      --tangany: #a78bfa;
+      --dlt: #34d399;
+      --user: #fbbf24;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+
+    /* ── Header ── */
+    header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+    header .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    header h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #e2e8f0 0%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 14px;
+    }
+    header p {
+      color: var(--muted);
+      max-width: 640px;
+      margin: 0 auto;
+      font-size: 0.95rem;
+    }
+    .doc-meta {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 20px;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .doc-meta span { display: flex; align-items: center; gap: 6px; }
+
+    /* ── Legend ── */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 48px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+    .legend-dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+    }
+
+    /* ── Section headers ── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .section-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .badge-original { background: rgba(79,124,255,0.15); color: var(--nexo); border: 1px solid rgba(79,124,255,0.3); }
+    .badge-new { background: rgba(52,211,153,0.15); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    /* ── Flow Diagram ── */
+    .diagram-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 40px;
+    }
+
+    .flow-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      position: relative;
+      margin-bottom: 32px;
+    }
+
+    .actor-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .actor-header {
+      width: 100%;
+      text-align: center;
+      padding: 12px 8px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .actor-user    { background: rgba(251,191,36,0.1);  color: var(--user);    border: 1px solid rgba(251,191,36,0.3); }
+    .actor-nexo    { background: rgba(79,124,255,0.1);  color: var(--nexo);    border: 1px solid rgba(79,124,255,0.3); }
+    .actor-tangany { background: rgba(167,139,250,0.1); color: var(--tangany); border: 1px solid rgba(167,139,250,0.3); }
+    .actor-dlt     { background: rgba(52,211,153,0.1);  color: var(--dlt);     border: 1px solid rgba(52,211,153,0.3); }
+
+    .actor-lifeline {
+      width: 2px;
+      flex: 1;
+      min-height: 20px;
+      background: repeating-linear-gradient(to bottom, var(--border) 0, var(--border) 6px, transparent 6px, transparent 12px);
+    }
+
+    /* ── Step Cards ── */
+    .steps-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 18px;
+      background: var(--surface2);
+      border-radius: 10px;
+      border-left: 3px solid transparent;
+      transition: border-color 0.2s;
+    }
+    .step:hover { border-left-color: var(--accent); }
+
+    .step-num {
+      flex-shrink: 0;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+    .step-user    { background: rgba(251,191,36,0.2);  color: var(--user); }
+    .step-nexo    { background: rgba(79,124,255,0.2);  color: var(--nexo); }
+    .step-tangany { background: rgba(167,139,250,0.2); color: var(--tangany); }
+    .step-dlt     { background: rgba(52,211,153,0.2);  color: var(--dlt); }
+    .step-settle  { background: rgba(248,113,113,0.2); color: var(--red); }
+
+    .step-content { flex: 1; }
+    .step-content strong { font-size: 0.88rem; display: block; margin-bottom: 3px; }
+    .step-content p { font-size: 0.82rem; color: var(--muted); }
+    .step-content .arrow-label {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      background: rgba(79,124,255,0.1);
+      color: var(--accent);
+      border: 1px solid rgba(79,124,255,0.2);
+    }
+    .step-content .arrow-label.green {
+      background: rgba(52,211,153,0.1);
+      color: var(--green);
+      border-color: rgba(52,211,153,0.2);
+    }
+    .step-content .arrow-label.amber {
+      background: rgba(251,191,36,0.1);
+      color: var(--amber);
+      border-color: rgba(251,191,36,0.2);
+    }
+    .step-content .arrow-label.purple {
+      background: rgba(167,139,250,0.1);
+      color: var(--tangany);
+      border-color: rgba(167,139,250,0.2);
+    }
+
+    /* ── SVG Flowchart ── */
+    .flowchart-wrap {
+      background: var(--surface2);
+      border-radius: 12px;
+      padding: 24px;
+      margin-top: 24px;
+      overflow-x: auto;
+    }
+
+    .flowchart-wrap svg {
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* ── Key Notes ── */
+    .note-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-top: 16px;
+    }
+    .note-box .note-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .note-box ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .note-box li {
+      font-size: 0.83rem;
+      color: var(--muted);
+      padding-left: 16px;
+      position: relative;
+    }
+    .note-box li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+    .note-box li strong { color: var(--text); }
+
+    /* ── Comparison Table ── */
+    .comparison {
+      margin-top: 48px;
+    }
+    .comparison h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+    }
+    thead th {
+      text-align: left;
+      padding: 10px 16px;
+      background: var(--surface2);
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    thead th:first-child { border-radius: 8px 0 0 0; }
+    thead th:last-child  { border-radius: 0 8px 0 0; }
+    tbody tr { border-bottom: 1px solid var(--border); }
+    tbody tr:hover { background: var(--surface2); }
+    tbody td { padding: 12px 16px; vertical-align: top; }
+    tbody td:first-child { color: var(--muted); font-weight: 500; }
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+    .tag-blue   { background: rgba(79,124,255,0.15); color: var(--nexo); }
+    .tag-green  { background: rgba(52,211,153,0.15); color: var(--green); }
+    .tag-amber  { background: rgba(251,191,36,0.15); color: var(--amber); }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 64px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    /* ── Divider ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 48px 0;
+    }
+
+    @media (max-width: 700px) {
+      header h1 { font-size: 1.6rem; }
+      .doc-meta { flex-direction: column; align-items: center; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <header>
+    <div class="eyebrow">Confidential · Internal Working Document</div>
+    <h1>Fund Flow Mechanism<br/>Nexo · Tangany · DLT</h1>
+    <p>Describes how client collateral moves between Nexo (lending platform), Tangany (qualified custodian), and DLT (derivatives platform) — covering both the original pledge model and the revised Nexo-centric snapshot model.</p>
+    <div class="doc-meta">
+      <span>📅 May 2026</span>
+      <span>📄 Working Draft v0.2</span>
+      <span>🔒 Confidential</span>
+    </div>
+  </header>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--user)"></div> User / Client</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--nexo)"></div> Nexo (Lending Platform)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--tangany)"></div> Tangany (Qualified Custodian)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--dlt)"></div> DLT (Derivatives Venue)</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SECTION 1 — ORIGINAL MODEL
+  ════════════════════════════════════════════════════ -->
+
+  <div class="section-header">
+    <div class="section-badge badge-original">Original Model</div>
+    <div class="section-title">Pledge & Repledge — No Physical Fund Movement</div>
+  </div>
+
+  <div class="diagram-card">
+    <p style="font-size:0.83rem; color:var(--muted); margin-bottom:24px;">
+      In this model, used margin is pledged by the user to DLT, which repledges it back to Nexo. No funds physically move between Nexo and DLT@Tangany — only PnL and funding rates settle T+1.
+    </p>
+
+    <div class="steps-container">
+
+      <div class="step">
+        <div class="step-num step-user">1</div>
+        <div class="step-content">
+          <strong>User holds funds in Nexo Lending</strong>
+          <p>Client's USDC is sitting in Nexo's lending product, earning yield. Not yet allocated to derivatives.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num step-nexo">2</div>
+        <div class="step-content">
+          <strong>User requests transfer to derivatives account</strong>
+          <p>User instructs Nexo to move <strong>5,000 USDC</strong> to their derivatives sub-account.</p>
+          <span class="arrow-label">User → Nexo: instruction</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num step-tangany">3</div>
+        <div class="step-content">
+          <strong>Physical settlement into Tangany (T+0 to T+3, or weekly)</strong>
+          <p>The 5,000 USDC moves into Tangany as the <strong>qualified custodian</strong> holding the client's collateral. Settlement can occur T+3 or batched weekly.</p>
+          <span class="arrow-label purple">Nexo → Tangany: 5,000 USDC (physical settlement)</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num step-dlt">4</div>
+        <div class="step-content">
+          <strong>User opens a leveraged position on DLT</strong>
+          <p>User opens a <strong>10,000 USDC notional</strong> position at <strong>5× leverage</strong>. Initial Margin required = <strong>2,000 USDC</strong> (20%).</p>
+          <span class="arrow-label green">Total collateral at Tangany: 5,000 USDC | Used margin: 2,000 USDC | Free margin: 3,000 USDC</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num step-user">5</div>
+        <div class="step-content">
+          <strong>User pledges used margin to DLT</strong>
+          <p>The 2,000 USDC of <em>used</em> (initial) margin is pledged by the user to DLT as collateral for the open position. DLT can <strong>only touch this pledged margin</strong> — unused collateral (3,000 USDC) is not accessible to DLT.</p>
+          <span class="arrow-label amber">User → DLT: pledge 2,000 USDC (legal / book-entry, no physical move)</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num step-nexo">6</div>
+        <div class="step-content">
+          <strong>DLT repledges margin back to Nexo</strong>
+          <p>DLT repledges the 2,000 USDC to Nexo. This creates a secured lending relationship: Nexo retains economic interest in the collateral while DLT holds the operational pledge.</p>
+          <span class="arrow-label">DLT → Nexo: repledge 2,000 USDC (legal / book-entry)</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num step-settle">↻</div>
+        <div class="step-content">
+          <strong>Daily settlement — PnL & Funding Rates (T+1)</strong>
+          <p>No funds move between Nexo and DLT@Tangany for the collateral itself. Only the <strong>net PnL and funding rate</strong> balances across all users and all trades are settled between Nexo and DLT on a T+1 basis.</p>
+          <span class="arrow-label amber">Nexo ↔ DLT: net PnL + funding rates (T+1)</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SVG Flowchart — Original Model -->
+    <div class="flowchart-wrap">
+      <svg width="960" height="560" viewBox="0 0 960 560" xmlns="http://www.w3.org/2000/svg" style="max-width:100%; height:auto;">
+        <defs>
+          <marker id="arrow-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#4f7cff"/>
+          </marker>
+          <marker id="arrow-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#34d399"/>
+          </marker>
+          <marker id="arrow-amber" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#fbbf24"/>
+          </marker>
+          <marker id="arrow-purple" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#a78bfa"/>
+          </marker>
+          <marker id="arrow-red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#f87171"/>
+          </marker>
+          <marker id="arrow-blue-rev" markerWidth="8" markerHeight="8" refX="2" refY="3" orient="auto">
+            <path d="M8,0 L8,6 L0,3 z" fill="#4f7cff"/>
+          </marker>
+        </defs>
+
+        <!-- Actor headers -->
+        <!-- User -->
+        <rect x="20" y="20" width="180" height="40" rx="8" fill="rgba(251,191,36,0.15)" stroke="rgba(251,191,36,0.4)" stroke-width="1.5"/>
+        <text x="110" y="45" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#fbbf24">USER / CLIENT</text>
+
+        <!-- Nexo -->
+        <rect x="270" y="20" width="180" height="40" rx="8" fill="rgba(79,124,255,0.15)" stroke="rgba(79,124,255,0.4)" stroke-width="1.5"/>
+        <text x="360" y="45" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#4f7cff">NEXO</text>
+
+        <!-- Tangany -->
+        <rect x="520" y="20" width="180" height="40" rx="8" fill="rgba(167,139,250,0.15)" stroke="rgba(167,139,250,0.4)" stroke-width="1.5"/>
+        <text x="610" y="45" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#a78bfa">TANGANY</text>
+
+        <!-- DLT -->
+        <rect x="770" y="20" width="170" height="40" rx="8" fill="rgba(52,211,153,0.15)" stroke="rgba(52,211,153,0.4)" stroke-width="1.5"/>
+        <text x="855" y="45" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#34d399">DLT</text>
+
+        <!-- Lifelines -->
+        <line x1="110" y1="60" x2="110" y2="540" stroke="#2e3352" stroke-width="1.5" stroke-dasharray="6,6"/>
+        <line x1="360" y1="60" x2="360" y2="540" stroke="#2e3352" stroke-width="1.5" stroke-dasharray="6,6"/>
+        <line x1="610" y1="60" x2="610" y2="540" stroke="#2e3352" stroke-width="1.5" stroke-dasharray="6,6"/>
+        <line x1="855" y1="60" x2="855" y2="540" stroke="#2e3352" stroke-width="1.5" stroke-dasharray="6,6"/>
+
+        <!-- Step 1 annotation -->
+        <rect x="30" y="75" width="160" height="36" rx="6" fill="rgba(251,191,36,0.08)" stroke="rgba(251,191,36,0.25)" stroke-width="1"/>
+        <text x="110" y="89" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#fbbf24" font-weight="600">① Holds 5,000 USDC</text>
+        <text x="110" y="103" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#8892b0">in Nexo Lending</text>
+
+        <!-- Step 2: User → Nexo instruction -->
+        <line x1="115" y1="145" x2="350" y2="145" stroke="#4f7cff" stroke-width="1.8" marker-end="url(#arrow-blue)"/>
+        <rect x="170" y="129" width="115" height="20" rx="4" fill="#0f1117"/>
+        <text x="228" y="143" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#4f7cff" font-weight="600">② Request: move 5k USDC</text>
+
+        <!-- Step 3: Nexo → Tangany -->
+        <line x1="365" y1="195" x2="600" y2="195" stroke="#a78bfa" stroke-width="1.8" marker-end="url(#arrow-purple)"/>
+        <rect x="418" y="179" width="130" height="20" rx="4" fill="#0f1117"/>
+        <text x="483" y="193" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#a78bfa" font-weight="600">③ Physical settlement T+0→T+3</text>
+        <rect x="523" y="207" width="175" height="30" rx="6" fill="rgba(167,139,250,0.08)" stroke="rgba(167,139,250,0.25)" stroke-width="1"/>
+        <text x="610" y="220" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#a78bfa" font-weight="600">5,000 USDC @ Tangany</text>
+        <text x="610" y="232" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892b0">(Qualified Custodian)</text>
+
+        <!-- Step 4: User opens position on DLT -->
+        <line x1="115" y1="270" x2="845" y2="270" stroke="#34d399" stroke-width="1.8" marker-end="url(#arrow-green)"/>
+        <rect x="350" y="254" width="200" height="20" rx="4" fill="#0f1117"/>
+        <text x="450" y="268" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#34d399" font-weight="600">④ Open 10k USDC position @ 5× leverage</text>
+        <rect x="760" y="282" width="190" height="40" rx="6" fill="rgba(52,211,153,0.08)" stroke="rgba(52,211,153,0.25)" stroke-width="1"/>
+        <text x="855" y="297" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#34d399" font-weight="600">Initial Margin = 2,000 USDC</text>
+        <text x="855" y="311" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892b0">Free margin = 3,000 USDC (DLT ✗)</text>
+
+        <!-- Step 5: Pledge User → DLT -->
+        <line x1="115" y1="355" x2="845" y2="355" stroke="#fbbf24" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#arrow-amber)"/>
+        <rect x="340" y="339" width="220" height="20" rx="4" fill="#0f1117"/>
+        <text x="450" y="353" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#fbbf24" font-weight="600">⑤ Pledge 2,000 USDC (book-entry, no physical move)</text>
+
+        <!-- Step 6: DLT repledge → Nexo -->
+        <line x1="845" y1="415" x2="370" y2="415" stroke="#4f7cff" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#arrow-blue-rev)"/>
+        <rect x="480" y="399" width="220" height="20" rx="4" fill="#0f1117"/>
+        <text x="590" y="413" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#4f7cff" font-weight="600">⑥ Repledge 2,000 USDC to Nexo (book-entry)</text>
+
+        <!-- Step 7: PnL settlement -->
+        <line x1="365" y1="480" x2="845" y2="480" stroke="#f87171" stroke-width="1.8" stroke-dasharray="4,4" marker-end="url(#arrow-red)"/>
+        <line x1="840" y1="490" x2="370" y2="490" stroke="#f87171" stroke-width="1.8" stroke-dasharray="4,4" marker-end="url(#arrow-red)"/>
+        <rect x="470" y="462" width="200" height="20" rx="4" fill="#0f1117"/>
+        <text x="570" y="476" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#f87171" font-weight="600">↻ Net PnL + Funding Rates (T+1)</text>
+        <text x="570" y="504" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892b0">No collateral movement — only cash settlement</text>
+
+        <!-- "No physical move" callout box -->
+        <rect x="20" y="392" width="210" height="56" rx="8" fill="rgba(248,113,113,0.08)" stroke="rgba(248,113,113,0.3)" stroke-width="1"/>
+        <text x="125" y="412" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#f87171" font-weight="700">⚠ No Physical Movement</text>
+        <text x="125" y="428" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892b0">Nexo ↔ DLT@Tangany:</text>
+        <text x="125" y="441" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892b0">pledge/repledge are legal only</text>
+      </svg>
+    </div>
+
+    <div class="note-box" style="margin-top:20px;">
+      <div class="note-title">Key Mechanics — Original Model</div>
+      <ul>
+        <li><strong>DLT access scope:</strong> DLT can only touch the <strong>used margin</strong> (2,000 USDC) pledged to it. The remaining 3,000 USDC free margin at Tangany is off-limits.</li>
+        <li><strong>No physical movement:</strong> The pledge and repledge are legal/book-entry arrangements. Funds stay at Tangany throughout.</li>
+        <li><strong>PnL settlement:</strong> Net gains and losses + funding rates across all users are cash-settled between Nexo and DLT on a T+1 basis.</li>
+        <li><strong>Custodian role:</strong> Tangany holds physical custody of all client collateral as the qualified custodian. Neither Nexo nor DLT takes direct custody.</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- ═══════════════════════════════════════════════════
+       SECTION 2 — NEW MODEL
+  ════════════════════════════════════════════════════ -->
+
+  <div class="section-header">
+    <div class="section-badge badge-new">Revised Model</div>
+    <div class="section-title">Nexo Snapshot-Driven — Funds Move to Nexo When Possible</div>
+  </div>
+
+  <div class="diagram-card">
+    <p style="font-size:0.83rem; color:var(--muted); margin-bottom:24px;">
+      In this updated model, Nexo takes periodic snapshots of used margin across all users. Instead of a legal pledge, Nexo physically moves funds between Tangany and Nexo based on the delta between snapshots. This maximises capital efficiency on Nexo's side while keeping unused margin safely at Tangany.
+    </p>
+
+    <div class="steps-container">
+
+      <div class="step">
+        <div class="step-num step-user">1</div>
+        <div class="step-content">
+          <strong>User holds funds in Nexo Lending</strong>
+          <p>Same starting point — client's USDC is in Nexo's lending product.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num step-nexo">2</div>
+        <div class="step-content">
+          <strong>User requests transfer to derivatives account</strong>
+          <p>User instructs Nexo to move <strong>5,000 USDC</strong> to their derivatives sub-account.</p>
+          <span class="arrow-label">User → Nexo: instruction</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num step-tangany">3</div>
+        <div class="step-content">
+          <strong>Physical settlement into Tangany (T+0 to T+3, or weekly)</strong>
+          <p>The 5,000 USDC moves into Tangany as the qualified custodian. Settlement window is T+3 or batched weekly.</p>
+          <span class="arrow-label purple">Nexo → Tangany: 5,000 USDC (physical settlement)</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num step-dlt">4</div>
+        <div class="step-content">
+          <strong>User opens a leveraged position on DLT</strong>
+          <p>User opens a <strong>10,000 USDC notional</strong> position at <strong>5× leverage</strong>. Initial Margin = <strong>2,000 USDC</strong>.</p>
+          <span class="arrow-label green">DLT records 2,000 USDC as used margin for this user</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num step-nexo">5</div>
+        <div class="step-content">
+          <strong>Nexo takes periodic snapshots of total used margin</strong>
+          <p>Nexo snapshots <strong>total used margin across all users</strong> on a defined cadence (hourly, daily, or weekly). The snapshot captures the aggregate of all open positions across all DLT users.</p>
+          <span class="arrow-label">Snapshot cadence: hourly / daily / weekly (configurable)</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num step-nexo">6</div>
+        <div class="step-content">
+          <strong>Nexo moves funds based on snapshot delta</strong>
+          <p>Nexo computes the delta between the current snapshot and the last one:</p>
+          <p style="margin-top:6px;">
+            • <strong>If used margin increased</strong> (more open positions): Nexo pulls funds <strong>from Tangany to Nexo</strong> equal to the delta<br/>
+            • <strong>If used margin decreased</strong> (positions closed): Nexo pushes funds <strong>from Nexo back to Tangany</strong> equal to the freed delta<br/>
+            • <strong>Net zero change</strong>: no movement required
+          </p>
+          <span class="arrow-label green">Tangany ↔ Nexo: delta amount (physical, batch)</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num step-settle">↻</div>
+        <div class="step-content">
+          <strong>Daily settlement — PnL & Funding Rates (T+1)</strong>
+          <p>Net PnL and funding rates across all users and all trades continue to settle between Nexo and DLT on a T+1 basis, same as the original model.</p>
+          <span class="arrow-label amber">Nexo ↔ DLT: net PnL + funding rates (T+1)</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SVG Flowchart — New Model -->
+    <div class="flowchart-wrap">
+      <svg width="960" height="620" viewBox="0 0 960 620" xmlns="http://www.w3.org/2000/svg" style="max-width:100%; height:auto;">
+        <defs>
+          <marker id="arrow-blue2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#4f7cff"/>
+          </marker>
+          <marker id="arrow-green2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#34d399"/>
+          </marker>
+          <marker id="arrow-amber2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#fbbf24"/>
+          </marker>
+          <marker id="arrow-purple2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#a78bfa"/>
+          </marker>
+          <marker id="arrow-red2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#f87171"/>
+          </marker>
+          <marker id="arrow-purple2-rev" markerWidth="8" markerHeight="8" refX="2" refY="3" orient="auto">
+            <path d="M8,0 L8,6 L0,3 z" fill="#a78bfa"/>
+          </marker>
+          <marker id="arrow-blue2-rev" markerWidth="8" markerHeight="8" refX="2" refY="3" orient="auto">
+            <path d="M8,0 L8,6 L0,3 z" fill="#4f7cff"/>
+          </marker>
+        </defs>
+
+        <!-- Actor headers -->
+        <rect x="20" y="20" width="160" height="40" rx="8" fill="rgba(251,191,36,0.15)" stroke="rgba(251,191,36,0.4)" stroke-width="1.5"/>
+        <text x="100" y="45" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#fbbf24">USER</text>
+
+        <rect x="240" y="20" width="180" height="40" rx="8" fill="rgba(79,124,255,0.15)" stroke="rgba(79,124,255,0.4)" stroke-width="1.5"/>
+        <text x="330" y="45" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#4f7cff">NEXO</text>
+
+        <rect x="490" y="20" width="190" height="40" rx="8" fill="rgba(167,139,250,0.15)" stroke="rgba(167,139,250,0.4)" stroke-width="1.5"/>
+        <text x="585" y="45" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#a78bfa">TANGANY</text>
+
+        <rect x="750" y="20" width="190" height="40" rx="8" fill="rgba(52,211,153,0.15)" stroke="rgba(52,211,153,0.4)" stroke-width="1.5"/>
+        <text x="845" y="45" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#34d399">DLT</text>
+
+        <!-- Lifelines -->
+        <line x1="100" y1="60" x2="100" y2="610" stroke="#2e3352" stroke-width="1.5" stroke-dasharray="6,6"/>
+        <line x1="330" y1="60" x2="330" y2="610" stroke="#2e3352" stroke-width="1.5" stroke-dasharray="6,6"/>
+        <line x1="585" y1="60" x2="585" y2="610" stroke="#2e3352" stroke-width="1.5" stroke-dasharray="6,6"/>
+        <line x1="845" y1="60" x2="845" y2="610" stroke="#2e3352" stroke-width="1.5" stroke-dasharray="6,6"/>
+
+        <!-- Step 1 box -->
+        <rect x="18" y="72" width="164" height="36" rx="6" fill="rgba(251,191,36,0.08)" stroke="rgba(251,191,36,0.25)" stroke-width="1"/>
+        <text x="100" y="87" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#fbbf24" font-weight="600">① Holds 5,000 USDC</text>
+        <text x="100" y="101" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#8892b0">in Nexo Lending</text>
+
+        <!-- Step 2: User → Nexo -->
+        <line x1="105" y1="148" x2="320" y2="148" stroke="#4f7cff" stroke-width="1.8" marker-end="url(#arrow-blue2)"/>
+        <rect x="140" y="132" width="145" height="20" rx="4" fill="#0f1117"/>
+        <text x="213" y="146" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#4f7cff" font-weight="600">② Request: move 5k USDC</text>
+
+        <!-- Step 3: Nexo → Tangany -->
+        <line x1="335" y1="200" x2="575" y2="200" stroke="#a78bfa" stroke-width="1.8" marker-end="url(#arrow-purple2)"/>
+        <rect x="388" y="184" width="140" height="20" rx="4" fill="#0f1117"/>
+        <text x="458" y="198" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#a78bfa" font-weight="600">③ 5,000 USDC → T+0/T+3</text>
+        <rect x="498" y="212" width="175" height="28" rx="6" fill="rgba(167,139,250,0.08)" stroke="rgba(167,139,250,0.25)" stroke-width="1"/>
+        <text x="585" y="225" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#a78bfa" font-weight="600">5,000 USDC @ Tangany</text>
+        <text x="585" y="236" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892b0">Qualified Custodian</text>
+
+        <!-- Step 4: User → DLT open position -->
+        <line x1="105" y1="278" x2="835" y2="278" stroke="#34d399" stroke-width="1.8" marker-end="url(#arrow-green2)"/>
+        <rect x="340" y="261" width="215" height="20" rx="4" fill="#0f1117"/>
+        <text x="448" y="275" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#34d399" font-weight="600">④ Open 10k USDC @ 5× → IM = 2,000 USDC</text>
+        <rect x="752" y="290" width="186" height="28" rx="6" fill="rgba(52,211,153,0.08)" stroke="rgba(52,211,153,0.25)" stroke-width="1"/>
+        <text x="845" y="303" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#34d399" font-weight="600">Records: used margin 2k USDC</text>
+        <text x="845" y="314" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892b0">per user / per position</text>
+
+        <!-- Step 5: Snapshot on Nexo side -->
+        <rect x="238" y="355" width="184" height="44" rx="8" fill="rgba(79,124,255,0.1)" stroke="rgba(79,124,255,0.35)" stroke-width="1.5"/>
+        <text x="330" y="373" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#4f7cff" font-weight="700">⑤ Nexo Snapshot</text>
+        <text x="330" y="388" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892b0">hourly / daily / weekly</text>
+        <text x="330" y="399" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892b0">Σ all users' used margin</text>
+
+        <!-- Step 6a: Used margin increased → pull from Tangany -->
+        <line x1="580" y1="370" x2="340" y2="370" stroke="#34d399" stroke-width="2" marker-end="url(#arrow-green2)"/>
+        <line x1="580" y1="370" x2="580" y2="370"/>
+
+        <!-- Conditional arrows for delta -->
+        <!-- Label for pull -->
+        <rect x="368" y="353" width="200" height="20" rx="4" fill="#0f1117"/>
+        <text x="468" y="367" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#34d399" font-weight="600">⑥A If Δ↑: Tangany → Nexo (pull used margin)</text>
+
+        <!-- Label for push -->
+        <line x1="335" y1="430" x2="575" y2="430" stroke="#a78bfa" stroke-width="2" marker-end="url(#arrow-purple2)"/>
+        <rect x="367" y="414" width="200" height="20" rx="4" fill="#0f1117"/>
+        <text x="467" y="428" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#a78bfa" font-weight="600">⑥B If Δ↓: Nexo → Tangany (push freed margin)</text>
+
+        <!-- "No move" case -->
+        <rect x="238" y="450" width="184" height="24" rx="6" fill="rgba(79,124,255,0.05)" stroke="rgba(79,124,255,0.15)" stroke-width="1"/>
+        <text x="330" y="466" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892b0">⑥C If Δ=0: no movement</text>
+
+        <!-- PnL settlement -->
+        <line x1="335" y1="532" x2="835" y2="532" stroke="#f87171" stroke-width="1.8" stroke-dasharray="4,4" marker-end="url(#arrow-red2)"/>
+        <line x1="840" y1="544" x2="340" y2="544" stroke="#f87171" stroke-width="1.8" stroke-dasharray="4,4" marker-end="url(#arrow-red2)"/>
+        <rect x="455" y="516" width="200" height="20" rx="4" fill="#0f1117"/>
+        <text x="555" y="530" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#f87171" font-weight="600">↻ Net PnL + Funding Rates (T+1)</text>
+        <text x="555" y="556" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892b0">Cash settled between Nexo ↔ DLT across all users</text>
+      </svg>
+    </div>
+
+    <div class="note-box" style="margin-top:20px;">
+      <div class="note-title">Key Mechanics — Revised Model</div>
+      <ul>
+        <li><strong>Snapshot-driven:</strong> Nexo aggregates used margin across all users at a configurable cadence (hourly/daily/weekly). No user-level action required.</li>
+        <li><strong>Delta movement only:</strong> Only the <em>change</em> in aggregate used margin triggers a physical fund move — not individual position opens/closes.</li>
+        <li><strong>Bidirectional:</strong> When positions are opened, funds move Tangany→Nexo. When positions close, freed margin returns Nexo→Tangany.</li>
+        <li><strong>Unused margin stays at Tangany:</strong> DLT's constraint is preserved — DLT can only touch actively-used margin, not free client collateral.</li>
+        <li><strong>PnL unchanged:</strong> T+1 net PnL + funding rate settlement between Nexo and DLT is identical to the original model.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       COMPARISON TABLE
+  ════════════════════════════════════════════════════ -->
+
+  <div class="comparison">
+    <h2>📊 Model Comparison</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>Original — Pledge / Repledge</th>
+          <th>Revised — Nexo Snapshot</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Collateral custody</td>
+          <td>Tangany throughout (no movement)</td>
+          <td>Tangany for idle; Nexo for used margin (periodic)</td>
+        </tr>
+        <tr>
+          <td>Fund movement trigger</td>
+          <td>T+3 / weekly (initial deposit only)</td>
+          <td>Snapshot delta (hourly / daily / weekly)</td>
+        </tr>
+        <tr>
+          <td>DLT margin mechanism</td>
+          <td>User pledge → DLT repledge (legal only)</td>
+          <td>Nexo physically holds used margin portion</td>
+        </tr>
+        <tr>
+          <td>Physical movement scope</td>
+          <td>Only initial deposit; no ongoing moves</td>
+          <td>Ongoing delta moves (Tangany ↔ Nexo)</td>
+        </tr>
+        <tr>
+          <td>DLT access constraint</td>
+          <td>Only pledged used margin</td>
+          <td>Only used margin (held at Nexo, not Tangany)</td>
+        </tr>
+        <tr>
+          <td>Operational complexity</td>
+          <td><span class="tag tag-green">Lower</span> — legal arrangements only</td>
+          <td><span class="tag tag-amber">Higher</span> — requires snapshot infra + treasury ops</td>
+        </tr>
+        <tr>
+          <td>Capital efficiency for Nexo</td>
+          <td><span class="tag tag-amber">Lower</span> — margin stays at Tangany</td>
+          <td><span class="tag tag-green">Higher</span> — used margin flows back to Nexo</td>
+        </tr>
+        <tr>
+          <td>PnL / funding settlement</td>
+          <td>T+1 net (Nexo ↔ DLT)</td>
+          <td>T+1 net (Nexo ↔ DLT) — unchanged</td>
+        </tr>
+        <tr>
+          <td>User experience</td>
+          <td>Transparent (no action after open)</td>
+          <td>Transparent (snapshot is automatic)</td>
+        </tr>
+        <tr>
+          <td>Regulatory treatment</td>
+          <td>Pledge / repledge (securities law)</td>
+          <td>Physical custody transfer (simpler)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       WORKED EXAMPLE
+  ════════════════════════════════════════════════════ -->
+  <div style="margin-top:48px;">
+    <h2 style="font-size:1.1rem; font-weight:700; margin-bottom:20px;">🔢 Worked Example — Revised Model (Single User)</h2>
+    <div class="diagram-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Event</th>
+            <th>Used Margin (All Users)</th>
+            <th>Δ vs Last Snapshot</th>
+            <th>Fund Movement</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>T+0</td>
+            <td>5,000 USDC deposited → Tangany</td>
+            <td>0 USDC</td>
+            <td>—</td>
+            <td>Nexo → Tangany: 5,000 USDC</td>
+          </tr>
+          <tr>
+            <td>T+1 (snapshot 1)</td>
+            <td>User opens 10k position @5× (IM = 2,000)</td>
+            <td>2,000 USDC</td>
+            <td><span class="tag tag-green">+2,000</span></td>
+            <td>Tangany → Nexo: 2,000 USDC</td>
+          </tr>
+          <tr>
+            <td>T+2 (snapshot 2)</td>
+            <td>No new positions, no closes</td>
+            <td>2,000 USDC</td>
+            <td>0</td>
+            <td>No movement</td>
+          </tr>
+          <tr>
+            <td>T+3 (snapshot 3)</td>
+            <td>User closes position (margin freed)</td>
+            <td>0 USDC</td>
+            <td><span class="tag tag-amber">-2,000</span></td>
+            <td>Nexo → Tangany: 2,000 USDC</td>
+          </tr>
+          <tr>
+            <td>T+4 (daily)</td>
+            <td>Net PnL settlement</td>
+            <td>—</td>
+            <td>—</td>
+            <td>Nexo ↔ DLT: net PnL + funding (T+1)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- ═══════════════════════════════════════════════════
+       SECTION 3 — IDEAL MODEL
+  ════════════════════════════════════════════════════ -->
+
+  <div class="section-header">
+    <div class="section-badge" style="background:rgba(248,113,113,0.12);color:#f87171;border:1px solid rgba(248,113,113,0.3);">Ideal Model ⚠ Regulatory Risk</div>
+    <div class="section-title">No Funds Leave Nexo Lending — Full In-House Custody</div>
+  </div>
+
+  <div class="diagram-card" style="border-color: rgba(248,113,113,0.25);">
+
+    <div style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.25);border-radius:10px;padding:14px 18px;margin-bottom:24px;">
+      <p style="font-size:0.83rem;color:#f87171;font-weight:700;margin-bottom:6px;">⚠ Regulatory Concern</p>
+      <p style="font-size:0.82rem;color:var(--muted);">If funds never leave Nexo Lending, Nexo effectively holds and controls the derivatives collateral — potentially putting Nexo in the role of <strong style="color:var(--text);">collateral custodian</strong> for the derivatives product. This may require Nexo to hold additional regulatory licences (e.g. qualified custodian status for derivatives collateral) and could conflict with Tangany's role. Legal and compliance review required before implementation.</p>
+    </div>
+
+    <p style="font-size:0.83rem; color:var(--muted); margin-bottom:24px)">
+      Nexo's ideal outcome: client funds stay within Nexo Lending throughout the lifecycle. Tangany is bypassed entirely. The derivatives account is a <em>ledger sub-account</em> within Nexo, not a separate custodial wallet.
+    </p>
+
+    <div class="steps-container">
+
+      <div class="step">
+        <div class="step-num step-user">1</div>
+        <div class="step-content">
+          <strong>User holds funds in Nexo Lending</strong>
+          <p>Client's 5,000 USDC is in Nexo's lending product, earning yield. This is the starting state.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num step-nexo">2</div>
+        <div class="step-content">
+          <strong>User requests allocation to derivatives account</strong>
+          <p>User requests Nexo to move <strong>5,000 USDC</strong> to their derivatives sub-account. Nexo performs an <em>internal ledger transfer only</em> — no funds leave Nexo's balance sheet.</p>
+          <span class="arrow-label">Nexo internal: re-label 5,000 USDC → derivatives sub-account (book-entry)</span>
+        </div>
+      </div>
+
+      <div class="step" style="border-left-color: rgba(248,113,113,0.4); background:rgba(248,113,113,0.04);">
+        <div class="step-num" style="background:rgba(248,113,113,0.2);color:#f87171;">✗</div>
+        <div class="step-content">
+          <strong style="color:#f87171;">Step 3 eliminated — no Tangany movement</strong>
+          <p>Funds do <strong>not</strong> move to Tangany. Tangany is not involved. Nexo retains physical custody of all client collateral on its own balance sheet.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num step-dlt">4</div>
+        <div class="step-content">
+          <strong>User opens a leveraged position on DLT</strong>
+          <p>User opens a <strong>10,000 USDC notional</strong> position at <strong>5× leverage</strong>. Initial Margin = <strong>2,000 USDC</strong>. Nexo's internal system marks 2,000 USDC as encumbered / used margin.</p>
+          <span class="arrow-label green">Nexo internal: 2,000 USDC flagged as used margin | 3,000 USDC remains free</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num step-settle">↻</div>
+        <div class="step-content">
+          <strong>PnL & Funding Rate settlement (T+1)</strong>
+          <p>Net PnL and funding rates across all users settle between Nexo and DLT on T+1 — same as all other models.</p>
+          <span class="arrow-label amber">Nexo ↔ DLT: net PnL + funding rates (T+1)</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SVG — Ideal Model -->
+    <div class="flowchart-wrap" style="margin-top:24px;">
+      <svg width="960" height="420" viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;">
+        <defs>
+          <marker id="arrow-b3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#4f7cff"/></marker>
+          <marker id="arrow-g3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#34d399"/></marker>
+          <marker id="arrow-r3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#f87171"/></marker>
+        </defs>
+
+        <!-- Actors -->
+        <rect x="20" y="20" width="160" height="40" rx="8" fill="rgba(251,191,36,0.15)" stroke="rgba(251,191,36,0.4)" stroke-width="1.5"/>
+        <text x="100" y="45" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#fbbf24">USER</text>
+
+        <rect x="240" y="20" width="200" height="40" rx="8" fill="rgba(79,124,255,0.15)" stroke="rgba(79,124,255,0.4)" stroke-width="1.5"/>
+        <text x="340" y="38" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#4f7cff">NEXO</text>
+        <text x="340" y="54" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892b0">(Lending + Derivatives custody)</text>
+
+        <!-- Tangany — crossed out -->
+        <rect x="510" y="20" width="180" height="40" rx="8" fill="rgba(167,139,250,0.05)" stroke="rgba(167,139,250,0.15)" stroke-width="1.5" stroke-dasharray="4,4"/>
+        <text x="600" y="45" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="400" fill="rgba(167,139,250,0.35)">TANGANY</text>
+        <line x1="510" y1="20" x2="690" y2="60" stroke="#f87171" stroke-width="2"/>
+        <line x1="690" y1="20" x2="510" y2="60" stroke="#f87171" stroke-width="2"/>
+
+        <rect x="760" y="20" width="180" height="40" rx="8" fill="rgba(52,211,153,0.15)" stroke="rgba(52,211,153,0.4)" stroke-width="1.5"/>
+        <text x="850" y="45" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#34d399">DLT</text>
+
+        <!-- Lifelines -->
+        <line x1="100" y1="60" x2="100" y2="400" stroke="#2e3352" stroke-width="1.5" stroke-dasharray="6,6"/>
+        <line x1="340" y1="60" x2="340" y2="400" stroke="#2e3352" stroke-width="1.5" stroke-dasharray="6,6"/>
+        <line x1="600" y1="60" x2="600" y2="400" stroke="rgba(46,51,82,0.35)" stroke-width="1" stroke-dasharray="4,8"/>
+        <line x1="850" y1="60" x2="850" y2="400" stroke="#2e3352" stroke-width="1.5" stroke-dasharray="6,6"/>
+
+        <!-- Step 1 box -->
+        <rect x="18" y="72" width="164" height="36" rx="6" fill="rgba(251,191,36,0.08)" stroke="rgba(251,191,36,0.25)" stroke-width="1"/>
+        <text x="100" y="87" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#fbbf24" font-weight="600">① Holds 5,000 USDC</text>
+        <text x="100" y="101" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#8892b0">in Nexo Lending</text>
+
+        <!-- Step 2: Internal book entry -->
+        <line x1="105" y1="150" x2="325" y2="150" stroke="#4f7cff" stroke-width="1.8" marker-end="url(#arrow-b3)"/>
+        <rect x="120" y="134" width="190" height="20" rx="4" fill="#0f1117"/>
+        <text x="215" y="148" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#4f7cff" font-weight="600">② Request derivatives allocation</text>
+        <!-- Internal loop arrow on Nexo -->
+        <path d="M 350 165 C 420 165 420 205 350 205" stroke="#4f7cff" stroke-width="1.5" fill="none" stroke-dasharray="4,3" marker-end="url(#arrow-b3)"/>
+        <text x="430" y="185" font-family="Inter,sans-serif" font-size="9" fill="#4f7cff">Internal ledger only</text>
+        <text x="430" y="197" font-family="Inter,sans-serif" font-size="9" fill="#8892b0">No funds leave Nexo</text>
+
+        <!-- Step 3: Tangany crossed out -->
+        <text x="600" y="200" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="rgba(248,113,113,0.5)">NOT USED</text>
+
+        <!-- Step 4: User opens position on DLT -->
+        <line x1="105" y1="255" x2="840" y2="255" stroke="#34d399" stroke-width="1.8" marker-end="url(#arrow-g3)"/>
+        <rect x="330" y="238" width="230" height="20" rx="4" fill="#0f1117"/>
+        <text x="445" y="252" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#34d399" font-weight="600">④ Open 10k USDC @ 5× → IM = 2,000 USDC</text>
+        <!-- Nexo internal flag -->
+        <rect x="248" y="268" width="184" height="28" rx="6" fill="rgba(79,124,255,0.08)" stroke="rgba(79,124,255,0.25)" stroke-width="1"/>
+        <text x="340" y="281" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#4f7cff" font-weight="600">Nexo marks 2,000 USDC encumbered</text>
+        <text x="340" y="292" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892b0">3,000 USDC remains free (on Nexo)</text>
+
+        <!-- PnL settlement -->
+        <line x1="345" y1="352" x2="840" y2="352" stroke="#f87171" stroke-width="1.8" stroke-dasharray="4,4" marker-end="url(#arrow-r3)"/>
+        <line x1="845" y1="364" x2="350" y2="364" stroke="#f87171" stroke-width="1.8" stroke-dasharray="4,4" marker-end="url(#arrow-r3)"/>
+        <rect x="455" y="336" width="200" height="20" rx="4" fill="#0f1117"/>
+        <text x="555" y="350" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#f87171" font-weight="600">↻ Net PnL + Funding Rates (T+1)</text>
+
+        <!-- Regulatory warning box -->
+        <rect x="18" y="295" width="210" height="50" rx="8" fill="rgba(248,113,113,0.08)" stroke="rgba(248,113,113,0.35)" stroke-width="1.5"/>
+        <text x="123" y="313" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#f87171" font-weight="700">⚠ Regulatory Risk</text>
+        <text x="123" y="328" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892b0">Nexo may become collateral</text>
+        <text x="123" y="340" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892b0">custodian for derivatives</text>
+      </svg>
+    </div>
+
+    <div class="note-box" style="margin-top:20px; border-color:rgba(248,113,113,0.2);">
+      <div class="note-title">⚠ Why This Likely Doesn't Work Regulatorily</div>
+      <ul>
+        <li><strong>Collateral custody creep:</strong> By holding and controlling derivatives margin on its own balance sheet, Nexo assumes the legal role of collateral custodian — a function typically requiring separate regulatory approval (e.g. qualified custodian licence under MiFID II, EMIR, or equivalent).</li>
+        <li><strong>Conflict of interest:</strong> Nexo is simultaneously the lender (Nexo Lending) and the collateral holder for a derivatives venue — a structural conflict regulators are sensitive to.</li>
+        <li><strong>Commingling risk:</strong> Client derivatives collateral sitting inside Nexo's lending book creates commingling exposure — regulators typically require segregation.</li>
+        <li><strong>Tangany's role:</strong> Tangany exists precisely to provide that third-party qualified custodian buffer. Removing Tangany removes the structural separation that makes the original model regulatorily defensible.</li>
+        <li><strong>Recommendation:</strong> Treat this model as a theoretical optimum that requires a full legal and compliance review before any discussion with Nexo's regulatory team.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- UPDATE COMPARISON TABLE -->
+
+  <!-- FOOTER -->
+  <footer>
+    <p>Nexo · Tangany · DLT — Fund Flow Working Document &nbsp;|&nbsp; Confidential &nbsp;|&nbsp; May 2026</p>
+    <p style="margin-top:6px;">This document is a working draft for internal discussion. Not for external distribution without review.</p>
+  </footer>
+
+</div>
+</body>
+</html>
