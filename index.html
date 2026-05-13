@@ -375,7 +375,7 @@
 
   <div class="diagram-card">
     <p style="font-size:0.83rem; color:var(--muted); margin-bottom:24px;">
-      In this model, used margin is pledged by the user to DLT, which repledges it back to Nexo. No funds physically move between Nexo and DLT@Tangany — only PnL and funding rates settle T+1.
+      In this model, used margin is pledged by the user to DLT, which repledges it back to Nexo. Collateral stays at Tangany throughout — no physical movement between Nexo, Tangany, or DLT for the pledged margin. Net PnL and funding rates settle T+1 between <strong>Nexo and Tangany</strong> (DLT is the venue computing PnL; Tangany is the custodian holding the cash).
     </p>
 
     <div class="steps-container">
@@ -437,8 +437,8 @@
         <div class="step-num step-settle">↻</div>
         <div class="step-content">
           <strong>Daily settlement — PnL & Funding Rates (T+1)</strong>
-          <p>No funds move between Nexo and DLT@Tangany for the collateral itself. Only the <strong>net PnL and funding rate</strong> balances across all users and all trades are settled between Nexo and DLT on a T+1 basis.</p>
-          <span class="arrow-label amber">Nexo ↔ DLT: net PnL + funding rates (T+1)</span>
+          <p>Pledged collateral stays at Tangany — no physical movement. Only the <strong>net PnL and funding rate</strong> balances across all users settle <strong>Nexo ↔ Tangany</strong> (cash leg) on a T+1 basis. DLT instructs settlement; Tangany executes the cash transfer.</p>
+          <span class="arrow-label amber">Nexo ↔ Tangany: net PnL + funding rates (T+1)</span>
         </div>
       </div>
 
@@ -527,18 +527,18 @@
         <rect x="480" y="399" width="220" height="20" rx="4" fill="#0f1117"/>
         <text x="590" y="413" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#4f7cff" font-weight="600">⑥ Repledge 2,000 USDC to Nexo (book-entry)</text>
 
-        <!-- Step 7: PnL settlement -->
-        <line x1="365" y1="480" x2="845" y2="480" stroke="#f87171" stroke-width="1.8" stroke-dasharray="4,4" marker-end="url(#arrow-red)"/>
-        <line x1="840" y1="490" x2="370" y2="490" stroke="#f87171" stroke-width="1.8" stroke-dasharray="4,4" marker-end="url(#arrow-red)"/>
-        <rect x="470" y="462" width="200" height="20" rx="4" fill="#0f1117"/>
-        <text x="570" y="476" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#f87171" font-weight="600">↻ Net PnL + Funding Rates (T+1)</text>
-        <text x="570" y="504" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892b0">No collateral movement — only cash settlement</text>
+        <!-- Step 7: PnL settlement Nexo ↔ Tangany -->
+        <line x1="365" y1="480" x2="600" y2="480" stroke="#f87171" stroke-width="1.8" stroke-dasharray="4,4" marker-end="url(#arrow-red)"/>
+        <line x1="595" y1="490" x2="370" y2="490" stroke="#f87171" stroke-width="1.8" stroke-dasharray="4,4" marker-end="url(#arrow-red)"/>
+        <rect x="390" y="462" width="200" height="20" rx="4" fill="#0f1117"/>
+        <text x="485" y="476" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#f87171" font-weight="600">↻ Net PnL + Funding Rates (T+1)</text>
+        <text x="485" y="490" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892b0">Nexo ↔ Tangany — cash settlement only</text>
 
         <!-- "No physical move" callout box -->
         <rect x="20" y="392" width="210" height="56" rx="8" fill="rgba(248,113,113,0.08)" stroke="rgba(248,113,113,0.3)" stroke-width="1"/>
         <text x="125" y="412" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#f87171" font-weight="700">⚠ No Physical Movement</text>
-        <text x="125" y="428" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892b0">Nexo ↔ DLT@Tangany:</text>
-        <text x="125" y="441" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892b0">pledge/repledge are legal only</text>
+        <text x="125" y="428" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892b0">Pledge/repledge are book-entry</text>
+        <text x="125" y="441" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892b0">Cash stays at Tangany</text>
       </svg>
     </div>
 
@@ -547,7 +547,7 @@
       <ul>
         <li><strong>DLT access scope:</strong> DLT can only touch the <strong>used margin</strong> (2,000 USDC) pledged to it. The remaining 3,000 USDC free margin at Tangany is off-limits.</li>
         <li><strong>No physical movement:</strong> The pledge and repledge are legal/book-entry arrangements. Funds stay at Tangany throughout.</li>
-        <li><strong>PnL settlement:</strong> Net gains and losses + funding rates across all users are cash-settled between Nexo and DLT on a T+1 basis.</li>
+        <li><strong>PnL settlement:</strong> Net gains and losses + funding rates across all users are cash-settled between <strong>Nexo and Tangany</strong> on a T+1 basis.</li>
         <li><strong>Custodian role:</strong> Tangany holds physical custody of all client collateral as the qualified custodian. Neither Nexo nor DLT takes direct custody.</li>
       </ul>
     </div>
@@ -633,8 +633,8 @@
         <div class="step-num step-settle">↻</div>
         <div class="step-content">
           <strong>Daily settlement — PnL & Funding Rates (T+1)</strong>
-          <p>Net PnL and funding rates across all users and all trades continue to settle between Nexo and DLT on a T+1 basis, same as the original model.</p>
-          <span class="arrow-label amber">Nexo ↔ DLT: net PnL + funding rates (T+1)</span>
+          <p>Net PnL and funding rates across all users and all trades settle between <strong>Nexo and Tangany</strong> on a T+1 basis.</p>
+          <span class="arrow-label amber">Nexo ↔ Tangany: net PnL + funding rates (T+1)</span>
         </div>
       </div>
 
@@ -736,12 +736,12 @@
         <rect x="238" y="450" width="184" height="24" rx="6" fill="rgba(79,124,255,0.05)" stroke="rgba(79,124,255,0.15)" stroke-width="1"/>
         <text x="330" y="466" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892b0">⑥C If Δ=0: no movement</text>
 
-        <!-- PnL settlement -->
-        <line x1="335" y1="532" x2="835" y2="532" stroke="#f87171" stroke-width="1.8" stroke-dasharray="4,4" marker-end="url(#arrow-red2)"/>
-        <line x1="840" y1="544" x2="340" y2="544" stroke="#f87171" stroke-width="1.8" stroke-dasharray="4,4" marker-end="url(#arrow-red2)"/>
-        <rect x="455" y="516" width="200" height="20" rx="4" fill="#0f1117"/>
-        <text x="555" y="530" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#f87171" font-weight="600">↻ Net PnL + Funding Rates (T+1)</text>
-        <text x="555" y="556" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892b0">Cash settled between Nexo ↔ DLT across all users</text>
+        <!-- PnL settlement: Nexo ↔ Tangany -->
+        <line x1="335" y1="532" x2="575" y2="532" stroke="#f87171" stroke-width="1.8" stroke-dasharray="4,4" marker-end="url(#arrow-red2)"/>
+        <line x1="570" y1="544" x2="340" y2="544" stroke="#f87171" stroke-width="1.8" stroke-dasharray="4,4" marker-end="url(#arrow-red2)"/>
+        <rect x="360" y="516" width="220" height="20" rx="4" fill="#0f1117"/>
+        <text x="470" y="530" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#f87171" font-weight="600">↻ Net PnL + Funding Rates (T+1)</text>
+        <text x="470" y="556" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892b0">Cash settled: Nexo ↔ Tangany across all users</text>
       </svg>
     </div>
 
@@ -752,7 +752,7 @@
         <li><strong>Delta movement only:</strong> Only the <em>change</em> in aggregate used margin triggers a physical fund move — not individual position opens/closes.</li>
         <li><strong>Bidirectional:</strong> When positions are opened, funds move Tangany→Nexo. When positions close, freed margin returns Nexo→Tangany.</li>
         <li><strong>Unused margin stays at Tangany:</strong> DLT's constraint is preserved — DLT can only touch actively-used margin, not free client collateral.</li>
-        <li><strong>PnL unchanged:</strong> T+1 net PnL + funding rate settlement between Nexo and DLT is identical to the original model.</li>
+        <li><strong>PnL settlement:</strong> T+1 net PnL + funding rate settlement runs between <strong>Nexo and Tangany</strong>.</li>
       </ul>
     </div>
   </div>
@@ -809,8 +809,8 @@
         </tr>
         <tr>
           <td>PnL / funding settlement</td>
-          <td>T+1 net (Nexo ↔ DLT)</td>
-          <td>T+1 net (Nexo ↔ DLT) — unchanged</td>
+          <td>T+1 net (Nexo ↔ Tangany)</td>
+          <td>T+1 net (Nexo ↔ Tangany) — unchanged</td>
         </tr>
         <tr>
           <td>User experience</td>
@@ -876,7 +876,7 @@
             <td>Net PnL settlement</td>
             <td>—</td>
             <td>—</td>
-            <td>Nexo ↔ DLT: net PnL + funding (T+1)</td>
+            <td>Nexo ↔ Tangany: net PnL + funding (T+1)</td>
           </tr>
         </tbody>
       </table>
@@ -945,8 +945,8 @@
         <div class="step-num step-settle">↻</div>
         <div class="step-content">
           <strong>PnL & Funding Rate settlement (T+1)</strong>
-          <p>Net PnL and funding rates across all users settle between Nexo and DLT on T+1 — same as all other models.</p>
-          <span class="arrow-label amber">Nexo ↔ DLT: net PnL + funding rates (T+1)</span>
+          <p>Net PnL and funding rates across all users settle between Nexo and Tangany on T+1 — same as all other models.</p>
+          <span class="arrow-label amber">Nexo ↔ Tangany: net PnL + funding rates (T+1)</span>
         </div>
       </div>
 
@@ -1010,11 +1010,11 @@
         <text x="340" y="281" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#4f7cff" font-weight="600">Nexo marks 2,000 USDC encumbered</text>
         <text x="340" y="292" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892b0">3,000 USDC remains free (on Nexo)</text>
 
-        <!-- PnL settlement -->
-        <line x1="345" y1="352" x2="840" y2="352" stroke="#f87171" stroke-width="1.8" stroke-dasharray="4,4" marker-end="url(#arrow-r3)"/>
-        <line x1="845" y1="364" x2="350" y2="364" stroke="#f87171" stroke-width="1.8" stroke-dasharray="4,4" marker-end="url(#arrow-r3)"/>
-        <rect x="455" y="336" width="200" height="20" rx="4" fill="#0f1117"/>
-        <text x="555" y="350" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#f87171" font-weight="600">↻ Net PnL + Funding Rates (T+1)</text>
+        <!-- PnL settlement: Nexo ↔ Tangany (ideal model - Tangany dimmed but still settlement counterparty) -->
+        <line x1="345" y1="352" x2="595" y2="352" stroke="#f87171" stroke-width="1.8" stroke-dasharray="4,4" marker-end="url(#arrow-r3)"/>
+        <line x1="590" y1="364" x2="350" y2="364" stroke="#f87171" stroke-width="1.8" stroke-dasharray="4,4" marker-end="url(#arrow-r3)"/>
+        <rect x="360" y="336" width="230" height="20" rx="4" fill="#0f1117"/>
+        <text x="475" y="350" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#f87171" font-weight="600">↻ Net PnL + Funding Rates: Nexo ↔ Tangany (T+1)</text>
 
         <!-- Regulatory warning box -->
         <rect x="18" y="295" width="210" height="50" rx="8" fill="rgba(248,113,113,0.08)" stroke="rgba(248,113,113,0.35)" stroke-width="1.5"/>
