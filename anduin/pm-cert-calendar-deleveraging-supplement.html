@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prediction-Market KO Certificate — Calendar Deleveraging Supplement</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Georgia', serif; background: #fafaf8; color: #1a1a1a; line-height: 1.75; font-size: 16px; }
+  .page { max-width: 860px; margin: 0 auto; padding: 60px 48px 100px; }
+  h1 { font-size: 28px; font-weight: normal; line-height: 1.3; margin: 0 0 20px; border-bottom: 2px solid #1a1a1a; padding-bottom: 16px; }
+  h2 { font-size: 20px; font-weight: normal; margin: 52px 0 18px; padding-bottom: 8px; border-bottom: 1px solid #ddd; }
+  h3 { font-size: 16px; font-weight: bold; margin: 32px 0 12px; font-family: 'Arial', sans-serif; }
+  p { margin-bottom: 16px; color: #2a2a2a; }
+  ul, ol { margin: 0 0 16px 24px; color: #2a2a2a; }
+  li { margin-bottom: 8px; }
+  table { width: 100%; border-collapse: collapse; margin: 20px 0 28px; font-family: 'Arial', sans-serif; font-size: 13px; }
+  th { background: #1a1a1a; color: #fff; padding: 10px 14px; text-align: left; font-weight: normal; }
+  td { padding: 10px 14px; border-bottom: 1px solid #e8e8e8; vertical-align: top; }
+  tr:nth-child(even) td { background: #f7f7f5; }
+  code { background: #f0ecdf; padding: 1px 6px; border-radius: 2px; font-family: 'Courier New', monospace; font-size: 13px; }
+  pre { background: #1a1a1a; color: #f0e8d0; padding: 16px 20px; margin: 16px 0; border-radius: 2px; overflow-x: auto; }
+  pre code { background: transparent; color: inherit; padding: 0; font-size: 13px; line-height: 1.55; }
+  hr { border: none; border-top: 1px solid #ccc; margin: 48px 0; }
+  blockquote { border-left: 3px solid #c8a96e; padding: 8px 18px; margin: 16px 0; background: #f5f0e8; }
+  strong { font-weight: 600; }
+  em { font-style: italic; }
+  .confidential { background: #f5f0e8; border-left: 3px solid #c8a96e; padding: 14px 18px; margin-bottom: 32px; font-family: 'Arial', sans-serif; font-size: 13px; color: #555; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="confidential"><strong>Confidential — Attorney-client privileged.</strong> Working draft for legal counsel discussion. Not legal advice. Companion document to <code>ko-cert-term-sheet.html</code> (v5.2) and <code>ko-cert-primer.html</code> (v5.0).</div>
+<h1>Prediction-Market KO Certificate — Calendar Deleveraging Supplement</h1>
+<p><strong>Audience:</strong> External legal counsel (LL)
+<strong>Purpose:</strong> Supplement to <code>perpetual-certificate-lawyer-primer.html</code> v5.0, addressing the prediction-market (PM) asset class specifically. Identifies the dated-vs-perpetual split, the calendar-deleveraging mechanic required to make leverage survivable through resolution, and the smart-contract / prospectus implications.
+<strong>Status:</strong> Working draft for counsel discussion. Programme-level mechanics unchanged from base primer.
+<strong>Companion documents:</strong> <code>ko-cert-primer.html</code> (§2.1, §3.1quinquies, §3.3, §3.5, §S9, Q21), <code>ko-cert-term-sheet.html</code>, <code>structured-products-issuance-primer.md</code>.</p>
+<hr />
+<h2>1. Problem the supplement addresses</h2>
+<p>The v5.0 base primer treats PMs as one more underlying class on the existing perpetual KO architecture. That is correct for the <em>daily trading mechanic</em> — reference price = venue probability quote, barrier adjustment passes through carry, knock-out terminates the cert at residual. It is <strong>not</strong> correct for the <em>terminal behaviour</em> of a PM:</p>
+<ul>
+<li>Asset-price classes (BTC, gold, equities) have no terminal event. Mark moves continuously and is bounded only by economics.</li>
+<li>PM classes resolve at a <strong>known terminal time T</strong>* to one of two values (0 or $1 in cents: 0¢ or 100¢). Mark snaps to that value at resolution.</li>
+</ul>
+<p>The implication is structural. A 5× long cert sitting at mark 47¢ at T*−1h, where the holder is wrong on resolution, takes a near-instantaneous −100% loss the moment resolution prints. Knock-out triggers, but the holder receives ~zero residual. Across an issuer's book at every major resolution event (US election, Fed decision, World Cup final), the realised P&amp;L profile is bimodal and ugly — and unlike crypto, the timing is fully predictable.</p>
+<p>The fix is not a bigger insurance fund. It is <strong>time-decaying leverage</strong>, implemented inside the cert wrapper as a scheduled barrier restrike on the calendar.</p>
+<hr />
+<h2>2. Product split — what changes vs. v5.0</h2>
+<h3>2.1 Two PM cert formats, not one</h3>
+<p>Add a second PM cert format alongside the existing perpetual KO format.</p>
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Use case</th>
+<th>Resolution handling</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Perpetual PM KO</strong> <em>(existing, v5.0)</em></td>
+<td>Open-ended / indeterminate-resolution PMs (e.g., "Will AGI arrive?", "Will Putin remain head of state?") — no fixed T*</td>
+<td>Standard perpetual mechanic; no calendar deleveraging needed</td>
+</tr>
+<tr>
+<td><strong>Dated PM KO</strong> <em>(new — this supplement)</em></td>
+<td>Fixed-resolution PMs (elections, Fed decisions, scheduled sports, economic releases) — known T*</td>
+<td>Calendar deleveraging schedule baked into Final Terms; cert is terminated and settled at T*, no rollover</td>
+</tr>
+</tbody>
+</table>
+<p>Format is fixed at issuance in the Final Terms. Series naming convention extension:</p>
+<div class="codehilite"><pre><span></span><code><span class="nf">Format</span><span class="err">:</span><span class="w"> </span><span class="n">PM</span><span class="o">-[</span><span class="n">VENUE</span><span class="o">]-[</span><span class="n">EVENT_ID</span><span class="o">]-[</span><span class="n">DIRECTION</span><span class="o">]-[</span><span class="n">KO_BARRIER_BPS</span><span class="o">]-[</span><span class="n">T*</span><span class="o">]</span>
+
+<span class="nl">Examples</span><span class="p">:</span>
+<span class="n">PM</span><span class="o">-</span><span class="n">POLY</span><span class="o">-</span><span class="n">TRUMP2028</span><span class="o">-</span><span class="n">LONG</span><span class="o">-</span><span class="n">KO38</span><span class="o">-</span><span class="n">NOV2028</span><span class="w">   </span><span class="p">(</span><span class="n">dated</span><span class="w"> </span><span class="n">long</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="err">×</span><span class="w"> </span><span class="k">at</span><span class="w"> </span><span class="n">issuance</span><span class="p">,</span><span class="w"> </span><span class="n">resolves</span><span class="w"> </span><span class="n">Nov</span><span class="w"> </span><span class="mi">2028</span><span class="p">)</span>
+<span class="n">PM</span><span class="o">-</span><span class="n">KALSHI</span><span class="o">-</span><span class="n">FEDDEC</span><span class="o">-</span><span class="n">SHORT</span><span class="o">-</span><span class="n">KO62</span><span class="o">-</span><span class="n">DEC2026</span><span class="w">   </span><span class="p">(</span><span class="n">dated</span><span class="w"> </span><span class="n">short</span><span class="p">,</span><span class="w"> </span><span class="n">hawkish</span><span class="w"> </span><span class="n">cut</span><span class="p">)</span>
+<span class="n">PM</span><span class="o">-</span><span class="n">POLY</span><span class="o">-</span><span class="n">AGI2030</span><span class="o">-</span><span class="n">LONG</span><span class="o">-</span><span class="n">KO20</span><span class="w">              </span><span class="p">(</span><span class="n">perpetual</span><span class="w"> </span><span class="n">long</span><span class="p">,</span><span class="w"> </span><span class="k">open</span><span class="o">-</span><span class="n">ended</span><span class="w"> </span><span class="n">underlying</span><span class="p">)</span>
+</code></pre></div>
+
+<h3>2.2 Why this is a Final-Terms split, not a base-prospectus split</h3>
+<p>Both formats use the same payoff formula, same knock-out trigger, same back-to-back hedge on the same venue universe, same TVTG token <em>sui generis</em> wrapper. The only differences are:</p>
+<ul>
+<li>Presence/absence of a <code>final_resolution_ts</code> field in the Series parameters</li>
+<li>Presence/absence of a <code>calendar_deleveraging_schedule</code> array in the Series parameters</li>
+<li>Final settlement logic at T* (defined in §4 below)</li>
+</ul>
+<p>These are Final-Terms variables, not structural product changes. The base prospectus describes the architecture; the Final Terms elects perpetual or dated per Series. This minimises counsel rework against the v5.0 draft.</p>
+<hr />
+<h2>3. Calendar deleveraging mechanic</h2>
+<h3>3.1 The mechanic in one paragraph</h3>
+<p>At pre-disclosed calendar boundaries before T<em>, the dated PM cert undergoes a </em><em>Calendar Restrike Event</em><em>: the Knock-Out Barrier moves away from the mark, the Contract Size (multiplier) shrinks proportionally, and the certificate's NAV at the moment of restrike is preserved. The holder's token balance is unchanged. The economic effect is that the cert's </em>forward<em> leverage drops to the next tier cap; the holder's </em>realised* P&amp;L up to the restrike is preserved in the new-series NAV. From the holder's perspective, a Calendar Restrike Event is a corporate-action entry, not a cash distribution.</p>
+<h3>3.2 Default schedule (Series-level, defined in Final Terms)</h3>
+<div class="codehilite"><pre><span></span><code>T*  −  90d   →   Issuance window (or earlier): lev cap = 5.0×
+T*  −  30d   →   Restrike to lev cap = 3.0×
+T*  −   7d   →   Restrike to lev cap = 2.0×
+T*  −  24h   →   Restrike to lev cap = 1.0×  (spot-equivalent exposure)
+T*  −   1h   →   Trading flips reduce-only; no new positions or transfers
+T*           →   Final settlement at TWAP of mark over [T*−30min, T*]
+</code></pre></div>
+
+<p>The schedule is fixed per Series at issuance and printed in the Final Terms. Each tier cap is an <em>upper</em> bound; the cert may be issued at a lower leverage and skip earlier restrikes.</p>
+<h3>3.3 NAV-preserving restrike formula</h3>
+<p>For a long dated PM cert at the moment of a Calendar Restrike Event:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">At</span><span class="w"> </span><span class="n">restrike</span><span class="w"> </span><span class="n">time</span><span class="w"> </span><span class="n">t_r</span><span class="p">,</span><span class="w"> </span><span class="n">given</span><span class="p">:</span>
+<span class="w">  </span><span class="n">M_t</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">mark</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">t_r</span><span class="w">  </span><span class="p">(</span><span class="n">probability</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">cents</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="err">–</span><span class="mi">100</span><span class="p">)</span>
+<span class="w">  </span><span class="n">B_old</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">barrier</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">pre</span><span class="o">-</span><span class="n">restrike</span><span class="w"> </span><span class="n">Series</span>
+<span class="w">  </span><span class="n">N_old</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">contract</span><span class="w"> </span><span class="n">multiplier</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">pre</span><span class="o">-</span><span class="n">restrike</span><span class="w"> </span><span class="n">Series</span><span class="w"> </span><span class="p">(</span><span class="n">cash</span><span class="o">/</span><span class="n">cent</span><span class="p">)</span>
+<span class="w">  </span><span class="n">L_new</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">target</span><span class="w"> </span><span class="n">leverage</span><span class="w"> </span><span class="n">cap</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">post</span><span class="o">-</span><span class="n">restrike</span><span class="w"> </span><span class="n">Series</span>
+
+<span class="n">Compute</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">new</span><span class="w"> </span><span class="n">Series</span><span class="w"> </span><span class="n">parameters</span><span class="p">:</span>
+
+<span class="w">  </span><span class="n">B_new</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">M_t</span><span class="w"> </span><span class="err">×</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="err">−</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">L_new</span><span class="p">)</span><span class="w">                       </span><span class="p">(</span><span class="n">new</span><span class="w"> </span><span class="n">barrier</span><span class="p">)</span>
+
+<span class="w">  </span><span class="n">V_t</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">M_t</span><span class="w"> </span><span class="err">−</span><span class="w"> </span><span class="n">B_old</span><span class="p">)</span><span class="w"> </span><span class="err">×</span><span class="w"> </span><span class="n">N_old</span><span class="w">                       </span><span class="p">(</span><span class="n">cert</span><span class="w"> </span><span class="n">NAV</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">t_r</span><span class="p">,</span><span class="w"> </span><span class="n">pre</span><span class="o">-</span><span class="n">restrike</span><span class="p">)</span>
+
+<span class="w">  </span><span class="n">N_new</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">V_t</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">M_t</span><span class="w"> </span><span class="err">−</span><span class="w"> </span><span class="n">B_new</span><span class="p">)</span><span class="w">                         </span><span class="p">(</span><span class="n">new</span><span class="w"> </span><span class="n">multiplier</span><span class="w"> </span><span class="err">—</span><span class="w"> </span><span class="n">chosen</span>
+<span class="w">                                                       </span><span class="n">so</span><span class="w"> </span><span class="n">post</span><span class="o">-</span><span class="n">restrike</span><span class="w"> </span><span class="n">NAV</span><span class="w"> </span><span class="n">equals</span><span class="w"> </span><span class="n">V_t</span><span class="p">)</span>
+
+<span class="w">  </span><span class="n">Cert</span><span class="w"> </span><span class="n">NAV</span><span class="w"> </span><span class="n">post</span><span class="o">-</span><span class="n">restrike</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">mark</span><span class="w"> </span><span class="n">M_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">V_t</span><span class="w">            </span><span class="p">(</span><span class="n">preserved</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="n">construction</span><span class="p">)</span>
+<span class="w">  </span><span class="n">Implied</span><span class="w"> </span><span class="n">forward</span><span class="w"> </span><span class="n">leverage</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="n">L_new</span><span class="w">           </span><span class="p">(</span><span class="n">by</span><span class="w"> </span><span class="n">construction</span><span class="p">)</span>
+</code></pre></div>
+
+<p>For short certs, swap <code>(M_t − B)</code> for <code>(B − M_t)</code> and flip the sign on <code>(1 − 1/L)</code>.</p>
+<p>The holder's token count is unchanged. The Series identifier on-chain updates from <code>...-KO38</code> to <code>...-KO31</code> (illustrative). The smart contract treats this as an in-place parameter update on the same security, not as a token swap (see §6.1).</p>
+<h3>3.4 Issuer-side mechanics</h3>
+<p>At each Calendar Restrike Event, the issuer mechanically deleverages its hedge book on the Reference Venue:</p>
+<ol>
+<li>Compute the aggregate notional exposure of the Series before restrike: <code>Σ (token_supply × N_old)</code>.</li>
+<li>Compute the aggregate notional exposure after restrike: <code>Σ (token_supply × N_new)</code>.</li>
+<li>The difference is the unwind size. The issuer reduces its back-to-back PM venue position by exactly that amount.</li>
+<li>Slippage on the unwind is absorbed into the issuer spread; pre-funded in the cert pricing formula at issuance (see §5.1 of base primer for carry passthrough mechanic — calendar passthrough is identical in form).</li>
+</ol>
+<p>Unwind dates are pre-disclosed → MMs and venue liquidity providers can quote into the calendar restrike, reducing slippage.</p>
+<hr />
+<h2>4. Final settlement at T*</h2>
+<p>The dated PM cert terminates at the underlying event's resolution time T*. Mechanics:</p>
+<ol>
+<li><strong>Trading halt</strong> at T*−1h (reduce-only window — same as the 5y perpetual primer §2.3).</li>
+<li><strong>Expiry mark</strong> = 30-minute TWAP of Reference Venue mark over <code>[T*−30min, T*]</code>. TWAP rather than last-print mitigates manipulation in the thin pre-resolution window.</li>
+<li><strong>Settlement value per cert</strong>:
+   <code>Long:  V_final = max(0, (TWAP_expiry − B_current) × N_current)
+   Short: V_final = max(0, (B_current − TWAP_expiry) × N_current)</code>
+   where <code>B_current, N_current</code> are the Series parameters following the final (T*−24h) restrike.</li>
+<li><strong>Cash distribution</strong> in the cert's settlement currency (EUR or USD per Series) to all holders on the snapshot block immediately before T*.</li>
+<li><strong>Delisting</strong>: Series is permanently retired; historical state queryable via the smart-contract event log.</li>
+</ol>
+<p>No automatic rollover. A successor Series referencing a later T* (e.g., the next election) may be listed in advance under supplementary Final Terms; holders must opt in.</p>
+<hr />
+<h2>5. Worked example — TRUMP2028 long, 5× at issuance</h2>
+<p>Issuance: 2026-12-01. T* = 2028-11-07 (US presidential election resolution day). 5.0× lev cap at issuance.</p>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Event</th>
+<th>Mark</th>
+<th>L target</th>
+<th>B</th>
+<th>N</th>
+<th>NAV/cert</th>
+<th>Implied lev</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2026-12-01</td>
+<td>Issuance</td>
+<td>47.0¢</td>
+<td>5.0×</td>
+<td>37.60¢</td>
+<td>$1,000/¢</td>
+<td>$9,400</td>
+<td>5.00×</td>
+</tr>
+<tr>
+<td>2028-10-08</td>
+<td>Restrike T*−30d</td>
+<td>51.0¢</td>
+<td>3.0×</td>
+<td>34.00¢</td>
+<td>$686.0/¢</td>
+<td>$11,662</td>
+<td>3.00×</td>
+</tr>
+<tr>
+<td>2028-10-31</td>
+<td>Restrike T*−7d</td>
+<td>56.0¢</td>
+<td>2.0×</td>
+<td>28.00¢</td>
+<td>$470.0/¢</td>
+<td>$13,160</td>
+<td>2.00×</td>
+</tr>
+<tr>
+<td>2028-11-06</td>
+<td>Restrike T*−24h</td>
+<td>62.0¢</td>
+<td>1.0×</td>
+<td>0.62¢ (≈0)</td>
+<td>$214.3/¢</td>
+<td>$13,160</td>
+<td>1.00×</td>
+</tr>
+<tr>
+<td>2028-11-07</td>
+<td>Final settlement (Yes resolves)</td>
+<td>TWAP = 99.4¢</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>$21,156</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>NAV at each restrike is preserved at the moment of the event (rows show pre-restrike NAV carried forward; the new barrier/multiplier are calibrated so that the cert is worth the same dollar amount immediately after the restrike).</p>
+<p>In the "No" scenario at T*: TWAP ≈ 0.6¢. Post-final-restrike (1× lev, barrier ≈ 0), the cert behaves as direct spot exposure. Settlement value ≈ <code>max(0, (0.6¢ − 0¢) × $214.3/¢)</code> ≈ $128 vs. pre-event NAV of $13,160 — a −99% loss, but the holder was already at 1× exposure for the last 24 hours, so the bimodal terminal jump did not compound through leverage.</p>
+<p><strong>Compare</strong> to a perpetual 5× through resolution: holder would have held ~$13,160 of 5×-leveraged exposure into the snap to 0¢; knock-out triggers near-zero residual. Same dollar outcome in "No"; the calendar deleveraging does not save the holder from being wrong, but it removes the <em>gap discontinuity</em> where a small last-mile mark move at high leverage produces an outsized loss inconsistent with the holder's risk budget.</p>
+<hr />
+<h2>6. Smart-contract / TVTG implementation</h2>
+<h3>6.1 In-place parameter update, not token swap</h3>
+<p>The Series is a single TVTG token <em>sui generis</em> throughout its life. Calendar Restrike Events update the Series' parameters in storage; they do not burn old tokens or mint new ones. Same ISIN (if elected for the Series), same contract address, same token balance per holder.</p>
+<p>This is the cleanest path for two reasons:
+- <strong>Tax characterisation</strong> — an in-place parameter adjustment under a pre-disclosed schedule is far more defensible as a non-realising event than a token-for-token exchange (see §7).
+- <strong>Custody and broker integration</strong> — most qualified crypto custodians (Tangany, Bankhaus von der Heydt) and MiFID-licensed brokers handle parameter updates as a corporate-action data feed; they do not handle automatic token swaps cleanly across the board.</p>
+<h3>6.2 Calendar logic on-chain</h3>
+<p>At issuance, the contract stores the Series' <code>calendar_deleveraging_schedule</code> as an array of <code>(timestamp, target_leverage_cap)</code> tuples. A keeper / oracle-triggered function <code>executeCalendarRestrike()</code>:</p>
+<ol>
+<li>Verifies <code>block.timestamp ≥ next_scheduled_timestamp</code>.</li>
+<li>Reads current mark <code>M_t</code> from the elected Reference Venue oracle (Kalshi API or Polymarket on-chain feed).</li>
+<li>Computes <code>B_new, N_new</code> per §3.3.</li>
+<li>Updates Series storage atomically.</li>
+<li>Emits <code>CalendarRestrike(seriesId, t_r, M_t, B_old, B_new, N_old, N_new, L_new)</code>.</li>
+<li>Issues a hedge-unwind instruction to the issuer's off-chain execution system (or, for Polymarket-referenced Series, executes the unwind on-chain in the same block).</li>
+</ol>
+<p>The function is idempotent (will not double-execute for the same scheduled date). Failure modes (oracle stale, hedge unwind partial) are handled by a 24-hour grace window during which the restrike can be deferred — disclosed in the Final Terms.</p>
+<h3>6.3 Reference price during the restrike window</h3>
+<p>To prevent mark manipulation at the restrike moment, <code>M_t</code> in §3.3 is the <strong>30-minute TWAP</strong> of the Reference Venue mark ending at the scheduled timestamp, not the spot mark at the block. Same TWAP methodology as final settlement (§4.2). This is consistent with the v5.0 primer's mark-source rules and does not introduce a new oracle dependency.</p>
+<hr />
+<h2>7. Open questions for counsel (extends Q1–Q24 in base primer)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Question</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Q25</td>
+<td>Does a pre-disclosed, NAV-preserving Calendar Restrike Event on the same TVTG token <em>sui generis</em> constitute a "disposal" under German EStG §20 / Austrian KESt / Liechtenstein VStG, or a continuation of the same security? Confirmation sought in each Phase-1 target market (DE, AT, FL).</td>
+</tr>
+<tr>
+<td>Q26</td>
+<td>For PRIIPS KID purposes, is the scenario calculation required to model the calendar restrike schedule (multiple discrete leverage tiers across the life of the product), or is a worst-case model based on the issuance-tier leverage acceptable?</td>
+</tr>
+<tr>
+<td>Q27</td>
+<td>MiFID II appropriateness: does the periodic deleveraging materially alter the complexity/risk classification of the cert vs. the perpetual format already covered under Q1–Q3 of the base primer? Implication for retail vs. professional-only distribution.</td>
+</tr>
+<tr>
+<td>Q28</td>
+<td>ESMA binary-options decision (EU 2018/795): the dated PM cert's payoff is bounded but not strictly binary (residual value between barrier and mark prior to T<em>). Does the bounded-but-non-binary characteristic remain sufficient to avoid the ban — same analysis as Q21 in v5.0 — given the additional terminal jump at T</em>?</td>
+</tr>
+<tr>
+<td>Q29</td>
+<td>For dated PM certs referencing <strong>Polymarket</strong> (on-chain venue): the Final Settlement TWAP is computed from on-chain price data. Does this raise additional Benchmark Regulation (BMR) considerations vs. an exchange-traded perpetual mark? Same question for Kalshi (CFTC-regulated event contracts).</td>
+</tr>
+<tr>
+<td>Q30</td>
+<td>Gambling-law characterisation under §S9 of the base primer: does a <em>dated</em> PM cert with a fixed T* resolve to a different gambling-law analysis than a perpetual PM cert? Specifically — does the time-bounded terminal payoff structure increase or decrease risk of dual securities/gambling regulation in DE / AT?</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>8. Sequencing recommendation</h2>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Product</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Phase 1A</strong> <em>(immediate)</em></td>
+<td>Dated PM KO on top-20 liquid Kalshi events, 5× max, EU professional-only distribution under base prospectus</td>
+<td>Cleanest regulatory story; reuses v5.0 architecture; tests calendar restrike mechanic with limited blast radius</td>
+</tr>
+<tr>
+<td><strong>Phase 1B</strong> <em>(+3 months)</em></td>
+<td>Add Polymarket-referenced Series (same product, on-chain reference); add EU retail distribution after PRIIPS KIDs</td>
+<td>Adds the larger PM venue pool once Phase 1A trading + restrike data is in hand</td>
+</tr>
+<tr>
+<td><strong>Phase 2</strong> <em>(+6 months)</em></td>
+<td>Add Perpetual PM KO for open-ended events (no T*, no calendar deleveraging) — pure v5.0 format</td>
+<td>Higher residual gap risk; only after Phase 1 data validates issuer hedge book mechanics</td>
+</tr>
+</tbody>
+</table>
+<p>The dated format leads. Perpetual PM certs remain in the programme but are added once the issuer has live data on a regulated, time-bounded variant.</p>
+<hr />
+<p><em>Working draft for LL discussion. Not legal advice. Mechanics assume v5.0 base primer architecture; any deviation from that primer should be flagged in counsel comments and reconciled before circulation.</em></p>
+</div>
+</body>
+</html>
