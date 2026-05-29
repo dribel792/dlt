@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anduin — Prediction-Market Certificate Trading (Mock)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0B0E14; --bg-2:#111520; --bg-3:#181D2A; --bg-hover:#252B3D;
+    --border:#252B3D; --border-light:#2E3548;
+    --text:#E8ECF3; --text-muted:#6B7A99; --text-dim:#3D4A65;
+    --green:#00C076; --green-dim:rgba(0,192,118,.12);
+    --red:#F6465D;   --red-dim:rgba(246,70,93,.12);
+    --blue:#3B82F6;  --blue-dim:rgba(59,130,246,.12);
+    --yellow:#F59E0B;--yellow-dim:rgba(245,158,11,.12);
+    --purple:#8B5CF6;--purple-dim:rgba(139,92,246,.12);
+    --teal:#06B6D4;  --teal-dim:rgba(6,182,212,.12);
+    --mono:'JetBrains Mono',monospace;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  html{font-size:13px;}
+  body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text);
+    min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased;}
+
+  /* MOCK BANNER */
+  .mock-banner{background:linear-gradient(90deg,rgba(139,92,246,.18),rgba(59,130,246,.18));
+    border-bottom:1px solid var(--purple);padding:8px 16px;font-size:.72rem;
+    color:var(--text-muted);font-family:var(--mono);letter-spacing:.02em;text-align:center;}
+  .mock-banner strong{color:var(--purple);letter-spacing:.08em;}
+
+  /* HEADER */
+  .header{display:flex;align-items:center;background:var(--bg-2);border-bottom:1px solid var(--border);
+    height:52px;padding:0 16px;flex-shrink:0;z-index:10;}
+  .logo{font-family:var(--mono);font-weight:600;font-size:1.05rem;color:var(--text);letter-spacing:-.02em;
+    margin-right:20px;padding-right:20px;border-right:1px solid var(--border-light);white-space:nowrap;}
+  .logo span{color:var(--purple);}
+  .issuer-pill{font-family:var(--mono);font-size:.62rem;color:var(--text-muted);
+    background:var(--bg-3);padding:3px 9px;border-radius:4px;border:1px solid var(--border-light);
+    letter-spacing:.05em;margin-right:14px;}
+  .issuer-pill .reg{color:var(--green);font-weight:600;}
+  .nav-tabs{display:flex;gap:2px;height:100%;align-items:center;}
+  .ntab{padding:0 14px;height:100%;display:flex;align-items:center;font-size:.85rem;font-weight:500;
+    color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;}
+  .ntab.active{color:var(--text);border-bottom-color:var(--purple);}
+  .ntab:hover{color:var(--text);}
+  .header-right{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:.78rem;color:var(--text-muted);}
+  .acct-balance{font-family:var(--mono);color:var(--text);font-weight:600;}
+  .hdr-btn{padding:5px 12px;border-radius:6px;font-size:.78rem;font-weight:500;cursor:pointer;
+    border:1px solid var(--border-light);background:transparent;color:var(--text-muted);}
+  .hdr-btn:hover{color:var(--text);border-color:var(--purple);}
+
+  /* SECURITY HERO */
+  .sec-hero{background:var(--bg-2);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:flex-start;gap:24px;flex-wrap:wrap;}
+  .sec-name{display:flex;flex-direction:column;gap:4px;}
+  .sec-name-row{display:flex;align-items:center;gap:10px;}
+  .sec-title{font-size:1.15rem;font-weight:600;letter-spacing:-.01em;color:var(--text);}
+  .sec-tier-badge{font-family:var(--mono);font-size:.72rem;background:var(--purple-dim);color:var(--purple);
+    padding:3px 9px;border-radius:4px;font-weight:700;border:1px solid rgba(139,92,246,.3);}
+  .sec-isin{font-family:var(--mono);font-size:.7rem;color:var(--text-muted);letter-spacing:.04em;}
+  .sec-isin span{color:var(--teal);}
+  .sec-ref{font-size:.72rem;color:var(--text-muted);margin-top:4px;}
+  .sec-ref-pill{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:.7rem;
+    background:var(--bg-3);padding:2px 8px;border-radius:4px;border:1px solid var(--border-light);
+    color:var(--text-muted);}
+  .sec-ref-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--teal);}
+  .sec-pricing{display:flex;gap:32px;margin-left:auto;flex-wrap:wrap;}
+  .px-block{display:flex;flex-direction:column;gap:2px;}
+  .px-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);}
+  .px-val{font-family:var(--mono);font-size:1.3rem;font-weight:600;color:var(--text);line-height:1.1;}
+  .px-val.big{font-size:1.6rem;}
+  .px-val.up{color:var(--green);} .px-val.down{color:var(--red);}
+  .px-sub{font-family:var(--mono);font-size:.7rem;color:var(--text-muted);}
+
+  /* LAYOUT */
+  .main{display:grid;grid-template-columns:260px 1fr 320px;flex:1;min-height:0;overflow:hidden;}
+
+  /* LEFT: SECURITY INFO + DELEVERAGING */
+  .left-rail{grid-column:1;background:var(--bg-2);border-right:1px solid var(--border);
+    display:flex;flex-direction:column;overflow-y:auto;}
+  .panel{border-bottom:1px solid var(--border);padding:14px 16px;}
+  .panel-title{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;
+    color:var(--text-muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+  .panel-title .badge-new{font-size:.6rem;background:var(--green);color:#000;padding:2px 6px;border-radius:3px;font-weight:700;letter-spacing:.05em;}
+  .meta-row{display:flex;justify-content:space-between;align-items:center;font-size:.72rem;padding:4px 0;}
+  .meta-row .lbl{color:var(--text-muted);}
+  .meta-row .val{font-family:var(--mono);color:var(--text);}
+  .meta-row .val.link{color:var(--purple);cursor:pointer;text-decoration:underline;text-underline-offset:2px;}
+  .meta-row .val.green{color:var(--green);}
+  .restrike-cd{background:linear-gradient(135deg,rgba(245,158,11,.08),rgba(139,92,246,.06));
+    border:1px solid rgba(245,158,11,.25);border-radius:6px;padding:12px;margin-top:8px;}
+  .restrike-cd-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:var(--yellow);margin-bottom:4px;font-weight:600;}
+  .restrike-cd-time{font-family:var(--mono);font-size:1.4rem;font-weight:600;color:var(--text);}
+  .restrike-cd-tier{font-size:.72rem;color:var(--text-muted);margin-top:4px;font-family:var(--mono);}
+  .restrike-cd-tier span{color:var(--yellow);font-weight:600;}
+  .restrike-schedule{margin-top:12px;}
+  .rs-row{display:flex;justify-content:space-between;font-size:.7rem;padding:5px 0;border-top:1px dashed var(--border-light);}
+  .rs-row:first-child{border-top:none;}
+  .rs-row.past{opacity:.35;}
+  .rs-row.next{background:var(--yellow-dim);margin:0 -16px;padding:5px 16px;border-radius:3px;}
+  .rs-row .when{font-family:var(--mono);color:var(--text-muted);}
+  .rs-row .tier{font-family:var(--mono);color:var(--text);font-weight:600;}
+  .rs-row.past .tier{color:var(--text-dim);text-decoration:line-through;}
+
+  /* CENTER: CHART + PROBABILITY DISPLAY */
+  .center{grid-column:2;display:flex;flex-direction:column;min-height:0;}
+  .chart-wrap{flex:1;background:var(--bg);position:relative;overflow:hidden;border-bottom:1px solid var(--border);min-height:340px;}
+  .chart-canvas{width:100%;height:100%;display:block;}
+  .chart-overlay{position:absolute;top:14px;left:18px;display:flex;flex-direction:column;gap:5px;pointer-events:none;}
+  .chart-tag{font-size:.7rem;font-family:var(--mono);color:var(--text-muted);
+    background:rgba(11,14,20,.78);padding:4px 9px;border-radius:4px;backdrop-filter:blur(4px);
+    display:flex;align-items:center;gap:6px;}
+  .chart-tag .dot{width:7px;height:7px;border-radius:50%;}
+  .chart-toggle{position:absolute;top:14px;right:18px;display:flex;
+    background:rgba(11,14,20,.85);border-radius:6px;border:1px solid var(--border-light);overflow:hidden;}
+  .ct-btn{padding:5px 11px;font-size:.7rem;color:var(--text-muted);cursor:pointer;border:none;background:transparent;font-weight:500;letter-spacing:.03em;}
+  .ct-btn.active{background:var(--purple);color:#fff;}
+
+  /* DEEP-LINK / ANNOTATIONS LANE */
+  .annot{position:absolute;bottom:14px;left:18px;display:flex;gap:8px;flex-wrap:wrap;}
+  .annot-pill{font-family:var(--mono);font-size:.65rem;background:rgba(11,14,20,.88);
+    border:1px solid var(--border-light);color:var(--text-muted);padding:4px 9px;border-radius:4px;}
+  .annot-pill.next{border-color:var(--yellow);color:var(--yellow);}
+  .annot-pill.term{border-color:var(--red);color:var(--red);}
+
+  /* POSITIONS TABLE */
+  .positions{background:var(--bg-2);min-height:200px;display:flex;flex-direction:column;border-top:1px solid var(--border);}
+  .pos-tabs{display:flex;border-bottom:1px solid var(--border);}
+  .pos-tab{padding:10px 18px;font-size:.78rem;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;font-weight:500;}
+  .pos-tab.active{color:var(--text);border-bottom-color:var(--purple);}
+  .pos-table{overflow-x:auto;}
+  .pos-table table{width:100%;border-collapse:collapse;font-size:.78rem;font-family:var(--mono);}
+  .pos-table th{text-align:left;padding:8px 14px;color:var(--text-muted);font-weight:500;font-family:'Inter';
+    font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border);background:var(--bg-2);}
+  .pos-table td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text);}
+  .pos-table td.up{color:var(--green);} .pos-table td.down{color:var(--red);}
+  .pos-table td.muted{color:var(--text-muted);}
+  .pos-table .sec-mini{display:flex;flex-direction:column;gap:1px;}
+  .pos-table .sec-mini .nm{font-weight:600;color:var(--text);font-family:'Inter';font-size:.78rem;}
+  .pos-table .sec-mini .id{font-family:var(--mono);font-size:.65rem;color:var(--text-muted);}
+  .pos-table .tier-badge{font-family:var(--mono);font-size:.68rem;background:var(--purple-dim);color:var(--purple);
+    padding:2px 7px;border-radius:3px;font-weight:600;}
+
+  /* RIGHT: TRADE TICKET */
+  .right-rail{grid-column:3;background:var(--bg-2);border-left:1px solid var(--border);
+    display:flex;flex-direction:column;overflow-y:auto;}
+  .ticket-side{display:grid;grid-template-columns:1fr 1fr;margin:14px 16px 0;background:var(--bg-3);
+    border-radius:6px;overflow:hidden;border:1px solid var(--border-light);}
+  .ts-btn{padding:10px;font-weight:600;font-size:.85rem;cursor:pointer;color:var(--text-muted);text-align:center;letter-spacing:.02em;}
+  .ts-btn.active.buy{background:var(--green-dim);color:var(--green);}
+  .ts-btn.active.sell{background:var(--red-dim);color:var(--red);}
+  .ticket-buy-language{padding:0 16px;margin-top:10px;font-size:.7rem;color:var(--text-muted);line-height:1.5;}
+  .ticket-buy-language strong{color:var(--text);}
+  .ticket-form{padding:14px 16px;display:flex;flex-direction:column;gap:12px;}
+  .field{display:flex;flex-direction:column;gap:5px;}
+  .field-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);
+    display:flex;justify-content:space-between;}
+  .field-label .hint{color:var(--text-dim);font-family:var(--mono);letter-spacing:0;text-transform:none;}
+  .field-input{display:flex;align-items:center;background:var(--bg-3);border:1px solid var(--border-light);
+    border-radius:6px;padding:0 11px;height:38px;}
+  .field-input input{flex:1;background:transparent;border:none;outline:none;color:var(--text);
+    font-family:var(--mono);font-size:.95rem;font-weight:500;}
+  .field-input .unit{font-family:var(--mono);font-size:.72rem;color:var(--text-muted);
+    border-left:1px solid var(--border-light);padding-left:10px;margin-left:8px;}
+  .quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;}
+  .quick-btn{padding:5px;font-size:.7rem;font-family:var(--mono);color:var(--text-muted);
+    background:var(--bg-3);border:1px solid var(--border-light);border-radius:4px;cursor:pointer;}
+  .quick-btn:hover{border-color:var(--purple);color:var(--text);}
+  .order-summary{background:var(--bg-3);border:1px solid var(--border-light);border-radius:6px;
+    padding:12px 14px;display:flex;flex-direction:column;gap:6px;}
+  .os-row{display:flex;justify-content:space-between;font-size:.72rem;}
+  .os-row .lbl{color:var(--text-muted);}
+  .os-row .val{font-family:var(--mono);color:var(--text);font-weight:500;}
+  .os-row.total{font-size:.9rem;padding-top:6px;border-top:1px solid var(--border-light);margin-top:2px;}
+  .os-row.total .val{color:var(--purple);font-weight:600;}
+  .submit-btn{padding:12px;border:none;border-radius:6px;font-weight:600;font-size:.92rem;cursor:pointer;
+    background:var(--green);color:#000;letter-spacing:.02em;}
+  .submit-btn.sell{background:var(--red);color:#fff;}
+  .submit-btn:hover{filter:brightness(1.1);}
+  .disclaimer{font-size:.65rem;line-height:1.55;color:var(--text-muted);padding:0 16px 14px;
+    border-top:1px dashed var(--border);margin-top:8px;padding-top:12px;}
+  .disclaimer a{color:var(--purple);}
+  .doc-links{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+  .doc-pill{font-size:.65rem;font-family:var(--mono);background:var(--bg-3);padding:3px 8px;
+    border-radius:3px;border:1px solid var(--border-light);color:var(--purple);cursor:pointer;
+    text-decoration:none;}
+
+  /* SVG chart helpers */
+  .grid-line{stroke:var(--border);stroke-width:1;stroke-dasharray:3 3;}
+  .axis-text{font-family:var(--mono);font-size:9.5px;fill:var(--text-muted);}
+  .probability-line{stroke:var(--teal);stroke-width:2;fill:none;}
+  .cert-nav-line{stroke:var(--purple);stroke-width:2.5;fill:none;}
+  .barrier-line{stroke:var(--red);stroke-width:1.2;stroke-dasharray:4 3;fill:none;}
+  .restrike-marker{stroke:var(--yellow);stroke-width:1.5;stroke-dasharray:2 3;}
+  .resolution-marker{stroke:var(--red);stroke-width:1.5;stroke-dasharray:2 3;}
+
+  /* SIDE-BY-SIDE callout */
+  .pricing-callout{margin:14px 16px;background:var(--bg-3);border:1px solid var(--purple-dim);
+    border-left:3px solid var(--purple);border-radius:6px;padding:12px 14px;font-size:.7rem;color:var(--text-muted);line-height:1.55;}
+  .pricing-callout strong{color:var(--text);display:block;font-size:.72rem;letter-spacing:.05em;margin-bottom:5px;text-transform:uppercase;}
+  .pricing-callout code{font-family:var(--mono);background:var(--bg);padding:1px 5px;border-radius:3px;color:var(--teal);}
+
+  @media (max-width:1180px){
+    .main{grid-template-columns:230px 1fr 290px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="mock-banner">
+  <strong>MOCK / WIREFRAME</strong> · Anduin trading interface for dated prediction-market knock-out certificates · The user trades a <strong>tokenised security issued by Anduin Capital</strong>, not a bet on Polymarket. Reference data comes from Polymarket; the trade does not.
+</div>
+
+<!-- ─────────────── HEADER ─────────────── -->
+<div class="header">
+  <div class="logo">anduin<span>.</span></div>
+  <div class="issuer-pill">
+    Issuer: <span class="reg">Anduin Capital (Jersey) Ltd</span> · Base Prospectus: CSSF-25-001234
+  </div>
+  <div class="nav-tabs">
+    <div class="ntab active">Certificates</div>
+    <div class="ntab">My Portfolio</div>
+    <div class="ntab">Markets</div>
+    <div class="ntab">Documents</div>
+    <div class="ntab">Account</div>
+  </div>
+  <div class="header-right">
+    <span>Wallet</span><span class="acct-balance">€48,294.10</span>
+    <button class="hdr-btn">Deposit</button>
+    <button class="hdr-btn">Withdraw</button>
+  </div>
+</div>
+
+<!-- ─────────────── SECURITY HERO ─────────────── -->
+<div class="sec-hero">
+  <div class="sec-name">
+    <div class="sec-name-row">
+      <div class="sec-title">ANDUIN — Trump 2028 (YES) Knock-Out Certificate</div>
+      <div class="sec-tier-badge">3.0× LONG</div>
+    </div>
+    <div class="sec-isin">ISIN <span>JE00ANDU0427</span> · Series <span>TRUMP-YES-KO34-NOV28-POLY</span> · Contract <span>0x9a31…b48c</span></div>
+    <div class="sec-ref">
+      <span class="sec-ref-pill"><span class="dot"></span> Reference: Polymarket — "Donald Trump wins 2028 US presidential election"</span>
+      &nbsp;·&nbsp; Reference Price = 30-min TWAP of venue mid · Final settlement against TWAP at T*
+    </div>
+  </div>
+  <div class="sec-pricing">
+    <div class="px-block">
+      <div class="px-label">Certificate Value</div>
+      <div class="px-val big" style="color:var(--purple);">€132.81</div>
+      <div class="px-sub up">+ €4.20 (+3.27%) today</div>
+    </div>
+    <div class="px-block">
+      <div class="px-label">Reference Probability</div>
+      <div class="px-val">51.0¢</div>
+      <div class="px-sub up">+1.4¢ on Polymarket</div>
+    </div>
+    <div class="px-block">
+      <div class="px-label">Current Barrier</div>
+      <div class="px-val" style="color:var(--red);">34.00¢</div>
+      <div class="px-sub">Distance to KO: 17.0¢ (33.3%)</div>
+    </div>
+    <div class="px-block">
+      <div class="px-label">Resolves</div>
+      <div class="px-val" style="color:var(--yellow);">07 Nov 2028</div>
+      <div class="px-sub">893 days to terminal</div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- ─────────────── LEFT RAIL ─────────────── -->
+  <div class="left-rail">
+
+    <div class="panel">
+      <div class="panel-title">Security Token Details</div>
+      <div class="meta-row"><span class="lbl">Instrument</span><span class="val">KO Certificate</span></div>
+      <div class="meta-row"><span class="lbl">Issuer</span><span class="val">Anduin Capital (JE)</span></div>
+      <div class="meta-row"><span class="lbl">NCA</span><span class="val green">CSSF Lux. — approved</span></div>
+      <div class="meta-row"><span class="lbl">Custodian</span><span class="val">Tangany GmbH (BaFin)</span></div>
+      <div class="meta-row"><span class="lbl">Settlement ccy</span><span class="val">EUR</span></div>
+      <div class="meta-row"><span class="lbl">Token standard</span><span class="val">Sui generis (ERC-20 compatible)</span></div>
+      <div class="meta-row"><span class="lbl">PRIIPS SRI</span><span class="val">6 / 7</span></div>
+      <div class="doc-links">
+        <a class="doc-pill" href="#">KID.pdf</a>
+        <a class="doc-pill" href="#">Final Terms</a>
+        <a class="doc-pill" href="#">Base Prospectus</a>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Calendar Deleveraging <span class="badge-new">NEW</span></div>
+      <div class="restrike-cd">
+        <div class="restrike-cd-label">Next restrike in</div>
+        <div class="restrike-cd-time">863d 04h 12m</div>
+        <div class="restrike-cd-tier">tier <span>3.0×</span> → <span>2.0×</span> at T−7d</div>
+      </div>
+      <div class="restrike-schedule">
+        <div class="rs-row past"><span class="when">2026-12-01</span><span class="tier">5.0× · ISSUE</span></div>
+        <div class="rs-row past"><span class="when">2028-10-08 · T−30d</span><span class="tier">3.0× · DONE</span></div>
+        <div class="rs-row next"><span class="when">2028-10-31 · T−7d</span><span class="tier">2.0× · NEXT</span></div>
+        <div class="rs-row"><span class="when">2028-11-06 · T−24h</span><span class="tier">1.0× · spot</span></div>
+        <div class="rs-row"><span class="when">2028-11-07 · T*</span><span class="tier">SETTLE</span></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Other Series — Same Underlying</div>
+      <div class="meta-row"><span class="lbl">5× long · KO 38¢</span><span class="val link">€198.40</span></div>
+      <div class="meta-row"><span class="lbl">3× long · KO 34¢</span><span class="val" style="color:var(--purple);">€132.81 (current)</span></div>
+      <div class="meta-row"><span class="lbl">1× long · KO 0¢</span><span class="val link">€51.00</span></div>
+      <div class="meta-row"><span class="lbl">3× short · KO 68¢</span><span class="val link">€56.66</span></div>
+      <div class="meta-row"><span class="lbl">5× short · KO 64¢</span><span class="val link">€38.40</span></div>
+      <div style="font-size:.65rem;color:var(--text-muted);margin-top:8px;line-height:1.45;">
+        Each tier is a separate ISIN and security. The 1× tier tracks the probability directly: <strong style="color:var(--text);">51¢ on Polymarket → €0.51 per cert</strong>. Higher tiers are leveraged knock-outs over the same reference.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ─────────────── CENTER ─────────────── -->
+  <div class="center">
+
+    <div class="chart-wrap">
+      <div class="chart-overlay">
+        <div class="chart-tag"><span class="dot" style="background:var(--purple);"></span> Anduin Cert NAV (€)</div>
+        <div class="chart-tag"><span class="dot" style="background:var(--teal);"></span> Polymarket reference probability (¢)</div>
+        <div class="chart-tag"><span class="dot" style="background:var(--red);"></span> Knock-Out Barrier</div>
+      </div>
+      <div class="chart-toggle">
+        <button class="ct-btn">1H</button>
+        <button class="ct-btn">1D</button>
+        <button class="ct-btn active">1W</button>
+        <button class="ct-btn">1M</button>
+        <button class="ct-btn">ALL</button>
+      </div>
+
+      <svg class="chart-canvas" viewBox="0 0 1000 360" preserveAspectRatio="none">
+        <!-- gridlines -->
+        <line class="grid-line" x1="0" y1="60"  x2="1000" y2="60" />
+        <line class="grid-line" x1="0" y1="120" x2="1000" y2="120" />
+        <line class="grid-line" x1="0" y1="180" x2="1000" y2="180" />
+        <line class="grid-line" x1="0" y1="240" x2="1000" y2="240" />
+        <line class="grid-line" x1="0" y1="300" x2="1000" y2="300" />
+        <!-- left axis (probability ¢) -->
+        <text class="axis-text" x="6" y="64">80¢</text>
+        <text class="axis-text" x="6" y="124">65¢</text>
+        <text class="axis-text" x="6" y="184">50¢</text>
+        <text class="axis-text" x="6" y="244">35¢</text>
+        <text class="axis-text" x="6" y="304">20¢</text>
+        <!-- right axis (cert €) -->
+        <text class="axis-text" x="965" y="64" text-anchor="end">€220</text>
+        <text class="axis-text" x="965" y="124" text-anchor="end">€175</text>
+        <text class="axis-text" x="965" y="184" text-anchor="end">€130</text>
+        <text class="axis-text" x="965" y="244" text-anchor="end">€85</text>
+        <text class="axis-text" x="965" y="304" text-anchor="end">€40</text>
+
+        <!-- restrike vertical markers (illustrative — T-30d already happened, T-7d, T-24h, T* far right) -->
+        <line class="restrike-marker" x1="160" y1="20" x2="160" y2="340" />
+        <text class="axis-text" x="164" y="32" fill="#F59E0B">5× → 3×  (T−30d, past)</text>
+
+        <line class="restrike-marker" x1="700" y1="20" x2="700" y2="340" />
+        <text class="axis-text" x="704" y="32" fill="#F59E0B">3× → 2×  (T−7d)</text>
+
+        <line class="restrike-marker" x1="880" y1="20" x2="880" y2="340" />
+        <text class="axis-text" x="884" y="32" fill="#F59E0B">2× → 1×  (T−24h)</text>
+
+        <line class="resolution-marker" x1="960" y1="20" x2="960" y2="340" />
+        <text class="axis-text" x="956" y="32" fill="#F6465D" text-anchor="end">T*</text>
+
+        <!-- probability line (teal) — wanders 47 → 51 → 56 → 62 → ~100 -->
+        <path class="probability-line"
+              d="M 0 200 L 60 196 L 120 192 L 160 188 L 200 184 L 260 178 L 320 172 L 380 168 L 440 160 L 500 152 L 560 148 L 620 144 L 700 132 L 760 124 L 820 116 L 880 100 L 920 88 L 960 60 L 1000 56"/>
+
+        <!-- cert NAV line (purple) — preserved at restrike events, sensitivity changes -->
+        <path class="cert-nav-line"
+              d="M 0 280 L 60 260 L 120 244 L 160 224 L 200 216 L 260 198 L 320 184 L 380 172 L 440 152 L 500 132 L 560 124 L 620 116 L 700 88 L 760 80 L 820 72 L 880 60 L 920 56 L 960 48 L 1000 46"/>
+
+        <!-- Barrier line (red, stepped at restrikes) -->
+        <path class="barrier-line"
+              d="M 0 244 L 160 244 L 161 256 L 700 256 L 701 272 L 880 272 L 881 304 L 1000 304"/>
+      </svg>
+
+      <div class="annot">
+        <div class="annot-pill next">↑ Next event: T−7d restrike · 3× → 2× · 863d</div>
+        <div class="annot-pill term">↑ Terminal: 07 Nov 2028 · cash settlement TWAP</div>
+        <div class="annot-pill">Mark source: Polymarket TWAP · oracle: Anduin Settlement Engine</div>
+      </div>
+    </div>
+
+    <!-- POSITIONS -->
+    <div class="positions">
+      <div class="pos-tabs">
+        <div class="pos-tab active">My Certificates (4)</div>
+        <div class="pos-tab">Open Orders</div>
+        <div class="pos-tab">Corporate Actions (2)</div>
+        <div class="pos-tab">Cash Distributions</div>
+      </div>
+      <div class="pos-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Security (ISIN · Series)</th>
+              <th>Tier</th>
+              <th>Held</th>
+              <th>Avg NAV</th>
+              <th>Cur NAV</th>
+              <th>P/L</th>
+              <th>Next Restrike</th>
+              <th>T*</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="sec-mini">
+                  <div class="nm">Anduin — Trump 2028 YES</div>
+                  <div class="id">JE00ANDU0427 · TRUMP-YES-KO34-NOV28-POLY</div>
+                </div>
+              </td>
+              <td><span class="tier-badge">3× L</span></td>
+              <td>50</td>
+              <td>€127.40</td>
+              <td>€132.81</td>
+              <td class="up">+ €270.50  (+4.2%)</td>
+              <td class="muted">3× → 2× · 863d</td>
+              <td class="muted">07 Nov 2028</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="sec-mini">
+                  <div class="nm">Anduin — Trump 2028 YES</div>
+                  <div class="id">JE00ANDU0431 · TRUMP-YES-KO0-NOV28-POLY (1× tracker)</div>
+                </div>
+              </td>
+              <td><span class="tier-badge" style="background:var(--teal-dim);color:var(--teal);border:none;">1× L</span></td>
+              <td>200</td>
+              <td>€0.49</td>
+              <td>€0.51</td>
+              <td class="up">+ €4.00  (+4.0%)</td>
+              <td class="muted">none — already 1×</td>
+              <td class="muted">07 Nov 2028</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="sec-mini">
+                  <div class="nm">Anduin — Fed Dec'26 cut ≥50bp</div>
+                  <div class="id">JE00ANDU0419 · FEDDEC-YES-KO22-DEC26-KALSHI</div>
+                </div>
+              </td>
+              <td><span class="tier-badge">5× L</span></td>
+              <td>25</td>
+              <td>€42.10</td>
+              <td>€38.80</td>
+              <td class="down">− €82.50  (−7.8%)</td>
+              <td class="muted">5× → 3× · 4d</td>
+              <td class="muted">16 Dec 2026</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="sec-mini">
+                  <div class="nm">Anduin — Recession 2026 NO</div>
+                  <div class="id">JE00ANDU0408 · RECESS26-NO-KO72-DEC26-POLY</div>
+                </div>
+              </td>
+              <td><span class="tier-badge">3× S</span></td>
+              <td>10</td>
+              <td>€68.90</td>
+              <td>€71.20</td>
+              <td class="up">+ €23.00  (+3.3%)</td>
+              <td class="muted">3× → 2× · 12d</td>
+              <td class="muted">31 Dec 2026</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ─────────────── RIGHT RAIL: TRADE TICKET ─────────────── -->
+  <div class="right-rail">
+
+    <div class="ticket-side">
+      <div class="ts-btn active buy">BUY CERTIFICATES</div>
+      <div class="ts-btn sell">SELL CERTIFICATES</div>
+    </div>
+    <div class="ticket-buy-language">
+      You are buying a <strong>tokenised security</strong> issued by Anduin Capital. You are <em>not</em> placing a bet on Polymarket. Polymarket data is referenced; the trade is between you and the issuer.
+    </div>
+
+    <div class="ticket-form">
+      <div class="field">
+        <div class="field-label">Number of certificates <span class="hint">unit price €132.81</span></div>
+        <div class="field-input">
+          <input type="text" value="100" />
+          <span class="unit">certs</span>
+        </div>
+      </div>
+
+      <div class="quick-grid">
+        <button class="quick-btn">25%</button>
+        <button class="quick-btn">50%</button>
+        <button class="quick-btn">75%</button>
+        <button class="quick-btn">MAX</button>
+      </div>
+
+      <div class="field">
+        <div class="field-label">Limit / Market <span class="hint">€ per cert</span></div>
+        <div class="field-input">
+          <input type="text" value="132.81" />
+          <span class="unit">EUR</span>
+        </div>
+      </div>
+
+      <div class="order-summary">
+        <div class="os-row"><span class="lbl">Order value</span><span class="val">€13,281.00</span></div>
+        <div class="os-row"><span class="lbl">Issuer spread (incl.)</span><span class="val">€39.84  (0.30%)</span></div>
+        <div class="os-row"><span class="lbl">Carry (next 8h)</span><span class="val">€0.00 / cert  (PM zero-carry)</span></div>
+        <div class="os-row"><span class="lbl">Implied lev (live)</span><span class="val">3.00×</span></div>
+        <div class="os-row"><span class="lbl">Max loss</span><span class="val">€13,281.00  (full NAV)</span></div>
+        <div class="os-row total"><span class="lbl">You pay</span><span class="val">€13,320.84</span></div>
+      </div>
+
+      <button class="submit-btn">CONFIRM PURCHASE — 100 certs</button>
+    </div>
+
+    <div class="pricing-callout">
+      <strong>How is this priced?</strong>
+      Cert NAV is <code>(Ref Price − Barrier) × Multiplier</code>. With reference at <code>51.0¢</code>, barrier at <code>34¢</code> and multiplier <code>€7.81 / ¢</code>: NAV = (51 − 34) × 7.81 = <code>€132.77</code>. For the 1× tracker cert (barrier 0¢, multiplier €0.01 / ¢): NAV ≡ Polymarket probability in cents → 51¢ = €0.51.
+    </div>
+
+    <div class="disclaimer">
+      Anduin Capital (Jersey) Ltd is the issuer of record. The certificate is a transferable security under MiFID II Art. 4(1)(44). Read the <a href="#">KID</a> and <a href="#">Final Terms</a> before trading. SRI = 6/7 (high risk). Total loss possible. The Calendar Deleveraging Schedule is fixed at issuance and applies automatically as a scheduled corporate action — your token balance is unchanged across restrikes.
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>
