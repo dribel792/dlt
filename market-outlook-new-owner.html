@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Market Outlook & Strategy — DLT</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --surface3: #2a2f44;
+      --border: #2e3352;
+      --border2: #3a4060;
+      --accent: #4f7cff;
+      --text: #e2e8f0;
+      --muted: #8892b0;
+      --dim: #5a6378;
+
+      --dlt: #34d399;       /* DLT */
+      --bitmex: #F7A600;    /* derivatives */
+      --eq: #a78bfa;        /* equities */
+      --yield: #fbbf24;     /* yield */
+      --warn: #f87171;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 56px 28px 80px;
+    }
+
+    /* ── Header ── */
+    header { text-align: center; margin-bottom: 48px; }
+    header .eyebrow {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--dlt); margin-bottom: 12px;
+    }
+    header h1 {
+      font-size: 2.6rem; font-weight: 800; letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #e2e8f0 0%, #34d399 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; margin-bottom: 14px;
+    }
+    header p.subtitle {
+      color: var(--muted); max-width: 720px; margin: 0 auto;
+      font-size: 1rem;
+    }
+    .doc-meta {
+      display: flex; justify-content: center; gap: 24px;
+      margin-top: 22px; font-size: 0.78rem; color: var(--muted);
+    }
+    .doc-meta span { display: flex; align-items: center; gap: 6px; }
+    .doc-meta .dot { width: 6px; height: 6px; background: var(--dlt); border-radius: 50%; }
+
+    /* ── TOC ── */
+    .toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 28px;
+      margin-bottom: 48px;
+    }
+    .toc h3 {
+      font-size: 0.78rem; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .toc ol { list-style: none; counter-reset: toc; }
+    .toc li {
+      counter-increment: toc;
+      font-size: 0.92rem;
+      padding: 6px 0 6px 30px;
+      position: relative;
+      color: var(--text);
+    }
+    .toc li::before {
+      content: counter(toc) ".";
+      position: absolute; left: 0; top: 6px;
+      color: var(--dlt); font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    .toc a { color: var(--text); text-decoration: none; }
+    .toc a:hover { color: var(--dlt); }
+
+    /* ── Executive Summary ── */
+    .exec-summary {
+      background: linear-gradient(135deg, rgba(52,211,153,0.06) 0%, rgba(79,124,255,0.04) 100%);
+      border: 1px solid rgba(52,211,153,0.2);
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin-bottom: 48px;
+    }
+    .exec-summary h2 {
+      font-size: 0.8rem; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--dlt);
+      margin-bottom: 14px;
+    }
+    .exec-summary p { color: var(--text); font-size: 0.95rem; }
+    .exec-summary p + p { margin-top: 10px; }
+
+    /* ── Section headers ── */
+    .section-header {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 18px; margin-top: 64px;
+      border-top: 1px solid var(--border);
+      padding-top: 48px;
+    }
+    .section-num {
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em;
+      color: var(--dlt); padding: 4px 10px;
+      border: 1px solid rgba(52,211,153,0.3);
+      border-radius: 6px;
+    }
+    .section-title {
+      font-size: 1.55rem; font-weight: 700; letter-spacing: -0.01em;
+    }
+    .section-subtitle {
+      color: var(--muted); font-size: 0.95rem;
+      margin-bottom: 28px; margin-left: 4px;
+    }
+    h3.sub-h {
+      font-size: 1.15rem; font-weight: 700;
+      margin-top: 36px; margin-bottom: 14px;
+      color: var(--text);
+      padding-left: 0;
+    }
+    h4.sub-h2 {
+      font-size: 1rem; font-weight: 700;
+      margin-top: 26px; margin-bottom: 10px;
+      color: var(--text);
+    }
+
+    p.body { color: var(--text); font-size: 0.95rem; margin-bottom: 14px; }
+    p.body + p.body { margin-top: 0; }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 26px 28px;
+      margin-bottom: 18px;
+    }
+    .card h4 {
+      font-size: 1.02rem; font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .card p { font-size: 0.92rem; color: var(--text); }
+    .card p + p { margin-top: 8px; }
+
+    /* ── Grids ── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+
+    /* ── Instrument tile ── */
+    .inst {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--dlt);
+      border-radius: 10px;
+      padding: 16px 18px;
+    }
+    .inst.eq      { border-left-color: var(--eq); }
+    .inst.yield   { border-left-color: var(--yield); }
+    .inst.deriv   { border-left-color: var(--bitmex); }
+    .inst.lev     { border-left-color: var(--warn); }
+    .inst-tag {
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .inst h5 { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
+    .inst p  { font-size: 0.82rem; color: var(--muted); }
+
+    /* ── Tables ── */
+    .compare-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-top: 16px; margin-bottom: 24px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th, td {
+      padding: 13px 18px; text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: var(--surface2);
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--muted);
+    }
+    tr:last-child td { border-bottom: none; }
+    td.dim { color: var(--muted); }
+    td strong.dlt { color: var(--dlt); }
+
+    /* ── Callouts ── */
+    .callout {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--dlt);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin: 20px 0;
+    }
+    .callout.warn { border-left-color: var(--bitmex); }
+    .callout.risk { border-left-color: var(--warn); }
+    .callout h5 {
+      font-size: 0.72rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--dlt);
+      margin-bottom: 8px;
+    }
+    .callout.warn h5 { color: var(--bitmex); }
+    .callout.risk h5 { color: var(--warn); }
+    .callout p { font-size: 0.92rem; color: var(--text); }
+    .callout p + p { margin-top: 8px; }
+
+    /* ── Payoff diagrams ── */
+    .payoff {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      margin: 16px 0 24px;
+    }
+    .payoff svg { width: 100%; height: auto; display: block; }
+    .payoff-caption {
+      font-size: 0.82rem; color: var(--muted);
+      text-align: center; margin-top: 8px;
+    }
+
+    /* ── Visualisation cards ── */
+    .viz-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+    .viz-card svg { width: 100%; height: auto; }
+
+    /* ── Bullet lists ── */
+    ul.body-list { list-style: none; margin: 8px 0 18px; }
+    ul.body-list li {
+      font-size: 0.92rem; color: var(--text);
+      padding: 5px 0 5px 22px; position: relative;
+    }
+    ul.body-list li::before {
+      content: "▸"; position: absolute; left: 4px;
+      color: var(--dlt); font-weight: 700;
+    }
+
+    /* ── Pillars block ── */
+    .pillar {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--dlt);
+      border-radius: 12px;
+      padding: 22px 24px;
+    }
+    .pillar.deriv  { border-top-color: var(--bitmex); }
+    .pillar.eq     { border-top-color: var(--eq); }
+    .pillar.yield  { border-top-color: var(--yield); }
+    .pillar h4 {
+      font-size: 0.72rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .pillar h3 { font-size: 1.05rem; margin-bottom: 8px; }
+    .pillar p { font-size: 0.88rem; color: var(--muted); }
+
+    /* ── Roadmap ── */
+    .roadmap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px;
+    }
+    .roadmap-row {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 18px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .roadmap-row:last-child { border-bottom: none; }
+    .roadmap-q {
+      font-size: 0.74rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--dlt);
+      padding-top: 4px;
+    }
+    .roadmap-body h5 { font-size: 0.95rem; margin-bottom: 4px; }
+    .roadmap-body p { font-size: 0.86rem; color: var(--muted); }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 80px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--dim);
+      font-size: 0.8rem;
+    }
+
+    strong.dlt    { color: var(--dlt); }
+    strong.deriv  { color: var(--bitmex); }
+    strong.eq     { color: var(--eq); }
+    strong.yield  { color: var(--yield); }
+    strong.warn   { color: var(--warn); }
+    strong.acc    { color: var(--accent); }
+
+    @media (max-width: 820px) {
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+      header h1 { font-size: 1.9rem; }
+      .roadmap-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <header>
+      <div class="eyebrow">Strategic Brief · Confidential</div>
+      <h1>Market Reality &amp; 12-Month Outlook</h1>
+      <p class="subtitle">
+        Where the crypto market stands today, where DLT is positioned to win,
+        and the product roadmap that keeps us relevant in a market that — for now —
+        is not driven by directional crypto demand.
+      </p>
+      <div class="doc-meta">
+        <span><span class="dot"></span> Internal · For new ownership</span>
+        <span><span class="dot"></span> Draft v1.0</span>
+        <span><span class="dot"></span> June 2026</span>
+      </div>
+    </header>
+
+    <!-- ──────────────── EXECUTIVE SUMMARY ──────────────── -->
+    <div class="exec-summary">
+      <h2>Executive Summary</h2>
+      <p>
+        Spot crypto demand is soft. Retail volumes are off the 2024 highs, directional
+        speculation is muted, and the MiCAR rulebook has reshuffled the European
+        landscape. That backdrop has not weakened DLT's position — it has clarified it.
+      </p>
+      <p>
+        Two opportunities are driving the next 12 months: <strong class="dlt">B2B2X</strong> —
+        a wave of newly licensed MiCAR institutions looking for the next product line they
+        can offer their clients under MiFID; and <strong class="dlt">B2B</strong> — large
+        institutions whose crypto trading desks are still operating well below full capacity,
+        keeping ECN-based liquidity provision and best execution in demand.
+      </p>
+      <p>
+        DLT has built the MiFID derivatives backbone. With that foundation in place, every
+        new product — equity perpetuals, yield strategies, structured certificates — is a
+        configuration on top of the same infrastructure, not a new build. This is what we
+        will press hard on for the next four quarters.
+      </p>
+    </div>
+
+    <!-- ──────────────── TOC ──────────────── -->
+    <div class="toc">
+      <h3>Contents</h3>
+      <ol>
+        <li><a href="#market">Where the crypto market is right now</a></li>
+        <li><a href="#b2b2x">B2B2X — the MiCAR wave</a></li>
+        <li><a href="#deriv">Derivatives trading — the MiFID-adjacent gap</a></li>
+        <li><a href="#eqperps">Equity perpetuals — natural extension</a></li>
+        <li><a href="#yield">Yield-focused option strategies</a></li>
+        <li><a href="#shelf">DLT instrument shelf</a></li>
+        <li><a href="#backbone">The MiFID backbone advantage</a></li>
+        <li><a href="#b2b">B2B — liquidity provision &amp; best execution</a></li>
+        <li><a href="#roadmap">12-month roadmap</a></li>
+      </ol>
+    </div>
+
+    <!-- ─────────────────────────────────────────── -->
+    <!-- 1. MARKET STATE                             -->
+    <!-- ─────────────────────────────────────────── -->
+    <div class="section-header" id="market">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Where the crypto market is right now</h2>
+    </div>
+    <p class="section-subtitle">A softer directional market, but two structural openings — one regulatory, one institutional.</p>
+
+    <p class="body">
+      The crypto market in mid-2026 is in a regime shift. Spot volumes across European
+      retail venues are materially below their 2024 peak. Funding rates on major perps
+      have compressed. Memes and high-beta narratives are recycling, but without the
+      capital inflows of the prior cycle. For brokers and exchanges with a pure
+      directional-crypto product shelf, this is a difficult year.
+    </p>
+    <p class="body">
+      The underlying structure of the market, however, has improved in two ways that
+      are directly relevant to DLT:
+    </p>
+
+    <div class="viz-card">
+      <svg viewBox="0 0 1100 400" xmlns="http://www.w3.org/2000/svg" font-family="Inter, system-ui, sans-serif">
+        <!-- Title -->
+        <text x="550" y="28" text-anchor="middle" fill="#e2e8f0" font-size="15" font-weight="700">
+          Two structural openings — both adjacent to DLT's existing footprint
+        </text>
+
+        <!-- Left box: B2B2X -->
+        <rect x="40" y="60" width="490" height="300" rx="14" fill="#1a1d27" stroke="#2e3352" stroke-width="1.5"/>
+        <rect x="40" y="60" width="490" height="40" rx="14" fill="#34d399" fill-opacity="0.1"/>
+        <text x="60" y="86" fill="#34d399" font-size="13" font-weight="700" letter-spacing="2">B2B2X · MICAR WAVE</text>
+
+        <text x="60" y="135" fill="#e2e8f0" font-size="13" font-weight="600">~50+ newly licensed MiCAR institutions</text>
+        <text x="60" y="158" fill="#8892b0" font-size="12">Each looking for the next product line they can</text>
+        <text x="60" y="175" fill="#8892b0" font-size="12">offer to their clients beyond spot crypto.</text>
+
+        <text x="60" y="215" fill="#e2e8f0" font-size="13" font-weight="600">MiFID adjacency = the natural extension</text>
+        <text x="60" y="238" fill="#8892b0" font-size="12">Derivatives, equity perps, structured products —</text>
+        <text x="60" y="255" fill="#8892b0" font-size="12">all live under MiFID II, all near-impossible to</text>
+        <text x="60" y="272" fill="#8892b0" font-size="12">build alone, all a single API call from DLT.</text>
+
+        <rect x="60" y="298" width="450" height="44" rx="8" fill="#34d399" fill-opacity="0.08" stroke="#34d399" stroke-opacity="0.3"/>
+        <text x="80" y="318" fill="#34d399" font-size="12" font-weight="700">DLT POSITION</text>
+        <text x="80" y="334" fill="#e2e8f0" font-size="12">Whitelabel MiFID infrastructure provider</text>
+
+        <!-- Right box: B2B -->
+        <rect x="570" y="60" width="490" height="300" rx="14" fill="#1a1d27" stroke="#2e3352" stroke-width="1.5"/>
+        <rect x="570" y="60" width="490" height="40" rx="14" fill="#4f7cff" fill-opacity="0.1"/>
+        <text x="590" y="86" fill="#4f7cff" font-size="13" font-weight="700" letter-spacing="2">B2B · INSTITUTIONAL DESKS</text>
+
+        <text x="590" y="135" fill="#e2e8f0" font-size="13" font-weight="600">Major institutions still under-capacity</text>
+        <text x="590" y="158" fill="#8892b0" font-size="12">Tier-1 desks have opened the door on crypto but</text>
+        <text x="590" y="175" fill="#8892b0" font-size="12">are nowhere near full deployment.</text>
+
+        <text x="590" y="215" fill="#e2e8f0" font-size="13" font-weight="600">Liquidity provision still scarce</text>
+        <text x="590" y="238" fill="#8892b0" font-size="12">ECNs (360T, oneZero, Crossover) remain the</text>
+        <text x="590" y="255" fill="#8892b0" font-size="12">distribution layer; best execution still wins</text>
+        <text x="590" y="272" fill="#8892b0" font-size="12">mandates that competitors cannot.</text>
+
+        <rect x="590" y="298" width="450" height="44" rx="8" fill="#4f7cff" fill-opacity="0.08" stroke="#4f7cff" stroke-opacity="0.3"/>
+        <text x="610" y="318" fill="#4f7cff" font-size="12" font-weight="700">DLT POSITION</text>
+        <text x="610" y="334" fill="#e2e8f0" font-size="12">Already plugged into all three ECNs · live BX flow</text>
+      </svg>
+    </div>
+
+    <!-- ─────────────────────────────────────────── -->
+    <!-- 2. B2B2X                                    -->
+    <!-- ─────────────────────────────────────────── -->
+    <div class="section-header" id="b2b2x">
+      <span class="section-num">02</span>
+      <h2 class="section-title">B2B2X — the MiCAR wave</h2>
+    </div>
+    <p class="section-subtitle">A new generation of licensed institutions, all looking for the next product line.</p>
+
+    <p class="body">
+      MiCAR has now produced a meaningful cohort of approved CASP licences across the EU.
+      These institutions have spent 18–24 months and significant capital getting authorised,
+      and they have arrived at the same realisation simultaneously: a plain crypto-spot
+      offering is not sufficient to retain or grow a client book in 2026.
+    </p>
+    <p class="body">
+      What they want is the <strong class="dlt">next product to put in front of their
+      clients</strong>. Their licence covers MiCAR; the natural adjacent product set
+      lives under MiFID. Building those products in-house is a multi-year, multi-million
+      regulated build. Plugging into a licensed MiFID counterparty via API is a quarter.
+    </p>
+    <p class="body">
+      That is the gap DLT sits in.
+    </p>
+
+    <div class="grid-3" style="margin-top: 20px;">
+      <div class="pillar deriv">
+        <h4>Layer 1</h4>
+        <h3>Derivatives Trading</h3>
+        <p>The most regulated-clean, most defensible adjacency. Already live with BitMEX, Bit2Me, Nexo.</p>
+      </div>
+      <div class="pillar eq">
+        <h4>Layer 2</h4>
+        <h3>Equity Perpetuals</h3>
+        <p>Natural extension of crypto perps mechanics, demand-strong while crypto direction is dull.</p>
+      </div>
+      <div class="pillar yield">
+        <h4>Layer 3</h4>
+        <h3>Yield Strategies</h3>
+        <p>Dual investment, shark fins, 0DTE, sprinters — what retail wants when spot is flat.</p>
+      </div>
+    </div>
+
+    <div class="callout warn" style="margin-top: 28px;">
+      <h5>Why not margin trading?</h5>
+      <p>
+        Margin trading on spot crypto sits in a regulatory grey area under MiCAR — there
+        is no clean, harmonised framework for retail leveraged spot in the EU. Most MiCAR
+        institutions will not touch it without explicit national-regulator guidance.
+        Derivatives, by contrast, sit cleanly under MiFID II — well-understood,
+        passportable, defensible. That is why all eyes are on derivatives.
+      </p>
+    </div>
+
+    <!-- ─────────────────────────────────────────── -->
+    <!-- 3. DERIVATIVES                              -->
+    <!-- ─────────────────────────────────────────── -->
+    <div class="section-header" id="deriv">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Derivatives trading — DLT's whitelabel offering</h2>
+    </div>
+    <p class="section-subtitle">A single API that turns a MiCAR-only platform into a MiFID-compliant derivatives broker.</p>
+
+    <p class="body">
+      DLT operates a licensed MiFID II derivatives broker stack. MiCAR-licensed
+      platforms route their client orders into DLT's API; we handle execution against
+      crypto-derivative venues (BitMEX as primary, others as alternates), provide best
+      execution reporting, post-trade transparency, and client-asset segregation. The
+      partner platform keeps the client relationship and the brand; DLT carries the
+      MiFID infrastructure.
+    </p>
+
+    <div class="viz-card">
+      <svg viewBox="0 0 1100 320" xmlns="http://www.w3.org/2000/svg" font-family="Inter, system-ui, sans-serif">
+        <!-- Client -->
+        <rect x="40" y="120" width="170" height="80" rx="10" fill="#1a1d27" stroke="#fbbf24" stroke-width="1.5"/>
+        <text x="125" y="148" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="700" letter-spacing="2">END CLIENT</text>
+        <text x="125" y="170" text-anchor="middle" fill="#e2e8f0" font-size="12">Retail / pro</text>
+        <text x="125" y="188" text-anchor="middle" fill="#8892b0" font-size="11">EU resident</text>
+
+        <!-- Partner platform -->
+        <rect x="260" y="120" width="190" height="80" rx="10" fill="#1a1d27" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="355" y="148" text-anchor="middle" fill="#a78bfa" font-size="11" font-weight="700" letter-spacing="2">MICAR PLATFORM</text>
+        <text x="355" y="170" text-anchor="middle" fill="#e2e8f0" font-size="12">BitMEX · Bit2Me · Nexo</text>
+        <text x="355" y="188" text-anchor="middle" fill="#8892b0" font-size="11">brand &amp; UX layer</text>
+
+        <!-- DLT -->
+        <rect x="500" y="100" width="210" height="120" rx="12" fill="#1a1d27" stroke="#34d399" stroke-width="2"/>
+        <text x="605" y="128" text-anchor="middle" fill="#34d399" font-size="11" font-weight="700" letter-spacing="2">DLT — MIFID BROKER</text>
+        <text x="605" y="152" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="600">Whitelabel API</text>
+        <text x="605" y="174" text-anchor="middle" fill="#8892b0" font-size="11">Best execution · MiFID II</text>
+        <text x="605" y="190" text-anchor="middle" fill="#8892b0" font-size="11">Client-asset segregation</text>
+        <text x="605" y="206" text-anchor="middle" fill="#8892b0" font-size="11">Reporting · risk · clearing</text>
+
+        <!-- Venues -->
+        <rect x="760" y="60" width="290" height="60" rx="10" fill="#1a1d27" stroke="#F7A600" stroke-width="1.5"/>
+        <text x="905" y="84" text-anchor="middle" fill="#F7A600" font-size="11" font-weight="700" letter-spacing="2">PRIMARY VENUE</text>
+        <text x="905" y="106" text-anchor="middle" fill="#e2e8f0" font-size="12">BitMEX — derivatives orderbook</text>
+
+        <rect x="760" y="140" width="290" height="60" rx="10" fill="#1a1d27" stroke="#2e3352" stroke-width="1.5"/>
+        <text x="905" y="164" text-anchor="middle" fill="#8892b0" font-size="11" font-weight="700" letter-spacing="2">ALTERNATE VENUES</text>
+        <text x="905" y="186" text-anchor="middle" fill="#e2e8f0" font-size="12">Deribit · OKX · Bybit (best-ex)</text>
+
+        <rect x="760" y="220" width="290" height="60" rx="10" fill="#1a1d27" stroke="#2e3352" stroke-width="1.5"/>
+        <text x="905" y="244" text-anchor="middle" fill="#8892b0" font-size="11" font-weight="700" letter-spacing="2">HEDGE / RISK</text>
+        <text x="905" y="266" text-anchor="middle" fill="#e2e8f0" font-size="12">Internal book + external hedge</text>
+
+        <!-- arrows -->
+        <line x1="210" y1="160" x2="258" y2="160" stroke="#8892b0" stroke-width="1.5"/>
+        <polygon points="258,160 250,156 250,164" fill="#8892b0"/>
+        <line x1="450" y1="160" x2="498" y2="160" stroke="#8892b0" stroke-width="1.5"/>
+        <polygon points="498,160 490,156 490,164" fill="#8892b0"/>
+        <line x1="710" y1="160" x2="758" y2="90" stroke="#F7A600" stroke-width="1.5"/>
+        <polygon points="758,90 750,90 754,98" fill="#F7A600"/>
+        <line x1="710" y1="160" x2="758" y2="170" stroke="#8892b0" stroke-width="1.5"/>
+        <polygon points="758,170 750,166 750,174" fill="#8892b0"/>
+        <line x1="710" y1="160" x2="758" y2="250" stroke="#8892b0" stroke-width="1.5"/>
+        <polygon points="758,250 750,242 754,242" fill="#8892b0"/>
+      </svg>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <h4>Live: <strong class="deriv">BitMEX</strong></h4>
+        <p>Primary derivatives venue. EU client flow routed via DLT under MiFID. Joint operational memorandum signed.</p>
+      </div>
+      <div class="card">
+        <h4>Live: <strong class="deriv">Bit2Me</strong></h4>
+        <p>Spanish MiCAR-licensed CASP. DLT provides derivatives access for their retail client base.</p>
+      </div>
+      <div class="card">
+        <h4>Live: <strong class="deriv">Nexo</strong></h4>
+        <p>Lending platform extending into derivatives. Tangany custody on the spot side; DLT on the derivatives side.</p>
+      </div>
+    </div>
+
+    <p class="body" style="margin-top: 22px;">
+      Each new partnership repeats the same pattern: the platform brings the licensed
+      client base, DLT brings the regulated execution stack. Onboarding is measured in
+      weeks, not quarters. The pipeline of MiCAR institutions in similar conversations
+      is double-digit.
+    </p>
+
+    <!-- ─────────────────────────────────────────── -->
+    <!-- 4. EQUITY PERPS                             -->
+    <!-- ─────────────────────────────────────────── -->
+    <div class="section-header" id="eqperps">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Equity perpetuals — the natural extension</h2>
+    </div>
+    <p class="section-subtitle">Perp mechanics applied to single names and indices: what crypto users want when crypto is flat.</p>
+
+    <p class="body">
+      The retail user who has spent two years trading BTC and ETH perps already understands
+      funding, mark price, liquidation, and leverage. The mechanics translate one-for-one
+      to single-name equity perpetuals: <strong class="eq">NVDA-PERP, TSLA-PERP, SPX-PERP,
+      GOLD-PERP</strong>. Same UX, same risk engine, same liquidation logic — just a different
+      underlying.
+    </p>
+    <p class="body">
+      This is exactly the product retail wants in a flat-crypto market. They keep the
+      muscle memory and the leverage; the underlying gives them something to trade. For
+      the partner platform, it is incremental product without rebuilding a single
+      front-end component.
+    </p>
+
+    <div class="grid-2" style="margin-top: 20px;">
+      <div class="card">
+        <h4>Why it's a clean MiFID product</h4>
+        <p>
+          Equity perpetuals can be structured as either (a) derivatives referencing a
+          regulated underlying (cleanest), or (b) securitised perpetuals — factor
+          certificates / mini-futures issued under an EU prospectus and distributed OTC
+          through licensed brokers. DLT covers both paths.
+        </p>
+      </div>
+      <div class="card">
+        <h4>Why partners want it now</h4>
+        <p>
+          Crypto-native venues cannot offer equity exposure without a securities licence.
+          DLT's MiFID stack means a MiCAR platform can offer NVDA, TSLA, SPX exposure to
+          their existing client base on day one — without becoming an investment firm
+          themselves.
+        </p>
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────────── -->
+    <!-- 5. YIELD STRATEGIES                          -->
+    <!-- ─────────────────────────────────────────── -->
+    <div class="section-header" id="yield">
+      <span class="section-num">05</span>
+      <h2 class="section-title">Yield-focused option strategies</h2>
+    </div>
+    <p class="section-subtitle">Packaged option strategies that retail can buy in one click — the dominant retail product when direction is sideways.</p>
+
+    <p class="body">
+      In a flat market, retail does not stop wanting product — it stops wanting
+      directional product. The dominant retail flow in Asia and in European structured
+      products in 2026 is into <strong class="yield">yield-enhanced structured
+      strategies</strong>: pre-packaged option positions that pay an attractive coupon
+      in exchange for capped upside or conditional downside risk.
+    </p>
+    <p class="body">
+      DLT's MiFID backbone supports all four of the dominant retail formats. Each is
+      explained below with its payoff profile.
+    </p>
+
+    <!-- 5.1 Dual Investment / Covered Calls -->
+    <h3 class="sub-h" style="color: var(--yield);">5.1 · Dual Investment / Covered Calls</h3>
+
+    <p class="body">
+      <strong>What it is.</strong> The user deposits an asset (e.g. BTC or USDC) and
+      commits to either <em>sell at a higher strike</em> if the underlying rallies, or
+      <em>buy at a lower strike</em> if it dips. In exchange, they earn a fixed,
+      attractive yield (often 15–60% annualised, scaled to the term) for the duration
+      of the product, typically 1–14 days.
+    </p>
+    <p class="body">
+      <strong>How it works under the hood.</strong> The product sells an out-of-the-money
+      option (a call if the user deposited the asset; a put if they deposited the quote
+      currency). The premium received is the yield paid to the user. At expiry, if the
+      option is out of the money, the user gets their deposit back plus the yield. If
+      the option is in the money, the user is "settled" into the other asset at the
+      strike — they have effectively sold high or bought low.
+    </p>
+
+    <div class="payoff">
+      <svg viewBox="0 0 900 320" xmlns="http://www.w3.org/2000/svg" font-family="Inter, system-ui, sans-serif">
+        <!-- axes -->
+        <line x1="80" y1="260" x2="820" y2="260" stroke="#3a4060" stroke-width="1"/>
+        <line x1="80" y1="40"  x2="80"  y2="280" stroke="#3a4060" stroke-width="1"/>
+        <text x="450" y="298" text-anchor="middle" fill="#8892b0" font-size="11">Underlying price at expiry</text>
+        <text x="20" y="160" fill="#8892b0" font-size="11" transform="rotate(-90 20 160)">User payoff</text>
+
+        <!-- breakeven line (deposit) -->
+        <line x1="80" y1="180" x2="820" y2="180" stroke="#3a4060" stroke-width="1" stroke-dasharray="4,4"/>
+        <text x="824" y="184" fill="#8892b0" font-size="10">Deposit</text>
+
+        <!-- strike line -->
+        <line x1="550" y1="40" x2="550" y2="260" stroke="#F7A600" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="550" y="34" text-anchor="middle" fill="#F7A600" font-size="11" font-weight="700">Strike</text>
+
+        <!-- payoff curve (covered call): flat at deposit+yield, then declines after strike -->
+        <path d="M 80 150 L 550 150 L 770 230" stroke="#fbbf24" stroke-width="3" fill="none"/>
+
+        <!-- yield zone -->
+        <line x1="80" y1="180" x2="80" y2="150" stroke="#34d399" stroke-width="2"/>
+        <text x="92" y="168" fill="#34d399" font-size="11" font-weight="700">+ yield</text>
+
+        <!-- labels -->
+        <text x="280" y="138" fill="#fbbf24" font-size="11" font-weight="600">Below strike: keep deposit + yield</text>
+        <text x="600" y="218" fill="#f87171" font-size="11" font-weight="600">Above strike: settled into other asset</text>
+      </svg>
+      <p class="payoff-caption">Covered Call / Dual Investment payoff — flat yield in the expected range, conversion above the strike.</p>
+    </div>
+
+    <p class="body">
+      <strong>Why retail loves it.</strong> Headline yields look high, the worst case is
+      framed as "you sold your BTC at a higher price than today" or "you bought BTC at a
+      cheaper price than today" — both feel like wins. Binance, OKX, Bybit have made
+      this one of the highest-volume retail products globally.
+    </p>
+
+    <!-- 5.2 Shark Fin -->
+    <h3 class="sub-h" style="color: var(--yield);">5.2 · Shark Fin</h3>
+
+    <p class="body">
+      <strong>What it is.</strong> A <em>capital-protected</em> structured note that pays an
+      enhanced yield if the underlying stays within a defined range, and a low (or zero)
+      yield if it breaches that range. Capital is returned at maturity in either case —
+      no loss of principal, only of upside.
+    </p>
+    <p class="body">
+      <strong>How it works under the hood.</strong> A zero-coupon bond delivers principal
+      protection; the residual premium funds a "knock-out" call spread or put spread.
+      If the underlying stays inside the corridor, the spread pays a high coupon. If it
+      knocks out, the spread expires worthless and only a small "consolation" coupon
+      is paid.
+    </p>
+
+    <div class="payoff">
+      <svg viewBox="0 0 900 320" xmlns="http://www.w3.org/2000/svg" font-family="Inter, system-ui, sans-serif">
+        <line x1="80" y1="260" x2="820" y2="260" stroke="#3a4060" stroke-width="1"/>
+        <line x1="80" y1="40"  x2="80"  y2="280" stroke="#3a4060" stroke-width="1"/>
+        <text x="450" y="298" text-anchor="middle" fill="#8892b0" font-size="11">Underlying price at expiry</text>
+        <text x="20" y="160" fill="#8892b0" font-size="11" transform="rotate(-90 20 160)">User payoff</text>
+
+        <!-- principal protection line -->
+        <line x1="80" y1="220" x2="820" y2="220" stroke="#3a4060" stroke-width="1" stroke-dasharray="4,4"/>
+        <text x="824" y="224" fill="#8892b0" font-size="10">Principal</text>
+
+        <!-- barriers -->
+        <line x1="280" y1="40" x2="280" y2="260" stroke="#f87171" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="280" y="34" text-anchor="middle" fill="#f87171" font-size="11" font-weight="700">Lower KO</text>
+        <line x1="620" y1="40" x2="620" y2="260" stroke="#f87171" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="620" y="34" text-anchor="middle" fill="#f87171" font-size="11" font-weight="700">Upper KO</text>
+
+        <!-- shark fin payoff -->
+        <path d="M 80 215 L 280 215 L 320 90 L 580 90 L 620 215 L 820 215"
+              stroke="#fbbf24" stroke-width="3" fill="none"/>
+        <path d="M 320 90 L 580 90 L 620 215 L 280 215 Z" fill="#fbbf24" fill-opacity="0.08"/>
+
+        <text x="450" y="110" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="700">
+          Inside corridor: enhanced coupon
+        </text>
+        <text x="180" y="240" text-anchor="middle" fill="#f87171" font-size="11">KO: consolation coupon</text>
+        <text x="720" y="240" text-anchor="middle" fill="#f87171" font-size="11">KO: consolation coupon</text>
+      </svg>
+      <p class="payoff-caption">Shark Fin payoff — capital always returned; enhanced yield only if underlying stays inside the corridor.</p>
+    </div>
+
+    <p class="body">
+      <strong>Why retail loves it.</strong> "Capital protected" is the strongest selling
+      angle in any structured product. Pair that with double-digit headline coupons and
+      this is the dominant European retail format outside of pure crypto. Translating
+      it to BTC/ETH/SPX underlyings is what makes DLT's stack uniquely positioned.
+    </p>
+
+    <!-- 5.3 0DTE -->
+    <h3 class="sub-h" style="color: var(--yield);">5.3 · 0DTE — Zero-Day-To-Expiry options</h3>
+
+    <p class="body">
+      <strong>What it is.</strong> Options that expire on the same trading day they
+      are bought. The user picks a strike and a direction, pays a small premium, and
+      either captures a multiple or loses the premium by end of session.
+    </p>
+    <p class="body">
+      0DTE has been the single fastest-growing product on US options exchanges. SPX 0DTE
+      now exceeds 50% of total SPX option volume on some sessions. The mechanic — pay a
+      small fixed premium, get binary-style exposure to a one-day move — translates
+      directly to crypto and to single-name equity perpetual references.
+    </p>
+
+    <div class="payoff">
+      <svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg" font-family="Inter, system-ui, sans-serif">
+        <line x1="80" y1="220" x2="820" y2="220" stroke="#3a4060" stroke-width="1"/>
+        <line x1="80" y1="40"  x2="80"  y2="240" stroke="#3a4060" stroke-width="1"/>
+        <text x="450" y="258" text-anchor="middle" fill="#8892b0" font-size="11">Underlying at end of session</text>
+
+        <line x1="450" y1="40" x2="450" y2="220" stroke="#F7A600" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="450" y="34" text-anchor="middle" fill="#F7A600" font-size="11" font-weight="700">Strike</text>
+
+        <!-- breakeven -->
+        <line x1="80" y1="195" x2="820" y2="195" stroke="#3a4060" stroke-width="1" stroke-dasharray="4,4"/>
+        <text x="824" y="199" fill="#8892b0" font-size="10">−premium</text>
+        <line x1="80" y1="220" x2="820" y2="220" stroke="#3a4060" stroke-width="1"/>
+
+        <!-- call payoff -->
+        <path d="M 80 195 L 450 195 L 720 60" stroke="#fbbf24" stroke-width="3" fill="none"/>
+        <text x="200" y="180" fill="#f87171" font-size="11">Premium lost if no move</text>
+        <text x="600" y="80" fill="#34d399" font-size="11">Multiple of premium if direction right</text>
+      </svg>
+      <p class="payoff-caption">0DTE call payoff — small fixed cost, leveraged exposure to a single-session move.</p>
+    </div>
+
+    <p class="body">
+      <strong>Why it matters for DLT.</strong> 0DTE is a high-frequency, high-engagement
+      product. It keeps users on platform daily without requiring directional conviction
+      from them. For the partner platform, it dramatically improves session frequency
+      metrics. For DLT, it is incremental order flow into the derivatives stack we
+      already operate.
+    </p>
+
+    <!-- 5.4 Sprinters -->
+    <h3 class="sub-h" style="color: var(--yield);">5.4 · Sprinters / Knock-Out certificates</h3>
+
+    <p class="body">
+      <strong>What it is.</strong> A leveraged participation certificate with an
+      automatic knock-out barrier. The user takes a directional view with embedded
+      leverage (5x–50x). If the underlying moves in their direction, the certificate
+      tracks the move on a leveraged basis. If the underlying touches a pre-defined
+      barrier, the certificate <em>knocks out</em> and is settled at (or near) zero.
+    </p>
+    <p class="body">
+      <strong>How it differs from a perp.</strong> A perp is a continuously rolling,
+      cash-settled futures contract with funding payments. A sprinter is a
+      <em>securitised</em> instrument — a certificate issued under an EU prospectus
+      with an ISIN, distributed OTC through MiFID-licensed brokers. The leverage and
+      knock-out are baked into the structure. There is no funding payment and no
+      margin call: maximum loss is capped at the premium paid.
+    </p>
+
+    <div class="payoff">
+      <svg viewBox="0 0 900 320" xmlns="http://www.w3.org/2000/svg" font-family="Inter, system-ui, sans-serif">
+        <line x1="80" y1="260" x2="820" y2="260" stroke="#3a4060" stroke-width="1"/>
+        <line x1="80" y1="40"  x2="80"  y2="280" stroke="#3a4060" stroke-width="1"/>
+        <text x="450" y="298" text-anchor="middle" fill="#8892b0" font-size="11">Underlying price</text>
+        <text x="20" y="160" fill="#8892b0" font-size="11" transform="rotate(-90 20 160)">Certificate value</text>
+
+        <!-- Knock-out barrier -->
+        <line x1="200" y1="40" x2="200" y2="260" stroke="#f87171" stroke-width="1.5" stroke-dasharray="3,3"/>
+        <text x="200" y="34" text-anchor="middle" fill="#f87171" font-size="11" font-weight="700">Knock-Out</text>
+
+        <!-- Strike / current -->
+        <line x1="400" y1="40" x2="400" y2="260" stroke="#8892b0" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="400" y="34" text-anchor="middle" fill="#8892b0" font-size="11">Current</text>
+
+        <!-- Knock-out zone -->
+        <rect x="80" y="40" width="120" height="220" fill="#f87171" fill-opacity="0.06"/>
+        <text x="140" y="160" text-anchor="middle" fill="#f87171" font-size="11" font-weight="700">Knocked out</text>
+        <text x="140" y="178" text-anchor="middle" fill="#f87171" font-size="11">value → 0</text>
+
+        <!-- Leveraged participation -->
+        <path d="M 200 260 L 770 60" stroke="#fbbf24" stroke-width="3" fill="none"/>
+
+        <text x="550" y="180" fill="#fbbf24" font-size="12" font-weight="600">Leveraged participation</text>
+        <text x="550" y="198" fill="#8892b0" font-size="11">(e.g. 10x — gain per unit underlying)</text>
+      </svg>
+      <p class="payoff-caption">Long Sprinter / Knock-Out certificate — leveraged participation until barrier; instant knock-out below barrier.</p>
+    </div>
+
+    <p class="body">
+      <strong>Why retail loves it.</strong> Sprinters are the dominant retail leveraged
+      product in Germany, Austria, Switzerland and the Nordics — total volume across
+      European exchanges runs into hundreds of billions of EUR per year. The product is
+      familiar, accepted by regulators, and well-understood. Putting BTC, ETH, SPX,
+      single-name equity sprinters in front of a retail MiCAR client base is a clean
+      product extension.
+    </p>
+
+    <div class="callout">
+      <h5>Why this matters for DLT</h5>
+      <p>
+        These four formats — Dual Investment, Shark Fin, 0DTE, Sprinters — cover the
+        full retail yield + leveraged spectrum. They all run on the same derivatives
+        and options primitives DLT already manages. They all distribute through the
+        same MiCAR-platform / MiFID-broker pipe DLT has already built. They are not
+        four new businesses — they are four configurations of the same business.
+      </p>
+    </div>
+
+    <!-- ─────────────────────────────────────────── -->
+    <!-- 6. INSTRUMENT SHELF                          -->
+    <!-- ─────────────────────────────────────────── -->
+    <div class="section-header" id="shelf">
+      <span class="section-num">06</span>
+      <h2 class="section-title">DLT instrument shelf</h2>
+    </div>
+    <p class="section-subtitle">The full product line that DLT can offer through any MiCAR platform partner — built on a single MiFID backbone.</p>
+
+    <h4 class="sub-h2" style="color: var(--bitmex);">Derivatives</h4>
+    <div class="grid-4">
+      <div class="inst deriv">
+        <div class="inst-tag">Derivatives</div>
+        <h5>Crypto Perpetuals</h5>
+        <p>BTC, ETH, SOL, top-50 alts. Up to 100× via MiFID-routed venues.</p>
+      </div>
+      <div class="inst deriv">
+        <div class="inst-tag">Derivatives</div>
+        <h5>Dated Futures</h5>
+        <p>Quarterly + monthly expiries on majors. Standard CFD/derivative wrapper.</p>
+      </div>
+      <div class="inst deriv">
+        <div class="inst-tag">Derivatives</div>
+        <h5>Options (vanilla)</h5>
+        <p>European-style calls/puts on majors — building block for all yield products.</p>
+      </div>
+      <div class="inst deriv">
+        <div class="inst-tag">Derivatives</div>
+        <h5>5-Year Perpetual Cert</h5>
+        <p>Securitised perpetual exposure with no daily funding — proprietary DLT format.</p>
+      </div>
+    </div>
+
+    <h4 class="sub-h2" style="color: var(--eq);">Equities &amp; Indices</h4>
+    <div class="grid-4">
+      <div class="inst eq">
+        <div class="inst-tag">Equity</div>
+        <h5>Equity Perpetuals</h5>
+        <p>NVDA, TSLA, AAPL, GOOGL, MSFT — perp mechanics on single names.</p>
+      </div>
+      <div class="inst eq">
+        <div class="inst-tag">Equity</div>
+        <h5>Index Perpetuals</h5>
+        <p>SPX, NDX, DAX, NKY — broad-market exposure with perp UX.</p>
+      </div>
+      <div class="inst eq">
+        <div class="inst-tag">Equity</div>
+        <h5>Commodity Perpetuals</h5>
+        <p>GOLD, SILVER, COPPER, OIL — diversification asset class for crypto-fatigued users.</p>
+      </div>
+      <div class="inst eq">
+        <div class="inst-tag">Equity</div>
+        <h5>FX Perpetuals</h5>
+        <p>EUR/USD, JPY/USD and emerging-market pairs — completes the macro shelf.</p>
+      </div>
+    </div>
+
+    <h4 class="sub-h2" style="color: var(--yield);">Yield &amp; Structured</h4>
+    <div class="grid-4">
+      <div class="inst yield">
+        <div class="inst-tag">Yield</div>
+        <h5>Dual Investment</h5>
+        <p>Covered call / cash-secured put product. 15–60% annualised on majors.</p>
+      </div>
+      <div class="inst yield">
+        <div class="inst-tag">Yield</div>
+        <h5>Shark Fin</h5>
+        <p>Capital-protected note with enhanced coupon inside a corridor.</p>
+      </div>
+      <div class="inst yield">
+        <div class="inst-tag">Yield</div>
+        <h5>0DTE Options</h5>
+        <p>Same-day-expiry options on crypto + indices.</p>
+      </div>
+      <div class="inst yield">
+        <div class="inst-tag">Yield</div>
+        <h5>Reverse Convertibles</h5>
+        <p>Enhanced coupon with conditional downside — classic European structured format.</p>
+      </div>
+      <div class="inst yield">
+        <div class="inst-tag">Yield</div>
+        <h5>Principal-Protected Notes</h5>
+        <p>Capital guarantee at maturity + capped upside participation.</p>
+      </div>
+      <div class="inst yield">
+        <div class="inst-tag">Yield</div>
+        <h5>Carry Notes</h5>
+        <p>Packaged exposure to funding-rate / basis trades.</p>
+      </div>
+      <div class="inst yield">
+        <div class="inst-tag">Yield</div>
+        <h5>Yield Vaults</h5>
+        <p>Automated rolling covered-call strategies on the user's deposited asset.</p>
+      </div>
+      <div class="inst yield">
+        <div class="inst-tag">Yield</div>
+        <h5>Range Accruals</h5>
+        <p>Daily coupon accrual conditional on the underlying staying in a corridor.</p>
+      </div>
+    </div>
+
+    <h4 class="sub-h2" style="color: var(--warn);">Leveraged Certificates</h4>
+    <div class="grid-4">
+      <div class="inst lev">
+        <div class="inst-tag">Leverage</div>
+        <h5>Sprinters / Knock-Outs</h5>
+        <p>Securitised leveraged certificates with knock-out barrier.</p>
+      </div>
+      <div class="inst lev">
+        <div class="inst-tag">Leverage</div>
+        <h5>Factor Certificates</h5>
+        <p>Constant-leverage daily rebalanced certificates — TradFi equivalent of perp.</p>
+      </div>
+      <div class="inst lev">
+        <div class="inst-tag">Leverage</div>
+        <h5>Turbo Certificates</h5>
+        <p>Knock-out variant with rolling funding cost embedded.</p>
+      </div>
+      <div class="inst lev">
+        <div class="inst-tag">Leverage</div>
+        <h5>Mini-Futures</h5>
+        <p>No knock-out variant; continuous funding; cleaner for hold periods.</p>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top: 28px;">
+      <h5>One backbone, twenty products</h5>
+      <p>
+        Every instrument above lives on the same DLT infrastructure: the same risk
+        engine, the same MiFID best-execution layer, the same client-asset
+        segregation, the same reporting pipe. Adding a new product to the shelf is a
+        configuration exercise — not a rebuild.
+      </p>
+    </div>
+
+    <!-- ─────────────────────────────────────────── -->
+    <!-- 7. BACKBONE                                  -->
+    <!-- ─────────────────────────────────────────── -->
+    <div class="section-header" id="backbone">
+      <span class="section-num">07</span>
+      <h2 class="section-title">The MiFID backbone advantage</h2>
+    </div>
+    <p class="section-subtitle">What we built to enable derivatives is the same thing that lets us launch the next 10 products quickly.</p>
+
+    <p class="body">
+      The work that went into enabling derivatives trading for MiCAR partners was not
+      a single-product build. It was the construction of a regulated infrastructure
+      layer: licensed MiFID II permissions, best-execution framework, transaction
+      reporting (ARM), pre- and post-trade transparency, client-asset segregation,
+      collateral management, and venue connectivity into BitMEX, Deribit, OKX and the
+      ECNs.
+    </p>
+    <p class="body">
+      That stack does not need to be rebuilt for the next product. Equity perps, yield
+      strategies, structured certificates — each one is a configuration on top of
+      existing infrastructure. The marginal cost of adding a product is mostly
+      structuring and prospectus work, not engineering or licensing.
+    </p>
+
+    <div class="grid-2">
+      <div class="card">
+        <h4 style="color: var(--dlt);">What's already built</h4>
+        <ul class="body-list">
+          <li>MiFID II investment-firm permissions</li>
+          <li>Best-execution &amp; reporting infrastructure</li>
+          <li>Client-asset segregation &amp; safeguarding</li>
+          <li>Venue connectivity: BitMEX · Deribit · OKX · Bybit</li>
+          <li>ECN connectivity: 360T · oneZero · Crossover</li>
+          <li>Whitelabel API for partner integration</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4 style="color: var(--yield);">What gets built on top</h4>
+        <ul class="body-list">
+          <li>Equity-perp risk &amp; mark-price layer</li>
+          <li>Options pricing &amp; risk engine</li>
+          <li>Structured-product wrappers (term sheets, KIDs)</li>
+          <li>Issuance entity for securitised products</li>
+          <li>Sprinter / certificate base prospectus</li>
+          <li>Distribution agreements with MiCAR partners</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────────── -->
+    <!-- 8. B2B                                       -->
+    <!-- ─────────────────────────────────────────── -->
+    <div class="section-header" id="b2b">
+      <span class="section-num">08</span>
+      <h2 class="section-title">B2B — liquidity provision &amp; best execution</h2>
+    </div>
+    <p class="section-subtitle">The institutional side. Below-capacity tier-1 desks plus ECN distribution keeps this business durable.</p>
+
+    <p class="body">
+      The institutional half of the market tells a different story than the retail half.
+      Large bank trading desks have opened crypto lines but are nowhere near full
+      deployment. They cannot yet warehouse meaningful crypto risk, their internal
+      mandates remain conservative, and many do not have direct exchange relationships.
+      That keeps the demand for external liquidity provision and routed best execution
+      structurally elevated.
+    </p>
+
+    <h3 class="sub-h">8.1 · ECN distribution remains the dominant pipe</h3>
+
+    <p class="body">
+      For institutional crypto flow, three ECNs dominate the market: <strong class="acc">360T</strong>,
+      <strong class="acc">oneZero</strong>, and <strong class="acc">Crossover Markets</strong>.
+      Every meaningful institutional liquidity programme — including ours — runs through
+      one or more of these. DLT is connected and live on all three.
+    </p>
+
+    <div class="grid-3">
+      <div class="card">
+        <h4>360T</h4>
+        <p>Deutsche Börse-owned multi-asset venue with the deepest bank connectivity. The institutional default for crypto NDFs and structured flow.</p>
+      </div>
+      <div class="card">
+        <h4>oneZero</h4>
+        <p>Broker-focused infrastructure layer with strong retail-broker connectivity. Where flow from FX-style brokers crosses into the crypto market.</p>
+      </div>
+      <div class="card">
+        <h4>Crossover Markets</h4>
+        <p>Institutional ECN purpose-built for digital assets. Smaller than 360T but with strong relationships in funds &amp; market-makers.</p>
+      </div>
+    </div>
+
+    <h3 class="sub-h">8.2 · Best execution as a moat</h3>
+
+    <p class="body">
+      MiFID II best-execution obligations are not a checkbox for institutional
+      counterparties — they are an audit requirement. The institutions that can
+      demonstrate routed best execution across multiple venues, with measurable
+      reporting, win the mandates. The institutions that route to a single venue do
+      not. DLT's documented, multi-venue routing is one of the few defensible
+      institutional moats in the European crypto market today.
+    </p>
+
+    <div class="callout">
+      <h5>The point</h5>
+      <p>
+        The B2B side is not a growth story — it is a stability story. ECN flow plus
+        best-execution mandates produce a stable institutional revenue base while the
+        B2B2X retail side is where the upside lives. We hold both.
+      </p>
+    </div>
+
+    <!-- ─────────────────────────────────────────── -->
+    <!-- 9. ROADMAP                                   -->
+    <!-- ─────────────────────────────────────────── -->
+    <div class="section-header" id="roadmap">
+      <span class="section-num">09</span>
+      <h2 class="section-title">12-month roadmap</h2>
+    </div>
+    <p class="section-subtitle">Where we direct capital and attention over the next four quarters.</p>
+
+    <div class="roadmap">
+      <div class="roadmap-row">
+        <div class="roadmap-q">Q3 2026</div>
+        <div class="roadmap-body">
+          <h5>Convert the pipeline — derivatives partnerships</h5>
+          <p>
+            Close 3–5 additional MiCAR partner integrations on top of the current live
+            cohort (BitMEX, Bit2Me, Nexo). Standardise the whitelabel onboarding playbook
+            so a new partner is live in ≤8 weeks.
+          </p>
+        </div>
+      </div>
+      <div class="roadmap-row">
+        <div class="roadmap-q">Q3 2026</div>
+        <div class="roadmap-body">
+          <h5>Equity perpetuals — first MiCAR partner live</h5>
+          <p>
+            Roll out NVDA, TSLA, SPX, GOLD perpetuals through the first partner platform.
+            Use the launch to harden the equity-perp risk &amp; mark-price layer for
+            subsequent rollouts.
+          </p>
+        </div>
+      </div>
+      <div class="roadmap-row">
+        <div class="roadmap-q">Q4 2026</div>
+        <div class="roadmap-body">
+          <h5>Yield product line v1 — Dual Investment + Shark Fin</h5>
+          <p>
+            Launch packaged Dual Investment and Shark Fin products on BTC, ETH, SPX
+            through at least two partner platforms. Build the options risk infrastructure
+            that supports the rest of the yield shelf.
+          </p>
+        </div>
+      </div>
+      <div class="roadmap-row">
+        <div class="roadmap-q">Q4 2026</div>
+        <div class="roadmap-body">
+          <h5>0DTE retail rollout</h5>
+          <p>
+            Same-day-expiry options on BTC, ETH and major indices. Optimised for partner
+            platform engagement metrics.
+          </p>
+        </div>
+      </div>
+      <div class="roadmap-row">
+        <div class="roadmap-q">Q1 2027</div>
+        <div class="roadmap-body">
+          <h5>Sprinter / certificate issuance live</h5>
+          <p>
+            Own-issuer base prospectus filed (Liechtenstein FMA route — fastest EEA
+            passport). First certificates issued and distributed OTC through MiFID-licensed
+            partner brokers.
+          </p>
+        </div>
+      </div>
+      <div class="roadmap-row">
+        <div class="roadmap-q">Q1 2027</div>
+        <div class="roadmap-body">
+          <h5>Institutional B2B — extend ECN footprint</h5>
+          <p>
+            Add additional bank counterparties on 360T and oneZero. Continue building
+            the documented best-execution case that wins institutional mandates.
+          </p>
+        </div>
+      </div>
+      <div class="roadmap-row">
+        <div class="roadmap-q">Q2 2027</div>
+        <div class="roadmap-body">
+          <h5>Full shelf live across top-3 partners</h5>
+          <p>
+            Derivatives + equity perps + yield + sprinters all live with the top three
+            partner platforms. DLT positioned as the default MiFID infrastructure layer
+            for the MiCAR market.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────────── -->
+    <!-- CLOSING                                     -->
+    <!-- ─────────────────────────────────────────── -->
+    <div class="exec-summary" style="margin-top: 56px;">
+      <h2>The thesis in one sentence</h2>
+      <p>
+        Crypto is dull, but the regulated infrastructure around it is the most
+        valuable it has ever been — and DLT is the company that owns the MiFID
+        backbone underneath the next wave of MiCAR-licensed European platforms.
+      </p>
+    </div>
+
+    <footer>
+      DLT — Market Outlook &amp; 12-Month Strategy · Confidential · For new ownership review
+    </footer>
+
+  </div>
+</body>
+</html>
