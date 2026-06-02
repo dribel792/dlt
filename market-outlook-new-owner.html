@@ -363,10 +363,13 @@
         keeping ECN-based liquidity provision and best execution in demand.
       </p>
       <p>
-        DLT has built the MiFID derivatives backbone. With that foundation in place, every
-        new product — equity perpetuals, yield strategies, structured certificates — is a
-        configuration on top of the same infrastructure, not a new build. This is what we
-        will press hard on for the next four quarters.
+        DLT will build out <strong class="dlt">three new product lines on top of the existing
+        MiFID derivatives backbone — leverage, TradFi, and yield</strong> — so that we always have
+        a product that fits the market regime. Direction strong → leverage (perps, sprinters, 0DTE)
+        sells. Direction dull but equities working → TradFi (equity perps, indices, commodities)
+        sells. Direction flat → yield (dual investment, shark fin, BRC, capital-protected notes)
+        sells. The infrastructure is the same; only the configuration changes. That is the bet
+        we press for the next four quarters.
       </p>
     </div>
 
@@ -378,7 +381,8 @@
         <li><a href="#b2b2x">B2B2X — the MiCAR wave</a></li>
         <li><a href="#deriv">Derivatives trading — the MiFID-adjacent gap</a></li>
         <li><a href="#eqperps">Equity perpetuals — natural extension</a></li>
-        <li><a href="#yield">Yield-focused option strategies</a></li>
+        <li><a href="#yield">Yield strategies</a></li>
+        <li><a href="#leverage">Leverage products</a></li>
         <li><a href="#shelf">DLT instrument shelf</a></li>
         <li><a href="#backbone">The MiFID backbone advantage</a></li>
         <li><a href="#b2b">B2B — liquidity provision &amp; best execution</a></li>
@@ -481,7 +485,7 @@
       <div class="pillar deriv">
         <h4>Layer 1</h4>
         <h3>Derivatives Trading</h3>
-        <p>The most regulated-clean, most defensible adjacency. Already live with BitMEX, Bit2Me, Nexo.</p>
+        <p>The most regulated-clean, most defensible adjacency. Going live with BitMEX, Bit2Me; Nexo signed, not yet live.</p>
       </div>
       <div class="pillar eq">
         <h4>Layer 2</h4>
@@ -490,20 +494,34 @@
       </div>
       <div class="pillar yield">
         <h4>Layer 3</h4>
-        <h3>Yield Strategies</h3>
-        <p>Dual investment, shark fins, 0DTE, sprinters — what retail wants when spot is flat.</p>
+        <h3>Yield, Leverage &amp; Structured</h3>
+        <p>Four parallel sub-shelves below — yield, leverage, tokenized structured products, prediction markets.</p>
       </div>
     </div>
 
-    <div class="callout warn" style="margin-top: 28px;">
-      <h5>Why not margin trading?</h5>
-      <p>
-        Margin trading on spot crypto sits in a regulatory grey area under MiCAR — there
-        is no clean, harmonised framework for retail leveraged spot in the EU. Most MiCAR
-        institutions will not touch it without explicit national-regulator guidance.
-        Derivatives, by contrast, sit cleanly under MiFID II — well-understood,
-        passportable, defensible. That is why all eyes are on derivatives.
-      </p>
+    <!-- Layer 3 sub-layers -->
+    <h4 class="sub-h2" style="color: var(--yield); margin-top: 30px;">Layer 3 — Four parallel sub-shelves</h4>
+    <div class="grid-4" style="margin-top: 12px;">
+      <div class="pillar yield">
+        <h4>3a · Yield</h4>
+        <h3>Yield Strategies</h3>
+        <p>Shark fin, BRC (reverse convertibles), dual investment, capital-protected notes, range accruals.</p>
+      </div>
+      <div class="pillar" style="border-top-color: var(--warn);">
+        <h4>3b · Leverage</h4>
+        <h3>Leveraged Products</h3>
+        <p>Sprinters / knock-outs, factor certificates, 0DTE options, turbos, mini-futures.</p>
+      </div>
+      <div class="pillar eq">
+        <h4>3c · TradFi-on-chain</h4>
+        <h3>Tokenized Structured Products</h3>
+        <p>Pre-packaged strategy tokens — e.g. long-BTC short-Strategy, BTC-vol-carry, long-equity short-vol. Added later in the roadmap.</p>
+      </div>
+      <div class="pillar deriv">
+        <h4>3d · Event</h4>
+        <h3>Prediction Markets</h3>
+        <p>Binary outcome markets — macro events, sports, crypto-native catalysts. High-engagement product for retail platforms.</p>
+      </div>
     </div>
 
     <!-- ─────────────────────────────────────────── -->
@@ -517,12 +535,34 @@
 
     <p class="body">
       DLT operates a licensed MiFID II derivatives broker stack. MiCAR-licensed
-      platforms route their client orders into DLT's API; we handle execution against
-      crypto-derivative venues (BitMEX as primary, others as alternates), provide best
-      execution reporting, post-trade transparency, and client-asset segregation. The
-      partner platform keeps the client relationship and the brand; DLT carries the
-      MiFID infrastructure.
+      platforms route their client orders into DLT's API; DLT carries the full
+      regulated wrapper around that flow. The partner platform keeps the client
+      relationship and the brand; DLT carries everything that would otherwise require
+      a multi-year, multi-million regulated build:
     </p>
+
+    <div class="grid-2" style="margin-top: 16px;">
+      <div class="card">
+        <h4 style="color: var(--dlt);">DLT handles — client-side</h4>
+        <ul class="body-list">
+          <li>KYC &amp; AML onboarding</li>
+          <li>MiFID appropriateness &amp; suitability assessment</li>
+          <li>Categorisation (retail vs. professional vs. eligible counterparty)</li>
+          <li>Client-asset segregation &amp; safeguarding</li>
+          <li>Pre-trade risk &amp; product-governance checks</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4 style="color: var(--dlt);">DLT handles — market-side</h4>
+        <ul class="body-list">
+          <li>Best-execution venue routing</li>
+          <li>Post-trade reporting — <strong class="dlt">EMIR + MiFIR</strong></li>
+          <li>Transaction reporting (ARM) &amp; trade publication (APA)</li>
+          <li>Venue connectivity, clearing &amp; collateral management</li>
+          <li>Internal book + external hedge execution</li>
+        </ul>
+      </div>
+    </div>
 
     <div class="viz-card">
       <svg viewBox="0 0 1100 320" xmlns="http://www.w3.org/2000/svg" font-family="Inter, system-ui, sans-serif">
@@ -573,26 +613,46 @@
       </svg>
     </div>
 
+    <h4 class="sub-h2" style="color: var(--bitmex); margin-top: 32px;">Integrating now</h4>
     <div class="grid-3">
       <div class="card">
-        <h4>Live: <strong class="deriv">BitMEX</strong></h4>
-        <p>Primary derivatives venue. EU client flow routed via DLT under MiFID. Joint operational memorandum signed.</p>
+        <h4>Integrating: <strong class="deriv">BitMEX</strong></h4>
+        <p>Primary derivatives venue. EU client flow routed via DLT under MiFID. Joint operational memorandum signed; final integration milestones in flight.</p>
       </div>
       <div class="card">
-        <h4>Live: <strong class="deriv">Bit2Me</strong></h4>
-        <p>Spanish MiCAR-licensed CASP. DLT provides derivatives access for their retail client base.</p>
+        <h4>Integrating: <strong class="deriv">Bit2Me</strong></h4>
+        <p>Spanish MiCAR-licensed CASP. DLT provides derivatives access for their retail client base. Technical integration in progress.</p>
       </div>
       <div class="card">
-        <h4>Live: <strong class="deriv">Nexo</strong></h4>
-        <p>Lending platform extending into derivatives. Tangany custody on the spot side; DLT on the derivatives side.</p>
+        <h4>Signed: <strong class="deriv">Nexo</strong></h4>
+        <p>Lending platform extending into derivatives. Agreement signed, not yet live — integration scheduled into the live cohort below.</p>
+      </div>
+    </div>
+
+    <h4 class="sub-h2" style="color: var(--dlt); margin-top: 32px;">High-priority pipeline</h4>
+    <div class="grid-4">
+      <div class="card">
+        <h4><strong class="dlt">Vancelian</strong></h4>
+        <p>Wealth-tech / structured products platform. Fit for derivatives + structured shelf.</p>
+      </div>
+      <div class="card">
+        <h4><strong class="dlt">Coinhouse</strong></h4>
+        <p>French PSAN / MiCAR-aligned CASP. Strong retail brand; clean fit for whitelabel derivatives.</p>
+      </div>
+      <div class="card">
+        <h4><strong class="dlt">Young Platform</strong></h4>
+        <p>Italian MiCAR-licensed CASP. Retail-first; equity-perp and yield products are the natural next layer.</p>
+      </div>
+      <div class="card">
+        <h4>+ Double-digit cohort</h4>
+        <p>Further MiCAR-licensed institutions in active conversations across DACH, Iberia, Nordics, France, Italy.</p>
       </div>
     </div>
 
     <p class="body" style="margin-top: 22px;">
       Each new partnership repeats the same pattern: the platform brings the licensed
       client base, DLT brings the regulated execution stack. Onboarding is measured in
-      weeks, not quarters. The pipeline of MiCAR institutions in similar conversations
-      is double-digit.
+      weeks, not quarters.
     </p>
 
     <!-- ─────────────────────────────────────────── -->
@@ -617,6 +677,20 @@
       the partner platform, it is incremental product without rebuilding a single
       front-end component.
     </p>
+
+    <div class="callout" style="margin-top: 18px;">
+      <h5>24/7 markets — the structural differentiator</h5>
+      <p>
+        Cash equities trade ~6.5h a day; futures markets close on weekends; the underlying
+        venues stop. Equity perpetuals do <strong class="eq">not</strong> — they are
+        <strong class="eq">24/7 markets</strong>. The mark price keeps moving against an
+        index reference, funding accrues continuously, and the order book stays open
+        through nights, weekends and holidays. That gives the partner platform a product
+        that is <em>always</em> tradeable — exactly when retail users actually open the
+        app — and gives DLT a regulated wrapper around something traditional brokers
+        structurally cannot offer.
+      </p>
+    </div>
 
     <div class="grid-2" style="margin-top: 20px;">
       <div class="card">
@@ -644,21 +718,69 @@
     <!-- ─────────────────────────────────────────── -->
     <div class="section-header" id="yield">
       <span class="section-num">05</span>
-      <h2 class="section-title">Yield-focused option strategies</h2>
+      <h2 class="section-title">Yield strategies</h2>
     </div>
     <p class="section-subtitle">Packaged option strategies that retail can buy in one click — the dominant retail product when direction is sideways.</p>
 
     <p class="body">
       In a flat market, retail does not stop wanting product — it stops wanting
-      directional product. The dominant retail flow in Asia and in European structured
-      products in 2026 is into <strong class="yield">yield-enhanced structured
-      strategies</strong>: pre-packaged option positions that pay an attractive coupon
-      in exchange for capped upside or conditional downside risk.
+      <em>directional</em> product. The dominant retail flow in Asia and in European
+      structured products in 2026 is into <strong class="yield">yield-enhanced
+      structured strategies</strong>: pre-packaged option positions that pay an
+      attractive coupon in exchange for capped upside, conditional downside, or a
+      barrier corridor.
     </p>
     <p class="body">
-      DLT's MiFID backbone supports all four of the dominant retail formats. Each is
-      explained below with its payoff profile.
+      DLT's MiFID backbone supports the four dominant retail yield formats — Dual
+      Investment, Shark Fin, BRC (Barrier Reverse Convertibles), and Principal-Protected
+      Notes. Each is explained below with payoff profile, indicative yield, and how
+      the downside is protected.
     </p>
+
+    <!-- Summary table -->
+    <div class="compare-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Yield Product</th>
+            <th>Indicative APR</th>
+            <th>Term</th>
+            <th>Downside Protection</th>
+            <th>Worst-case for user</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong class="yield">Dual Investment</strong></td>
+            <td>15 – 60% p.a.</td>
+            <td>1 – 14 days</td>
+            <td class="dim">None — directional conversion at strike</td>
+            <td>Converted into the other asset at the strike (sold above market or bought below)</td>
+          </tr>
+          <tr>
+            <td><strong class="yield">Shark Fin</strong></td>
+            <td>2% (base) → up to 30% p.a. (fin peak)</td>
+            <td>1 – 3 months</td>
+            <td><strong class="dlt">100% capital protected</strong></td>
+            <td>Receive principal back plus the base APR (no upside)</td>
+          </tr>
+          <tr>
+            <td><strong class="yield">BRC (Reverse Convertible)</strong></td>
+            <td>8 – 25% p.a. (fixed coupon)</td>
+            <td>3 – 12 months</td>
+            <td>Conditional — barrier (typically 60–80% of spot)</td>
+            <td>If barrier breached, redeemed in the underlying at the strike (loss vs. cash)</td>
+          </tr>
+          <tr>
+            <td><strong class="yield">Principal-Protected Note</strong></td>
+            <td>0% guaranteed + capped upside participation</td>
+            <td>6 – 24 months</td>
+            <td><strong class="dlt">100% capital protected at maturity</strong></td>
+            <td>Receive principal back with zero (or low) upside if underlying did not perform</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <!-- 5.1 Dual Investment / Covered Calls -->
     <h3 class="sub-h" style="color: var(--yield);">5.1 · Dual Investment / Covered Calls</h3>
@@ -720,48 +842,72 @@
     <h3 class="sub-h" style="color: var(--yield);">5.2 · Shark Fin</h3>
 
     <p class="body">
-      <strong>What it is.</strong> A <em>capital-protected</em> structured note that pays an
-      enhanced yield if the underlying stays within a defined range, and a low (or zero)
-      yield if it breaches that range. Capital is returned at maturity in either case —
-      no loss of principal, only of upside.
+      <strong>What it is.</strong> A <em>capital-protected</em> structured note that pays
+      a directional, range-linked yield. The user picks a direction (bull or bear); the
+      product defines a starting price and a knock-out barrier. As long as the underlying
+      moves in their direction but does not breach the barrier, the APR rises linearly
+      with the move. If the underlying retraces, the user receives a small base APR. If
+      the barrier is breached, the product knocks out and only the base APR is paid.
+      Principal is always returned at maturity.
     </p>
     <p class="body">
       <strong>How it works under the hood.</strong> A zero-coupon bond delivers principal
-      protection; the residual premium funds a "knock-out" call spread or put spread.
-      If the underlying stays inside the corridor, the spread pays a high coupon. If it
-      knocks out, the spread expires worthless and only a small "consolation" coupon
-      is paid.
+      protection; the residual premium funds an up-and-out call spread (for a bull fin)
+      or a down-and-out put spread (for a bear fin). The strike sits at spot, the knock-out
+      sits at the upper (or lower) barrier. Payoff between strike and barrier is linear in
+      the underlying — that is the "fin" shape, and it is exactly how Bitget, OKX and
+      Binance display the product to retail.
     </p>
 
     <div class="payoff">
-      <svg viewBox="0 0 900 320" xmlns="http://www.w3.org/2000/svg" font-family="Inter, system-ui, sans-serif">
-        <line x1="80" y1="260" x2="820" y2="260" stroke="#3a4060" stroke-width="1"/>
+      <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" font-family="Inter, system-ui, sans-serif">
+        <!-- axes -->
+        <line x1="80" y1="280" x2="820" y2="280" stroke="#3a4060" stroke-width="1"/>
         <line x1="80" y1="40"  x2="80"  y2="280" stroke="#3a4060" stroke-width="1"/>
-        <text x="450" y="298" text-anchor="middle" fill="#8892b0" font-size="11">Underlying price at expiry</text>
-        <text x="20" y="160" fill="#8892b0" font-size="11" transform="rotate(-90 20 160)">User payoff</text>
+        <text x="450" y="318" text-anchor="middle" fill="#8892b0" font-size="11">Underlying price at expiry (Bull Shark Fin)</text>
+        <text x="20" y="170" fill="#8892b0" font-size="11" transform="rotate(-90 20 170)">APR (yield to user)</text>
 
-        <!-- principal protection line -->
-        <line x1="80" y1="220" x2="820" y2="220" stroke="#3a4060" stroke-width="1" stroke-dasharray="4,4"/>
-        <text x="824" y="224" fill="#8892b0" font-size="10">Principal</text>
+        <!-- base APR line -->
+        <line x1="80" y1="250" x2="820" y2="250" stroke="#3a4060" stroke-width="1" stroke-dasharray="4,4"/>
+        <text x="824" y="254" fill="#8892b0" font-size="10">Base APR (~2%)</text>
 
-        <!-- barriers -->
-        <line x1="280" y1="40" x2="280" y2="260" stroke="#f87171" stroke-width="1" stroke-dasharray="3,3"/>
-        <text x="280" y="34" text-anchor="middle" fill="#f87171" font-size="11" font-weight="700">Lower KO</text>
-        <line x1="620" y1="40" x2="620" y2="260" stroke="#f87171" stroke-width="1" stroke-dasharray="3,3"/>
-        <text x="620" y="34" text-anchor="middle" fill="#f87171" font-size="11" font-weight="700">Upper KO</text>
+        <!-- max APR line -->
+        <line x1="80" y1="80" x2="820" y2="80" stroke="#3a4060" stroke-width="1" stroke-dasharray="4,4"/>
+        <text x="824" y="84" fill="#8892b0" font-size="10">Max APR (~30%)</text>
 
-        <!-- shark fin payoff -->
-        <path d="M 80 215 L 280 215 L 320 90 L 580 90 L 620 215 L 820 215"
+        <!-- Lower bound (entry into fin) -->
+        <line x1="260" y1="40" x2="260" y2="280" stroke="#fbbf24" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="260" y="34" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="700">Lower bound (Spot)</text>
+
+        <!-- Knock-out barrier -->
+        <line x1="640" y1="40" x2="640" y2="280" stroke="#f87171" stroke-width="1.5" stroke-dasharray="3,3"/>
+        <text x="640" y="34" text-anchor="middle" fill="#f87171" font-size="11" font-weight="700">Knock-out barrier</text>
+
+        <!-- Shark fin payoff: flat low → linear ramp up → cliff drop → flat low -->
+        <!-- Fill area under the fin -->
+        <path d="M 260 250 L 640 80 L 640 250 Z" fill="#fbbf24" fill-opacity="0.10"/>
+
+        <!-- Path: base flat (80→260), rising slope (260→640 from 250 to 80), cliff to base (640→640 from 80 to 250), base flat (640→820) -->
+        <path d="M 80 250 L 260 250 L 640 80 L 640 250 L 820 250"
               stroke="#fbbf24" stroke-width="3" fill="none"/>
-        <path d="M 320 90 L 580 90 L 620 215 L 280 215 Z" fill="#fbbf24" fill-opacity="0.08"/>
 
-        <text x="450" y="110" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="700">
-          Inside corridor: enhanced coupon
+        <!-- annotations -->
+        <text x="170" y="240" text-anchor="middle" fill="#8892b0" font-size="11">Below spot:</text>
+        <text x="170" y="255" text-anchor="middle" fill="#8892b0" font-size="11">base APR</text>
+
+        <text x="450" y="155" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="700">
+          Inside fin: APR rises linearly with price
         </text>
-        <text x="180" y="240" text-anchor="middle" fill="#f87171" font-size="11">KO: consolation coupon</text>
-        <text x="720" y="240" text-anchor="middle" fill="#f87171" font-size="11">KO: consolation coupon</text>
+        <text x="450" y="173" text-anchor="middle" fill="#8892b0" font-size="11">(the closer to the barrier, the higher the yield)</text>
+
+        <text x="730" y="240" text-anchor="middle" fill="#f87171" font-size="11">Knocked out:</text>
+        <text x="730" y="255" text-anchor="middle" fill="#f87171" font-size="11">base APR only</text>
+
+        <!-- capital protected note -->
+        <rect x="80" y="290" width="740" height="2" fill="#34d399" fill-opacity="0.0"/>
+        <text x="450" y="334" text-anchor="middle" fill="#34d399" font-size="11" font-weight="700">Capital is always returned at maturity — only the yield varies.</text>
       </svg>
-      <p class="payoff-caption">Shark Fin payoff — capital always returned; enhanced yield only if underlying stays inside the corridor.</p>
+      <p class="payoff-caption">Bull Shark Fin (Bitget-style) — base APR below spot, linearly rising APR up to the barrier, cliff back to base APR if knocked out.</p>
     </div>
 
     <p class="body">
@@ -771,8 +917,141 @@
       it to BTC/ETH/SPX underlyings is what makes DLT's stack uniquely positioned.
     </p>
 
-    <!-- 5.3 0DTE -->
-    <h3 class="sub-h" style="color: var(--yield);">5.3 · 0DTE — Zero-Day-To-Expiry options</h3>
+    <!-- 5.3 BRC -->
+    <h3 class="sub-h" style="color: var(--yield);">5.3 · BRC — Barrier Reverse Convertibles</h3>
+
+    <p class="body">
+      <strong>What it is.</strong> A yield-enhanced note that pays a fixed coupon
+      regardless of market direction, with a conditional downside: if the underlying
+      breaches a pre-set barrier (typically 60–80% of spot) during the life of the
+      product, the user is redeemed in the underlying at the strike at maturity rather
+      than in cash. If the barrier is never touched, the user receives full principal
+      plus the coupon.
+    </p>
+    <p class="body">
+      <strong>How it works under the hood.</strong> A zero-coupon bond + short
+      down-and-in put. The premium received from selling the barrier put funds the
+      enhanced coupon. The buyer is effectively being paid to take conditional
+      downside exposure below the barrier.
+    </p>
+    <p class="body">
+      <strong>Indicative terms.</strong> 8–25% p.a. fixed coupon, 3–12 month tenor,
+      barrier at 60–80% of spot. Classic European retail format — by far the
+      highest-volume structured product category in Switzerland, Germany and the
+      Nordics. Crypto-linked BRCs on BTC and ETH are the cleanest first translation
+      to a MiCAR-platform audience.
+    </p>
+
+    <!-- 5.4 Principal-Protected Notes -->
+    <h3 class="sub-h" style="color: var(--yield);">5.4 · Principal-Protected Notes</h3>
+
+    <p class="body">
+      <strong>What it is.</strong> A note that guarantees 100% return of capital at
+      maturity plus a participation in any upside of the underlying. The user gives
+      up the risk-free interest they would have earned on a deposit; in exchange they
+      get exposure to the upside of BTC, ETH, SPX, gold — with zero downside risk
+      beyond opportunity cost.
+    </p>
+    <p class="body">
+      <strong>How it works under the hood.</strong> A zero-coupon bond is bought at a
+      discount; the discount funds an at-the-money call (or call spread) on the
+      underlying. At maturity, the zero pays back par (= principal protection); the
+      call pays the upside. The participation rate (often 40–80%) and any cap are
+      tuned to the level of interest rates and option volatility at issuance.
+    </p>
+    <p class="body">
+      <strong>Indicative terms.</strong> 6–24 month tenor, 100% capital protection,
+      40–80% participation in the underlying, optional cap. The most regulator-friendly
+      structured format that exists — and the easiest pitch to a partner platform
+      whose clients are reluctant to take direct crypto downside.
+    </p>
+
+    <div class="callout">
+      <h5>Why these four matter for DLT</h5>
+      <p>
+        Dual Investment, Shark Fin, BRC and Principal-Protected Notes between them
+        cover the full retail risk spectrum — from "I'll take conversion risk for 30%
+        yield" all the way to "I want zero downside but exposure to the upside."
+        That spectrum is exactly what a partner platform needs to retain a diverse
+        client base: a yield product for every risk tolerance, all sourced from one
+        MiFID counterparty.
+      </p>
+      <p>
+        These products also lean into the same <strong class="yield">gamification</strong>
+        loop that has driven crypto retail volumes for the last cycle: short tenors,
+        clear payoff diagrams, headline APRs, one-click subscription, daily settlement.
+        They cater to different risk profiles <em>and</em> to gamified, engagement-driven
+        retail behaviour — the same users who trade perps will subscribe to dual
+        investments and shark fins between trades. For the partner platform, this is
+        what keeps the app open seven days a week.
+      </p>
+    </div>
+
+    <!-- ─────────────────────────────────────────── -->
+    <!-- 6. LEVERAGE PRODUCTS                         -->
+    <!-- ─────────────────────────────────────────── -->
+    <div class="section-header" id="leverage">
+      <span class="section-num">06</span>
+      <h2 class="section-title">Leverage products</h2>
+    </div>
+    <p class="section-subtitle">Securitised and option-based leverage formats — what retail buys when they want a directional bet, not a yield.</p>
+
+    <p class="body">
+      Yield products are what retail buys when direction is flat. Leverage products are
+      what they buy when they want to <em>take</em> a direction. DLT's MiFID stack
+      supports both formats that dominate the European leveraged-retail market: 0DTE
+      options for short-tenor, low-premium speculation; and securitised knock-out
+      certificates (sprinters / turbos / factor certificates / mini-futures) for the
+      traditional German / Swiss / Nordic retail audience.
+    </p>
+
+    <!-- Summary table -->
+    <div class="compare-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Leverage Product</th>
+            <th>Max Loss</th>
+            <th>Tenor</th>
+            <th>Funding / Roll Cost</th>
+            <th>Audience</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong class="warn">0DTE Option</strong></td>
+            <td>Premium paid</td>
+            <td>Same trading day</td>
+            <td>None — single-session expiry</td>
+            <td>Crypto-native retail; daily engagement</td>
+          </tr>
+          <tr>
+            <td><strong class="warn">Sprinter / Knock-Out</strong></td>
+            <td>Capped at premium paid</td>
+            <td>Open-ended (until knock-out)</td>
+            <td>Embedded financing spread</td>
+            <td>DACH / Nordic retail; brokerage audience</td>
+          </tr>
+          <tr>
+            <td><strong class="warn">Factor Certificate</strong></td>
+            <td>Capped at premium paid</td>
+            <td>Open-ended (daily rebalance)</td>
+            <td>Daily rebalance + financing spread</td>
+            <td>Securitised perp equivalent; familiar to TradFi retail</td>
+          </tr>
+          <tr>
+            <td><strong class="warn">Turbo / Mini-Future</strong></td>
+            <td>Capped at premium paid</td>
+            <td>Open-ended</td>
+            <td>Continuous funding</td>
+            <td>Hold-period leverage without daily decay</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 6.1 0DTE -->
+    <h3 class="sub-h" style="color: var(--warn);">6.1 · 0DTE — Zero-Day-To-Expiry options</h3>
 
     <p class="body">
       <strong>What it is.</strong> Options that expire on the same trading day they
@@ -816,8 +1095,8 @@
       already operate.
     </p>
 
-    <!-- 5.4 Sprinters -->
-    <h3 class="sub-h" style="color: var(--yield);">5.4 · Sprinters / Knock-Out certificates</h3>
+    <!-- 6.2 Sprinters -->
+    <h3 class="sub-h" style="color: var(--warn);">6.2 · Sprinters / Knock-Out certificates</h3>
 
     <p class="body">
       <strong>What it is.</strong> A leveraged participation certificate with an
@@ -873,22 +1152,11 @@
       product extension.
     </p>
 
-    <div class="callout">
-      <h5>Why this matters for DLT</h5>
-      <p>
-        These four formats — Dual Investment, Shark Fin, 0DTE, Sprinters — cover the
-        full retail yield + leveraged spectrum. They all run on the same derivatives
-        and options primitives DLT already manages. They all distribute through the
-        same MiCAR-platform / MiFID-broker pipe DLT has already built. They are not
-        four new businesses — they are four configurations of the same business.
-      </p>
-    </div>
-
     <!-- ─────────────────────────────────────────── -->
-    <!-- 6. INSTRUMENT SHELF                          -->
+    <!-- 7. INSTRUMENT SHELF                          -->
     <!-- ─────────────────────────────────────────── -->
     <div class="section-header" id="shelf">
-      <span class="section-num">06</span>
+      <span class="section-num">07</span>
       <h2 class="section-title">DLT instrument shelf</h2>
     </div>
     <p class="section-subtitle">The full product line that DLT can offer through any MiCAR platform partner — built on a single MiFID backbone.</p>
@@ -955,12 +1223,7 @@
       </div>
       <div class="inst yield">
         <div class="inst-tag">Yield</div>
-        <h5>0DTE Options</h5>
-        <p>Same-day-expiry options on crypto + indices.</p>
-      </div>
-      <div class="inst yield">
-        <div class="inst-tag">Yield</div>
-        <h5>Reverse Convertibles</h5>
+        <h5>BRC (Reverse Convertibles)</h5>
         <p>Enhanced coupon with conditional downside — classic European structured format.</p>
       </div>
       <div class="inst yield">
@@ -985,7 +1248,7 @@
       </div>
     </div>
 
-    <h4 class="sub-h2" style="color: var(--warn);">Leveraged Certificates</h4>
+    <h4 class="sub-h2" style="color: var(--warn);">Leverage</h4>
     <div class="grid-4">
       <div class="inst lev">
         <div class="inst-tag">Leverage</div>
@@ -1007,6 +1270,35 @@
         <h5>Mini-Futures</h5>
         <p>No knock-out variant; continuous funding; cleaner for hold periods.</p>
       </div>
+      <div class="inst lev">
+        <div class="inst-tag">Leverage</div>
+        <h5>0DTE Options</h5>
+        <p>Same-day-expiry options on crypto + indices — short-tenor, premium-only leverage.</p>
+      </div>
+    </div>
+
+    <h4 class="sub-h2" style="color: var(--accent);">Tokenized Structured Products &amp; Prediction (roadmap)</h4>
+    <div class="grid-4">
+      <div class="inst" style="border-left-color: var(--accent);">
+        <div class="inst-tag">Tokenized SP</div>
+        <h5>Long-BTC Short-Strategy</h5>
+        <p>Tokenized basket — long BTC vs. short a strategy index. One-click thematic exposure.</p>
+      </div>
+      <div class="inst" style="border-left-color: var(--accent);">
+        <div class="inst-tag">Tokenized SP</div>
+        <h5>Vol-Carry Token</h5>
+        <p>Packaged short-volatility / carry strategy on BTC and ETH — single token, daily mark.</p>
+      </div>
+      <div class="inst" style="border-left-color: var(--accent);">
+        <div class="inst-tag">Prediction</div>
+        <h5>Binary Event Markets</h5>
+        <p>Macro, sports, crypto-native catalysts — yes/no outcome markets, MiFID-wrapped.</p>
+      </div>
+      <div class="inst" style="border-left-color: var(--accent);">
+        <div class="inst-tag">Prediction</div>
+        <h5>Range Event Markets</h5>
+        <p>Multi-outcome buckets over a defined horizon — e.g. "where will BTC close this week?"</p>
+      </div>
     </div>
 
     <div class="callout" style="margin-top: 28px;">
@@ -1020,10 +1312,10 @@
     </div>
 
     <!-- ─────────────────────────────────────────── -->
-    <!-- 7. BACKBONE                                  -->
+    <!-- 8. BACKBONE                                  -->
     <!-- ─────────────────────────────────────────── -->
     <div class="section-header" id="backbone">
-      <span class="section-num">07</span>
+      <span class="section-num">08</span>
       <h2 class="section-title">The MiFID backbone advantage</h2>
     </div>
     <p class="section-subtitle">What we built to enable derivatives is the same thing that lets us launch the next 10 products quickly.</p>
@@ -1069,10 +1361,10 @@
     </div>
 
     <!-- ─────────────────────────────────────────── -->
-    <!-- 8. B2B                                       -->
+    <!-- 9. B2B                                       -->
     <!-- ─────────────────────────────────────────── -->
     <div class="section-header" id="b2b">
-      <span class="section-num">08</span>
+      <span class="section-num">09</span>
       <h2 class="section-title">B2B — liquidity provision &amp; best execution</h2>
     </div>
     <p class="section-subtitle">The institutional side. Below-capacity tier-1 desks plus ECN distribution keeps this business durable.</p>
@@ -1131,10 +1423,10 @@
     </div>
 
     <!-- ─────────────────────────────────────────── -->
-    <!-- 9. ROADMAP                                   -->
+    <!-- 10. ROADMAP                                  -->
     <!-- ─────────────────────────────────────────── -->
     <div class="section-header" id="roadmap">
-      <span class="section-num">09</span>
+      <span class="section-num">10</span>
       <h2 class="section-title">12-month roadmap</h2>
     </div>
     <p class="section-subtitle">Where we direct capital and attention over the next four quarters.</p>
