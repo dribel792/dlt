@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DLT Product Stack — Sketch</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3352;
+      --accent: #4f7cff;
+      --accent2: #a78bfa;
+      --green: #34d399;
+      --amber: #fbbf24;
+      --red: #f87171;
+      --text: #e2e8f0;
+      --muted: #8892b0;
+      --micar: #34d399;
+      --mifid: #4f7cff;
+      --backbone: #a78bfa;
+      --spot: #fbbf24;
+      --lev: #f87171;
+      --yield: #34d399;
+      --tradfi: #4f7cff;
+      --pred: #a78bfa;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    header .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    header h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #e2e8f0 0%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 14px;
+    }
+    header p {
+      color: var(--muted);
+      max-width: 720px;
+      margin: 0 auto;
+      font-size: 0.95rem;
+    }
+
+    .sketch-tag {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--amber);
+      background: rgba(251, 191, 36, 0.1);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      border-radius: 4px;
+    }
+
+    .stack-wrap {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 32px;
+      margin-top: 32px;
+    }
+
+    @media (max-width: 900px) {
+      .stack-wrap { grid-template-columns: 1fr; }
+    }
+
+    .stack {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+    }
+
+    .layer-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    /* ── Top: 5 product towers ── */
+    .products {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .product {
+      border-radius: 10px;
+      padding: 16px 10px;
+      text-align: center;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, var(--surface2) 0%, var(--surface) 100%);
+      position: relative;
+      transition: transform 0.15s ease;
+    }
+    .product:hover { transform: translateY(-2px); }
+
+    .product .icon {
+      font-size: 22px;
+      margin-bottom: 6px;
+      display: block;
+    }
+    .product .name {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .product .reg {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .product.spot { border-top: 3px solid var(--spot); }
+    .product.lev { border-top: 3px solid var(--lev); }
+    .product.yld { border-top: 3px solid var(--yield); }
+    .product.tradfi { border-top: 3px solid var(--tradfi); }
+    .product.pred { border-top: 3px solid var(--pred); }
+
+    /* ── Middle: regulatory wrappers ── */
+    .wrappers {
+      display: grid;
+      grid-template-columns: 1fr 4fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .wrapper {
+      border-radius: 10px;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .wrapper.micar {
+      background: rgba(52, 211, 153, 0.08);
+      border-color: rgba(52, 211, 153, 0.35);
+    }
+    .wrapper.mifid {
+      background: rgba(79, 124, 255, 0.08);
+      border-color: rgba(79, 124, 255, 0.35);
+    }
+
+    .wrapper .badge {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+    .wrapper.micar .badge { background: var(--micar); color: #0b3b2a; }
+    .wrapper.mifid .badge { background: var(--mifid); color: #0a1340; }
+
+    .wrapper .label {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ── Bottom: DLT backbone ── */
+    .backbone {
+      border: 1px solid rgba(167, 139, 250, 0.35);
+      background: linear-gradient(180deg, rgba(167, 139, 250, 0.10) 0%, rgba(167, 139, 250, 0.04) 100%);
+      border-radius: 12px;
+      padding: 18px 20px;
+    }
+    .backbone-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .backbone-title strong {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--accent2);
+      letter-spacing: 0.02em;
+    }
+    .backbone-title .tag {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      background: rgba(167, 139, 250, 0.15);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    .modules {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+    }
+    @media (max-width: 700px) {
+      .modules { grid-template-columns: repeat(3, 1fr); }
+      .products { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .module {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 8px;
+      text-align: center;
+    }
+    .module .m-icon {
+      font-size: 16px;
+      margin-bottom: 4px;
+      display: block;
+    }
+    .module .m-name {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* connector arrows between layers (subtle) */
+    .connector {
+      height: 14px;
+      position: relative;
+    }
+    .connector::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, transparent, var(--border), transparent);
+    }
+
+    /* ── Side panel: speed gauge ── */
+    .side {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      align-self: start;
+      position: sticky;
+      top: 24px;
+    }
+
+    .side h3 {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .gauge {
+      text-align: center;
+      padding: 16px 0 20px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 18px;
+    }
+    .gauge .label-top {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .gauge .value-old {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--red);
+      text-decoration: line-through;
+      text-decoration-color: rgba(248, 113, 113, 0.5);
+      margin-bottom: 8px;
+    }
+    .gauge .arrow {
+      color: var(--muted);
+      font-size: 16px;
+      margin: 6px 0;
+    }
+    .gauge .label-bottom {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .gauge .value-new {
+      font-size: 32px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--green) 0%, var(--accent2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .gauge .unit {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .why {
+      font-size: 12.5px;
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .why ul {
+      list-style: none;
+      padding: 0;
+    }
+    .why li {
+      padding: 6px 0;
+      padding-left: 16px;
+      position: relative;
+      color: var(--muted);
+    }
+    .why li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: var(--accent2);
+    }
+    .why li strong { color: var(--text); }
+
+    /* ── Legend / notes ── */
+    .notes {
+      margin-top: 32px;
+      padding: 20px 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .notes strong { color: var(--text); }
+    .notes ul { padding-left: 18px; margin-top: 8px; }
+    .notes li { padding: 3px 0; }
+
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <header>
+      <div class="eyebrow">Concept 1 — The Stack</div>
+      <h1>DLT Product Suite — Platform Sketch</h1>
+      <p>Five products, two regulatory wrappers, one shared DLT backbone. The backbone is the moat: it's why a new product takes weeks, not months.</p>
+      <div class="sketch-tag">Sketch · v0.1 · for review</div>
+    </header>
+
+    <div class="stack-wrap">
+
+      <!-- ── Main stack ── -->
+      <div class="stack">
+
+        <!-- Top layer: products -->
+        <div class="layer-label">Layer 3 · Products (customer-facing)</div>
+        <div class="products">
+          <div class="product spot">
+            <span class="icon">●</span>
+            <div class="name">Spot</div>
+            <div class="reg">MiCAR</div>
+          </div>
+          <div class="product lev">
+            <span class="icon">⇡</span>
+            <div class="name">Leverage</div>
+            <div class="reg">MiFID</div>
+          </div>
+          <div class="product yld">
+            <span class="icon">◆</span>
+            <div class="name">Yield + Downside-Protected</div>
+            <div class="reg">MiFID</div>
+          </div>
+          <div class="product tradfi">
+            <span class="icon">▦</span>
+            <div class="name">TradFi</div>
+            <div class="reg">MiFID</div>
+          </div>
+          <div class="product pred">
+            <span class="icon">◈</span>
+            <div class="name">Prediction Markets</div>
+            <div class="reg">MiFID</div>
+          </div>
+        </div>
+
+        <div class="connector"></div>
+
+        <!-- Middle layer: regulatory wrappers -->
+        <div class="layer-label">Layer 2 · Regulatory wrappers</div>
+        <div class="wrappers">
+          <div class="wrapper micar">
+            <span class="badge">MiCAR</span>
+            <span class="label">Spot crypto</span>
+          </div>
+          <div class="wrapper mifid">
+            <span class="badge">MiFID</span>
+            <span class="label">Leverage · Structured yield · TradFi · Prediction</span>
+          </div>
+        </div>
+
+        <div class="connector"></div>
+
+        <!-- Bottom layer: DLT backbone -->
+        <div class="layer-label">Layer 1 · Shared infrastructure</div>
+        <div class="backbone">
+          <div class="backbone-title">
+            <strong>DLT Backbone</strong>
+            <span class="tag">Build once · reuse everywhere</span>
+          </div>
+          <div class="modules">
+            <div class="module">
+              <span class="m-icon">🔐</span>
+              <div class="m-name">Custody</div>
+            </div>
+            <div class="module">
+              <span class="m-icon">↻</span>
+              <div class="m-name">Settlement</div>
+            </div>
+            <div class="module">
+              <span class="m-icon">✔</span>
+              <div class="m-name">KYC / AML</div>
+            </div>
+            <div class="module">
+              <span class="m-icon">◉</span>
+              <div class="m-name">Oracle</div>
+            </div>
+            <div class="module">
+              <span class="m-icon">⚖</span>
+              <div class="m-name">Risk Engine</div>
+            </div>
+            <div class="module">
+              <span class="m-icon">§</span>
+              <div class="m-name">Compliance</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── Side panel: speed gauge ── -->
+      <aside class="side">
+        <h3>Time to Launch</h3>
+        <div class="gauge">
+          <div class="label-top">Industry standard</div>
+          <div class="value-old">12+ months</div>
+          <div class="arrow">↓</div>
+          <div class="label-bottom">DLT platform</div>
+          <div class="value-new">4–6</div>
+          <div class="unit">weeks per product</div>
+        </div>
+        <div class="why">
+          <ul>
+            <li><strong>Shared rails.</strong> Custody, settlement, KYC, risk — built once.</li>
+            <li><strong>Two wrappers.</strong> MiCAR or MiFID. Pick the lane, ship.</li>
+            <li><strong>Composable.</strong> New product = new recipe of existing modules.</li>
+          </ul>
+        </div>
+      </aside>
+
+    </div>
+
+    <!-- Notes for review -->
+    <div class="notes">
+      <strong>Things to react to before I commit to this:</strong>
+      <ul>
+        <li>Order of products left→right — should it reflect launch sequence, revenue weight, or regulatory complexity?</li>
+        <li>Is "Yield + Downside-Protected" one product or two (vanilla yield vs structured/protected)?</li>
+        <li>Backbone modules — anything missing? (matching engine? margining? liquidity provisioning? user-facing UI kit?)</li>
+        <li>Speed claim "4–6 weeks" — defensible number, or set higher (e.g. 8–12) to leave room?</li>
+        <li>Worth adding a 4th layer at the very top (distribution: API, white-label, retail UI)?</li>
+      </ul>
+    </div>
+
+  </div>
+</body>
+</html>
