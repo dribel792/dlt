@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DLT Finance — Market & Product Positioning</title>
+  <style>
+    :root {
+      /* base */
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3352;
+      --text: #e7ecf3;
+      --muted: #93a0b8;
+
+      /* brand */
+      --brand: #b4d3a8;          /* DLT Finance sage green */
+      --brand-strong: #8ec27a;
+      --brand-soft: rgba(180, 211, 168, 0.10);
+      --brand-border: rgba(180, 211, 168, 0.35);
+
+      /* secondary */
+      --blue: #7aa5ff;
+      --blue-soft: rgba(122, 165, 255, 0.10);
+      --blue-border: rgba(122, 165, 255, 0.32);
+
+      --violet: #b39dff;
+      --amber: #f5c067;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      background: #0a0c12;
+      color: var(--text);
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .deck {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* ── 16:9 slide frame ── */
+    .slide {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      background:
+        radial-gradient(1100px 600px at 0% 0%, rgba(180, 211, 168, 0.06), transparent 60%),
+        radial-gradient(900px 500px at 100% 100%, rgba(122, 165, 255, 0.05), transparent 60%),
+        linear-gradient(180deg, #131826 0%, #0f1320 100%);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+    }
+
+    .slide-inner {
+      position: absolute;
+      inset: 0;
+      padding: 38px 52px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Slide header ── */
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--brand);
+    }
+    .slide-title {
+      font-size: 38px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-top: 6px;
+      color: var(--text);
+    }
+    .slide-title .accent {
+      background: linear-gradient(135deg, var(--brand) 0%, #d8e8c8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text);
+    }
+    .brand-mark svg { width: 22px; height: 22px; }
+    .brand-mark .name {
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      font-size: 14px;
+    }
+    .brand-mark .name .light { color: var(--brand); }
+
+    /* ─────────────────────────────────────────────────────────
+       SLIDE 1 — THE MARKET
+       ───────────────────────────────────────────────────────── */
+
+    .market-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 120px 1fr;
+      gap: 24px;
+      margin-top: 10px;
+    }
+
+    .col-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .market-col {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .market-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-bottom: 12px;
+    }
+    .market-card .headline {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+      line-height: 1.35;
+    }
+    .market-card .caption {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .market-card.brand {
+      border-left: 3px solid var(--brand);
+    }
+    .market-card.blue {
+      border-left: 3px solid var(--blue);
+    }
+
+    /* sub-tile row */
+    .tile-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .tile {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 9px;
+      border-radius: 5px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .tile.b { border-color: var(--blue-border); color: var(--blue); background: var(--blue-soft); }
+    .tile.g { border-color: var(--brand-border); color: var(--brand); background: var(--brand-soft); }
+
+    /* center "Leading To" arrow */
+    .leading-to {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding-top: 40px;
+    }
+    .leading-to .label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--brand);
+      margin-bottom: 10px;
+    }
+    .leading-to svg { width: 80px; height: 26px; }
+
+    /* product category tiles inside trend 3 */
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .cat {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 10px;
+    }
+    .cat .cat-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--brand);
+      margin-bottom: 3px;
+    }
+    .cat .cat-sub {
+      font-size: 10.5px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    /* ─────────────────────────────────────────────────────────
+       SLIDE 2 — PRODUCT POSITIONING
+       ───────────────────────────────────────────────────────── */
+
+    .pos-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 22px;
+      margin-top: 8px;
+    }
+
+    .pos-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .wrappers-row {
+      display: grid;
+      grid-template-columns: 0.7fr 2fr;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .panel {
+      border-radius: 14px;
+      padding: 18px 18px 16px;
+      display: flex;
+      flex-direction: column;
+    }
+    .panel.micar {
+      background: linear-gradient(180deg, rgba(180, 211, 168, 0.12) 0%, rgba(180, 211, 168, 0.04) 100%);
+      border: 1px solid var(--brand-border);
+    }
+    .panel.mifid {
+      background: linear-gradient(180deg, rgba(122, 165, 255, 0.10) 0%, rgba(122, 165, 255, 0.03) 100%);
+      border: 1px solid var(--blue-border);
+    }
+
+    .panel-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .panel-title .badge {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      padding: 4px 9px;
+      border-radius: 5px;
+    }
+    .panel.micar .badge { background: var(--brand); color: #1a3a14; }
+    .panel.mifid .badge { background: var(--blue); color: #0a1340; }
+    .panel-title .hint {
+      font-size: 10.5px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    .product-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .product-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 8px 11px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .panel.micar .product-item { border-color: var(--brand-border); }
+
+    /* MIFID inner grid */
+    .mifid-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr 0.85fr;
+      gap: 10px;
+    }
+    .mifid-col {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--blue-border);
+      border-radius: 8px;
+      padding: 10px 11px;
+    }
+    .mifid-col .col-head {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: 6px;
+    }
+    .mifid-col ul {
+      list-style: none;
+      padding: 0;
+      font-size: 11px;
+      color: var(--text);
+      line-height: 1.55;
+    }
+    .mifid-col li {
+      padding: 1.5px 0;
+      color: var(--text);
+    }
+    .mifid-col li.note {
+      color: var(--muted);
+      font-style: italic;
+      font-size: 10.5px;
+    }
+
+    /* underlyings row */
+    .underlyings {
+      margin-top: 12px;
+    }
+    .underlyings .ul-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .underlyings .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .chip {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 9px;
+      border-radius: 12px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    /* Backbone strip */
+    .backbone {
+      background: linear-gradient(180deg, rgba(180, 211, 168, 0.10) 0%, rgba(180, 211, 168, 0.03) 100%);
+      border: 1px solid var(--brand-border);
+      border-radius: 12px;
+      padding: 12px 16px;
+    }
+    .backbone-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .backbone-head strong {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--brand);
+    }
+    .backbone-head .why {
+      font-size: 10.5px;
+      color: var(--muted);
+    }
+    .backbone-modules {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .mod {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--brand-border);
+      border-radius: 7px;
+      padding: 8px 10px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .mod .mod-sub {
+      display: block;
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* Takeaways side panel */
+    .takeaways {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 18px;
+      display: flex;
+      flex-direction: column;
+    }
+    .takeaways h3 {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--brand);
+      margin-bottom: 14px;
+    }
+    .takeaways ol {
+      list-style: none;
+      counter-reset: t;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .takeaways li {
+      counter-increment: t;
+      position: relative;
+      padding-left: 28px;
+      font-size: 11.5px;
+      line-height: 1.5;
+      color: var(--text);
+    }
+    .takeaways li::before {
+      content: counter(t);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      background: var(--brand);
+      color: #1a3a14;
+      font-weight: 800;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .takeaways li strong { color: var(--brand); }
+    .takeaways li .sub {
+      display: block;
+      color: var(--muted);
+      margin-top: 2px;
+      font-size: 11px;
+    }
+
+    /* slide footer */
+    .slide-foot {
+      position: absolute;
+      bottom: 14px;
+      left: 52px;
+      right: 52px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="deck">
+
+    <!-- ─────────── SLIDE 1 — THE MARKET ─────────── -->
+    <section class="slide">
+      <div class="slide-inner">
+
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow">DLT Finance · Market View</div>
+            <h1 class="slide-title">The <span class="accent">Market</span></h1>
+          </div>
+          <div class="brand-mark">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#b4d3a8" stroke-width="1.6" fill="rgba(180,211,168,0.08)"/>
+            </svg>
+            <div class="name">DLT <span class="light">Finance</span></div>
+          </div>
+        </div>
+
+        <div class="market-grid">
+
+          <!-- LEFT: Market State -->
+          <div class="market-col">
+            <div class="col-label">Market State — today</div>
+
+            <div class="market-card brand">
+              <div class="headline">>200 MiCAR licences granted in last 12 months</div>
+              <div class="caption">MiCAR is now a commodity — no longer a moat.</div>
+            </div>
+
+            <div class="market-card brand">
+              <div class="headline">Crypto spot volumes at 2022 lows</div>
+              <div class="caption">AI boom shifting liquidity away from crypto.</div>
+            </div>
+
+            <div class="market-card brand">
+              <div class="headline">Crypto actors racing to expand product scope</div>
+              <div class="caption">Strategy to attract and retain capital.</div>
+            </div>
+          </div>
+
+          <!-- CENTER: Leading To arrow -->
+          <div class="leading-to">
+            <div class="label">Leading to</div>
+            <svg viewBox="0 0 80 26" fill="none">
+              <line x1="0" y1="13" x2="68" y2="13" stroke="#b4d3a8" stroke-width="2"/>
+              <polygon points="68,5 80,13 68,21" fill="#b4d3a8"/>
+            </svg>
+          </div>
+
+          <!-- RIGHT: Market Trends -->
+          <div class="market-col">
+            <div class="col-label">Market Trends — where it's going</div>
+
+            <div class="market-card blue">
+              <div class="headline">Crypto players going after TradFi securities at speed</div>
+            </div>
+
+            <div class="market-card blue">
+              <div class="headline">Expanding into structured securities + new underlyings</div>
+              <div class="tile-row">
+                <span class="tile b">Crypto</span>
+                <span class="tile b">Equities</span>
+                <span class="tile b">Debt</span>
+                <span class="tile b">Precious Metals</span>
+                <span class="tile b">Commodities</span>
+                <span class="tile b">Prediction Markets</span>
+              </div>
+            </div>
+
+            <div class="market-card blue">
+              <div class="headline">Rolling out new products at high frequency in few categories</div>
+              <div class="cat-grid">
+                <div class="cat">
+                  <div class="cat-name">Leverage</div>
+                  <div class="cat-sub">Perpetual Futures, Options, Turbos…</div>
+                </div>
+                <div class="cat">
+                  <div class="cat-name">Yield + Downside Protection</div>
+                  <div class="cat-sub">Covered Calls, Shark Fin…</div>
+                </div>
+                <div class="cat">
+                  <div class="cat-name">Delta-1 Security Tokens</div>
+                  <div class="cat-sub">Tokenised equities, ETFs, bonds</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="slide-foot">
+          <span>Slide 1 · Market View</span>
+          <span>DLT Finance · Confidential</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ─────────── SLIDE 2 — PRODUCT POSITIONING ─────────── -->
+    <section class="slide">
+      <div class="slide-inner">
+
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow">DLT Finance · Strategy</div>
+            <h1 class="slide-title">Product <span class="accent">Positioning</span></h1>
+          </div>
+          <div class="brand-mark">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#b4d3a8" stroke-width="1.6" fill="rgba(180,211,168,0.08)"/>
+            </svg>
+            <div class="name">DLT <span class="light">Finance</span></div>
+          </div>
+        </div>
+
+        <div class="pos-grid">
+
+          <!-- LEFT: stacked layout (wrappers row + backbone) -->
+          <div class="pos-stack">
+
+            <div class="wrappers-row">
+
+              <!-- MICAR panel -->
+              <div class="panel micar">
+                <div class="panel-title">
+                  <span class="badge">MiCAR</span>
+                  <span class="hint">Spot crypto</span>
+                </div>
+                <div class="product-list">
+                  <div class="product-item">Spot Trading</div>
+                  <div class="product-item">Margin Trading</div>
+                  <div class="product-item">Lending / Borrowing <span style="color:var(--muted);font-weight:500;">(excl. EMT)</span></div>
+                </div>
+              </div>
+
+              <!-- MIFID panel -->
+              <div class="panel mifid">
+                <div class="panel-title">
+                  <span class="badge">MiFID</span>
+                  <span class="hint">Derivatives · Structured · Securities</span>
+                </div>
+
+                <div class="mifid-grid">
+                  <div class="mifid-col">
+                    <div class="col-head">Leverage</div>
+                    <ul>
+                      <li>Perpetual Futures</li>
+                      <li>Options</li>
+                      <li>Turbos</li>
+                      <li>Mini Futures</li>
+                      <li class="note">…</li>
+                    </ul>
+                  </div>
+                  <div class="mifid-col">
+                    <div class="col-head">Yield + Downside Protection</div>
+                    <ul>
+                      <li>Covered Calls <span style="color:var(--muted);">(20–40% APY)</span></li>
+                      <li>Zero-Interest Credit</li>
+                      <li>Shark Fin</li>
+                      <li>Principal-Protected Notes</li>
+                      <li>BRC · Sprinters</li>
+                    </ul>
+                  </div>
+                  <div class="mifid-col">
+                    <div class="col-head">Delta-1 Security Tokens</div>
+                    <ul>
+                      <li>Tokenised Equities</li>
+                      <li>Tokenised ETFs</li>
+                      <li>Tokenised Bonds</li>
+                      <li class="note">All major underlyings</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="underlyings">
+                  <div class="ul-label">All underlyings</div>
+                  <div class="chips">
+                    <span class="chip">Crypto</span>
+                    <span class="chip">Equities</span>
+                    <span class="chip">Debt</span>
+                    <span class="chip">Precious Metals</span>
+                    <span class="chip">Commodities</span>
+                    <span class="chip">Prediction Markets</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Backbone strip -->
+            <div class="backbone">
+              <div class="backbone-head">
+                <strong>DLT Finance Backbone</strong>
+                <span class="why">Build once · reuse across MiCAR & MiFID</span>
+              </div>
+              <div class="backbone-modules">
+                <div class="mod">Spot Post-Trading / Reporting <span class="mod-sub">MiCAR</span></div>
+                <div class="mod">KYC / AML <span class="mod-sub">Onboarding · monitoring</span></div>
+                <div class="mod">Risk Engine <span class="mod-sub">Margining · limits · liquidation</span></div>
+                <div class="mod">Post-Trade / Reporting <span class="mod-sub">Derivatives · Equities</span></div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT: Key Takeaways -->
+          <aside class="takeaways">
+            <h3>Key Takeaways</h3>
+            <ol>
+              <li>
+                <strong>Weeks, not months.</strong>
+                <span class="sub">Platform must be set up so new products ship in weeks — meeting the market's demand for speed.</span>
+              </li>
+              <li>
+                <strong>Risk engine + post-trade are the moat.</strong>
+                <span class="sub">A solid risk engine and robust post-trade services let us spin up any MiFID product fast and compete with the best.</span>
+              </li>
+              <li>
+                <strong>Underlyings are open-ended.</strong>
+                <span class="sub">Crypto, equities, debt, metals, commodities, prediction markets — all addressable through the same rails.</span>
+              </li>
+            </ol>
+          </aside>
+
+        </div>
+
+        <div class="slide-foot">
+          <span>Slide 2 · Product Positioning</span>
+          <span>DLT Finance · Confidential</span>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>

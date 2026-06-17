@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spot Flow Architecture — DLT × BitMEX</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --surface3: #2a2f44;
+      --border: #2e3352;
+      --border2: #3a4060;
+      --accent: #4f7cff;
+      --text: #e2e8f0;
+      --muted: #8892b0;
+      --dim: #5a6378;
+
+      --dlt: #34d399;       /* DLT — broker entity */
+      --bitmex: #F7A600;    /* BitMEX — global venue */
+      --ouinex: #a78bfa;    /* Ouinex — secondary venue */
+      --user: #fbbf24;      /* End user */
+      --hedge: #f87171;     /* Hedge / risk flow */
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    .page {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 56px 28px 80px;
+    }
+
+    /* ── Header ── */
+    header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+    header .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--bitmex);
+      margin-bottom: 12px;
+    }
+    header h1 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #e2e8f0 0%, #F7A600 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 14px;
+    }
+    header p {
+      color: var(--muted);
+      max-width: 720px;
+      margin: 0 auto;
+      font-size: 0.97rem;
+    }
+    .doc-meta {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 22px;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .doc-meta span { display: flex; align-items: center; gap: 6px; }
+    .doc-meta .dot { width: 6px; height: 6px; background: var(--bitmex); border-radius: 50%; }
+
+    /* ── Legend ── */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      justify-content: center;
+      margin-bottom: 56px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+    .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
+
+    /* ── Executive Summary ── */
+    .exec-summary {
+      background: linear-gradient(135deg, rgba(247,166,0,0.06) 0%, rgba(52,211,153,0.04) 100%);
+      border: 1px solid rgba(247,166,0,0.2);
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin-bottom: 48px;
+    }
+    .exec-summary h2 {
+      font-size: 0.8rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--bitmex);
+      margin-bottom: 14px;
+    }
+    .exec-summary p { color: var(--text); font-size: 0.95rem; }
+    .exec-summary p + p { margin-top: 10px; }
+
+    /* ── Section headers ── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+      margin-top: 56px;
+    }
+    .section-badge {
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .badge-opt1  { background: rgba(79,124,255,0.15); color: var(--accent); border: 1px solid rgba(79,124,255,0.3); }
+    .badge-opt2  { background: rgba(167,139,250,0.15); color: var(--ouinex); border: 1px solid rgba(167,139,250,0.3); }
+    .badge-reg   { background: rgba(247,166,0,0.15);  color: var(--bitmex); border: 1px solid rgba(247,166,0,0.3); }
+    .badge-cmp   { background: rgba(52,211,153,0.15);  color: var(--dlt); border: 1px solid rgba(52,211,153,0.3); }
+    .badge-note  { background: rgba(248,113,113,0.12);  color: var(--hedge); border: 1px solid rgba(248,113,113,0.3); }
+
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .section-subtitle {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-bottom: 28px;
+      margin-left: 4px;
+    }
+
+    /* ── Diagram cards ── */
+    .diagram-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+    .diagram-card svg { width: 100%; height: auto; display: block; }
+
+    /* ── Step list ── */
+    .steps-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 18px;
+      background: var(--surface2);
+      border-radius: 10px;
+      border-left: 3px solid transparent;
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+    .step-dlt    { background: rgba(52,211,153,0.2);  color: var(--dlt); }
+    .step-bitmex { background: rgba(247,166,0,0.2);   color: var(--bitmex); }
+    .step-ouinex { background: rgba(167,139,250,0.2); color: var(--ouinex); }
+    .step-user   { background: rgba(251,191,36,0.2);  color: var(--user); }
+    .step-hedge  { background: rgba(248,113,113,0.2); color: var(--hedge); }
+
+    .step-content { flex: 1; }
+    .step-title {
+      font-size: 0.92rem;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+    .step-desc {
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+
+    /* ── Pros / Cons ── */
+    .pros-cons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .pc-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px 24px;
+    }
+    .pc-card h4 {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .pc-pros h4 { color: var(--dlt); }
+    .pc-cons h4 { color: var(--hedge); }
+    .pc-card ul { list-style: none; }
+    .pc-card li {
+      font-size: 0.88rem;
+      color: var(--text);
+      padding: 6px 0 6px 18px;
+      position: relative;
+    }
+    .pc-pros li::before { content: "+"; position: absolute; left: 0; color: var(--dlt); font-weight: 700; }
+    .pc-cons li::before { content: "−"; position: absolute; left: 0; color: var(--hedge); font-weight: 700; }
+
+    /* ── Info / callout boxes ── */
+    .callout {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin: 20px 0;
+    }
+    .callout.warn   { border-left-color: var(--bitmex); }
+    .callout.risk   { border-left-color: var(--hedge); }
+    .callout.note   { border-left-color: var(--dlt); }
+    .callout h5 {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      color: var(--bitmex);
+    }
+    .callout.risk h5 { color: var(--hedge); }
+    .callout.note h5 { color: var(--dlt); }
+    .callout p { font-size: 0.9rem; color: var(--text); }
+    .callout p + p { margin-top: 8px; }
+
+    /* ── Tables ── */
+    .compare-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-top: 16px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    th, td {
+      padding: 14px 18px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: var(--surface2);
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    th.opt1 { color: var(--accent); }
+    th.opt2 { color: var(--ouinex); }
+    tr:last-child td { border-bottom: none; }
+    td.dim { color: var(--muted); }
+
+    /* ── Recommendation block ── */
+    .recommendation {
+      background: linear-gradient(135deg, rgba(52,211,153,0.06) 0%, rgba(79,124,255,0.04) 100%);
+      border: 1px solid rgba(52,211,153,0.3);
+      border-radius: 16px;
+      padding: 32px;
+      margin-top: 24px;
+    }
+    .recommendation h3 {
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--dlt);
+      margin-bottom: 14px;
+    }
+    .recommendation p { color: var(--text); font-size: 0.95rem; }
+    .recommendation p + p { margin-top: 12px; }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 80px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--dim);
+      font-size: 0.8rem;
+    }
+
+    strong.acc { color: var(--accent); }
+    strong.bitmex { color: var(--bitmex); }
+    strong.dlt    { color: var(--dlt); }
+    strong.ouinex { color: var(--ouinex); }
+    strong.hedge  { color: var(--hedge); }
+
+    @media (max-width: 720px) {
+      .pros-cons { grid-template-columns: 1fr; }
+      header h1 { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <header>
+      <div class="eyebrow">Operational Memorandum · Confidential</div>
+      <h1>Spot Flow Architecture — DLT × BitMEX</h1>
+      <p>
+        Two operating models for routing EU client spot order flow into the BitMEX global
+        order book, presented for joint review. This document describes the legal and
+        operational structures; technical specifications will follow in a separate
+        integration document.
+      </p>
+      <div class="doc-meta">
+        <span><span class="dot"></span> Draft v0.1</span>
+        <span><span class="dot"></span> For DLT ↔ BitMEX discussion</span>
+        <span><span class="dot"></span> Not for external distribution</span>
+      </div>
+    </header>
+
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot" style="background: var(--user)"></span> End User (EU client)</div>
+      <div class="legend-item"><span class="legend-dot" style="background: var(--dlt)"></span> DLT (Broker)</div>
+      <div class="legend-item"><span class="legend-dot" style="background: var(--bitmex)"></span> BitMEX Global</div>
+      <div class="legend-item"><span class="legend-dot" style="background: var(--ouinex)"></span> Ouinex (Secondary Venue)</div>
+      <div class="legend-item"><span class="legend-dot" style="background: var(--hedge)"></span> Hedge / Risk Transfer</div>
+    </div>
+
+    <div class="exec-summary">
+      <h2>Executive Summary</h2>
+      <p>
+        Unlike perpetual derivatives — where DLT can act as a pure broker routing orders
+        directly to BitMEX — EU spot crypto activity is constrained by MiFID II–style
+        best execution obligations and emerging MiCA conduct rules. DLT cannot legally
+        route 100% of EU client spot flow to a single venue without a structurally
+        defensible framework.
+      </p>
+      <p>
+        This memorandum sets out the two viable models — <strong class="acc">Option 1: Riskless
+        Principal / Financial Commission Broker</strong> and <strong class="ouinex">Option 2:
+        Proprietary Trader / Market Maker</strong> — including their order flow mechanics,
+        regulatory anchoring, and the practical implications for the share of flow
+        that lands on BitMEX Global. Both models are designed so that the substantive
+        majority of executed volume reaches the BitMEX order book.
+      </p>
+    </div>
+
+    <!-- ──────────────── REGULATORY CONTEXT ──────────────── -->
+    <div class="section-header">
+      <span class="section-badge badge-reg">Context</span>
+      <h2 class="section-title">Why two models exist</h2>
+    </div>
+    <p class="section-subtitle">
+      The constraint that shapes both options
+    </p>
+
+    <div class="diagram-card">
+      <p style="font-size: 0.92rem; color: var(--text); margin-bottom: 12px;">
+        For perpetual derivatives, DLT operates under an introducing-broker / order-routing
+        model: the order originates with the user, DLT relays it, and BitMEX is the
+        execution venue and counterparty. EU best execution rules apply but are easily
+        satisfied because a derivatives venue is the natural execution point.
+      </p>
+      <p style="font-size: 0.92rem; color: var(--text); margin-bottom: 12px;">
+        For spot crypto, the legal categorisation under MiFID II / MiCA and most national
+        regimes splits into two paths:
+      </p>
+      <ul style="list-style: none; padding-left: 0; margin-top: 10px;">
+        <li style="padding: 8px 0 8px 22px; position: relative; font-size: 0.92rem;">
+          <span style="position: absolute; left: 0; color: var(--accent); font-weight: 700;">▸</span>
+          <strong class="acc">Reception &amp; transmission of orders / execution on behalf of clients</strong>
+          — the broker must demonstrate best execution and must not systematically prefer
+          one venue without justification.
+        </li>
+        <li style="padding: 8px 0 8px 22px; position: relative; font-size: 0.92rem;">
+          <span style="position: absolute; left: 0; color: var(--ouinex); font-weight: 700;">▸</span>
+          <strong class="ouinex">Dealing on own account</strong>
+          — the broker is the counterparty to the client trade and operates under
+          fair-price / market-making rules instead of multi-venue best execution.
+        </li>
+      </ul>
+      <div class="callout warn" style="margin-top: 18px;">
+        <h5>Key constraint</h5>
+        <p>
+          Routing 100% of EU client spot flow to a single non-EU venue
+          while presenting as a broker is the pattern regulators flag as
+          <em>circumvention</em>. Both options below are designed to avoid that
+          surface while still delivering the majority of executed volume to BitMEX.
+        </p>
+      </div>
+    </div>
+
+    <!-- ──────────────── OPTION 1 ──────────────── -->
+    <div class="section-header">
+      <span class="section-badge badge-opt1">Option 1</span>
+      <h2 class="section-title">Riskless Principal / Financial Commission Broker</h2>
+    </div>
+    <p class="section-subtitle">
+      DLT executes against an aggregated book of BitMEX + Ouinex; Ouinex back-routes its flow into BitMEX.
+    </p>
+
+    <div class="diagram-card">
+      <svg viewBox="0 0 1000 320" xmlns="http://www.w3.org/2000/svg" style="font-family: Inter, system-ui, sans-serif;">
+        <!-- Lane backgrounds -->
+        <rect x="20"   y="20"  width="180" height="280" rx="10" fill="rgba(251,191,36,0.04)" stroke="rgba(251,191,36,0.25)"/>
+        <rect x="220"  y="20"  width="240" height="280" rx="10" fill="rgba(52,211,153,0.04)" stroke="rgba(52,211,153,0.25)"/>
+        <rect x="480"  y="20"  width="240" height="280" rx="10" fill="rgba(167,139,250,0.04)" stroke="rgba(167,139,250,0.25)"/>
+        <rect x="740"  y="20"  width="240" height="280" rx="10" fill="rgba(247,166,0,0.04)" stroke="rgba(247,166,0,0.25)"/>
+
+        <!-- Lane titles -->
+        <text x="110" y="48"  text-anchor="middle" fill="#fbbf24" font-size="13" font-weight="700" letter-spacing="1.5">USER</text>
+        <text x="340" y="48"  text-anchor="middle" fill="#34d399" font-size="13" font-weight="700" letter-spacing="1.5">DLT (BROKER)</text>
+        <text x="600" y="48"  text-anchor="middle" fill="#a78bfa" font-size="13" font-weight="700" letter-spacing="1.5">OUINEX</text>
+        <text x="860" y="48"  text-anchor="middle" fill="#F7A600" font-size="13" font-weight="700" letter-spacing="1.5">BITMEX GLOBAL</text>
+
+        <!-- Aggregated book box -->
+        <rect x="240" y="80" width="200" height="44" rx="8" fill="#22263a" stroke="#34d399"/>
+        <text x="340" y="100" text-anchor="middle" fill="#e2e8f0" font-size="11.5" font-weight="600">Aggregated Order Book</text>
+        <text x="340" y="115" text-anchor="middle" fill="#8892b0" font-size="10">BitMEX levels + Ouinex levels</text>
+
+        <!-- Liquidity feed from BitMEX -->
+        <path d="M 740 170 L 460 110" stroke="#F7A600" stroke-width="1.5" fill="none" stroke-dasharray="4 3"/>
+        <text x="600" y="135" text-anchor="middle" fill="#F7A600" font-size="10">L2 liquidity feed</text>
+
+        <!-- Liquidity feed from Ouinex -->
+        <path d="M 500 170 L 440 130" stroke="#a78bfa" stroke-width="1.5" fill="none" stroke-dasharray="4 3"/>
+        <text x="470" y="155" text-anchor="end" fill="#a78bfa" font-size="10">L2 feed</text>
+
+        <!-- Book stream to user -->
+        <path d="M 240 100 L 200 100" stroke="#34d399" stroke-width="2" fill="none" marker-end="url(#arrG1)"/>
+        <text x="218" y="92" text-anchor="middle" fill="#8892b0" font-size="9">stream</text>
+
+        <!-- User order to DLT -->
+        <path d="M 200 175 L 240 175" stroke="#fbbf24" stroke-width="2" fill="none" marker-end="url(#arrY1)"/>
+        <text x="220" y="167" text-anchor="middle" fill="#fbbf24" font-size="10">order</text>
+
+        <!-- Smart router box -->
+        <rect x="260" y="200" width="160" height="40" rx="8" fill="#2a2f44" stroke="#34d399"/>
+        <text x="340" y="223" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="600">Smart Order Router</text>
+
+        <!-- Route to BitMEX 75% -->
+        <path d="M 420 215 Q 600 215 740 215" stroke="#F7A600" stroke-width="2.5" fill="none" marker-end="url(#arrO1)"/>
+        <text x="580" y="208" text-anchor="middle" fill="#F7A600" font-size="11" font-weight="700">~75% direct execution</text>
+
+        <!-- Route to Ouinex 25% -->
+        <path d="M 420 230 L 500 250" stroke="#a78bfa" stroke-width="2.5" fill="none" marker-end="url(#arrP1)"/>
+        <text x="455" y="265" text-anchor="middle" fill="#a78bfa" font-size="11" font-weight="700">~25%</text>
+
+        <!-- Ouinex back-routes -->
+        <path d="M 720 250 Q 760 250 800 230" stroke="#F7A600" stroke-width="2" fill="none" marker-end="url(#arrO2)"/>
+        <text x="730" y="280" text-anchor="middle" fill="#F7A600" font-size="10">flow forwarded</text>
+        <text x="730" y="292" text-anchor="middle" fill="#8892b0" font-size="9">100% to BitMEX</text>
+
+        <defs>
+          <marker id="arrG1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker>
+          <marker id="arrY1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#fbbf24"/></marker>
+          <marker id="arrO1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#F7A600"/></marker>
+          <marker id="arrO2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#F7A600"/></marker>
+          <marker id="arrP1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+        </defs>
+      </svg>
+    </div>
+
+    <h3 style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 24px 0 12px;">Order flow — step by step</h3>
+    <div class="steps-container">
+      <div class="step">
+        <div class="step-num step-bitmex">1</div>
+        <div class="step-content">
+          <div class="step-title">BitMEX and Ouinex stream L2 order books to DLT</div>
+          <div class="step-desc">Ouinex's book is itself constructed by quoting against the BitMEX book on its side, generally one tick tighter due to Ouinex's lower internal fee structure.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num step-dlt">2</div>
+        <div class="step-content">
+          <div class="step-title">DLT publishes a single aggregated order book to the user</div>
+          <div class="step-desc">Predominantly BitMEX liquidity, with a thin layer of price-improved Ouinex levels. To the user the surface looks like one consolidated book.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num step-user">3</div>
+        <div class="step-content">
+          <div class="step-title">User submits a marketable order to DLT</div>
+          <div class="step-desc">DLT receives the order under its broker license; the contractual relationship is broker-client, not principal-counterparty.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num step-dlt">4</div>
+        <div class="step-content">
+          <div class="step-title">Smart Order Router selects best-priced levels</div>
+          <div class="step-desc">In normal book conditions ~75% of executed volume hits the BitMEX side, ~25% hits Ouinex's top-of-book. The split is the natural consequence of price priority, not a manual allocation.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num step-ouinex">5</div>
+        <div class="step-content">
+          <div class="step-title">Ouinex forwards 100% of its received flow to BitMEX Global</div>
+          <div class="step-desc">From BitMEX's perspective the entire flow ultimately lands in the BitMEX order book — either directly (75%) or via Ouinex (25%).</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pros-cons">
+      <div class="pc-card pc-pros">
+        <h4>Advantages</h4>
+        <ul>
+          <li>Clean fit under the broker / best-execution paradigm</li>
+          <li>100% of executed volume ultimately reaches the BitMEX order book</li>
+          <li>No proprietary balance-sheet risk for DLT</li>
+          <li>Operationally simple — no internalisation, no risk warehousing</li>
+          <li>Lower capital requirements (no own-account dealing license needed)</li>
+        </ul>
+      </div>
+      <div class="pc-card pc-cons">
+        <h4>Disadvantages / Risks</h4>
+        <ul>
+          <li>Aggregated book is harder to display cleanly on the front end</li>
+          <li>Smart router and venue-selection logic must be built and continuously evidenced</li>
+          <li>Best-execution reporting (RTS 28-style) becomes mandatory</li>
+          <li>Regulators may still characterise the Ouinex hop as circumvention if Ouinex adds no genuine price improvement</li>
+          <li>Ouinex must remain a credible independent venue, not a captive entity</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout note">
+      <h5>DLT note · Defensibility test</h5>
+      <p>
+        The structure stands up to scrutiny only if Ouinex demonstrably <em>improves</em>
+        the price on the levels it contributes. If Ouinex levels are just a mirror of
+        BitMEX with no improvement, the routing logic looks contrived. Recommendation:
+        ensure Ouinex's published top-of-book is, on average, at least one tick inside
+        the BitMEX best bid/ask on the symbols DLT supports.
+      </p>
+    </div>
+
+    <!-- ──────────────── OPTION 2 ──────────────── -->
+    <div class="section-header">
+      <span class="section-badge badge-opt2">Option 2</span>
+      <h2 class="section-title">Proprietary Trader / Market Maker</h2>
+    </div>
+    <p class="section-subtitle">
+      DLT is the direct counterparty to client trades and hedges aggregate exposure into BitMEX in threshold-sized blocks.
+    </p>
+
+    <div class="diagram-card">
+      <svg viewBox="0 0 1000 340" xmlns="http://www.w3.org/2000/svg" style="font-family: Inter, system-ui, sans-serif;">
+        <!-- Lanes -->
+        <rect x="20"  y="20" width="200" height="300" rx="10" fill="rgba(251,191,36,0.04)" stroke="rgba(251,191,36,0.25)"/>
+        <rect x="240" y="20" width="320" height="300" rx="10" fill="rgba(52,211,153,0.04)" stroke="rgba(52,211,153,0.25)"/>
+        <rect x="580" y="20" width="400" height="300" rx="10" fill="rgba(247,166,0,0.04)" stroke="rgba(247,166,0,0.25)"/>
+
+        <text x="120" y="48" text-anchor="middle" fill="#fbbf24" font-size="13" font-weight="700" letter-spacing="1.5">USERS</text>
+        <text x="400" y="48" text-anchor="middle" fill="#34d399" font-size="13" font-weight="700" letter-spacing="1.5">DLT (PRINCIPAL)</text>
+        <text x="780" y="48" text-anchor="middle" fill="#F7A600" font-size="13" font-weight="700" letter-spacing="1.5">BITMEX GLOBAL</text>
+
+        <!-- BitMEX feed -->
+        <rect x="610" y="80" width="340" height="40" rx="8" fill="#22263a" stroke="#F7A600"/>
+        <text x="780" y="105" text-anchor="middle" fill="#e2e8f0" font-size="11.5" font-weight="600">BitMEX Global Order Book (price reference)</text>
+
+        <!-- Feed to DLT -->
+        <path d="M 610 100 L 560 130" stroke="#F7A600" stroke-width="1.5" fill="none" stroke-dasharray="4 3" marker-end="url(#arrO3)"/>
+        <text x="600" y="125" text-anchor="middle" fill="#F7A600" font-size="10">L2 feed</text>
+
+        <!-- DLT book box -->
+        <rect x="270" y="135" width="260" height="40" rx="8" fill="#2a2f44" stroke="#34d399"/>
+        <text x="400" y="160" text-anchor="middle" fill="#e2e8f0" font-size="11.5" font-weight="600">DLT Book (mirrors BitMEX prices)</text>
+
+        <!-- Book stream to users -->
+        <path d="M 270 155 L 220 155" stroke="#34d399" stroke-width="2" fill="none" marker-end="url(#arrG2)"/>
+        <text x="245" y="148" text-anchor="middle" fill="#8892b0" font-size="9">stream</text>
+
+        <!-- User orders to DLT -->
+        <path d="M 220 200 L 270 200" stroke="#fbbf24" stroke-width="2" fill="none" marker-end="url(#arrY2)"/>
+        <text x="245" y="192" text-anchor="middle" fill="#fbbf24" font-size="10">orders</text>
+
+        <!-- DLT internalises -->
+        <rect x="270" y="225" width="260" height="40" rx="8" fill="#2a2f44" stroke="#34d399"/>
+        <text x="400" y="245" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="600">DLT executes as counterparty</text>
+        <text x="400" y="259" text-anchor="middle" fill="#8892b0" font-size="9.5">at BitMEX-referenced price · accumulates net exposure</text>
+
+        <!-- Threshold dotted line -->
+        <line x1="270" y1="285" x2="530" y2="285" stroke="#f87171" stroke-width="1" stroke-dasharray="3 3"/>
+        <text x="400" y="280" text-anchor="middle" fill="#f87171" font-size="9.5" font-weight="600">net position ≥ risk threshold (e.g. 0.01 BTC)</text>
+
+        <!-- Hedge to BitMEX -->
+        <path d="M 530 290 Q 700 290 870 200" stroke="#f87171" stroke-width="2.5" fill="none" marker-end="url(#arrR1)"/>
+        <text x="720" y="310" text-anchor="middle" fill="#f87171" font-size="11" font-weight="700">aggregated hedge → BitMEX</text>
+
+        <defs>
+          <marker id="arrG2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker>
+          <marker id="arrY2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#fbbf24"/></marker>
+          <marker id="arrO3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#F7A600"/></marker>
+          <marker id="arrR1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f87171"/></marker>
+        </defs>
+      </svg>
+    </div>
+
+    <h3 style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 24px 0 12px;">Order flow — step by step</h3>
+    <div class="steps-container">
+      <div class="step">
+        <div class="step-num step-bitmex">1</div>
+        <div class="step-content">
+          <div class="step-title">DLT consumes the BitMEX Global order book as its price reference</div>
+          <div class="step-desc">DLT republishes a "DLT order book" sourced from BitMEX. To the user the displayed prices are those of BitMEX Global, with DLT as the named counterparty.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num step-user">2</div>
+        <div class="step-content">
+          <div class="step-title">User submits an order, e.g. €100 to buy 0.001 BTC</div>
+          <div class="step-desc">The contractual relationship is principal-to-principal. DLT is the legal counterparty.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num step-dlt">3</div>
+        <div class="step-content">
+          <div class="step-title">DLT executes the order on its own book at the BitMEX-referenced price</div>
+          <div class="step-desc">No hedge order is sent to BitMEX at this point. DLT carries the open position on its balance sheet.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num step-dlt">4</div>
+        <div class="step-content">
+          <div class="step-title">DLT accumulates net exposure across all client flow</div>
+          <div class="step-desc">Multiple users' orders net into a single position. A risk threshold is defined per symbol (e.g. 0.01 BTC, configurable).</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num step-hedge">5</div>
+        <div class="step-content">
+          <div class="step-title">On crossing the threshold, DLT hedges into BitMEX in one block</div>
+          <div class="step-desc">A small residual (e.g. ~10%) may be warehoused intentionally — this is the visible evidence of "real" proprietary risk-taking, distinguishing DLT from a pure pass-through.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pros-cons">
+      <div class="pc-card pc-pros">
+        <h4>Advantages</h4>
+        <ul>
+          <li>User-facing UI can mirror the BitMEX global order book directly</li>
+          <li>Flow is fully internalised between DLT and BitMEX — no third venue required</li>
+          <li>Cleaner narrative: one venue, one liquidity source, one counterparty for the user</li>
+          <li>BitMEX captures all hedge flow as natural block trades</li>
+          <li>Fee economics simpler to model (no inter-venue rebates to track)</li>
+        </ul>
+      </div>
+      <div class="pc-card pc-cons">
+        <h4>Disadvantages / Risks</h4>
+        <ul>
+          <li>DLT must hold an own-account dealing / market-making license</li>
+          <li>Higher regulatory capital (own-funds requirements under IFR/IFD)</li>
+          <li>Hedge orders are not deterministic — sometimes minutes of latency between client trade and BitMEX hedge</li>
+          <li>Still requires evidencing that quoted prices are "fair market" against multiple references</li>
+          <li>Conflict-of-interest policy and disclosures to clients mandatory</li>
+          <li>Could still be characterised as circumvention if the warehoused portion is negligible</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout risk">
+      <h5>Coinbase precedent · Read carefully</h5>
+      <p>
+        Coinbase's original EU spot model — act as MM under a prop trading license while
+        hedging 100% to the global venue — was challenged precisely because the EU entity
+        was treated as a façade with no real risk-taking. The current model (an EU entity
+        that warehouses ~10% of exposure and routes the rest back) is what gives the
+        structure substance.
+      </p>
+      <p>
+        For DLT, the warehoused percentage is therefore not just a risk parameter — it
+        is the regulatory feature that defines Option 2 as <em>dealing on own account</em>
+        rather than dressed-up brokerage. Recommendation: define the warehoused band
+        explicitly in DLT's risk policy and document it as a fixed operating principle.
+      </p>
+    </div>
+
+    <!-- ──────────────── COMPARISON ──────────────── -->
+    <div class="section-header">
+      <span class="section-badge badge-cmp">Comparison</span>
+      <h2 class="section-title">Side-by-side</h2>
+    </div>
+
+    <div class="compare-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 26%;">Dimension</th>
+            <th class="opt1">Option 1 · Riskless Principal</th>
+            <th class="opt2">Option 2 · Prop Trader / MM</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Legal categorisation</strong></td>
+            <td>Reception/transmission and execution on behalf of client</td>
+            <td>Dealing on own account</td>
+          </tr>
+          <tr>
+            <td><strong>DLT counterparty role</strong></td>
+            <td>Agent / broker</td>
+            <td>Principal</td>
+          </tr>
+          <tr>
+            <td><strong>Required licenses</strong></td>
+            <td>Reception &amp; transmission + execution license</td>
+            <td>Above + dealing on own account license</td>
+          </tr>
+          <tr>
+            <td><strong>Capital requirements</strong></td>
+            <td>Lower (no proprietary book)</td>
+            <td>Higher (own-funds for inventory risk)</td>
+          </tr>
+          <tr>
+            <td><strong>% of executed flow on BitMEX</strong></td>
+            <td>~75% direct + ~25% via Ouinex = effectively 100%</td>
+            <td>~90% (hedge flow) — residual warehoused by DLT</td>
+          </tr>
+          <tr>
+            <td><strong>User UI shows</strong></td>
+            <td>Aggregated book (BitMEX + Ouinex)</td>
+            <td>BitMEX-referenced "DLT book"</td>
+          </tr>
+          <tr>
+            <td><strong>Order routing</strong></td>
+            <td>Per-order, real-time, price-priority</td>
+            <td>Batched hedges on threshold breach</td>
+          </tr>
+          <tr>
+            <td><strong>Key regulatory obligation</strong></td>
+            <td>MiFID II Article 27 best execution + RTS 28 reporting</td>
+            <td>Fair pricing evidence + conflict-of-interest disclosures</td>
+          </tr>
+          <tr>
+            <td><strong>Circumvention risk</strong></td>
+            <td>Medium — depends on whether Ouinex adds genuine price improvement</td>
+            <td>Medium — depends on warehoused share being non-trivial</td>
+          </tr>
+          <tr>
+            <td><strong>Technical complexity</strong></td>
+            <td>Smart Order Router + venue analytics</td>
+            <td>Inventory engine + hedging engine + price-fairness monitor</td>
+          </tr>
+          <tr>
+            <td><strong>Time to ship</strong></td>
+            <td>Faster — most components are off-the-shelf routing</td>
+            <td>Slower — risk infra is bespoke</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ──────────────── ADDITIONS / NOTES ──────────────── -->
+    <div class="section-header">
+      <span class="section-badge badge-note">Additional considerations</span>
+      <h2 class="section-title">Points worth surfacing with BitMEX</h2>
+    </div>
+
+    <div class="callout">
+      <h5>Pre-trade transparency &amp; client disclosure</h5>
+      <p>
+        In both options, EU clients must receive an order-execution policy describing
+        venue selection and price formation. In Option 2 specifically, the prospectus /
+        terms must disclose that DLT acts as principal and that BitMEX is the underlying
+        price source.
+      </p>
+    </div>
+
+    <div class="callout">
+      <h5>Reporting &amp; surveillance</h5>
+      <p>
+        Trade reporting obligations (MiFIR / MiCAR equivalent) sit with DLT, not BitMEX.
+        Market-abuse surveillance under MAR also remains with DLT for client-facing
+        activity. BitMEX's own surveillance covers the order book it operates.
+      </p>
+    </div>
+
+    <div class="callout">
+      <h5>Settlement &amp; custody</h5>
+      <p>
+        Client custody is independent of execution model. Both options assume BitMEX as
+        execution venue; settlement/custody arrangements (omnibus vs segregated, on-chain
+        vs internal book transfer) should be defined separately in the integration spec.
+      </p>
+    </div>
+
+    <div class="callout">
+      <h5>Client classification</h5>
+      <p>
+        Retail clients carry stricter obligations under both models (appropriateness
+        assessment, costs &amp; charges disclosure, suitability for advised flow).
+        Professional and ECPs allow more streamlined execution. Indicate which client
+        category DLT primarily intends to onboard via the BitMEX flow.
+      </p>
+    </div>
+
+    <div class="callout risk">
+      <h5>Hybrid model (worth mentioning)</h5>
+      <p>
+        A third route is operationally possible: Option 1 as the default for retail flow,
+        Option 2 for professional clients who explicitly accept principal execution.
+        This is more complex to operate but maximises BitMEX-bound flow while keeping
+        capital requirements proportional. Not recommended for the initial launch but
+        useful as an evolution path.
+      </p>
+    </div>
+
+    <!-- ──────────────── RECOMMENDATION ──────────────── -->
+    <div class="section-header">
+      <span class="section-badge badge-cmp">Recommendation</span>
+      <h2 class="section-title">DLT's working preference</h2>
+    </div>
+
+    <div class="recommendation">
+      <h3>Suggested direction</h3>
+      <p>
+        DLT proposes <strong class="acc">Option 1 (Riskless Principal / Best Execution)</strong>
+        as the initial operating model, conditional on BitMEX and Ouinex coordinating
+        the back-routing arrangement described in steps 1 and 5 above. This model
+        delivers the simplest fit with EU broker obligations, requires the least capital,
+        and routes effectively 100% of executed volume to BitMEX Global.
+      </p>
+      <p>
+        Option 2 remains on the roadmap as a future state for higher-margin client tiers
+        and for symbols where DLT wants to retain inventory upside, but launching as a
+        prop trader from day one increases both regulatory and operational complexity
+        without immediately enlarging BitMEX-bound flow.
+      </p>
+      <p>
+        We would welcome BitMEX's view on (a) the back-routing arrangement with Ouinex,
+        (b) fee economics under each model, and (c) whether BitMEX has internal
+        preferences shaped by precedent from similar EU broker integrations.
+      </p>
+    </div>
+
+    <footer>
+      Draft v0.1 · DLT × BitMEX · Operational memorandum · Not for external distribution
+    </footer>
+
+  </div>
+</body>
+</html>
