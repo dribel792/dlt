@@ -163,8 +163,8 @@
     .market-grid {
       flex: 1;
       display: grid;
-      grid-template-rows: 1fr auto 1fr;
-      gap: 10px;
+      grid-template-rows: 1fr 1fr;
+      gap: 14px;
       margin-top: 4px;
       min-height: 0;
     }
@@ -199,6 +199,21 @@
       border-radius: 10px;
       padding: 10px 12px;
     }
+    .market-card .num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 5px;
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 800;
+      color: #ffffff;
+      background: var(--brand);
+      margin-bottom: 5px;
+    }
+    .market-card.blue .num { background: var(--blue); }
     .market-card .headline {
       font-size: 12.5px;
       font-weight: 700;
@@ -341,12 +356,51 @@
       margin-bottom: 10px;
       gap: 6px;
     }
+    .panel-title .badge-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .panel-title .num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 5px;
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+    .panel.micar .panel-title .num { background: var(--brand); }
+    .panel.mifid .panel-title .num { background: var(--blue); }
+    .panel.infra .panel-title .num { background: var(--purple); }
     .panel-title .badge {
       font-size: 10.5px;
       font-weight: 800;
       letter-spacing: 0.12em;
       padding: 4px 8px;
       border-radius: 5px;
+    }
+
+    /* Slide 2 intro strip ("read the slide in this order") */
+    .pos-intro {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 14px;
+      margin-bottom: 8px;
+      background: var(--surface2);
+      border-left: 3px solid var(--petrol);
+      border-radius: 8px;
+      font-size: 11px;
+      color: var(--text);
+    }
+    .pos-intro strong { color: var(--petrol); font-weight: 800; }
+    .pos-intro .arrow {
+      color: var(--petrol);
+      font-weight: 800;
     }
     .panel.micar .badge { background: var(--brand); color: #ffffff; }
     .panel.mifid .badge { background: var(--blue); color: #ffffff; }
@@ -1047,63 +1101,128 @@
     .cat-license .lic-pill.mifid { background: var(--blue); }
 
     /* ─────────────────────────────────────────────────────────
-       SLIDE 6 — OPERATING MODELS MATRIX
+       SLIDE 6 — THREE OPERATING MODELS (cards, not matrix)
        ───────────────────────────────────────────────────────── */
 
-    .ops-matrix {
+    .ops-models {
       flex: 1;
       display: grid;
-      grid-template-columns: 160px repeat(3, 1fr);
-      gap: 10px;
+      grid-template-columns: 1fr 1fr 1.8fr;
+      gap: 12px;
       margin-top: 6px;
       min-height: 0;
     }
-    .ops-row-label {
-      font-size: 11px;
+    .ops-model {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+    }
+    .ops-model.compound {
+      border: 1.5px solid var(--petrol);
+      background: linear-gradient(180deg, rgba(14, 74, 102, 0.05) 0%, #ffffff 100%);
+    }
+    .ops-model-head {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .ops-tag {
+      font-size: 9.5px;
       font-weight: 800;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.20em;
       text-transform: uppercase;
       color: var(--muted);
-      display: flex;
-      align-items: center;
-      padding: 0 4px;
     }
-    .ops-col-head {
-      background: var(--petrol);
-      color: #ffffff;
-      border-radius: 10px;
-      padding: 10px 14px;
+    .ops-model h3 {
       font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--petrol);
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
+    .ops-model.compound h3 { color: var(--petrol-deep); }
+    .ops-desc {
+      font-size: 11.5px;
+      color: var(--text);
+      line-height: 1.4;
+    }
+    .ops-components {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .ops-component {
+      background: #ffffff;
+      border: 1px solid var(--petrol-border);
+      border-radius: 10px;
+      padding: 10px 12px;
       display: flex;
       flex-direction: column;
       gap: 4px;
     }
-    .ops-col-head .tag {
-      font-size: 10px;
+    .ops-component .comp-tag {
+      font-size: 9px;
       font-weight: 800;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: var(--mint);
+      color: var(--petrol);
     }
-    .ops-col-head .name {
-      font-size: 18px;
+    .ops-component .comp-head {
+      font-size: 12px;
       font-weight: 800;
-      letter-spacing: -0.01em;
+      color: var(--ink);
+      line-height: 1.25;
     }
-    .ops-cell {
-      background: #ffffff;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px 12px;
-      font-size: 11.5px;
-      line-height: 1.4;
-      color: var(--text);
+    .ops-component .comp-body {
+      font-size: 10.5px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+    .ops-foot-label {
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: auto;
+      margin-bottom: 2px;
+    }
+    .ops-logos {
       display: flex;
-      flex-direction: column;
-      gap: 4px;
+      flex-wrap: wrap;
+      gap: 6px;
     }
-    .ops-cell strong { color: var(--ink); font-weight: 700; }
-    .ops-cell .sub { color: var(--muted); font-size: 10.5px; }
+    .logo {
+      font-family: var(--font-display);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      padding: 5px 11px;
+      border-radius: 6px;
+      color: #ffffff;
+      background: #4b5563;
+      white-space: nowrap;
+    }
+    .logo.kraken   { background: #5741D9; }
+    .logo.bitvavo  { background: #0080FF; }
+    .logo.binance  { background: #F3BA2F; color: #1a1d27; }
+    .logo.nexo     { background: #1A2C5B; }
+    .logo.bitget   { background: #00F0FF; color: #0b1d3a; }
+    .logo.neutral  { background: #4b5563; }
+    .logo.placeholder {
+      background: transparent;
+      color: var(--muted);
+      border: 1.5px dashed var(--border);
+      font-weight: 600;
+    }
 
     /* slide footer */
     .slide-foot {
@@ -1150,45 +1269,42 @@
             <div class="market-cards state">
 
               <div class="market-card brand">
+                <span class="num">1</span>
                 <div class="headline">>200 MiCAR licences granted in last 12 months</div>
                 <div class="caption">MiCAR is now a commodity — no longer a moat.</div>
               </div>
 
               <div class="market-card brand">
+                <span class="num">2</span>
                 <div class="headline">Crypto spot volumes seeing a temporary dip</div>
                 <div class="caption">AI boom shifting liquidity away from crypto.</div>
               </div>
 
               <div class="market-card brand">
+                <span class="num">3</span>
                 <div class="headline">Crypto actors racing to expand product scope</div>
                 <div class="caption">Strategy to attract and retain capital.</div>
               </div>
 
               <div class="market-card brand">
+                <span class="num">4</span>
                 <div class="headline">Crypto going into TradFi infra</div>
                 <div class="caption">On/off-ramps, custody, settlement — meeting TradFi rails.</div>
               </div>
 
               <div class="market-card brand">
+                <span class="num">5</span>
                 <div class="headline">TradFi &amp; Fintech entering tokenization &amp; structured products</div>
                 <div class="caption">Brokers, banks, fintechs piloting tokenised assets.</div>
               </div>
 
               <div class="market-card brand">
+                <span class="num">6</span>
                 <div class="headline">Perpification &amp; prediction markets growing fast</div>
                 <div class="caption">New venues, new underlyings, new user behaviour.</div>
               </div>
 
             </div>
-          </div>
-
-          <!-- MIDDLE: Leading To arrow (horizontal, between rows) -->
-          <div class="leading-to">
-            <div class="label">Leading to</div>
-            <svg viewBox="0 0 80 26" fill="none">
-              <line x1="0" y1="13" x2="68" y2="13" stroke="#0E4A66" stroke-width="2"/>
-              <polygon points="68,5 80,13 68,21" fill="#0E4A66"/>
-            </svg>
           </div>
 
           <!-- BOTTOM: Market Trends -->
@@ -1198,10 +1314,12 @@
             <div class="market-cards trends">
 
               <div class="market-card blue">
+                <span class="num">1</span>
                 <div class="headline">Crypto players going after TradFi securities at speed</div>
               </div>
 
               <div class="market-card blue">
+                <span class="num">2</span>
                 <div class="headline">Expanding into structured securities + new underlyings</div>
                 <div class="tile-row">
                   <span class="tile b">Crypto</span>
@@ -1214,7 +1332,8 @@
               </div>
 
               <div class="market-card blue">
-                <div class="headline">Rolling out new products at high frequency in few categories</div>
+                <span class="num">3</span>
+                <div class="headline">Crypto players &amp; fintechs rolling out new products at high frequency — in few categories</div>
                 <div class="cat-grid">
                   <div class="cat">
                     <div class="cat-name">Leverage</div>
@@ -1231,9 +1350,10 @@
                 </div>
               </div>
 
-              <div class="market-card yellow">
+              <div class="market-card blue">
+                <span class="num">4</span>
                 <div class="headline">Clearing between tokenized assets and CeFi becomes unavoidable</div>
-                <div class="caption">Opportunity · infrastructure still to be built</div>
+                <div class="caption">Infrastructure still to be built.</div>
               </div>
 
             </div>
@@ -1271,12 +1391,23 @@
           <!-- LEFT: stacked layout (wrappers row + backbone) -->
           <div class="pos-stack">
 
+            <!-- Intro / reading order -->
+            <div class="pos-intro">
+              <strong>Read:</strong>
+              <span>Three regulatory shells</span>
+              <span class="arrow">↓</span>
+              <span>one shared DLT backbone underneath</span>
+            </div>
+
             <div class="wrappers-row">
 
               <!-- MICAR panel -->
               <div class="panel micar">
                 <div class="panel-title">
-                  <span class="badge">MiCAR</span>
+                  <span class="badge-group">
+                    <span class="num">1</span>
+                    <span class="badge">MiCAR</span>
+                  </span>
                   <span class="hint">Spot crypto</span>
                 </div>
                 <div class="product-list">
@@ -1289,7 +1420,10 @@
               <!-- MIFID panel -->
               <div class="panel mifid">
                 <div class="panel-title">
-                  <span class="badge">MiFID</span>
+                  <span class="badge-group">
+                    <span class="num">2</span>
+                    <span class="badge">MiFID</span>
+                  </span>
                   <span class="hint">Derivatives · Structured · Securities</span>
                 </div>
 
@@ -1341,7 +1475,10 @@
               <!-- INFRASTRUCTURE / CLEARING panel -->
               <div class="panel infra">
                 <div class="panel-title">
-                  <span class="badge">Infrastructure</span>
+                  <span class="badge-group">
+                    <span class="num">3</span>
+                    <span class="badge">Infrastructure</span>
+                  </span>
                   <span class="hint">Clearing</span>
                 </div>
                 <div class="infra-body">
@@ -1368,8 +1505,8 @@
             <!-- Backbone strip -->
             <div class="backbone">
               <div class="backbone-head">
-                <strong>DLT Finance Backbone</strong>
-                <span class="why">Build once · reuse across MiCAR & MiFID</span>
+                <strong>↑ Shared backbone — powers all three shells above</strong>
+                <span class="why">Build once · reuse across MiCAR, MiFID, Infrastructure</span>
               </div>
               <div class="backbone-modules">
                 <div class="mod">Spot Post-Trading / Reporting <span class="mod-sub">MiCAR</span></div>
@@ -1381,21 +1518,25 @@
 
           </div>
 
-          <!-- RIGHT: Key Takeaways -->
+          <!-- RIGHT: Key Takeaways — numbering mirrors the 3 shells + backbone -->
           <aside class="takeaways">
-            <h3>Key Takeaways</h3>
+            <h3>Read in this order</h3>
             <ol>
               <li>
-                <strong>Weeks, not months.</strong>
-                <span class="sub">Platform must be set up so new products ship in weeks — meeting the market's demand for speed.</span>
+                <strong>MiCAR is a commodity.</strong>
+                <span class="sub">Spot crypto via MiCAR is now table stakes — no longer a moat.</span>
               </li>
               <li>
-                <strong>Risk engine + post-trade are the moat.</strong>
-                <span class="sub">A solid risk engine and robust post-trade services let us spin up any MiFID product fast and compete with the best.</span>
+                <strong>MiFID is the moat.</strong>
+                <span class="sub">Risk engine + post-trade let us ship any MiFID product fast and compete on derivatives, structured, and securities.</span>
               </li>
               <li>
-                <strong>Underlyings are open-ended.</strong>
-                <span class="sub">Crypto, equities, debt, metals, commodities, prediction markets — all addressable through the same rails.</span>
+                <strong>Infrastructure / Clearing is the new lane.</strong>
+                <span class="sub">Bridging tokenized and traditional securities — DLT clears between the two worlds.</span>
+              </li>
+              <li>
+                <strong>All three on one backbone.</strong>
+                <span class="sub">KYC, risk, post-trade, reporting — build once, reuse across MiCAR, MiFID, Infrastructure.</span>
               </li>
             </ol>
           </aside>
@@ -1794,81 +1935,63 @@
           </div>
         </div>
 
-        <div class="ops-matrix">
+        <div class="ops-models">
 
-          <!-- Column headers (row 1) -->
-          <div></div>
-          <div class="ops-col-head">
-            <span class="tag">Model A</span>
-            <span class="name">B2B</span>
-          </div>
-          <div class="ops-col-head">
-            <span class="tag">Model B</span>
-            <span class="name">B2B2B</span>
-          </div>
-          <div class="ops-col-head">
-            <span class="tag">Model C</span>
-            <span class="name">B2B2BX</span>
-          </div>
-
-          <!-- Row: Who DLT serves -->
-          <div class="ops-row-label">Who DLT serves</div>
-          <div class="ops-cell">
-            <strong>Direct enterprise</strong>
-            <span class="sub">single business consumes DLT in-house</span>
-          </div>
-          <div class="ops-cell">
-            <strong>Business that serves other businesses</strong>
-            <span class="sub">DLT powers a distributor's offering</span>
-          </div>
-          <div class="ops-cell">
-            <strong>Multi-tier distribution</strong>
-            <span class="sub">distributor's distributors reach the end customer</span>
+          <!-- MODEL A — B2B -->
+          <div class="ops-model">
+            <div class="ops-model-head">
+              <span class="ops-tag">Model A</span>
+              <h3>B2B</h3>
+            </div>
+            <div class="ops-desc">DLT sells directly to an enterprise that consumes the platform in-house.</div>
+            <div class="ops-foot-label">Example clients</div>
+            <div class="ops-logos">
+              <span class="logo neutral">Neo-banks</span>
+              <span class="logo neutral">Prop desks</span>
+            </div>
           </div>
 
-          <!-- Row: Branding -->
-          <div class="ops-row-label">Branding</div>
-          <div class="ops-cell">
-            <strong>DLT-branded</strong>
-            <span class="sub">co-marketing optional</span>
-          </div>
-          <div class="ops-cell">
-            <strong>White-label</strong>
-            <span class="sub">partner brand front-of-house</span>
-          </div>
-          <div class="ops-cell">
-            <strong>Fully white-label</strong>
-            <span class="sub">DLT invisible to end customer</span>
-          </div>
-
-          <!-- Row: Revenue model -->
-          <div class="ops-row-label">Revenue model</div>
-          <div class="ops-cell">
-            <strong>Direct fees / SaaS</strong>
-            <span class="sub">platform + per-trade economics</span>
-          </div>
-          <div class="ops-cell">
-            <strong>Revenue share with partner</strong>
-            <span class="sub">~ 30 – 50% on user yield / volume</span>
-          </div>
-          <div class="ops-cell">
-            <strong>Tiered share across the chain</strong>
-            <span class="sub">economics split across partners</span>
+          <!-- MODEL B — B2B2B -->
+          <div class="ops-model">
+            <div class="ops-model-head">
+              <span class="ops-tag">Model B</span>
+              <h3>B2B2B</h3>
+            </div>
+            <div class="ops-desc">DLT powers a distributor's offering to other businesses or to end users.</div>
+            <div class="ops-foot-label">Example clients</div>
+            <div class="ops-logos">
+              <span class="logo kraken">Kraken</span>
+              <span class="logo bitvavo">Bitvavo</span>
+              <span class="logo nexo">Nexo</span>
+              <span class="logo bitget">Bitget</span>
+            </div>
           </div>
 
-          <!-- Row: Example clients -->
-          <div class="ops-row-label">Example clients</div>
-          <div class="ops-cell">
-            <strong>Neo-banks · prop desks</strong>
-            <span class="sub">build their own product on DLT rails</span>
-          </div>
-          <div class="ops-cell">
-            <strong>Kraken · Bitvavo · NEXO · Bitget</strong>
-            <span class="sub">distribute yield + structured to their users</span>
-          </div>
-          <div class="ops-cell">
-            <strong>Distribution networks · super-apps</strong>
-            <span class="sub">DLT in the stack, brand at the surface</span>
+          <!-- MODEL C — B2B2X (compound: ONE model, TWO components) -->
+          <div class="ops-model compound">
+            <div class="ops-model-head">
+              <span class="ops-tag">Model C — one model, two components</span>
+              <h3>B2B2X</h3>
+            </div>
+            <div class="ops-desc">A single distribution model that bundles two distinct DLT components, delivered together.</div>
+            <div class="ops-components">
+              <div class="ops-component">
+                <span class="comp-tag">Component 1</span>
+                <span class="comp-head">Reg + Infrastructure</span>
+                <span class="comp-body">Licence shell, custody, clearing, settlement — the regulated rails.</span>
+              </div>
+              <div class="ops-component">
+                <span class="comp-tag">Component 2</span>
+                <span class="comp-head">Tokenization + Investment Products</span>
+                <span class="comp-body">Asset issuance, structured products, on-chain wrappers — the user-facing side.</span>
+              </div>
+            </div>
+            <div class="ops-foot-label">Example clients</div>
+            <div class="ops-logos">
+              <span class="logo binance">Binance</span>
+              <span class="logo placeholder">[client logo]</span>
+              <span class="logo placeholder">[client logo]</span>
+            </div>
           </div>
 
         </div>
