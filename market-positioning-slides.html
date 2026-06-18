@@ -1107,7 +1107,7 @@
     .ops-models {
       flex: 1;
       display: grid;
-      grid-template-columns: 1fr 2fr;
+      grid-template-columns: 1fr 2.5fr;
       gap: 14px;
       margin-top: 6px;
       min-height: 0;
@@ -1202,19 +1202,50 @@
     }
     .logo {
       font-family: var(--font-display);
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 800;
       letter-spacing: 0.02em;
-      padding: 5px 11px;
+      padding: 5px 10px;
       border-radius: 6px;
       color: #ffffff;
       background: #4b5563;
       white-space: nowrap;
     }
+
+    /* B2B logos */
+    .logo.scalable      { background: #1bb1a1; }
+    .logo.deutsche-bank { background: #0018a8; }
+    .logo.relai         { background: #1a1d27; }
+    .logo.deka          { background: #c8102e; }
+    .logo.taiwan-mobile { background: #003a70; }
+
+    /* B2B2X — Agent Model */
+    .logo.bitflyer      { background: #e94f1d; }
+    .logo.backpack      { background: #1a1d27; }
+    .logo.vancelian     { background: #6b7280; }
+
+    /* B2B2X — Principal Model */
+    .logo.abn-amro      { background: #018556; }
+    .logo.capital-com   { background: #000000; }
+    .logo.libertex      { background: #ef6c00; }
+    .logo.nexo          { background: #1A2C5B; }
+
+    /* B2B2X — Tokenization */
+    .logo.coinhouse     { background: #4c2a85; }
+    .logo.axi           { background: #ff6600; }
+    .logo.young-platform{ background: #00b97c; }
+    .logo.ouinex        { background: #111827; }
+
+    /* B2B2X — Derivatives */
+    .logo.revolut       { background: #0a0a23; }
+    .logo.bitmex        { background: #0b1a2e; }
+    .logo.bit2me        { background: #ff5c00; }
+    .logo.firi          { background: #6c2dc7; }
+
+    /* Generic + earlier-used */
     .logo.kraken   { background: #5741D9; }
     .logo.bitvavo  { background: #0080FF; }
     .logo.binance  { background: #F3BA2F; color: #1a1d27; }
-    .logo.nexo     { background: #1A2C5B; }
     .logo.bitget   { background: #00F0FF; color: #0b1d3a; }
     .logo.neutral  { background: #4b5563; }
     .logo.placeholder {
@@ -1222,6 +1253,26 @@
       color: var(--muted);
       border: 1.5px dashed var(--border);
       font-weight: 600;
+    }
+
+    /* Sub-groups inside ops-component (Agent Model / Principal Model / etc.) */
+    .comp-subgroups {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .comp-subgroup {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .sg-label {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
     }
 
     /* slide footer */
@@ -1938,8 +1989,11 @@
             <div class="ops-desc">DLT sells directly to an enterprise that consumes the platform in-house.</div>
             <div class="ops-foot-label">Example clients</div>
             <div class="ops-logos">
-              <span class="logo neutral">Neo-banks</span>
-              <span class="logo neutral">Prop desks</span>
+              <span class="logo scalable">scalable.CAPITAL</span>
+              <span class="logo deutsche-bank">Deutsche Bank</span>
+              <span class="logo relai">Relai</span>
+              <span class="logo deka">Deka</span>
+              <span class="logo taiwan-mobile">Taiwan Mobile</span>
             </div>
           </div>
 
@@ -1951,24 +2005,60 @@
             </div>
             <div class="ops-desc">A single distribution model that bundles two distinct DLT components, delivered together.</div>
             <div class="ops-components">
+
+              <!-- Component 1: Reg + Infrastructure -->
               <div class="ops-component">
                 <span class="comp-tag">Component 1</span>
                 <span class="comp-head">Reg + Infrastructure</span>
                 <span class="comp-body">Licence shell, custody, clearing, settlement — the regulated rails.</span>
+                <div class="comp-subgroups">
+                  <div class="comp-subgroup">
+                    <span class="sg-label">Agent Model</span>
+                    <div class="ops-logos">
+                      <span class="logo bitflyer">bitFlyer</span>
+                      <span class="logo backpack">Backpack</span>
+                      <span class="logo vancelian">VANCELIAN</span>
+                    </div>
+                  </div>
+                  <div class="comp-subgroup">
+                    <span class="sg-label">Principal Model</span>
+                    <div class="ops-logos">
+                      <span class="logo abn-amro">ABN-AMRO</span>
+                      <span class="logo capital-com">capital.com</span>
+                      <span class="logo libertex">Libertex</span>
+                      <span class="logo nexo">NEXO</span>
+                    </div>
+                  </div>
+                </div>
               </div>
+
+              <!-- Component 2: Tokenization + Investment Products -->
               <div class="ops-component">
                 <span class="comp-tag">Component 2</span>
                 <span class="comp-head">Tokenization + Investment Products</span>
                 <span class="comp-body">Asset issuance, structured products, on-chain wrappers — the user-facing side.</span>
+                <div class="comp-subgroups">
+                  <div class="comp-subgroup">
+                    <span class="sg-label">Tokenization</span>
+                    <div class="ops-logos">
+                      <span class="logo coinhouse">COINHOUSE</span>
+                      <span class="logo axi">axi</span>
+                      <span class="logo young-platform">young platform</span>
+                      <span class="logo ouinex">ouinex</span>
+                    </div>
+                  </div>
+                  <div class="comp-subgroup">
+                    <span class="sg-label">Derivatives</span>
+                    <div class="ops-logos">
+                      <span class="logo revolut">Revolut</span>
+                      <span class="logo bitmex">BitMEX</span>
+                      <span class="logo bit2me">bit2me</span>
+                      <span class="logo firi">Firi</span>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="ops-foot-label">Example clients</div>
-            <div class="ops-logos">
-              <span class="logo kraken">Kraken</span>
-              <span class="logo bitvavo">Bitvavo</span>
-              <span class="logo binance">Binance</span>
-              <span class="logo nexo">Nexo</span>
-              <span class="logo bitget">Bitget</span>
+
             </div>
           </div>
 
