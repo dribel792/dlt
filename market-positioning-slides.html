@@ -911,6 +911,200 @@
       color: var(--muted);
     }
 
+    /* ─────────────────────────────────────────────────────────
+       SLIDES 3 & 4 — HERO ("Used by …") STRIP
+       ───────────────────────────────────────────────────────── */
+
+    .hero-strip {
+      margin-top: 12px;
+      background: var(--petrol-grad);
+      color: #ffffff;
+      border-radius: 12px;
+      padding: 12px 18px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 16px;
+      align-items: center;
+    }
+    .hero-strip .h-label {
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--mint);
+      white-space: nowrap;
+    }
+    .hero-strip .h-metrics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 16px;
+      align-items: baseline;
+    }
+    .hero-strip .h-logo {
+      font-size: 13px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 0.02em;
+    }
+    .hero-strip .h-sep {
+      color: rgba(255, 255, 255, 0.35);
+      font-weight: 400;
+    }
+    .hero-strip .h-fact {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.94);
+    }
+    .hero-strip .h-fact em {
+      font-style: normal;
+      color: var(--mint);
+    }
+
+    /* ─────────────────────────────────────────────────────────
+       SLIDE 5 — CATEGORY | LICENSE TABLE
+       ───────────────────────────────────────────────────────── */
+
+    .cat-license {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      margin-top: 4px;
+    }
+    .cat-license .table-head {
+      display: grid;
+      grid-template-columns: 0.9fr 2fr 0.7fr;
+      gap: 10px;
+      padding: 9px 14px;
+      background: var(--petrol);
+      color: #ffffff;
+      border-radius: 10px 10px 0 0;
+      font-family: var(--font-display);
+    }
+    .cat-license .table-head span {
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    .cat-license .table-body {
+      flex: 1;
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+      overflow: hidden;
+    }
+    .cat-license .cat-group {
+      border-bottom: 1px solid var(--border);
+    }
+    .cat-license .cat-group:last-child { border-bottom: none; }
+    .cat-license .cat-row {
+      display: grid;
+      grid-template-columns: 0.9fr 2fr 0.7fr;
+      gap: 10px;
+      padding: 6.5px 14px;
+      align-items: center;
+      border-bottom: 1px dashed var(--border);
+      font-size: 11.5px;
+    }
+    .cat-license .cat-row:last-child { border-bottom: none; }
+    .cat-license .cat-row.head-row {
+      background: var(--surface2);
+    }
+    .cat-license .cat-name-cell {
+      font-weight: 800;
+      font-size: 12px;
+      color: var(--ink);
+      letter-spacing: 0.02em;
+    }
+    .cat-license .cat-name-cell.lev { color: var(--blue); }
+    .cat-license .cat-name-cell.yield { color: var(--green); }
+    .cat-license .cat-name-cell.tradfi { color: var(--purple); }
+    .cat-license .cat-name-cell.misc { color: var(--petrol); }
+    .cat-license .product-cell {
+      color: var(--text);
+      font-weight: 600;
+    }
+    .cat-license .product-cell .sub {
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 10.5px;
+      margin-left: 6px;
+    }
+    .cat-license .lic-cell {
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .cat-license .lic-pill {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 12px;
+      color: #ffffff;
+    }
+    .cat-license .lic-pill.micar { background: var(--brand); }
+    .cat-license .lic-pill.mifid { background: var(--blue); }
+
+    /* ─────────────────────────────────────────────────────────
+       SLIDE 6 — OPERATING MODELS MATRIX
+       ───────────────────────────────────────────────────────── */
+
+    .ops-matrix {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 160px repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 6px;
+      min-height: 0;
+    }
+    .ops-row-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      padding: 0 4px;
+    }
+    .ops-col-head {
+      background: var(--petrol);
+      color: #ffffff;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-family: var(--font-display);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .ops-col-head .tag {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--mint);
+    }
+    .ops-col-head .name {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+    .ops-cell {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 11.5px;
+      line-height: 1.4;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .ops-cell strong { color: var(--ink); font-weight: 700; }
+    .ops-cell .sub { color: var(--muted); font-size: 10.5px; }
+
     /* slide footer */
     .slide-foot {
       position: absolute;
@@ -1309,17 +1503,19 @@
 
         </div>
 
-        <!-- Under-strip: any underlying -->
-        <div class="under-strip">
-          <span class="ustr-label">Any underlying</span>
-          <span class="ustr-note">Not only crypto — same structure across asset classes:</span>
-          <span class="ustr-chips">
-            <span class="chip">Crypto</span>
-            <span class="chip">Equities</span>
-            <span class="chip">Debt</span>
-            <span class="chip">Precious Metals</span>
-            <span class="chip">Commodities</span>
-            <span class="chip">Prediction Markets</span>
+        <!-- Hero strip: customer validation -->
+        <div class="hero-strip">
+          <span class="h-label">Used by</span>
+          <span class="h-metrics">
+            <span class="h-logo">NEXO</span>
+            <span class="h-sep">·</span>
+            <span class="h-logo">Bitget</span>
+            <span class="h-sep">·</span>
+            <span class="h-fact"><em>50%</em> revenue share on user yield</span>
+            <span class="h-sep">·</span>
+            <span class="h-fact"><em>~$60M</em> weekly Bitget</span>
+            <span class="h-sep">·</span>
+            <span class="h-fact"><em>~$5M</em> weekly Nexo</span>
           </span>
         </div>
 
@@ -1331,14 +1527,14 @@
       </div>
     </section>
 
-    <!-- ─────────── SLIDE 4 — PRINCIPAL-PROTECTED NOTE DEEP DIVE ─────────── -->
+    <!-- ─────────── SLIDE 4 — COVERED CALLS DEEP DIVE ─────────── -->
     <section class="slide">
       <div class="slide-inner">
 
         <div class="slide-header">
           <div>
             <div class="eyebrow">DLT Finance · Product Spotlight</div>
-            <h1 class="slide-title"><span class="accent">Principal-Protected Note</span> — capped upside, full floor</h1>
+            <h1 class="slide-title"><span class="accent">Covered Calls</span> — yield from selling upside</h1>
           </div>
           <div class="brand-mark">
             <svg viewBox="0 0 24 24" fill="none">
@@ -1353,58 +1549,67 @@
           <!-- LEFT: Payoff diagram -->
           <div class="payoff-card">
             <div class="payoff-head">
-              <span class="h-label">Payoff profile · PPN at maturity</span>
-              <span class="h-cap">Return vs. underlying performance</span>
+              <span class="h-label">Payoff profile · Covered Call at expiry</span>
+              <span class="h-cap">Return vs. underlying at expiry</span>
             </div>
             <svg viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
               <!-- axes -->
               <line x1="50" y1="280" x2="580" y2="280" stroke="#cbd2dc" stroke-width="1"/>
               <line x1="50" y1="40" x2="50" y2="280" stroke="#cbd2dc" stroke-width="1"/>
-              <text x="22" y="160" fill="#5b6577" font-size="11" transform="rotate(-90, 22, 160)" text-anchor="middle">Payoff at maturity (% of principal)</text>
-              <text x="315" y="310" fill="#5b6577" font-size="11" text-anchor="middle">Underlying performance vs. strike</text>
+              <text x="22" y="160" fill="#5b6577" font-size="11" transform="rotate(-90, 22, 160)" text-anchor="middle">Return at expiry (% of underlying)</text>
+              <text x="315" y="310" fill="#5b6577" font-size="11" text-anchor="middle">Underlying price at expiry</text>
 
               <!-- value lines -->
-              <line x1="50" y1="200" x2="580" y2="200" stroke-dasharray="3,3" stroke="#d6dbe3"/>
+              <line x1="50" y1="190" x2="580" y2="190" stroke-dasharray="3,3" stroke="#d6dbe3"/>
               <line x1="50" y1="100" x2="580" y2="100" stroke-dasharray="3,3" stroke="#d6dbe3"/>
-              <text x="540" y="204" fill="#5b6577" font-size="10">100% (principal)</text>
-              <text x="540" y="104" fill="#5b6577" font-size="10">Cap (~120%)</text>
+              <text x="540" y="194" fill="#5b6577" font-size="10">0% return</text>
+              <text x="540" y="104" fill="#5b6577" font-size="10">Cap (strike + premium)</text>
+
+              <!-- spot (initial) vertical -->
+              <line x1="220" y1="60" x2="220" y2="280" stroke-dasharray="4,4" stroke="#c98b1f" stroke-width="1.2"/>
+              <text x="220" y="52" fill="#c98b1f" font-size="11" font-weight="700" text-anchor="middle">Initial spot</text>
 
               <!-- strike vertical -->
-              <line x1="250" y1="60" x2="250" y2="280" stroke-dasharray="4,4" stroke="#c98b1f" stroke-width="1.2"/>
-              <text x="250" y="52" fill="#c98b1f" font-size="11" font-weight="700" text-anchor="middle">Strike (initial level)</text>
+              <line x1="420" y1="60" x2="420" y2="280" stroke-dasharray="4,4" stroke="#3b6cd9" stroke-width="1.2"/>
+              <text x="420" y="52" fill="#3b6cd9" font-size="11" font-weight="700" text-anchor="middle">Strike (OTM)</text>
 
-              <!-- cap vertical -->
-              <line x1="470" y1="60" x2="470" y2="280" stroke-dasharray="4,4" stroke="#3b6cd9" stroke-width="1.2"/>
-              <text x="470" y="52" fill="#3b6cd9" font-size="11" font-weight="700" text-anchor="middle">Cap reached</text>
+              <!-- shaded loss region (below spot, exposed) -->
+              <polygon points="60,260 220,180 220,280 60,280" fill="rgba(208,68,68,0.10)"/>
 
-              <!-- shaded protected area (below strike, principal returned) -->
-              <polygon points="60,200 250,200 250,280 60,280" fill="rgba(95,156,74,0.10)"/>
+              <!-- shaded premium gain region (between spot & strike) -->
+              <polygon points="220,180 420,100 420,190 220,190" fill="rgba(31,159,108,0.14)"/>
 
-              <!-- shaded upside area -->
-              <polygon points="250,200 470,100 470,200" fill="rgba(59,108,217,0.10)"/>
+              <!-- shaded capped region (above strike) -->
+              <polygon points="420,100 580,100 580,190 420,190" fill="rgba(59,108,217,0.10)"/>
 
-              <!-- payoff polyline -->
-              <polyline points="60,200 250,200 470,100 580,100" stroke="#5f9c4a" stroke-width="2.5" fill="none"/>
+              <!-- benchmark: pure long underlying (dashed) -->
+              <line x1="60" y1="275" x2="580" y2="40" stroke="#9aa3b1" stroke-width="1.2" stroke-dasharray="5,4"/>
+              <text x="555" y="56" fill="#9aa3b1" font-size="10" text-anchor="end">Long underlying (benchmark)</text>
+
+              <!-- payoff polyline: covered call -->
+              <polyline points="60,260 220,180 420,100 580,100" stroke="#5f9c4a" stroke-width="2.6" fill="none"/>
 
               <!-- annotations -->
-              <text x="155" y="178" fill="#1a1d27" font-size="11.5" font-weight="700" text-anchor="middle">Principal protected</text>
-              <text x="155" y="192" fill="#5b6577" font-size="10" text-anchor="middle">100% returned regardless of move</text>
+              <text x="140" y="222" fill="#1a1d27" font-size="11" font-weight="700" text-anchor="middle">Exposed to downside</text>
+              <text x="140" y="236" fill="#5b6577" font-size="10" text-anchor="middle">premium cushions loss</text>
 
-              <text x="360" y="158" fill="#1a1d27" font-size="11.5" font-weight="700" text-anchor="middle">Capped upside participation</text>
-              <text x="360" y="172" fill="#5b6577" font-size="10" text-anchor="middle">user shares gains up to the cap</text>
+              <text x="320" y="148" fill="#1a1d27" font-size="11" font-weight="700" text-anchor="middle">Earn premium + appreciation</text>
+              <text x="320" y="162" fill="#5b6577" font-size="10" text-anchor="middle">tracks underlying up to strike</text>
+
+              <text x="500" y="84" fill="#3b6cd9" font-size="11" font-weight="700" text-anchor="middle">Capped above strike</text>
             </svg>
-            <div class="payoff-note">Floor at 100% of principal · upside participation up to a defined cap.</div>
+            <div class="payoff-note">Earn option premium · participate in spot up to the strike · downside same as holding the underlying.</div>
           </div>
 
           <!-- RIGHT: Key terms + scenarios -->
           <div class="terms-stack">
             <div class="terms-card">
               <div class="terms-title">Key Terms</div>
-              <div class="terms-row"><span class="k">Term</span><span class="v">6 – 24 months</span></div>
-              <div class="terms-row"><span class="k">Guaranteed return</span><span class="v">0% (principal floor)</span></div>
-              <div class="terms-row"><span class="k">Upside participation</span><span class="v">~ 50 – 70%</span></div>
-              <div class="terms-row"><span class="k">Indicative cap</span><span class="v">~ 15 – 25% over term</span></div>
-              <div class="terms-row"><span class="k">Capital protection</span><span class="v brand">100% at maturity</span></div>
+              <div class="terms-row"><span class="k">Term</span><span class="v">1 – 4 weeks</span></div>
+              <div class="terms-row"><span class="k">Strike</span><span class="v">5 – 15% OTM</span></div>
+              <div class="terms-row"><span class="k">Premium / Yield</span><span class="v brand">~ 20 – 40% APY</span></div>
+              <div class="terms-row"><span class="k">Settlement</span><span class="v">Cash or physical</span></div>
+              <div class="terms-row"><span class="k">Capital protection</span><span class="v">No (downside same as spot)</span></div>
             </div>
 
             <div class="terms-card scenarios-card">
@@ -1412,15 +1617,15 @@
               <div class="scenario">
                 <span class="tag best">Best</span>
                 <div class="body">
-                  <strong>Underlying rallies past the cap</strong>
-                  <span>Capped upside — typically <em>15 – 25% over 1 – 2 years</em>.</span>
+                  <strong>Underlying drifts up but stays below strike</strong>
+                  <span>Keep premium + full underlying appreciation — <em>~20–40% APY</em> on top of spot return.</span>
                 </div>
               </div>
               <div class="scenario">
                 <span class="tag worst">Worst</span>
                 <div class="body">
-                  <strong>Underlying falls or stays flat</strong>
-                  <span><em>0% return</em> — principal returned in full at maturity.</span>
+                  <strong>Underlying tanks</strong>
+                  <span>Premium cushions the loss; exposed to the rest of the downside — <em>same as holding spot</em>.</span>
                 </div>
               </div>
             </div>
@@ -1428,29 +1633,255 @@
 
         </div>
 
-        <!-- Under-strip: any underlying -->
-        <div class="under-strip">
-          <span class="ustr-label">Any underlying</span>
-          <span class="ustr-note">Not only crypto — same structure across asset classes:</span>
-          <span class="ustr-chips">
-            <span class="chip">Crypto</span>
-            <span class="chip">Equities</span>
-            <span class="chip">Debt</span>
-            <span class="chip">Precious Metals</span>
-            <span class="chip">Commodities</span>
-            <span class="chip">Prediction Markets</span>
+        <!-- Hero strip: customer validation -->
+        <div class="hero-strip">
+          <span class="h-label">Used by</span>
+          <span class="h-metrics">
+            <span class="h-logo">Kraken</span>
+            <span class="h-sep">·</span>
+            <span class="h-logo">Bitvavo</span>
+            <span class="h-sep">·</span>
+            <span class="h-logo">Binance</span>
+            <span class="h-sep">·</span>
+            <span class="h-fact"><em>~30%</em> revenue share</span>
+            <span class="h-sep">·</span>
+            <span class="h-fact"><em>several hundred million</em> weekly volume</span>
           </span>
         </div>
 
         <div class="slide-foot">
-          <span>Slide 4 · Product Spotlight — Principal-Protected Note</span>
+          <span>Slide 4 · Product Spotlight — Covered Calls</span>
           <span>2026 | Confidential</span>
         </div>
 
       </div>
     </section>
 
-    <!-- ─────────── SLIDE 5 — POST-ACQUISITION EFFICIENCIES ─────────── -->
+    <!-- ─────────── SLIDE 5 — CATEGORY × LICENSE TABLE ─────────── -->
+    <section class="slide">
+      <div class="slide-inner">
+
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow">DLT Finance · Product Map</div>
+            <h1 class="slide-title">Categories &amp; <span class="accent">Licences</span></h1>
+          </div>
+          <div class="brand-mark">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#5f9c4a" stroke-width="1.6" fill="rgba(95,156,74,0.08)"/>
+            </svg>
+            <div class="name">DLT <span class="light">Finance</span></div>
+          </div>
+        </div>
+
+        <div class="cat-license">
+
+          <div class="table-head">
+            <span>Category</span>
+            <span>Product</span>
+            <span>Licence</span>
+          </div>
+
+          <div class="table-body">
+
+            <!-- LEVERAGE -->
+            <div class="cat-group">
+              <div class="cat-row head-row">
+                <div class="cat-name-cell lev">Leverage</div>
+                <div class="product-cell">Perpetual Futures</div>
+                <div class="lic-cell"><span class="lic-pill mifid">MiFID</span></div>
+              </div>
+              <div class="cat-row">
+                <div class="cat-name-cell"></div>
+                <div class="product-cell">Options <span class="sub">vanilla &amp; structured</span></div>
+                <div class="lic-cell"><span class="lic-pill mifid">MiFID</span></div>
+              </div>
+              <div class="cat-row">
+                <div class="cat-name-cell"></div>
+                <div class="product-cell">Turbos · Mini Futures</div>
+                <div class="lic-cell"><span class="lic-pill mifid">MiFID</span></div>
+              </div>
+            </div>
+
+            <!-- YIELD PRODUCTS -->
+            <div class="cat-group">
+              <div class="cat-row head-row">
+                <div class="cat-name-cell yield">Yield Products</div>
+                <div class="product-cell">Covered Calls</div>
+                <div class="lic-cell"><span class="lic-pill mifid">MiFID</span></div>
+              </div>
+              <div class="cat-row">
+                <div class="cat-name-cell"></div>
+                <div class="product-cell">Shark Fin</div>
+                <div class="lic-cell"><span class="lic-pill mifid">MiFID</span></div>
+              </div>
+              <div class="cat-row">
+                <div class="cat-name-cell"></div>
+                <div class="product-cell">Principal-Protected Notes</div>
+                <div class="lic-cell"><span class="lic-pill mifid">MiFID</span></div>
+              </div>
+              <div class="cat-row">
+                <div class="cat-name-cell"></div>
+                <div class="product-cell">BRC · Sprinters</div>
+                <div class="lic-cell"><span class="lic-pill mifid">MiFID</span></div>
+              </div>
+            </div>
+
+            <!-- TRADFI -->
+            <div class="cat-group">
+              <div class="cat-row head-row">
+                <div class="cat-name-cell tradfi">TradFi</div>
+                <div class="product-cell">Tokenised Equities</div>
+                <div class="lic-cell"><span class="lic-pill mifid">MiFID</span></div>
+              </div>
+              <div class="cat-row">
+                <div class="cat-name-cell"></div>
+                <div class="product-cell">Tokenised ETFs</div>
+                <div class="lic-cell"><span class="lic-pill mifid">MiFID</span></div>
+              </div>
+              <div class="cat-row">
+                <div class="cat-name-cell"></div>
+                <div class="product-cell">Tokenised Bonds</div>
+                <div class="lic-cell"><span class="lic-pill mifid">MiFID</span></div>
+              </div>
+            </div>
+
+            <!-- MISC -->
+            <div class="cat-group">
+              <div class="cat-row head-row">
+                <div class="cat-name-cell misc">Misc</div>
+                <div class="product-cell">Spot Trading</div>
+                <div class="lic-cell"><span class="lic-pill micar">MiCAR</span></div>
+              </div>
+              <div class="cat-row">
+                <div class="cat-name-cell"></div>
+                <div class="product-cell">Margin Trading</div>
+                <div class="lic-cell"><span class="lic-pill micar">MiCAR</span></div>
+              </div>
+              <div class="cat-row">
+                <div class="cat-name-cell"></div>
+                <div class="product-cell">Lending / Borrowing <span class="sub">(excl. EMT)</span></div>
+                <div class="lic-cell"><span class="lic-pill micar">MiCAR</span></div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="slide-foot">
+          <span>Slide 5 · Categories &amp; Licences</span>
+          <span>2026 | Confidential</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ─────────── SLIDE 6 — THREE OPERATING MODELS MATRIX ─────────── -->
+    <section class="slide">
+      <div class="slide-inner">
+
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow">DLT Finance · Go-to-Market</div>
+            <h1 class="slide-title">Three General <span class="accent">Operating Models</span></h1>
+          </div>
+          <div class="brand-mark">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#5f9c4a" stroke-width="1.6" fill="rgba(95,156,74,0.08)"/>
+            </svg>
+            <div class="name">DLT <span class="light">Finance</span></div>
+          </div>
+        </div>
+
+        <div class="ops-matrix">
+
+          <!-- Column headers (row 1) -->
+          <div></div>
+          <div class="ops-col-head">
+            <span class="tag">Model A</span>
+            <span class="name">B2B</span>
+          </div>
+          <div class="ops-col-head">
+            <span class="tag">Model B</span>
+            <span class="name">B2B2B</span>
+          </div>
+          <div class="ops-col-head">
+            <span class="tag">Model C</span>
+            <span class="name">B2B2BX</span>
+          </div>
+
+          <!-- Row: Who DLT serves -->
+          <div class="ops-row-label">Who DLT serves</div>
+          <div class="ops-cell">
+            <strong>Direct enterprise</strong>
+            <span class="sub">single business consumes DLT in-house</span>
+          </div>
+          <div class="ops-cell">
+            <strong>Business that serves other businesses</strong>
+            <span class="sub">DLT powers a distributor's offering</span>
+          </div>
+          <div class="ops-cell">
+            <strong>Multi-tier distribution</strong>
+            <span class="sub">distributor's distributors reach the end customer</span>
+          </div>
+
+          <!-- Row: Branding -->
+          <div class="ops-row-label">Branding</div>
+          <div class="ops-cell">
+            <strong>DLT-branded</strong>
+            <span class="sub">co-marketing optional</span>
+          </div>
+          <div class="ops-cell">
+            <strong>White-label</strong>
+            <span class="sub">partner brand front-of-house</span>
+          </div>
+          <div class="ops-cell">
+            <strong>Fully white-label</strong>
+            <span class="sub">DLT invisible to end customer</span>
+          </div>
+
+          <!-- Row: Revenue model -->
+          <div class="ops-row-label">Revenue model</div>
+          <div class="ops-cell">
+            <strong>Direct fees / SaaS</strong>
+            <span class="sub">platform + per-trade economics</span>
+          </div>
+          <div class="ops-cell">
+            <strong>Revenue share with partner</strong>
+            <span class="sub">~ 30 – 50% on user yield / volume</span>
+          </div>
+          <div class="ops-cell">
+            <strong>Tiered share across the chain</strong>
+            <span class="sub">economics split across partners</span>
+          </div>
+
+          <!-- Row: Example clients -->
+          <div class="ops-row-label">Example clients</div>
+          <div class="ops-cell">
+            <strong>Neo-banks · prop desks</strong>
+            <span class="sub">build their own product on DLT rails</span>
+          </div>
+          <div class="ops-cell">
+            <strong>Kraken · Bitvavo · NEXO · Bitget</strong>
+            <span class="sub">distribute yield + structured to their users</span>
+          </div>
+          <div class="ops-cell">
+            <strong>Distribution networks · super-apps</strong>
+            <span class="sub">DLT in the stack, brand at the surface</span>
+          </div>
+
+        </div>
+
+        <div class="slide-foot">
+          <span>Slide 6 · Three Operating Models</span>
+          <span>2026 | Confidential</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ─────────── SLIDE 7 — POST-ACQUISITION EFFICIENCIES ─────────── -->
     <section class="slide">
       <div class="slide-inner">
 
@@ -1546,7 +1977,7 @@
         </div>
 
         <div class="slide-foot">
-          <span>Slide 5 · Post-Acquisition Efficiencies</span>
+          <span>Slide 7 · Post-Acquisition Efficiencies</span>
           <span>2026 | Confidential</span>
         </div>
 
