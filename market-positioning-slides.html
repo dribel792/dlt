@@ -625,6 +625,166 @@
       margin-left: auto;
     }
 
+    /* ─────────────────────────────────────────────────────────
+       SLIDE 5 — POST-ACQUISITION EFFICIENCIES
+       ───────────────────────────────────────────────────────── */
+
+    .synergy-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 22px;
+      margin-top: 8px;
+      min-height: 0;
+    }
+
+    .synergy-main {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-height: 0;
+    }
+
+    .synergy-stacks {
+      display: grid;
+      grid-template-columns: 1fr 110px 1fr;
+      gap: 14px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .syn-stack {
+      border-radius: 14px;
+      padding: 14px 14px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .syn-stack.dlt {
+      background: linear-gradient(180deg, rgba(95, 156, 74, 0.08) 0%, rgba(95, 156, 74, 0.02) 100%);
+      border: 1px solid var(--brand-border);
+    }
+    .syn-stack.uphold {
+      background: linear-gradient(180deg, rgba(59, 108, 217, 0.07) 0%, rgba(59, 108, 217, 0.02) 100%);
+      border: 1px solid var(--blue-border);
+    }
+
+    .syn-stack-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .syn-badge {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      padding: 4px 9px;
+      border-radius: 5px;
+      color: #ffffff;
+    }
+    .syn-badge.dlt { background: var(--brand); }
+    .syn-badge.uphold { background: var(--blue); }
+    .syn-hint {
+      font-size: 10.5px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .syn-row {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 8px 38px 8px 11px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text);
+      position: relative;
+    }
+    .syn-stack.dlt .syn-row { border-color: var(--brand-border); }
+    .syn-stack.uphold .syn-row { border-color: var(--blue-border); }
+
+    .syn-row.overlap {
+      background: linear-gradient(90deg, rgba(95,156,74,0.12), rgba(59,108,217,0.12));
+      border: 1px solid rgba(201, 139, 31, 0.45);
+      box-shadow: 0 0 0 2px rgba(201, 139, 31, 0.10);
+    }
+    .syn-row.overlap::after {
+      content: 'Overlap';
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--amber);
+      background: rgba(201, 139, 31, 0.12);
+      padding: 3px 6px;
+      border-radius: 4px;
+    }
+
+    .syn-merge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-align: center;
+      padding: 6px 0;
+    }
+    .syn-merge-label {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--brand);
+      line-height: 1.3;
+    }
+    .syn-merge svg {
+      width: 64px;
+      height: 64px;
+    }
+    .syn-merge-sub {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .syn-action {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: linear-gradient(180deg, rgba(95, 156, 74, 0.10) 0%, rgba(95, 156, 74, 0.03) 100%);
+      border: 1px solid var(--brand-border);
+      border-radius: 12px;
+      padding: 12px 16px;
+    }
+    .syn-action-tag {
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #ffffff;
+      background: var(--brand);
+      padding: 6px 10px;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+    .syn-action-body strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+    .syn-action-body span {
+      font-size: 11.5px;
+      color: var(--muted);
+    }
+
     /* slide footer */
     .slide-foot {
       position: absolute;
@@ -1105,6 +1265,109 @@
 
         <div class="slide-foot">
           <span>Slide 4 · Product Spotlight — Principal-Protected Note</span>
+          <span>DLT Finance · Confidential</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ─────────── SLIDE 5 — POST-ACQUISITION EFFICIENCIES ─────────── -->
+    <section class="slide">
+      <div class="slide-inner">
+
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow">DLT Finance · Post-Acquisition</div>
+            <h1 class="slide-title">Capture <span class="accent">Synergies</span> Where Overlap Is Highest</h1>
+          </div>
+          <div class="brand-mark">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#5f9c4a" stroke-width="1.6" fill="rgba(95,156,74,0.08)"/>
+            </svg>
+            <div class="name">DLT <span class="light">Finance</span></div>
+          </div>
+        </div>
+
+        <div class="synergy-grid">
+
+          <!-- LEFT: overlap stacks + Day-1 action -->
+          <div class="synergy-main">
+
+            <div class="synergy-stacks">
+
+              <!-- DLT stack -->
+              <div class="syn-stack dlt">
+                <div class="syn-stack-head">
+                  <span class="syn-badge dlt">DLT</span>
+                  <span class="syn-hint">Today</span>
+                </div>
+                <div class="syn-row overlap">Spot execution</div>
+                <div class="syn-row overlap">Spot post-trade · settlement</div>
+                <div class="syn-row">MiFID derivatives engine</div>
+                <div class="syn-row">Structured products</div>
+                <div class="syn-row">Tokenisation rails</div>
+              </div>
+
+              <!-- Merge column -->
+              <div class="syn-merge">
+                <div class="syn-merge-label">Highest<br>overlap</div>
+                <svg viewBox="0 0 64 64" fill="none">
+                  <path d="M6 18 L26 18 M20 12 L26 18 L20 24" stroke="#5f9c4a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M58 18 L38 18 M44 12 L38 18 L44 24" stroke="#3b6cd9" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M32 28 L32 56 M22 46 L32 56 L42 46" stroke="#5f9c4a" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <div class="syn-merge-sub">Consolidate<br>Day 1</div>
+              </div>
+
+              <!-- Uphold stack -->
+              <div class="syn-stack uphold">
+                <div class="syn-stack-head">
+                  <span class="syn-badge uphold">Uphold</span>
+                  <span class="syn-hint">Today</span>
+                </div>
+                <div class="syn-row overlap">Spot execution at scale</div>
+                <div class="syn-row overlap">Spot post-trade · custody</div>
+                <div class="syn-row">Global brokerage rails</div>
+                <div class="syn-row">Retail UX &amp; distribution</div>
+                <div class="syn-row">Multi-jurisdiction licences</div>
+              </div>
+
+            </div>
+
+            <!-- Day-1 action strip -->
+            <div class="syn-action">
+              <div class="syn-action-tag">Day 1 move</div>
+              <div class="syn-action-body">
+                <strong>DLT adopts Uphold's spot execution &amp; post-trade services immediately</strong>
+                <span>One spot stack across the combined group — no parallel build, no duplicate ops.</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT: Why this matters -->
+          <aside class="takeaways">
+            <h3>Why this matters</h3>
+            <ol>
+              <li>
+                <strong>Spot is the obvious overlap.</strong>
+                <span class="sub">Both teams run a spot execution + post-trade stack. Picking one (Uphold's) removes the most duplication, fastest.</span>
+              </li>
+              <li>
+                <strong>Frees DLT engineering &amp; ops.</strong>
+                <span class="sub">No more carrying two spot stacks. Headcount, infra, and on-call effort redirected immediately to higher-leverage work.</span>
+              </li>
+              <li>
+                <strong>Refocus on where DLT differentiates.</strong>
+                <span class="sub">MiFID derivatives, structured products, new underlyings, tokenisation — the parts only DLT brings to the combined group.</span>
+              </li>
+            </ol>
+          </aside>
+
+        </div>
+
+        <div class="slide-foot">
+          <span>Slide 5 · Post-Acquisition Efficiencies</span>
           <span>DLT Finance · Confidential</span>
         </div>
 
