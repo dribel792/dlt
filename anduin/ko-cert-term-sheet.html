@@ -67,37 +67,23 @@
     <div class="sub">One-page programme wrap sheet — prepared for prospectus counsel</div>
     <div class="meta">
       <span>Date</span><span>May 2026</span>
-      <span>Version</span><span>5.2 — v5.2 addendum: <strong>Dated variant of the prediction-market (PM) Series introduced.</strong> Same KO architecture as the perpetual PM Series, with a fixed Final Resolution Time T* (mirroring the underlying event's resolution — e.g., election day, Fed decision date, scheduled sports result) and a Calendar Deleveraging Schedule baked into each Series' Final Terms. At pre-disclosed timestamps before T*, the Series undergoes a NAV-preserving Calendar Restrike Event that lowers the implied leverage cap to a tier-stepped target (default schedule: 5× at issuance → 3× at T*−30d → 2× at T*−7d → 1× at T*−24h → spot-equivalent into terminal). Mechanics: at each restrike, the Barrier moves further from the Reference Price and the Contract Size shrinks proportionally so that the cert NAV is preserved at the moment of restrike; the holder's token balance is unchanged (in-place parameter update — same ISIN, same contract address — not a token swap or burn-and-reissue). Final settlement at T* against a 30-minute TWAP of the venue probability. Rationale: PMs have a known terminal jump at T*, which produces a predictable bimodal liquidation event for any leveraged holder at high implied leverage going into resolution; calendar deleveraging removes the gap discontinuity without forcing the holder to exit. New rows added to the Term Sheet (<strong>Maturity</strong> and <strong>Termination</strong> rows expanded; new <strong>Calendar Deleveraging Schedule</strong> row). New formula <strong>F8</strong> (Calendar Restrike) added under Key Formulas. New Series naming example added to F6. New questions <strong>Q25–Q30</strong> added in Section 10 (tax characterisation of in-place restrike, PRIIPS KID modelling across leverage tiers, MiFID appropriateness for dated PM, ESMA binary-options revisited for dated terminal, BMR for Polymarket / Kalshi as TWAP reference, gambling-law characterisation of dated vs. perpetual PM). Companion document <code>pm-cert-calendar-deleveraging-supplement.md</code> contains the full mechanic, worked Trump 2028 example, smart-contract implementation notes, and tier-by-tier sequencing recommendation.<br><br>v5.1 baseline: 24/7 perpetual hedge is now the <em>preferred</em> Reference Price and hedge venue for every non-crypto asset class (precious metals, equities, commodities) wherever a sufficiently liquid perp exists for the underlying — spot / TradFi-futures sources are reframed as fallbacks. Rationale: a 24/7 perp eliminates overnight and weekend gap risk, preserves continuous mark and funding-rate carry, and brings TradFi-underlying Series into full UX parity with crypto Series. See updated Term Sheet, §3.1quinquies, and §4.6. <br><br>v5.0 baseline: SPV jurisdiction revised to Jersey or Cayman (LI dropped); approving NCA to be CSSF or FMA (pre-submission consultation with both); EUR <em>or</em> USD base prospectus (KO Certs first, other product lines to follow); fifth underlying asset class added — prediction markets (Kalshi / Polymarket / equivalent); crypto reference and hedge venue universe opened to any crypto-exchange perpetual (six-venue list removed); security token sui generis is now the primary issuance format (Ondo / xStocks pattern, qualified-custodian compatible — TVTG governs only if the FL alternative is later adopted); leverage range widened to 1×–30×; programme objective ("100% UI/UX parity with native venue experience") and token transferability principle ("distributable w/o KYC after primary issuance") added to the Term Sheet; new Strategic Context section (S1–S9) added before Section 10; new questions Q21–Q24 added in Section 10 covering prediction-market underlyings, additional product lines under the same base prospectus, SPV jurisdiction choice, and venue-universe drafting. v3.0 and v4.0 changes retained except where superseded.</span>
-      <span>Purpose</span><span>Single-view summary of programme-level parameters for prospectus counsel. The full product description, economic mechanics, hedging architecture, strategic-context questions (S1–S9) and open legal questions (Q1–Q30) are contained in the companion document <code>ko-cert-primer.html</code> and (for the v5.2 dated PM variant) <code>pm-cert-calendar-deleveraging-supplement.md</code>.</span>
+      <span>Purpose</span><span>Single-view summary of programme-level parameters for prospectus counsel. The full product description, economic mechanics, and hedging architecture are contained in the companion document <code>ko-cert-primer.html</code>.</span>
       <span>Classification</span><span>Confidential — Attorney-client privileged</span>
     </div>
   </div>
 
-  <div class="change-notice">
-    <strong>Version 5.2 Changes (May 2026)</strong>
-    Single material update over v5.1: <strong>Dated variant of the prediction-market (PM) Series introduced</strong> — the perpetual PM Series in v5.0 is unchanged and remains suitable for open-ended / indeterminate-resolution underlyings (e.g., "Will AGI arrive?", "Will Putin remain head of state?"); the dated PM Series adds a fixed Final Resolution Time T* and a Calendar Deleveraging Schedule for fixed-resolution underlyings (elections, Fed decisions, scheduled sports, economic releases). Format is elected per-Series in the Final Terms; both variants share the same KO architecture, hedge venue, settlement currency, and issuance format. Default schedule: 5× → 3× at T*−30d → 2× at T*−7d → 1× at T*−24h. Mechanism: in-place NAV-preserving Calendar Restrike Event — Barrier moves further from Reference Price, Contract Size shrinks proportionally, holder's token balance unchanged. Final cash settlement at T* against 30-min TWAP of Reference Price. Term Sheet additions: Maturity and Termination rows expanded; new Calendar Deleveraging Schedule row; new formula F8; new F6 dated-PM naming example; new Questions Q25–Q30 in Section 10. Companion: <code>pm-cert-calendar-deleveraging-supplement.md</code> — full mechanic and worked example.
-  </div>
-
-  <div class="change-notice" style="background:#eef9ee; border-left-color:#5fa85a; color:#1a4f1a;">
-    <strong>Version 5.0 Changes (May 2026)</strong>
-    Material updates since v4.0: (1) <strong>SPV jurisdiction</strong> — issuer to be a Jersey or Cayman SPV (Liechtenstein dropped as default; FL retained only as fallback if the offshore route proves unworkable for EU passporting). (2) <strong>Approving NCA</strong> — to be either CSSF (Luxembourg) or FMA (Liechtenstein); pre-submission meetings with both, prior to filing. (3) <strong>Base prospectus currency</strong> — EUR <em>or</em> USD (election made at filing). (4) <strong>Programme scope</strong> — focus on KO Certificates first; the base prospectus is to be drafted with a hook for additional product lines (Autocallable Note, Capital Protected Note, Sprint, Outperformance) to be added later under the same programme without re-issuance — see new Question 22. (5) <strong>Prediction-market underlyings</strong> — fifth asset class added (Kalshi / Polymarket / equivalent venues); raises the question whether non-financial-instrument underlyings are permissible for KO Certs — see new Question 21 and Section 2.1. (6) <strong>Reference venue universe — crypto</strong> — opened to any crypto-exchange perpetual (mark price + funding rate); the six-venue list (BitMEX / Bybit / Binance / Kraken / OKX / Deribit) is no longer a closed set in the prospectus. (7) <strong>Reference price — non-crypto</strong> — may be either the spot price for the asset class or a perpetual where one exists; prediction-market Series reference Kalshi or Polymarket. (8) <strong>Hedge venue universe</strong> — opened to any crypto exchange (for crypto Series) and to any regulated hedge exchange (for TradFi Series); not limited to the named venues. (9) <strong>Issuance format</strong> — security token <em>sui generis</em> is the primary format (the Ondo / xStocks pattern, custody-compatible with Tangany, Hauck Aufhäuser Lampe, Bankhaus von der Heydt and equivalents); the optional bearer/CSD format remains available per-Series. The token standard follows the Ondo pattern; whether the substantive law is TVTG, Jersey, or Cayman depends on the SPV jurisdiction (Question 24). (10) <strong>Settlement currency</strong> — USD primary; EUR for Eurozone distribution; USDC and other crypto-denominated settlement for selected token Series. (11) <strong>Leverage</strong> — widened to 1×–30× (was 2×–30×). (12) <strong>Programme objective added to Term Sheet</strong> — "100% UI/UX parity with native venue (perp) experience" is now an explicit programme design constraint. (13) <strong>Token transferability principle added to Term Sheet</strong> — tokens are distributable to third parties without per-transfer KYC after primary issuance (Ondo / xStocks pattern). (14) <strong>New Strategic Context section (S1–S9)</strong> — programme-level questions on dual issuance, DeFi yield, secondary-market venues, transferable-token model, ESMA options carve-out, SPV jurisdiction, underlying asset class, token-only / CFD reclassification risk, and prediction-market securitization — inserted before Section 10. (15) <strong>New questions Q21–Q24</strong> added to Section 10.
-  </div>
-
-  <div class="change-notice" style="background:#eef4f9; border-left-color:#3a5fc8; color:#1a3a6b;">
-    <strong>Prior Version 3.0 Changes (May 2026)</strong>
-    Two material updates over v2.0: (1) the Reference Venue is elected per Series in the Final Terms (rather than BitMEX being the canonical reference for all Series); the base prospectus defines a class of permissible venues including BitMEX, Bybit, Binance, Kraken, OKX, and Deribit, with the choice fixed at issuance per Series — see Section 3.1bis. (2) A Maintenance Margin Buffer (MMB) is introduced as an explicit per-Series Final Terms parameter, calibrating the Knock-Out Barrier at zero-equity and paying the MMB as residual cash on KO — bringing user experience to exact parity with perp liquidation mechanics — see Section 3.7. Existing v2.0 disclosures on the BitMEX-canonical reference and barrier-equals-liquidation construct are retained as the "Standard Calibration" baseline.
-  </div>
-
-  <div class="change-notice" style="background:#fff6e8; border-left-color:#c8a96e; color:#5a4416;">
-    <strong>Prior Version 2.0 Changes (April 2026)</strong>
-    Earlier v2.0 updates (retained): reference price is the venue perpetual mark price, not spot — eliminating basis risk in the issuer's hedge; the barrier adjustment mechanism mirrors the venue funding rate exactly; the back-to-back hedging architecture is fully described; the series naming convention is barrier-based (e.g., "BTC-LONG-KO92k") rather than leverage-based; Annex A describes the trading interface for counsel's reference.
+  <div class="highlight-box" style="margin-bottom:32px;">
+    <strong>Programme objective — a securitized perp</strong>
+    The goal of this programme is to issue a <strong>security token</strong> that replicates the economics and user experience of perpetual-futures trading so completely that a user cannot tell the difference. Leverage selection, position sizing, open-ended (perpetual) holding period, continuous price tracking, carry/funding display, and liquidation mechanics are all designed to feel identical to trading a perp on a native crypto venue — but the instrument is a fully regulated, prospectus-based <em>transferable security</em>, not an OTC derivative. In one line: a <strong>securitized perp</strong>. The single product line described here is the Unlimited Perpetual Knock-Out Certificate.
+    <br><br>
+    <strong>Hard custody requirement.</strong> The token <strong>MUST be custodizable by a German qualified custodian</strong> — a Kryptoverwahrgeschäft-licensed institution (e.g., Tangany, Hauck Aufhäuser Lampe, Bankhaus von der Heydt). It is issued as a <strong>security token <em>sui generis</em></strong> — a DLT-native transferable security following the Ondo / xStocks pattern — precisely so that it falls within the scope of a German qualified custodian's licence. Custody compatibility with a German qualified custodian is a non-negotiable design constraint for every Series.
   </div>
 
   <div class="notice">
-    <strong>Note to counsel:</strong> This document uses terminology from the cryptocurrency derivatives market in its illustrative worked examples (BTC, exchange perpetual mark price, funding rate, etc.) because the perpetual-future analogue is what informs the product's economic design. From v4.0, the programme expressly covers four asset classes (crypto, precious metals, equities, commodities); the crypto-specific mechanics are retained as the canonical baseline and the TradFi equivalents are described in the asset-class sections. Where crypto terms appear, plain-language explanations are provided inline. No prior knowledge of cryptocurrency markets is assumed. A full description of the intended trading interface (what the user sees on screen) is provided in Annex A.
+    <strong>Note to counsel:</strong> This document uses terminology from the cryptocurrency derivatives market in its illustrative worked examples (BTC, exchange perpetual mark price, funding rate, etc.) because the perpetual-future analogue is what informs the product's economic design. The programme expressly covers four asset classes (crypto, precious metals, equities, commodities); the crypto-specific mechanics are retained as the canonical baseline and the TradFi equivalents are described in the asset-class sections. Where crypto terms appear, plain-language explanations are provided inline. No prior knowledge of cryptocurrency markets is assumed. A full description of the intended trading interface (what the user sees on screen) is provided in Annex A.
   </div>
 
-  <!-- Programme Term Sheet (v4.0 — for prospectus counsel) -->
+  <!-- Programme Term Sheet — for prospectus counsel -->
   <div class="section-num" style="margin-top:40px">PROGRAMME TERM SHEET</div>
   <h2 id="termsheet" style="margin-top:6px">Programme Term Sheet — Perpetual Knock-Out Certificate</h2>
   <p style="font-style:italic; color:#555; margin-top:-4px; margin-bottom:18px;">One-page wrap sheet — programme-level parameters. Per-Series parameters (barrier level, contract size, MMB amount, reference venue) are set in each Final Terms.</p>
@@ -107,39 +93,35 @@
       <tr><th style="width:34%">Field</th><th>Programme-level value</th></tr>
     </thead>
     <tbody>
-      <tr><td><strong>Product</strong></td><td>Unlimited Perpetual Knock-Out Certificate (open-ended leveraged transferable security with Knock-Out Barrier and embedded carry passthrough; economic analogue of a perpetual future). First product line under the programme; additional product lines (Autocallable Note, Capital Protected Note, Sprint Certificate, Outperformance Certificate) intended to be added under the same base prospectus over time — see Question 22.</td></tr>
-      <tr><td><strong>Issuer</strong></td><td>Jersey or Cayman SPV (Anduin Capital — TBC). Final jurisdiction selected following counsel input on EU Prospectus Regulation third-country issuer mechanics — see Question 24 and Section S6. Liechtenstein retained only as fallback if the offshore route proves unworkable.</td></tr>
-      <tr><td><strong>Programme</strong></td><td>EUR <em>or</em> USD Base Prospectus for Structured Products (election made at filing) — KO Certificate is the first product line; additional product lines (Autocallable, CPN, Sprint, Outperformance) to be added under the same programme without re-issuance, subject to counsel direction on Question 22.</td></tr>
+      <tr><td><strong>Product</strong></td><td>Unlimited Perpetual Knock-Out Certificate (open-ended leveraged transferable security with Knock-Out Barrier and embedded carry passthrough; economic analogue of a perpetual future). First product line under the programme; additional product lines (Autocallable Note, Capital Protected Note, Sprint Certificate, Outperformance Certificate) intended to be added under the same base prospectus over time.</td></tr>
+      <tr><td><strong>Issuer</strong></td><td>Jersey or Cayman SPV (Anduin Capital — TBC). Final jurisdiction selected following counsel input on EU Prospectus Regulation third-country issuer mechanics — see Section S6. Liechtenstein retained only as fallback if the offshore route proves unworkable.</td></tr>
+      <tr><td><strong>Programme</strong></td><td>EUR <em>or</em> USD Base Prospectus for Structured Products (election made at filing) — KO Certificate is the first product line; additional product lines (Autocallable, CPN, Sprint, Outperformance) to be added under the same programme without re-issuance.</td></tr>
       <tr><td><strong>Regulatory wrapper</strong></td><td>Transferable security under MiFID II Art. 4(1)(44) · PRIIPs Category 3 (KID per Series, expected SRI 6–7 depending on leverage) · EU Prospectus Regulation 2017/1129 (base prospectus + per-Series Final Terms) · not a CFD (see §9.2)</td></tr>
       <tr><td><strong>Approving NCA</strong></td><td>CSSF (Luxembourg) <em>or</em> FMA (Liechtenstein) — pre-submission meetings to be held with both prior to filing; jurisdiction elected following those meetings. EEA passport from whichever NCA approves.</td></tr>
       <tr><td><strong>Underlyings — Crypto</strong></td><td>Bitcoin (BTC), Ethereum (ETH), and major altcoins added under supplemental Final Terms</td></tr>
       <tr><td><strong>Underlyings — Precious Metals</strong></td><td>Gold (XAU), Silver (XAG); additional precious metals (Platinum, Palladium) under supplemental Final Terms</td></tr>
       <tr><td><strong>Underlyings — Equities</strong></td><td>Single-stocks (e.g., Apple, NVIDIA, Tesla, Microsoft) and indices (S&amp;P 500, NASDAQ-100, DAX, EuroStoxx 50); index references subject to data-licensing arrangements with the index provider</td></tr>
       <tr><td><strong>Underlyings — Commodities</strong></td><td>Oil (Brent / WTI), Copper; additional commodities under supplemental Final Terms</td></tr>
-      <tr><td><strong>Underlyings — Prediction Markets <span style="font-size:11px; color:#999;">(new in v5.0)</span></strong></td><td>Outcomes of real-world events traded on prediction-market venues — e.g., US presidential election outcome on Kalshi or Polymarket. The underlying is a <em>non-financial-instrument event probability</em> rather than an asset price. Raises a discrete classification question under MiFID II Annex I Section C — see Question 21 (and Section S9). The Reference Price for these Series is the venue's published probability quote (Kalshi or Polymarket).</td></tr>
-      <tr><td><strong>Reference Price — Crypto</strong></td><td>Perpetual futures <em>mark price</em> published by the Reference Venue elected per Series. The Reference Venue may be <strong>any crypto exchange</strong> that publishes a perpetual mark price and funding rate (illustrative non-exhaustive list: BitMEX, Bybit, Binance, Kraken Futures, OKX, Deribit, Hyperliquid, Bitget, MEXC, Bitfinex). The base prospectus defines the venue universe by class characteristic (publishes perpetual mark price + funding rate; meets minimum liquidity threshold per the Final Terms); the specific venue is elected per Series in the Final Terms — see §3.1bis and Question 4.</td></tr>
+      <tr><td><strong>Reference Price — Crypto</strong></td><td>Perpetual futures <em>mark price</em> published by the Reference Venue elected per Series. The Reference Venue may be <strong>any crypto exchange</strong> that publishes a perpetual mark price and funding rate (illustrative non-exhaustive list: BitMEX, Bybit, Binance, Kraken Futures, OKX, Deribit, Hyperliquid, Bitget, MEXC, Bitfinex). The base prospectus defines the venue universe by class characteristic (publishes perpetual mark price + funding rate; meets minimum liquidity threshold per the Final Terms); the specific venue is elected per Series in the Final Terms — see §3.1bis.</td></tr>
       <tr><td><strong>Reference Price — Metals</strong></td><td><strong>Preferred:</strong> 24/7 perpetual mark price wherever one exists for the underlying (e.g., XAU/USDT, XAG/USDT perpetuals on Bybit, OKX, Binance, Bitget, Hyperliquid). <strong>Fallback (only where no perp exists or liquidity is insufficient):</strong> spot — LBMA Gold/Silver Price (London fix) or CME spot front-month. Election per Series in the Final Terms; the default per Series is the perp where the prospectus deems one available. Rationale: a 24/7 perp eliminates the gap-risk created by closed-market hours of TradFi venues and supports continuous certificate trading.</td></tr>
       <tr><td><strong>Reference Price — Equities</strong></td><td><strong>Preferred:</strong> 24/7 perpetual mark price wherever one exists for the underlying (single-stock and index perpetuals on crypto-exchange-listed tokenized-equity venues, e.g., Hyperliquid, Bybit, OKX where listed). <strong>Fallback:</strong> primary listing exchange closing price (Xetra, Nasdaq, NYSE, Euronext Paris) or Eurex single-stock / index futures mark where no perp is available. Election per Series in the Final Terms; the default per Series is the perp where the prospectus deems one available. Rationale as above (24/7, no overnight gap).</td></tr>
       <tr><td><strong>Reference Price — Commodities</strong></td><td><strong>Preferred:</strong> 24/7 perpetual mark price wherever one exists (e.g., Oil / Copper / NatGas perpetuals on Bybit, OKX, Binance, Hyperliquid). <strong>Fallback:</strong> CME / ICE front-month futures spot. Election per Series in the Final Terms; the default per Series is the perp where the prospectus deems one available. Rationale as above.</td></tr>
-      <tr><td><strong>Reference Price — Prediction Markets <span style="font-size:11px; color:#999;">(new in v5.0)</span></strong></td><td><strong>Kalshi</strong> (CFTC-regulated event-contract exchange) <em>or</em> <strong>Polymarket</strong> (on-chain prediction market). The Reference Price is the venue's most recent traded probability for the event in question, published continuously by the venue. Election per Series in the Final Terms.</td></tr>
       <tr><td><strong>Hedge venues — Crypto</strong></td><td>Any crypto exchange — typically the Series' Reference Venue for direct back-to-back hedge alignment (§4.2), but the prospectus does <strong>not</strong> close the universe to any named list. The issuer may hedge on a different venue from the Reference Venue where this improves execution, subject to the basis-risk disclosure in §4.</td></tr>
       <tr><td><strong>Hedge venues — TradFi</strong></td><td><strong>Preferred for non-crypto Series: 24/7 perpetual hedge on whichever venue lists a perp for the underlying</strong> (gold, oil, single-stock and index perpetuals on Bybit, OKX, Binance, Bitget, Hyperliquid and equivalents). This brings TradFi-underlying Series into parity with crypto Series — issuer net flat on a venue open 24/7, no overnight or weekend gap risk, continuous mark-price reference, full perp UX preserved. <strong>Fallback (only where no perp exists for the underlying or perp liquidity is insufficient):</strong> any regulated hedge exchange or counterparty appropriate for the asset class — prime brokerage (Interactive Brokers, Goldman Sachs Prime, Marex, Saxo) for cash equities; Eurex / ICE Futures Europe / CME for futures; LBMA bullion banks (HSBC, JPM, UBS) for physical metals; ISDA-papered swap counterparties where required. The prospectus does not close the universe to any named list for either tier; venue selection is per-Series and operational.</td></tr>
-      <tr><td><strong>Hedge venues — Prediction Markets <span style="font-size:11px; color:#999;">(new in v5.0)</span></strong></td><td>The corresponding outcome contract on the Series' Reference Venue (Kalshi or Polymarket) — back-to-back, same probability quote, same outcome. Issuer net flat per §4 (subject to liquidity and venue access).</td></tr>
-      <tr><td><strong>Issuance format</strong></td><td><strong>Primary format: security token <em>sui generis</em></strong> — DLT-native transferable security, issued under the standard adopted by Ondo Finance (USDY, OUSG) and xStocks (tokenized equities); custody-compatible with qualified crypto custodians (in DE: Tangany, Hauck Aufhäuser Lampe, Bankhaus von der Heydt; equivalent licensed custodians in other EEA jurisdictions). The substantive law of the token (TVTG, Jersey, Cayman, or German sui generis) follows the SPV jurisdiction — see Question 24. Token transfer model follows the Ondo / xStocks pattern: KYC at primary issuance only; tokens distributable to any wallet thereafter without per-transfer KYC (see "Token transferability" row below and Section S4).<br><br>
+      <tr><td><strong>Issuance format</strong></td><td><strong>Primary format: security token <em>sui generis</em></strong> — DLT-native transferable security, issued under the standard adopted by Ondo Finance (USDY, OUSG) and xStocks (tokenized equities). <strong>The token MUST be custodizable by a German qualified custodian</strong> — a Kryptoverwahrgeschäft-licensed institution (Tangany, Hauck Aufhäuser Lampe, Bankhaus von der Heydt; equivalent licensed custodians in other EEA jurisdictions). This is a non-negotiable, programme-level design constraint and the reason the instrument is structured as a security token sui generis rather than as a bilateral derivative. The substantive law of the token follows the SPV jurisdiction. Token transfer model follows the Ondo / xStocks pattern: KYC at primary issuance only; tokens distributable to any wallet thereafter without per-transfer KYC (see "Token transferability" row below and Section S4).<br><br>
         <strong>Optional secondary format: bearer/registered certificate</strong> — settled through CSD (Clearstream, Euroclear, SIX SIS); ISIN allocated per Series. Available per-Series in the Final Terms where distribution partners require it.</td></tr>
       <tr><td><strong>Settlement currency</strong></td><td>USD primary; EUR for Series targeting Eurozone distribution. <strong>Crypto-denominated settlement (USDC, and other stablecoin / native-crypto denominations) is additionally available for selected token-format Series</strong> — election per Series in the Final Terms.</td></tr>
       <tr><td><strong>Direction</strong></td><td>Long and Short variants per Series (parallel Series with mirrored barrier placement)</td></tr>
       <tr><td><strong>Leverage tiers (initial)</strong></td><td><strong>1× to 30×</strong> — initial leverage is fixed by the relationship between mark price at issuance and barrier; implied leverage drifts continuously over the life of the Series (see §3.4). The 1× tier (effectively unleveraged tracker, barrier-free or barrier-at-zero) is included so that holders can purchase a delta-one position in the underlying using the same product engine. High-leverage tiers (20×–30×) may be professional-client-only subject to counsel direction (Question 7).</td></tr>
-      <tr><td><strong>Maturity</strong></td><td>Default: open-ended (perpetual) — no fixed expiry. <strong>Dated variant for prediction-market Series (new in v5.2):</strong> where the underlying PM event has a known resolution time T*, the Series may be elected as a dated cert in the Final Terms — fixed Final Resolution Time T*, Calendar Deleveraging Schedule applies (see row below), final cash settlement at T* against a 30-min TWAP of the Reference Price. Both variants share the same KO architecture and hedge venue universe; election is per-Series.</td></tr>
-      <tr><td><strong>Termination</strong></td><td>Automatic on Knock-Out Event — Reference Price reaches the Knock-Out Barrier (for long: barrier breached from above; for short: from below). <strong>For dated PM Series additionally (new in v5.2):</strong> automatic on Final Resolution Time T* — trading flips reduce-only at T*−1h, expiry mark computed as 30-min TWAP over [T*−30min, T*], holder receives cash settlement on the snapshot block immediately before T*; Series delisted post-settlement, smart-contract state preserved for historical query.</td></tr>
-      <tr><td><strong>Calendar Deleveraging Schedule <span style="font-size:11px; color:#999;">(new in v5.2 — dated PM Series only)</span></strong></td><td>Per-Series election in the Final Terms; applies <em>only</em> to dated PM Series with a known Final Resolution Time T*. The schedule specifies pre-disclosed timestamps before T* at which a <strong>NAV-preserving Calendar Restrike Event</strong> occurs — the Knock-Out Barrier moves further from the Reference Price, the Contract Size shrinks proportionally so that the cert NAV is preserved at the moment of restrike, and the implied forward leverage cap drops to the next tier. Default schedule (overridable in the Final Terms): <code>T*−30d</code> → cap 3.0×, <code>T*−7d</code> → cap 2.0×, <code>T*−24h</code> → cap 1.0× (effectively spot exposure into resolution). The holder's token balance is unchanged across all restrike events; same ISIN, same contract address, same TVTG security throughout the life of the Series — the restrike is an in-place parameter update, not a token swap or burn-and-reissue. Restrike mechanic is mathematically deterministic — see §F8 and the supplement document <code>pm-cert-calendar-deleveraging-supplement.md</code> for the full worked example (TRUMP2028, 5× at issuance), smart-contract implementation outline, hedge-book unwind handling, and the open tax / PRIIPS / appropriateness questions raised (Q25–Q30). Schedule and tier caps are fixed at issuance in the Final Terms and not modifiable mid-life.</td></tr>
+      <tr><td><strong>Maturity</strong></td><td>Open-ended (perpetual) — no fixed expiry. Mirrors a perpetual future: the position is held indefinitely until the holder exits or a Knock-Out Event occurs.</td></tr>
+      <tr><td><strong>Termination</strong></td><td>Automatic on Knock-Out Event — Reference Price reaches the Knock-Out Barrier (for long: barrier breached from above; for short: from below).</td></tr>
       <tr><td><strong>Knock-Out Barrier</strong></td><td>Fixed at issuance per Series; adjusted at each Funding/Carry Settlement to pass through the issuer's hedge carry cost (see Carry mechanism below)</td></tr>
-      <tr><td><strong>Carry mechanism</strong></td><td><strong>Crypto:</strong> Reference Venue funding rate, applied at each funding settlement (typically every 8h). <strong>TradFi:</strong> cost-of-carry passthrough — futures-roll yield + ESTR/SOFR financing rate + dividends (for equities) or storage cost (for physical commodities). <strong>Prediction Markets:</strong> typically no carry (event-contract holding cost is zero); any platform fee charged by Kalshi/Polymarket on the hedge is passed through at the Series' Carry Settlement cadence. Cadence and rate source set per Series in the Final Terms. See §3.3.</td></tr>
+      <tr><td><strong>Carry mechanism</strong></td><td><strong>Crypto:</strong> Reference Venue funding rate, applied at each funding settlement (typically every 8h). <strong>TradFi:</strong> cost-of-carry passthrough — futures-roll yield + ESTR/SOFR financing rate + dividends (for equities) or storage cost (for physical commodities). Cadence and rate source set per Series in the Final Terms. See §3.3.</td></tr>
       <tr><td><strong>MMB (Maintenance Margin Buffer)</strong></td><td>Optional per-Series Final Terms parameter — barrier set at zero-equity and MMB paid in cash on KO (perp-parity calibration); typically 0.3%–1.0% of Series Notional. See §3.7.</td></tr>
-      <tr><td><strong>Series naming convention</strong></td><td><code>[UNDERLYING]-[DIRECTION]-KO[BARRIER]-[VENUE]</code><br>Examples: <code>BTC-LONG-KO92k-BITMEX</code>, <code>ETH-LONG-KO318k-DERIBIT</code>, <code>XAU-LONG-KO2100-LBMA</code>, <code>AAPL-LONG-KO180-EUREX</code>, <code>SPX-SHORT-KO5800-CME</code>, <code>USELECT-YES-KO35-KALSHI</code> (prediction-market example: long the YES outcome of the US presidential election, KO if probability falls to 35¢, Kalshi as Reference Venue)</td></tr>
+      <tr><td><strong>Series naming convention</strong></td><td><code>[UNDERLYING]-[DIRECTION]-KO[BARRIER]-[VENUE]</code><br>Examples: <code>BTC-LONG-KO92k-BITMEX</code>, <code>ETH-LONG-KO318k-DERIBIT</code>, <code>XAU-LONG-KO2100-LBMA</code>, <code>AAPL-LONG-KO180-EUREX</code>, <code>SPX-SHORT-KO5800-CME</code></td></tr>
       <tr><td><strong>Distribution</strong></td><td>MiFID II investment firms across EEA; retail (subject to appropriateness gate per ESMA) + professional clients; no exchange listing currently intended. Token-format Series additionally distributable through Kryptoverwahrgeschäft-licensed custodians in DE and equivalent custodians in other EEA jurisdictions.</td></tr>
-      <tr><td><strong>Token transferability <span style="font-size:11px; color:#999;">(new in v5.0 — programme principle)</span></strong></td><td><strong>Tokens are distributable to others without per-transfer KYC, following the Ondo / xStocks pattern.</strong> KYC is required only at primary issuance (issuer → first holder); secondary transfers between any wallet addresses are unrestricted at the smart-contract level. Compliance is concentrated at the primary-issuance gate. Issuer retains a sanctions-driven freeze/seize function. See Section S4 for the model and the legal questions arising. This is a programme-level design constraint, not a per-Series election.</td></tr>
-      <tr><td><strong>Programme design objective <span style="font-size:11px; color:#999;">(new in v5.0 — programme principle)</span></strong></td><td><strong>100% UI/UX parity with the native-venue (perp) trading experience.</strong> A user familiar with perpetual-futures trading on a crypto exchange (BitMEX / Bybit / Hyperliquid etc.) should be able to switch to the certificate trading interface and experience no material difference in workflow — leverage selection, position sizing, open-ended holding period, price tracking, carry display, and liquidation mechanics all feel equivalent. This is the programme's primary design constraint and applies to every Series, every asset class, and every issuance format. Annex A illustrates how the regulatory-required disclosures are embedded into the native-perp interface rather than appearing as external compliance additions.</td></tr>
+      <tr><td><strong>Token transferability <span style="font-size:11px; color:#999;">(programme principle)</span></strong></td><td><strong>Tokens are distributable to others without per-transfer KYC, following the Ondo / xStocks pattern.</strong> KYC is required only at primary issuance (issuer → first holder); secondary transfers between any wallet addresses are unrestricted at the smart-contract level. Compliance is concentrated at the primary-issuance gate. Issuer retains a sanctions-driven freeze/seize function. See Section S4 for the model and the legal questions arising. This is a programme-level design constraint, not a per-Series election.</td></tr>
+      <tr><td><strong>Programme design objective <span style="font-size:11px; color:#999;">(programme principle)</span></strong></td><td><strong>100% UI/UX parity with the native-venue (perp) trading experience.</strong> A user familiar with perpetual-futures trading on a crypto exchange (BitMEX / Bybit / Hyperliquid etc.) should be able to switch to the certificate trading interface and experience no material difference in workflow — leverage selection, position sizing, open-ended holding period, price tracking, carry display, and liquidation mechanics all feel equivalent. This is the programme's primary design constraint and applies to every Series, every asset class, and every issuance format. Annex A illustrates how the regulatory-required disclosures are embedded into the native-perp interface rather than appearing as external compliance additions.</td></tr>
       <tr><td><strong>Documentation set</strong></td><td>Base Prospectus · programme Risk Factors · per-Series Final Terms · per-Series PRIIPs KID · per-Series ISIN · marketing materials (subject to MiFID II Art. 24 / PRIIPs cross-reference)</td></tr>
       <tr><td><strong>Counsel</strong></td><td>Linklaters (prospectus counsel — programme structuring, Prospectus Regulation submission, BMR/MiCA analysis, asset-class regulatory perimeter, token-format custody chain, SPV jurisdiction selection)</td></tr>
     </tbody>
@@ -147,7 +129,7 @@
 
   <div class="highlight-box">
     <strong>What is materially novel about this programme</strong>
-    Three product features sit at or just inside the boundary of established structured-product practice: <strong>(a)</strong> perpetual (open-ended) maturity with daily/8-hourly barrier-driven termination — established for crypto Mini Futures since 2018, novel as a programme-level construct for TradFi underlyings; <strong>(b)</strong> reference price set to a venue mark price or futures mark price rather than spot — eliminating issuer basis risk against the hedge but requiring BMR analysis (Question 11); <strong>(c)</strong> dual issuance format (bearer certificate and security token) under identical legal substance — requiring confirmation of cross-format fungibility for prospectus and PRIIPs purposes. The asset-class extension in v4.0 is intentionally <em>not</em> novel — it tracks established issuance practice across crypto (DZ Bank, BNP), metals (HSBC, UBS), and equities (BNP, SG) for KO/Turbo certificates.
+    Three product features sit at or just inside the boundary of established structured-product practice: <strong>(a)</strong> perpetual (open-ended) maturity with daily/8-hourly barrier-driven termination — established for crypto Mini Futures since 2018, novel as a programme-level construct for TradFi underlyings; <strong>(b)</strong> reference price set to a venue mark price or futures mark price rather than spot — eliminating issuer basis risk against the hedge but requiring BMR analysis (Question 11); <strong>(c)</strong> dual issuance format (bearer certificate and security token) under identical legal substance — requiring confirmation of cross-format fungibility for prospectus and PRIIPs purposes. The multi-asset-class coverage is intentionally <em>not</em> novel — it tracks established issuance practice across crypto (DZ Bank, BNP), metals (HSBC, UBS), and equities (BNP, SG) for KO/Turbo certificates.
   </div>
 
   
@@ -156,7 +138,7 @@
   <!-- Key Formulas -->
   <div class="section-num">KEY FORMULAS</div>
   <h2 id="formulas" style="margin-top:6px">Key Formulas — Programme-Level</h2>
-  <p style="font-style:italic; color:#555; margin-top:-4px; margin-bottom:18px;">The deterministic formulas published in the base prospectus. Per-Series parameters (Reference Venue, Contract Size, Barrier at issuance, MMB%, Carry Settlement cadence) are fixed in the Final Terms. Worked-example numbers below use BTC as illustration; the same formulas apply across all asset classes (crypto perp reference; spot or perp reference for metals / equities / commodities; venue-published probability for prediction markets).</p>
+  <p style="font-style:italic; color:#555; margin-top:-4px; margin-bottom:18px;">The deterministic formulas published in the base prospectus. Per-Series parameters (Reference Venue, Contract Size, Barrier at issuance, MMB%, Carry Settlement cadence) are fixed in the Final Terms. Worked-example numbers below use BTC as illustration; the same formulas apply across all asset classes (crypto perp reference; spot or perp reference for metals / equities / commodities).</p>
 
   <h3>F1. Certificate Value</h3>
   <p>The value of an Unlimited Knock-Out Certificate at any point in time is:</p>
@@ -170,8 +152,7 @@
     Where:
       Reference Price  = the Series' Reference Price as defined in §3.1 / §3.1quinquies
                          (crypto: venue perp mark price; metals/equities/commodities:
-                          24/7 perp where available, else spot; prediction markets:
-                          Kalshi/Polymarket probability quote)
+                          24/7 perp where available, else spot)
       Knock-Out Barrier = fixed at issuance per Series, adjusted at each Carry
                           Settlement per F3
       Contract Size    = 1 / Multiplier (fixed in Final Terms)
@@ -196,7 +177,7 @@
   <div class="formula">
     At each Reference Venue carry settlement
     (crypto: typically every 8h; TradFi perp hedge: every 8h on the perp venue;
-     TradFi spot/futures fallback: daily; prediction markets: typically zero carry):
+     TradFi spot/futures fallback: daily):
 
     For long certificates (issuer is long on the Reference / Hedge Venue):
       New Barrier = Previous Barrier + (Carry Rate × Reference Price at settlement)
@@ -208,7 +189,6 @@
       Crypto perp Series              → the Reference Venue funding rate
       Non-crypto perp-hedged Series   → the perp-venue funding rate (preferred)
       Non-crypto spot/futures Series  → ESTR/SOFR ± dividend yield or roll yield
-      Prediction-market Series        → typically zero; venue platform fee if any
 
     Sign convention: positive Carry Rate = longs pay shorts (the typical case).
     Bidirectional: a negative Carry Rate moves the long Barrier downward
@@ -268,13 +248,6 @@
       AAPL-LONG-KO180-HYPERLIQUID  Long Apple, KO at $180, Hyperliquid perp ref
       SPX-SHORT-KO5800-CME         Short S&P 500, KO at 5,800, CME futures ref
                                    (fallback where no liquid index perp exists)
-      USELECT-YES-KO35-KALSHI      Long YES outcome of US presidential election,
-                                   KO if probability falls to 35¢, Kalshi ref
-                                   (perpetual PM Series — open-ended)
-      TRUMP-YES-KO38-NOV28-POLY    Dated PM Series (new in v5.2): long YES of
-                                   Trump win 2028, KO at 38¢, resolves Nov 2028,
-                                   Polymarket ref; Calendar Deleveraging Schedule
-                                   applies per Final Terms (see F8 below)
   </div>
 
   <h3>F7. Add-Margin Mechanism</h3>
@@ -289,87 +262,20 @@
     CFD-reclassification analysis of the add-margin mechanism.
   </div>
 
-  <h3>F8. Calendar Restrike — Dated PM Series <span style="font-size:13px; color:#666; font-weight:normal;">(new in v5.2)</span></h3>
-  <p>Applies only to dated PM Series with a Calendar Deleveraging Schedule (Term Sheet row above). At each pre-disclosed timestamp in the Schedule, the Series undergoes an in-place NAV-preserving Calendar Restrike Event. The Reference Price <code>M_t</code> used in the computation is a 30-minute TWAP of the Reference Price ending at the scheduled timestamp (same anti-manipulation methodology as the final-settlement TWAP at T*); this prevents single-block mark manipulation around the restrike instant.</p>
-  <div class="formula">
-    At each scheduled Calendar Restrike Event for a long dated PM Series:
-
-      M_t   = 30-min TWAP of Reference Price ending at restrike timestamp
-      B_old = Barrier of pre-restrike Series
-      N_old = Contract Size (multiplier) of pre-restrike Series
-      L_new = target leverage cap of post-restrike Series (per the Schedule)
-
-      V_t   = (M_t − B_old) × N_old        (cert NAV at restrike, pre-event)
-
-    Compute new Series parameters:
-
-      B_new = M_t × (1 − 1 / L_new)         (new Barrier — moves further from M_t)
-      N_new = V_t / (M_t − B_new)            (new Contract Size — preserves NAV)
-
-    Post-restrike at mark M_t:
-      Cert NAV                  = V_t                    (preserved by construction)
-      Implied forward leverage  = L_new                  (by construction)
-
-    For short dated PM Series: swap (M_t − B) for (B − M_t).
-
-    Holder's token balance: unchanged.
-    ISIN and contract address: unchanged.
-    The event is implemented as an in-place parameter update on the same
-    security (not a token swap or burn-and-reissue).
-
-  Worked example — TRUMP2028 long, 5× at issuance:
-
-    At issuance (T*−2y), M = 47¢:
-        B       = 47 × (1 − 1/5)    = 37.6¢
-        N       = $1,000 / ¢        (multiplier)
-        NAV/cert = (47 − 37.6) × 1,000 = $9,400
-        Implied lev = 47 / (47 − 37.6) = 5.0×
-
-    At T*−30d, M_t (TWAP) = 51¢, L_new = 3.0×:
-        V_t     = (51 − 37.6) × 1,000   = $13,400
-        B_new   = 51 × (1 − 1/3)        = 34.0¢
-        N_new   = 13,400 / (51 − 34)    = $788.2 / ¢
-        NAV/cert post-restrike           = $13,400  (preserved)
-        Implied forward leverage         = 3.0×     (by construction)
-
-    At T*−7d, M_t = 56¢, L_new = 2.0×:
-        V_t     = (56 − 34.0) × 788.2   = $17,341
-        B_new   = 56 × (1 − 1/2)        = 28.0¢
-        N_new   = 17,341 / (56 − 28)    = $619.3 / ¢
-        NAV/cert post-restrike           = $17,341
-        Implied forward leverage         = 2.0×
-
-    At T*−24h, M_t = 62¢, L_new = 1.0×:
-        V_t     = (62 − 28) × 619.3     = $21,056
-        B_new   = 62 × (1 − 1/1)        = 0.0¢   (barrier collapses to floor)
-        N_new   = 21,056 / (62 − 0)     = $339.6 / ¢
-        NAV/cert post-restrike           = $21,056
-        Implied forward leverage         = 1.0×  (spot-equivalent into terminal)
-
-    At T*, trading flips reduce-only at T*−1h; final settlement TWAP M_T*.
-    If YES resolves (M_T* ≈ 99.4¢):
-        Settlement = max(0, (99.4 − 0) × 339.6) = $33,756 per cert
-    If NO resolves (M_T* ≈ 0.6¢):
-        Settlement = max(0, (0.6 − 0) × 339.6)  = $204 per cert
-        Holder loss ≈ 99% of pre-event NAV — but at 1× lev into terminal,
-        not 5× lev compounded.
-  </div>
-  <p style="font-size:13px; color:#555;">The mechanic mirrors the carry-passthrough Barrier Adjustment (F3) in form (Barrier and Contract Size are updated by deterministic formula at a scheduled cadence) but on a separate calendar axis. The cadence is per-Series and pre-disclosed in the Final Terms at issuance; the issuer correspondingly unwinds a proportional fraction of the hedge book at each scheduled restrike (slippage absorbed into the issuer spread; pre-funded in the issuance pricing — same treatment as F3 carry passthrough). See <code>pm-cert-calendar-deleveraging-supplement.md</code> for the full mechanic, hedge-book unwind handling, smart-contract implementation outline, and the open tax / PRIIPS / appropriateness questions (Q25–Q30 below).</p>
-
   <div class="highlight-box" style="margin-top:24px;">
     <strong>Where these formulas live in the prospectus</strong>
     F1–F2 (Certificate Value, Implied Leverage) appear in the base prospectus payoff schedule. F3 (Barrier Adjustment / Carry Passthrough) is the central deterministic mechanic — see Question 1 on the level of specificity required in the prospectus and Question 12 on the bidirectional carry/CFD-reclassification analysis. F4–F5 (Standard and MMB Calibrations) sit in the Final Terms per Series (the calibration choice is per-Series — see Question 15). F6 is the Series naming convention referenced in every Final Terms. F7 is described as a programme-level mechanism in the base prospectus and is subject to Question 6.
   </div>
 
   <div class="notice" style="background:#eef4f9; border-left-color:#3a5fc8; color:#1a3a6b; margin-bottom:32px; margin-top:48px;">
-    <strong>Open programme questions for counsel.</strong> The remainder of this document contains the programme-level <strong>Strategic Context</strong> questions (S1–S9) and the <strong>Open Legal Questions for Counsel</strong> (Q1–Q30, with Q25–Q30 new in v5.2 — addressing the dated PM variant). They are reproduced here so that this Term Sheet is a self-contained counsel-facing brief. The detailed product mechanics, hedging architecture, comparison to standard Mini Future / KO certs, and the trading-interface annex are in the companion document <code>ko-cert-primer.html</code> — each question below should be read in that fuller context. Cross-references to section numbers (e.g., §3.1bis, §4.6) refer to the primer.
+    <strong>Open programme questions for counsel.</strong> The remainder of this document contains the programme-level <strong>Strategic Context</strong> questions and the <strong>Open Legal Questions for Counsel</strong>. They are reproduced here so that this Term Sheet is a self-contained counsel-facing brief. The detailed product mechanics, hedging architecture, comparison to standard Mini Future / KO certs, and the trading-interface annex are in the companion document <code>ko-cert-primer.html</code> — each question below should be read in that fuller context. Cross-references to section numbers (e.g., §3.1bis, §4.6) refer to the primer.
   </div>
 
-  <!-- Strategic Context (S1–S9) — new in v5.0 -->
-  <div class="section-num" style="margin-top:60px">STRATEGIC CONTEXT — PROGRAMME-LEVEL QUESTIONS (v5.0)</div>
-  <h2 id="strategic-context">Strategic Context — Questions S1 through S9</h2>
+  <!-- Strategic Context -->
+  <div class="section-num" style="margin-top:60px">STRATEGIC CONTEXT — PROGRAMME-LEVEL QUESTIONS</div>
+  <h2 id="strategic-context">Strategic Context</h2>
 
-  <p style="font-style:italic; color:#555;">The following nine strategic-context questions are programme-level (they apply across the KO Certificate product line addressed in Sections 1–9 above, and will apply equally to additional product lines added later under the same base prospectus — see Question 22). They are imported from the parallel five-product-programme primer so that counsel sees a single consolidated set. Each section states our working position and ends with the specific legal questions counsel is asked to determine.</p>
+  <p style="font-style:italic; color:#555;">The following strategic-context questions are programme-level (they apply across the KO Certificate product line addressed in Sections 1–9 above). Each section states our working position and ends with the specific legal questions counsel is asked to determine.</p>
 
   <!-- S1: DUAL ISSUANCE -->
   <div class="section-num" style="margin-top:48px">S1</div>
@@ -387,27 +293,6 @@
       <li><strong>Single prospectus for optional dual format:</strong> Can a single base prospectus cover Series issued (a) as security tokens only, (b) as traditional certificates only, or (c) both simultaneously, with the choice made per-Series at issuance? If not, what is the minimum supplementary documentation required to switch formats within the same programme?</li>
       <li><strong>Format conversion:</strong> If a holder requests conversion of a security token into a bearer certificate (or vice versa) on the same Series, does this constitute a new issuance, a redemption-and-re-subscription, or an administrative transfer? PRIIPs and Prospectus Regulation implications of each characterisation?</li>
       <li><strong>Automatic custodian account:</strong> (a) Is it permissible for the issuer to contractually bind investors to a specific qualified custodian at onboarding (e.g., Tangany)? (b) Must the custodian be named in the prospectus? (c) What are the consequences if the custodian relationship terminates — must the issuer notify all holders?</li>
-    </ol>
-  </div>
-
-  <!-- S2: DEFI YIELD -->
-  <div class="section-num" style="margin-top:48px">S2</div>
-  <h2 id="ss2" style="font-size:18px;">S2. DeFi Yield as Bond-Leg Alternative</h2>
-
-  <p>For product lines requiring a principal-protection or bond-leg component (Capital Protected Note, Sprint Certificate variants), the traditional approach invests the bond leg in government securities or money-market instruments yielding ~3–4% APY. We are considering investing the bond leg in DeFi yield strategies at 8–15% APY (stablecoin lending: Aave, Morpho; tokenized T-bills: Ondo USDY; structured yield: Pendle PT, Ethena sUSDe). This materially improves product economics — e.g., near-100% upside participation in a 12-month Capital Protected Note vs. ~35% at traditional rates.</p>
-
-  <p><strong>Note on KO Certificate scope.</strong> The KO Certificate itself does not have a bond leg, so S2 does not directly affect KO Series. It applies to product lines we intend to add under the same base prospectus (see Question 22). It is included here because the bond-leg structuring choice is programme-level: confirming it once at programme drafting avoids re-litigating it for each subsequent product line.</p>
-
-  <div class="callout" style="border-left:3px solid #c89a3a; background:#fff8e8; padding:14px 18px; margin:14px 0;"><strong>Disclosure challenge:</strong> "Capital protection" implies guaranteed return of principal. If the bond leg is invested in DeFi protocols with smart-contract risk, the protection is no longer unconditional. KID risk categorisation and disclosure language must reflect this.</div>
-
-  <div class="question-block" style="border-left-color:#c89a3a; background:#fffaf0;">
-    <div class="q-label" style="color:#a06a00;">Legal questions for counsel — S2</div>
-    <ol style="margin-left:18px;">
-      <li><strong>Capital-protection claim:</strong> If the bond leg is invested in DeFi protocols rather than government securities, can the product still be marketed as "capital protected"? What disclosure language is required to accurately describe conditional protection?</li>
-      <li><strong>PRIIPs category shift:</strong> Does investing the bond leg in DeFi protocols move the product from PRIIPs Category 1 (capital protected) to Category 2 or 3? Implications for the KID Summary Risk Indicator?</li>
-      <li><strong>MiCA CASP obligations:</strong> Does the issuer deploying funds into DeFi protocols constitute "crypto-asset service" activity under MiCA, requiring CASP registration?</li>
-      <li><strong>Blended bond leg:</strong> Can the issuer combine DeFi yield strategies and traditional money-market instruments in the bond leg (e.g., 50/50), and what prospectus disclosure does this require?</li>
-      <li><strong>Ethena sUSDe specifically:</strong> Ethena's yield is generated through delta-neutral perpetual hedging. Does using sUSDe as a bond-leg component create any specific regulatory concerns given its synthetic-stablecoin structure?</li>
     </ol>
   </div>
 
@@ -538,39 +423,6 @@
     </ol>
   </div>
 
-  <!-- S7: UNDERLYING ASSET CLASS -->
-  <div class="section-num" style="margin-top:48px">S7</div>
-  <h2 id="ss7" style="font-size:18px;">S7. Underlying Asset Class — Does Crypto (or Prediction Markets) Change Anything?</h2>
-
-  <p>The programme intends to issue across five underlying asset classes (Section 2.1). Key differences for non-asset-price underlyings:</p>
-
-  <ul>
-    <li><strong>ESMA CFD restriction (crypto):</strong> For crypto, CFDs are restricted to 2× leverage for retail. This does NOT apply to certificates — but the classification risk is higher for KO certs on crypto than on equities.</li>
-    <li><strong>MiCA (crypto):</strong> If the issuer or distributor interacts with crypto-assets as part of the product lifecycle (custody, settlement in crypto), MiCA CASP registration may be required.</li>
-    <li><strong>Benchmark Regulation:</strong> Crypto perpetual reference prices may not be BMR-registered benchmarks. Needs per-source analysis. Same applies (potentially with different conclusions) to LBMA gold prices, exchange closing prices, and Kalshi/Polymarket probability quotes.</li>
-    <li><strong>No regulated EU spot venue for crypto:</strong> Unlike equities (Xetra, Euronext) or gold (LBMA), there is no EU-regulated crypto spot market. Reference prices come from unregulated exchanges.</li>
-    <li><strong>Prediction markets (new in v5.0):</strong> The underlying is a <em>non-financial-instrument event probability</em>, not an asset price. This raises a discrete question under MiFID II Annex I Section C — see Question 21 and Section S9.</li>
-  </ul>
-
-  <h3>What does NOT change across asset classes</h3>
-  <ul>
-    <li>Prospectus Regulation obligations are the same regardless of underlying</li>
-    <li>PRIIPs KID requirements are the same</li>
-    <li>MiFID II product governance and appropriateness testing apply equally</li>
-    <li>The KO Certificate structure (transferable security) is the same</li>
-  </ul>
-
-  <div class="question-block" style="border-left-color:#c89a3a; background:#fffaf0;">
-    <div class="q-label" style="color:#a06a00;">Legal questions for counsel — S7</div>
-    <ol style="margin-left:18px;">
-      <li><strong>Underlying-specific regulatory treatment:</strong> Does the regulatory treatment of the KO Certificate (or of additional product lines added later) change materially depending on whether the underlying is crypto vs. equity vs. precious metal vs. commodity vs. prediction-market event? Specifically: are there any restrictions, additional licensing requirements, or product-intervention measures that apply to crypto-underlying or event-underlying structured products but not to the other asset classes?</li>
-      <li><strong>Benchmark Regulation (BMR):</strong> For each intended reference price (per-Series crypto-exchange perpetual mark prices — open venue class; CME / LBMA spot; Xetra / Nasdaq close; Kalshi / Polymarket probability quote), confirm which are BMR-registered benchmarks and which are not. Is per-Series election of reference venue (with corresponding disclosure in the Final Terms) acceptable, or must the base prospectus pre-name a closed list?</li>
-      <li><strong>Equity index licensing:</strong> For Series referencing equity indices (S&amp;P 500, NASDAQ, DAX), are index licensing agreements required, and what are the typical commercial / legal terms?</li>
-      <li><strong>Mixed-underlying outperformance:</strong> Are there specific regulatory issues for an Outperformance Certificate referencing BTC vs. Apple (BTC/AAPL spread) — single product referencing both a crypto-asset and a traditional equity?</li>
-      <li><strong>Approval timeline per underlying:</strong> Does adding each new underlying asset class to the base prospectus require a separate supplement, and does each new underlying materially prolong approval? Is there a way to pre-approve a class of underlyings (e.g., "all equities traded on major EU/US regulated markets") within the original base prospectus to avoid per-underlying filings? (Related to Question 22.)</li>
-    </ol>
-  </div>
-
   <!-- S8: TOKEN-ONLY / CFD RECLASSIFICATION -->
   <div class="section-num" style="margin-top:48px">S8</div>
   <h2 id="ss8" style="font-size:18px;">S8. Token-Only Issuance — CFD Reclassification Risk?</h2>
@@ -591,42 +443,6 @@
     </ol>
   </div>
 
-  <!-- S9: PREDICTION MARKETS -->
-  <div class="section-num" style="margin-top:48px">S9</div>
-  <h2 id="ss9" style="font-size:18px;">S9. Prediction Markets — Can They Be Underlyings to a KO Certificate?</h2>
-
-  <p>Prediction markets allow participants to bet on the probability of real-world events (elections, sports, economic data). Major platforms: <strong>Polymarket</strong> (on-chain), <strong>Kalshi</strong> (CFTC-regulated US), Manifold, PredictIt. They trade binary outcome contracts: "Will X happen by date Y?" — pays $1 if yes, $0 if no.</p>
-
-  <p>Two distinct questions arise: (i) can a transferable-security product reference a prediction-market venue as Reference Price? (ii) does the non-binary structure of the KO Certificate avoid the ESMA binary-options ban?</p>
-
-  <h3>Possible securitization structures</h3>
-  <table>
-    <thead><tr><th>Structure</th><th>Description</th><th>Regulatory view</th></tr></thead>
-    <tbody>
-      <tr><td>Binary outcome note</td><td>Certificate that pays fixed amount if event occurs, zero otherwise — economically identical to binary option</td><td style="color:#c8383a;">✗ Likely binary option → ESMA banned for retail</td></tr>
-      <tr><td>Probability-indexed note (KO Cert variant)</td><td>KO Certificate whose value tracks the market-implied probability of an event (continuous, not binary); KO triggers on probability hitting a barrier (e.g., 0¢)</td><td style="color:#b87030;">⚠ Novel; structured as KO Cert on a continuously-quoted probability — avoids the binary characteristic. Discussed in detail below.</td></tr>
-      <tr><td>Prediction-market basket note</td><td>Certificate investing in a diversified portfolio of prediction-market positions</td><td style="color:#b87030;">⚠ Fund-like; may require UCITS or AIF status</td></tr>
-      <tr><td>Event-linked note</td><td>Bond with coupon linked to specific event outcome (cat-bond extension)</td><td style="color:#2a7a2a;">✓ Established for cat-bonds; extension to prediction markets is novel but structurally familiar</td></tr>
-    </tbody>
-  </table>
-
-  <p><strong>Our intended structure:</strong> A KO Certificate referencing a prediction-market venue (Kalshi or Polymarket) — the Reference Price is the venue's continuously-published probability quote (e.g., "Outcome of US presidential election: YES — currently quoted at 47¢"). The certificate trades at intermediate values throughout its life and reflects the evolving probability quote, with KO triggered if probability hits the barrier. The product is <em>not</em> binary — it has a continuous price path between issuance and termination — distinguishing it from the binary options banned by ESMA Decision 2018/795.</p>
-
-  <div class="callout" style="border-left:3px solid #c89a3a; background:#fff8e8; padding:14px 18px; margin:14px 0;"><strong>Key obstacle — ESMA binary-options ban.</strong> A straightforward "pays $X if event occurs" certificate is economically a binary option (ESMA Decision EU 2018/795). Our KO Cert design avoids this by having a continuous probability-tracked value and a barrier-driven termination rather than a fixed-amount-on-event payoff. Counsel is asked to confirm this distinction is robust.</div>
-
-  <div class="question-block" style="border-left-color:#c89a3a; background:#fffaf0;">
-    <div class="q-label" style="color:#a06a00;">Legal questions for counsel — S9 (related to Question 21)</div>
-    <ol style="margin-left:18px;">
-      <li><strong>Binary-option definition for real-world events:</strong> Does a note that pays a fixed amount contingent on a real-world event constitute a "binary option" under ESMA Decision 2018/795, or does the "option" characterisation require a financial underlying (price of an asset) rather than a real-world event outcome?</li>
-      <li><strong>Avoiding binary characterisation via continuous pricing:</strong> Our KO Cert on prediction-market probability has a market price that changes continuously during its life (tracking the evolving probability) and terminates on barrier-hit at the value at the barrier — not at a $0/$1 binary payoff. (a) Does this continuous-price argument have legal merit in avoiding ESMA binary classification? (b) Is there a minimum level of "path-dependent" or "continuous" value behaviour required before the instrument ceases to be "binary"?</li>
-      <li><strong>Non-financial-instrument underlying:</strong> Can an option, warrant, or KO Certificate reference an underlying that is not a financial instrument (e.g., the probability of a geopolitical event)? Under MiFID II Annex I Section C, does the definition of a derivative require a financial underlying, or can a real-world event serve as the reference? Implications for product classification?</li>
-      <li><strong>Most viable regulatory pathway:</strong> Setting aside the specific KO-Cert question — what is counsel's overall assessment of the most viable regulatory pathway to enable a prediction-market product for EU retail investors? Are there EEA jurisdictions where prediction markets are explicitly authorised or operate with regulatory tolerance?</li>
-      <li><strong>Event-linked-note precedent:</strong> Does the cat-bond precedent (event-linked notes treated as transferable securities) extend to prediction-market-linked notes referencing non-financial events?</li>
-      <li><strong>Gambling-law risk:</strong> In jurisdictions where prediction markets are classified as gambling, would a securitized prediction-market KO Certificate be subject to gambling regulation in addition to securities regulation? Risk of dual regulation?</li>
-    </ol>
-  </div>
-
-
   <!-- Section 10 -->
   <div class="section-num" style="margin-top:60px">SECTION 10</div>
   <h2 id="s10">Open Legal Questions for Counsel</h2>
@@ -636,31 +452,13 @@
   <div class="question-block">
     <div class="q-label">Question 1 — Financing Rate Formula Disclosure</div>
     <div class="q-text">What level of specificity is required in the prospectus for the barrier adjustment formula, and what flexibility does the issuer retain to update the formula?</div>
-    <div class="q-context">The barrier adjustment formula references the Reference Venue's funding rate (rather than SOFR+spread). The formula is deterministic: <code>New Barrier = Previous Barrier + (Funding Rate × Mark Price)</code>. We need to understand: (a) whether the base prospectus may define the venue class (BitMEX / Bybit / Binance / Kraken / OKX / Deribit) and leave the specific Reference Venue to per-Series election in the Final Terms (per v3.0 Section 3.1bis); (b) what happens if the Series' Reference Venue ceases to publish a funding rate or is unavailable — fallback provisions or Series Termination at Fair Value; (c) whether the PRIIPS KID performance scenarios remain valid when the barrier adjustment depends on a variable funding rate.</div>
+    <div class="q-context">The barrier adjustment formula references the Reference Venue's funding rate (rather than SOFR+spread). The formula is deterministic: <code>New Barrier = Previous Barrier + (Funding Rate × Mark Price)</code>. We need to understand: (a) whether the base prospectus may define the venue class (BitMEX / Bybit / Binance / Kraken / OKX / Deribit) and leave the specific Reference Venue to per-Series election in the Final Terms (per Section 3.1bis); (b) what happens if the Series' Reference Venue ceases to publish a funding rate or is unavailable — fallback provisions or Series Termination at Fair Value; (c) whether the PRIIPS KID performance scenarios remain valid when the barrier adjustment depends on a variable funding rate.</div>
   </div>
 
   <div class="question-block">
     <div class="q-label">Question 2 — Issuance Model: Fungible Series and Tap Mechanism</div>
     <div class="q-text">Can the issuer issue additional certificates into an existing series after the initial issuance date ("tap"), and does this require additional disclosure?</div>
     <div class="q-context">When demand exceeds the initial issuance volume for a series, we need to issue additional certificates with identical terms into the same series (same barrier, same ISIN). We need to confirm: (a) the series model qualifies as a transferable security; (b) tap issuances under identical terms do not require a new Final Terms or prospectus supplement; (c) the minimum issuance size per series (if any) for securities classification to hold.</div>
-  </div>
-
-  <div class="question-block">
-    <div class="q-label">Question 3 — Denomination Threshold and Home Member State</div>
-    <div class="q-text">What are the implications of certificate denomination below vs. above €1,000 for home member state selection and EEA passport?</div>
-    <div class="q-context">We intend to incorporate in Liechtenstein (FL AG) with the FMA as home competent authority. We need confirmation of: (a) FL AG incorporation compatibility with EU Prospectus Regulation passporting; (b) impact of denomination choice on distribution flexibility; (c) counsel's recommendation on denomination level.</div>
-  </div>
-
-  <div class="question-block">
-    <div class="q-label">Question 4 — Reference Venue Class and Per-Series Election (v3.0)</div>
-    <div class="q-text">Can the base prospectus define a class of permissible Reference Venues (BitMEX, Bybit, Binance, Kraken, OKX, Deribit), with the venue elected per Series in the Final Terms, and parallel Series of the same underlying coexisting with different venues fixed at issuance?</div>
-    <div class="q-context">v3.0 introduces per-Series Reference Venue election (Section 3.1bis). The same underlying may be the subject of multiple Series each referencing a different venue. We need counsel to confirm: (a) the base prospectus may define a class of permissible Reference Venues rather than naming a single venue; (b) BMR implications for exchange-published mark prices across the venue class (in particular: if some venues are EU-supervised — Deribit (now Coinbase-owned) and Kraken Futures — while others are non-EU, does this create a heterogeneous BMR posture across the venue class?); (c) whether parallel Series of the same underlying with different venues require any specific cross-reference in their Final Terms or KIDs; (d) whether the Final Terms must specify a fallback venue or define a "Venue Disruption Event" leading to Series termination at fair value if the Reference Venue becomes unavailable. See also Question 16 (v3.0) for additional venue-election considerations.</div>
-  </div>
-
-  <div class="question-block">
-    <div class="q-label">Question 5 — Gap Risk: Issuer Obligation When Mark Price Gaps Through Barrier</div>
-    <div class="q-text">In a gap scenario, what are the issuer's legal obligations to the holder, and how should gap risk be described in the prospectus?</div>
-    <div class="q-context">We need counsel to advise on: (a) whether residual value may be calculated at the barrier price regardless of where the hedge was executed; (b) the appropriate maximum-loss disclaimer; (c) how gap risk is described in the risk factors section, particularly given 24/7 cryptocurrency market operation.</div>
   </div>
 
   <div class="question-block">
@@ -676,21 +474,9 @@
   </div>
 
   <div class="question-block">
-    <div class="q-label">Question 8 — Base Prospectus Structure: Unlimited Series Issuance</div>
-    <div class="q-text">What is the correct structure for a base prospectus covering unlimited series across multiple underlyings, directions, and barrier levels, without requiring a new prospectus for each series?</div>
-    <div class="q-context">We intend to maintain approximately 16–32 simultaneously active series per underlying, with new series spawning automatically after Knock-Out Events. We need counsel to confirm: (a) all series can be covered under a single base prospectus with individual Final Terms per series; (b) new Final Terms for a replacement series following a Knock-Out Event do not require a prospectus supplement; (c) the 12-month base prospectus validity and renewal requirements; (d) notification and publication requirements for each new Final Terms filing.</div>
-  </div>
-
-  <div class="question-block">
     <div class="q-label">Question 9 — Sui Generis Security Token: Custodian Compatibility</div>
     <div class="q-text">Does a sui generis security token representing the rights of a Knock-Out Certificate qualify for custody by a German Kryptoverwahrgeschäft-licensed custodian?</div>
     <div class="q-context">We request confirmation: (a) that a sui generis token constitutes a Kryptowert within KWG §1(11) S.4 and is within the scope of the Kryptoverwahrgeschäft licence; (b) that a Kryptoverwahrgeschäft-licensed custodian may hold such tokens without a separate Depotgeschäft licence; (c) BaFin's current position on sui generis security tokens as transferable securities under WpHG; (d) whether absence of a statutory register creates any gap in the chain of legal title.</div>
-  </div>
-
-  <div class="question-block">
-    <div class="q-label">Question 10 — TVTG (Liechtenstein) vs. German-Law Sui Generis Token</div>
-    <div class="q-text">Does the Liechtenstein TVTG structure support German distribution via Kryptoverwahrgeschäft-licensed custodians, and what are its limitations versus a German-law token?</div>
-    <div class="q-context">We need counsel to assess: (a) compatibility of FL-law TVTG instruments with German Depotgesetz and KWG custody chain; (b) conflict of laws on transfer of TVTG tokens by German investors; (c) additional compliance obligations for German MiFID II distributors of TVTG-structured products; (d) counsel's recommendation on Liechtenstein vs. German or Luxembourg domicile for the issuer.</div>
   </div>
 
   <div class="question-block">
@@ -702,127 +488,35 @@
   <div class="question-block">
     <div class="q-label">Question 12 — Funding Rate Passthrough: Bidirectional Barrier Adjustment and CFD Reclassification</div>
     <div class="q-text">Does the bidirectional barrier adjustment (barrier decreasing when funding is negative, constituting an effective credit to the holder) create any risk that the instrument is reclassified as a CFD or as an instrument with "bilateral financial obligations" under MiFID II?</div>
-    <div class="q-context">In v1.0, financing was unidirectional: always a cost to the holder. In v2.0, the barrier adjusts in both directions to mirror the exchange funding rate. When funding is negative, the barrier decreases — the certificate holder receives a benefit equivalent to the funding payment they would have received as a perp long. The instrument's daily value change now depends on a bilateral market-determined rate (the BitMEX funding rate), not just a fixed cost schedule. We need counsel to advise on: (a) whether the bidirectional adjustment affects the transferable security classification; (b) whether it constitutes a "contingent liability transaction" under ESMA guidance; (c) whether the instrument can still be described as a security whose value depends only on the mark price, given that the barrier (and therefore the value) also depends on the funding rate; (d) whether the PRIIPS KID cost disclosure methodology changes when costs can be negative.</div>
+    <div class="q-context">Financing could be modelled as unidirectional (always a cost to the holder); in the current design the barrier adjusts in both directions to mirror the exchange funding rate. When funding is negative, the barrier decreases — the certificate holder receives a benefit equivalent to the funding payment they would have received as a perp long. The instrument's daily value change now depends on a bilateral market-determined rate (the BitMEX funding rate), not just a fixed cost schedule. We need counsel to advise on: (a) whether the bidirectional adjustment affects the transferable security classification; (b) whether it constitutes a "contingent liability transaction" under ESMA guidance; (c) whether the instrument can still be described as a security whose value depends only on the mark price, given that the barrier (and therefore the value) also depends on the funding rate; (d) whether the PRIIPS KID cost disclosure methodology changes when costs can be negative.</div>
   </div>
 
   <div class="question-block">
-    <div class="q-label">Question 13 — Issuer's BitMEX Activity: Licensing Requirements</div>
-    <div class="q-text">Does the issuer's back-to-back hedging activity on BitMEX — opening and closing perpetual futures positions systematically for every certificate issued — constitute "investment business" requiring regulatory authorisation in the issuer's jurisdiction of incorporation?</div>
-    <div class="q-context">The issuer will routinely execute perpetual futures trades on BitMEX as a mechanical consequence of its certificate issuance and redemption activity. These trades are not proprietary — each trade corresponds 1:1 to an outstanding certificate obligation. We need counsel to advise on: (a) whether systematic execution of exchange-traded derivatives in a non-proprietary capacity (pure hedging) constitutes "dealing in investments" or equivalent regulated activity in the issuer's home jurisdiction; (b) whether any exemption applies (e.g., a hedging or ancillary activity exemption); (c) whether BitMEX's own requirements for institutional clients impose licensing obligations on the issuer; (d) whether the issuer's hedging activity should be disclosed in the prospectus, and if so, how it should be characterised.</div>
-  </div>
-
-  <div class="question-block">
-    <div class="q-label">Question 14 — Displaying Underlying Exchange Orderbook to Clients</div>
-    <div class="q-text">Are there any MiFID II, MiFIR, or market transparency obligations arising from displaying the Reference Venue (BitMEX, Bybit, Binance, Kraken, OKX, Deribit) perpetual futures orderbook to EU retail clients as the primary price reference in the trading interface?</div>
-    <div class="q-context">As described in Annex A, the trading interface displays the Series' Reference Venue orderbook as the primary price reference, with certificate availability overlaid as a secondary layer. The orderbook data is provided under a commercial market data agreement with each venue. Clients place orders expressed in mark price terms of the elected Reference Venue; these are converted to certificate orders by the platform. We need counsel to advise on: (a) whether displaying a third-party exchange's orderbook alongside proprietary certificate orders creates any MiFIR pre-trade transparency obligations for the issuer or distributor; (b) whether the display implies to clients that they are trading directly on the Reference Venue, and if so, whether additional disclosure is required to clarify that they are purchasing certificates; (c) whether the execution report (confirming certificate purchase and the underlying perp reference price) satisfies MiFID II trade confirmation requirements under Art. 25; (d) any specific implications when the same trader views Series referencing different venues side-by-side in their portfolio.</div>
-  </div>
-
-  <div class="question-block">
-    <div class="q-label">Question 15 — Maintenance Margin Buffer (MMB) Calibration — New in v3.0</div>
-    <div class="q-text">Is the Maintenance Margin Buffer (MMB) Calibration introduced in v3.0 compatible with (a) the transferable security classification under MiFID II Art. 4(1)(44); (b) the PRIIPs cost disclosure methodology; (c) the European Prospectus Regulation Final Terms structure; and (d) any specific disclosure required in the KID and marketing materials?</div>
+    <div class="q-label">Question 15 — Maintenance Margin Buffer (MMB) Calibration</div>
+    <div class="q-text">Is the Maintenance Margin Buffer (MMB) Calibration compatible with (a) the transferable security classification under MiFID II Art. 4(1)(44); (b) the PRIIPs cost disclosure methodology; (c) the European Prospectus Regulation Final Terms structure; and (d) any specific disclosure required in the KID and marketing materials?</div>
     <div class="q-context">The MMB is a fixed, pre-defined, deterministic cash payment specified in the Final Terms at issuance, paid to the holder at KO in addition to the standard residual value. Its purpose is to bring the user experience into exact parity with perp liquidation mechanics. We believe: (a) the MMB does not introduce contingent liability or holder-issuer netting, so it does not affect transferable security classification; (b) the MMB should be disclosed as a component of residual value at KO, not as a separate cost in the PRIIPs cost methodology; (c) the MMB amount can be specified per-Series in the Final Terms without requiring a base prospectus supplement; (d) the marketing materials may describe the MMB as "your remaining margin returned at liquidation" to make the perp-parity feature plainly understood by the target user. We need counsel to confirm or correct these views.</div>
   </div>
 
   <div class="question-block">
-    <div class="q-label">Question 16 — Per-Series Reference Venue Election (Multiple Venues Across Series) — New in v3.0</div>
-    <div class="q-text">Does the per-Series Reference Venue election framework introduced in v3.0 — with the same underlying issued in parallel Series referencing different venues (e.g., <code>BTC-LONG-KO92k-BITMEX</code> alongside <code>BTC-LONG-KO92k-BYBIT</code>) — create any specific PRIIPs comparison issue, MiFID II suitability/appropriateness consideration, or Prospectus Regulation Final Terms drafting concern?</div>
+    <div class="q-label">Question 16 — Per-Series Reference Venue Election (Multiple Venues Across Series)</div>
+    <div class="q-text">Does the per-Series Reference Venue election framework — with the same underlying issued in parallel Series referencing different venues (e.g., <code>BTC-LONG-KO92k-BITMEX</code> alongside <code>BTC-LONG-KO92k-BYBIT</code>) — create any specific PRIIPs comparison issue, MiFID II suitability/appropriateness consideration, or Prospectus Regulation Final Terms drafting concern?</div>
     <div class="q-context">We believe per-Series election is a routine prospectus-level structural choice that does not require any special disclosure beyond clearly identifying the Reference Venue in the Series identifier and Final Terms. We need counsel to confirm: (a) the per-Series venue election structure is compatible with the Prospectus Regulation; (b) the KID for each Series may be venue-specific without creating a comparative-disclosure obligation across Series; (c) the appropriateness test is conducted per-Series and does not require the distributor to compare venue risk profiles for the holder; (d) there is no fallback obligation requiring the issuer to substitute a Reference Venue mid-life if a Reference Venue becomes unavailable (we propose a defined "Venue Disruption Event" provision in the Final Terms with a "Series Termination with Fair Value Payment" remedy — see also Question 1 on financing rate disclosure).</div>
   </div>
 
   <div class="question-block">
-    <div class="q-label">Question 17 — Multi-Asset Underlying Extension: Regulatory Perimeter — New in v4.0</div>
-    <div class="q-text">Does the v4.0 extension of the programme to cover four asset classes (crypto, precious metals, equities, commodities) under a single base prospectus create any product-classification, prospectus-disclosure, or product-intervention issue compared with a crypto-only programme?</div>
+    <div class="q-label">Question 17 — Multi-Asset Underlying Extension: Regulatory Perimeter</div>
+    <div class="q-text">Does the extension of the programme to cover four asset classes (crypto, precious metals, equities, commodities) under a single base prospectus create any product-classification, prospectus-disclosure, or product-intervention issue compared with a crypto-only programme?</div>
     <div class="q-context">We have assumed in §2.1 and §3.1quinquies that the asset-class extension is structurally neutral — the same instrument (Unlimited Perpetual Knock-Out Certificate) is issued, with the same payoff formula, the same Knock-Out Barrier mechanism, the same PRIIPs Category 3 classification — across all four classes; only the Reference Price source and the hedge venue universe differ. We need counsel to confirm: (a) a single base prospectus covering all four asset classes is acceptable to FL FMA (and to NCAs in DE/AT/FR/IT/ES/NL after passporting), or whether asset-class-specific base prospectuses are required; (b) whether any of the four classes attracts asset-class-specific product intervention measures (in particular: ESMA's CFD intervention for crypto retail, any commodity-specific national rules in DE/IT/FR); (c) whether the BMR analysis (Question 11) needs to be repeated separately for each Reference Price source (LBMA Gold Price, CME spot, primary listing exchange close, index provider published level) and whether the BMR posture differs from the crypto venue mark price; (d) whether the issuer's hedge book diversification across asset classes (crypto exchanges + LBMA bullion banks + prime brokers + futures FCMs) creates any disclosure or supervisory consolidation issue.</div>
   </div>
 
-  <div class="question-block">
-    <div class="q-label">Question 18 — Dual Issuance Format: Bearer Certificate and Security Token — New in v4.0</div>
-    <div class="q-text">For a given Series, may the issuer offer both (i) a bearer certificate format (CSD-settled, ISIN-allocated) and (ii) a security token format (FL TVTG, custody via Kryptoverwahrgeschäft-licensed custodian) in parallel under the same Final Terms, treating the two formats as fungible at the Series level; or must each Series elect a single format at issuance?</div>
-    <div class="q-context">§2.4 contemplates that the two formats are economically identical and operate under the same PRIIPs KID and prospectus. We need counsel to advise: (a) whether the two formats can share a single ISIN and a single Final Terms, or whether each format requires a separate ISIN; (b) whether the Prospectus Regulation accepts a single base prospectus disclosing both formats with the format elected per Series in the Final Terms (or whether the token format requires a separate prospectus); (c) whether transfer of the same economic position between the two formats (e.g., a holder converting a bearer certificate position into a token position with the same ISIN) is operationally and legally permissible; (d) whether the PRIIPs KID needs to be format-specific (different cost/SRI disclosure depending on whether the holder uses CSD custody vs. token custody) or programme-level (single KID covering both formats); (e) whether the marketing rules under MiFID II Art. 24 require the issuer to disclose the format choice upfront in any communication targeted at retail holders.</div>
-  </div>
-
-  <div class="question-block">
-    <div class="q-label">Question 19 — Hedge Counterparty Regime by Asset Class: Issuer Licensing — New in v4.0</div>
-    <div class="q-text">Does the issuer's hedge activity across multiple asset classes — crypto exchange direct accounts (Question 13), prime brokerage cash-equity holdings, FCM futures accounts, LBMA bullion-bank accounts, and ISDA-papered swap arrangements — engage any additional issuer-side licensing or supervisory requirements (MiFID II, EMIR, CSDR, AIFMD, MAR) beyond those already considered for the crypto-only v3.0 programme?</div>
-    <div class="q-context">We propose that the issuer engages in pure hedging across all asset classes, never proprietary trading; each hedge position corresponds 1:1 to an outstanding certificate obligation. We need counsel to advise on whether this analysis (already requested for crypto in Question 13) applies symmetrically to: (a) prime brokerage cash-equity holdings — does the issuer become a MiFID II investment firm by reason of its systematic cash equity activity, or does the PB's MiFID II permissions cover the issuer's activity? (b) EMIR — for the issuer's ISDA-papered swaps and futures positions, what clearing and reporting obligations apply, and whether the issuer is FC, NFC+, or NFC− under EMIR Art. 10; (c) MAR — for the issuer's single-stock hedge activity, whether the hedge book is subject to MAR insider-dealing or market-manipulation provisions in a way that affects its operational design; (d) AIFMD — whether the issuer is itself an AIF by reason of its multi-asset hedge book (we believe not — the issuer is a programme issuer, not a fund — but request confirmation).</div>
-  </div>
-
-  <div class="question-block">
-    <div class="q-label">Question 20 — Index Licensing and Equity Reference Data — New in v4.0</div>
-    <div class="q-text">For Series referencing equity indices (S&amp;P 500, NASDAQ-100, DAX, EuroStoxx 50) or single stocks (Apple, NVIDIA, etc.), what licensing arrangements are required with the index provider (S&amp;P Dow Jones, NASDAQ, Deutsche Börse / STOXX, MSCI) or the listing exchange, and do any of these arrangements impose constraints on the structuring of the certificate?</div>
-    <div class="q-context">We need counsel to advise on: (a) whether the issuer needs an index licensing agreement with each index provider to reference their index in a structured product, and the typical commercial and legal terms of such agreements; (b) whether referencing a single stock requires any licensing arrangement with the listing exchange (typically not for cash equity reference, but may apply for futures-mark reference); (c) whether the index provider has the right to require pre-issuance approval of the Final Terms or marketing materials; (d) whether the prospectus disclosure language describing the index needs to be coordinated with the index provider's own disclosures.</div>
-  </div>
-
-  <div class="question-block" style="border-left-color:#3a5fc8;">
-    <div class="q-label" style="color:#3a5fc8;">Question 21 — Prediction-Market Underlying: Non-Financial Reference for a KO Certificate — New in v5.0</div>
-    <div class="q-text">Is the Reference Price for a KO Certificate permitted to be a non-financial-instrument data point — specifically, a prediction-market venue's continuously-published probability quote for a real-world event (e.g., Kalshi or Polymarket on the outcome of the US presidential election) — and if so, does the resulting product remain a transferable security under MiFID II Art. 4(1)(44) and avoid classification as a "binary option" under ESMA Decision EU 2018/795?</div>
-    <div class="q-context">Per Section 2.1 and the Programme Term Sheet, the programme intends to include prediction-market events as a fifth underlying asset class (see also Section S9). The Reference Price is the venue's continuously-published probability quote, the certificate trades at intermediate values throughout its life, and KO triggers if probability hits the barrier — the payoff is <em>not</em> binary. We need counsel to confirm: (a) MiFID II Annex I Section C permits a real-world event probability (not an asset price) as the underlying for a transferable-security derivative-type instrument; (b) the continuous-price-path design (Section S9) is sufficient to distinguish the product from a binary option under ESMA Decision 2018/795; (c) Kalshi (CFTC-regulated) vs. Polymarket (on-chain) venue choice creates any specific issues for the Reference Price source or the hedge venue; (d) gambling-law overlay risk in EEA member states where prediction markets are classified as gambling; (e) the BMR posture of the Kalshi / Polymarket probability quote.</div>
-  </div>
-
-  <div class="question-block" style="border-left-color:#3a5fc8;">
-    <div class="q-label" style="color:#3a5fc8;">Question 22 — Adding Additional Product Lines under the Same Base Prospectus (No Re-Issuance) — New in v5.0</div>
-    <div class="q-text">The base prospectus is initially drafted to cover only the Unlimited Perpetual KO Certificate. We intend to add additional product lines later — Autocallable Note, Capital Protected Note, Sprint Certificate, Outperformance Certificate — under the same programme. Can these be added via supplement to the existing base prospectus (no fresh issuance / no new programme), or does each new product type require a separate base prospectus and approval cycle?</div>
-    <div class="q-context">This is a programme-architecture question and is critical to time-to-market for the second-wave products. We need counsel to advise on: (a) the EU Prospectus Regulation mechanism for adding a new product type to an existing base prospectus — what triggers a "supplement" (Art. 23) vs. a fresh base prospectus filing; (b) what specific drafting hooks should be inserted in the v1 base prospectus (e.g., generic Risk Factors, payoff-formula schedule, generic PRIIPs Cat 2/3 coverage) to maximise the chance that later product additions can proceed via Final Terms / supplement rather than fresh filing; (c) whether the approving NCA's typical practice (CSSF or FMA — see Question 23) treats Autocallable / CPN / Sprint / Outperformance as "different product type" requiring fresh approval, or as variants under a structured-product programme; (d) what the realistic incremental time and cost is to add a new product line via supplement vs. fresh prospectus; (e) whether a single base prospectus can simultaneously cover Cat 2 (CPN — capital protected) and Cat 3 (KO Cert — leveraged) PRIIPs categories, given the very different KID disclosures, or whether this is a hard separation requiring two prospectuses.</div>
-  </div>
-
-  <div class="question-block" style="border-left-color:#3a5fc8;">
-    <div class="q-label" style="color:#3a5fc8;">Question 23 — Approving NCA: CSSF vs. FMA — Pre-Submission Consultation — New in v5.0</div>
-    <div class="q-text">The approving NCA is to be either CSSF (Luxembourg) or FMA (Liechtenstein). We intend to hold pre-submission meetings with both prior to filing and elect on the basis of those conversations. Counsel's input requested on: which NCA is, on balance, more likely to approve (a) the offshore SPV structure (Jersey or Cayman — Question 24), (b) the security-token-sui-generis primary format (Section 9.5), (c) the multi-asset-class programme (crypto, metals, equities, commodities, prediction markets), and (d) the multi-product-line programme architecture (Question 22) — within a realistic timeline.</div>
-    <div class="q-context">The election between CSSF and FMA materially affects timeline, cost, and the breadth of the EEA passport accepted by destination NCAs. We need counsel to advise on: (a) typical pre-submission process and timeline for each NCA; (b) each NCA's recent track record with offshore SPV issuers (Jersey / Cayman); (c) each NCA's posture on security tokens and prediction-market underlyings; (d) downstream passporting friction in DE/AT/FR/IT/ES/NL — does CSSF approval carry more "weight" with destination NCAs than FMA approval, or are the two functionally equivalent post-approval; (e) whether the choice of NCA affects the SPV jurisdiction question (i.e., is there an alignment effect — e.g., CSSF more familiar with Cayman, FMA more familiar with TVTG-flavoured structures).</div>
-  </div>
-
-  <div class="question-block" style="border-left-color:#3a5fc8;">
-    <div class="q-label" style="color:#3a5fc8;">Question 24 — SPV Jurisdiction: Jersey vs. Cayman (LI as Fallback) — New in v5.0</div>
-    <div class="q-text">Between Jersey and Cayman as the SPV jurisdiction for the issuer, which is preferable for a tokenized-securities programme passported into EU retail under the EU Prospectus Regulation, and what considerations argue for Liechtenstein as fallback?</div>
-    <div class="q-context">See Section S6 for the comparison table. We need counsel to advise on: (a) Jersey vs. Cayman comparative analysis specifically for an EU-retail-facing structured-products programme — most recent comparable precedents at CSSF / FMA; (b) any substantive law gaps that arise for the sui generis security token where the SPV is Jersey or Cayman (vs. TVTG-governed token under FL law) — and whether these gaps affect German Kryptoverwahrgeschäft custody (Tangany / HAL / BvdH) or downstream investor enforceability; (c) Ondo BVI precedent: how transferable is the Ondo legal architecture to a Jersey or Cayman issuer offering KO Certificates into EU retail; (d) substance / governance requirements (directors, audit, registered office) in each jurisdiction; (e) the conditions under which counsel would recommend defaulting to Liechtenstein (FL AG) as fallback — i.e., what specific obstacle in the Jersey / Cayman route, if encountered, should trigger the fallback?</div>
-  </div>
-
-  <div class="question-block" style="border-left-color:#2e7d32;">
-    <div class="q-label" style="color:#2e7d32;">Question 25 — Tax Characterisation of the Calendar Restrike Event — New in v5.2</div>
-    <div class="q-text">Does a pre-disclosed, NAV-preserving Calendar Restrike Event on a dated PM Series — implemented as an in-place parameter update on the same security token (Barrier and Contract Size updated by deterministic formula; ISIN and contract address unchanged; token balance unchanged) — constitute a "disposal" for the holder under German EStG §20, Austrian KESt, and Liechtenstein VStG, or a continuation of the same security with no realisation event?</div>
-    <div class="q-context">Counsel input requested separately for each of the Phase-1 target retail markets (DE, AT, FL/CH). This is the load-bearing question for the dated PM variant: if the restrike is treated as a disposal, the product becomes economically unworkable for retail and we would need to redesign as either a discretionary calendar barrier without parameter restrike, or accept the disposal characterisation and shift to professional-only distribution. We would also like counsel's view on whether explicit characterisation language in the Final Terms (e.g., "the Calendar Restrike Event is an administrative adjustment of certificate parameters under the original terms of the security and does not effect a disposal") would carry weight with the relevant tax authority in each jurisdiction, or whether the analysis is fact-driven irrespective of drafting.</div>
-  </div>
-
-  <div class="question-block" style="border-left-color:#2e7d32;">
-    <div class="q-label" style="color:#2e7d32;">Question 26 — PRIIPS KID Scenario Modelling Across Multiple Leverage Tiers — New in v5.2</div>
-    <div class="q-text">For a dated PM Series with a Calendar Deleveraging Schedule that steps the implied leverage cap through multiple tiers over the life of the Series (default: 5× → 3× → 2× → 1×), how must the PRIIPS KID scenario calculations model the changing leverage profile?</div>
-    <div class="q-context">Specifically: (a) must the KID model the four leverage regimes separately and report blended performance scenarios, or is a worst-case model based on the issuance-tier leverage acceptable? (b) does the Summary Risk Indicator (SRI) reflect the issuance-tier leverage, the highest-tier leverage encountered during the life, or a time-weighted average? (c) are the calendar restrike events themselves disclosed as "scheduled adjustments" in the KID, and if so under which KID section? (d) given the SRI is fixed per KID and the leverage profile evolves on a deterministic schedule, is a single KID at issuance sufficient, or does each post-restrike state require a fresh KID?</div>
-  </div>
-
-  <div class="question-block" style="border-left-color:#2e7d32;">
-    <div class="q-label" style="color:#2e7d32;">Question 27 — MiFID II Appropriateness: Dated PM Series Complexity Classification — New in v5.2</div>
-    <div class="q-text">Does the introduction of a pre-disclosed Calendar Deleveraging Schedule (multiple scheduled restrike events; deterministic NAV-preserving parameter updates; pre-resolution leverage decay) materially alter the MiFID II complexity / risk classification of the dated PM Series compared to the perpetual PM Series already addressed under Q1–Q3 and Q21 of this Term Sheet?</div>
-    <div class="q-context">Implication: should the dated PM Series be retail-permitted (with appropriateness gate) or professional-only? Our working view is that the dated variant is <em>less</em> complex and <em>lower</em> risk than the perpetual variant (deterministic schedule, declining leverage into terminal, bounded loss) and should not trigger a stricter classification — but counsel input is required. Sub-question: if the dated variant is permitted to retail and the perpetual variant is professional-only, would this dual classification be supportable across the same base prospectus?</div>
-  </div>
-
-  <div class="question-block" style="border-left-color:#2e7d32;">
-    <div class="q-label" style="color:#2e7d32;">Question 28 — ESMA Binary-Options Decision: Revisited for Dated PM Series — New in v5.2</div>
-    <div class="q-text">The dated PM Series differs from the perpetual PM Series addressed under Q21 in one structural way: it has a known Final Resolution Time T*, at which the Reference Price snaps to a binary terminal value (0¢ or 100¢). The payoff during the life of the Series is bounded-but-non-binary (residual value between Barrier and Reference Price prior to T*); at T* the payoff is binary. Does the binary terminal characteristic, in the context of an otherwise bounded-but-non-binary product, change the analysis under ESMA Decision EU 2018/795?</div>
-    <div class="q-context">Specifically: is the 24h-pre-T* deleveraging to 1× sufficient to defuse the binary-at-terminal exposure (the holder enters the binary terminal at spot-equivalent exposure, not leveraged), or does the binary final state import the full ESMA ban? Sub-question: is there a structural difference between (a) a dated PM cert that settles at T* against the venue's terminal probability (0 or 100¢) and (b) a barrier option / digital option that pays at T* conditional on a binary state — and does the difference matter for the ESMA carve-out analysis?</div>
-  </div>
-
-  <div class="question-block" style="border-left-color:#2e7d32;">
-    <div class="q-label" style="color:#2e7d32;">Question 29 — Benchmark Regulation: Polymarket / Kalshi as Reference for Dated TWAP — New in v5.2</div>
-    <div class="q-text">For dated PM Series referencing <strong>Polymarket</strong> (on-chain), the final-settlement and calendar-restrike TWAPs are computed from on-chain price data published by a non-EU, non-regulated venue. For dated PM Series referencing <strong>Kalshi</strong>, the data is from a CFTC-regulated US event-contract exchange. Are either of these Reference Price sources within scope of the EU Benchmarks Regulation when used as the settlement reference for a transferable security distributed to EU retail?</div>
-    <div class="q-context">Sub-questions: (a) does the use of a deterministic TWAP methodology (computed by the issuer or by smart contract, rather than relying on the venue's own published "official" closing price) affect the BMR analysis — i.e., is the issuer creating an unregulated benchmark by computing the TWAP? (b) if the TWAP is computed on-chain by the smart contract, is there a "benchmark administrator" for BMR purposes? (c) does CFTC regulation of Kalshi (or absence thereof for Polymarket) constitute an equivalent regime for the purposes of BMR third-country recognition? Same analytical line as Q11 but with explicit settlement-reference rather than intra-life mark.</div>
-  </div>
-
-  <div class="question-block" style="border-left-color:#2e7d32;">
-    <div class="q-label" style="color:#2e7d32;">Question 30 — Gambling-Law Characterisation: Dated vs. Perpetual PM Cert — New in v5.2</div>
-    <div class="q-text">Section S9 of this Term Sheet flagged a gambling-law risk for the perpetual PM Series (potential dual securities/gambling regulation in DE / AT, the two largest target markets). Does the dated PM variant — with a fixed T* tied directly to the underlying real-world event's resolution and a deterministic terminal payoff structure — produce a materially different gambling-law analysis in DE (GlüStV 2021) and AT (Glücksspielgesetz)?</div>
-    <div class="q-context">Our working hypothesis: the dated variant is <em>closer</em> to a traditional event-linked structured product (compare cat-bonds, weather derivatives) than the perpetual variant, which has fewer TradFi precedents and is more easily framed as a continuous wagering product. If counsel agrees, the dated variant may be the lower-risk pathway into DE and AT and the perpetual variant should be reserved for non-DE/AT distribution. If counsel disagrees, we would want to understand the specific feature(s) of the dated variant that import gambling-law concern — and whether structural adjustments (e.g., minimum subscription size, professional-only distribution in DE/AT) can mitigate.</div>
-  </div>
-
-
-
   <div class="notice" style="margin-top:48px;">
-    <strong>Companion documents:</strong> The full product description (Sections 1–9), Strategic Context questions (S1–S9), Open Legal Questions for Counsel (Q1–Q24), and the Trading Interface annex (Annex A) are contained in <code>ko-cert-primer.html</code>. The dated PM variant and the Calendar Deleveraging mechanic introduced in v5.2 (Q25–Q30, expanded Term Sheet rows, formula F8, worked TRUMP2028 example, smart-contract implementation, hedge-book unwind handling, sequencing recommendation) are documented in full in <code>pm-cert-calendar-deleveraging-supplement.md</code>. This Term Sheet is intended to be read alongside both documents; the three together replace the prior combined primer <code>perpetual-certificate-lawyer-primer.html</code>, which remains available as a single-file master copy.
+    <strong>Companion document:</strong> The full product description (Sections 1–9), the Strategic Context questions, the Open Legal Questions for Counsel, and the Trading Interface annex (Annex A) are contained in <code>ko-cert-primer.html</code>. This Term Sheet is intended to be read alongside that document.
   </div>
 
   <!-- Footer -->
   <div style="margin-top:80px; padding-top:24px; border-top:1px solid #ddd; font-family:'Arial',sans-serif; font-size:12px; color:#888; line-height:1.6;">
     <p>This document is prepared for the purpose of instructing legal counsel and is protected by legal professional privilege. It does not constitute legal advice. All product structures described herein are subject to legal review and regulatory approval prior to implementation. The product described has not yet been approved by any regulatory authority.</p>
-    <p style="margin-top:8px;">Version 5.2 — May 2026. Confidential — not for distribution outside legal counsel engagement.</p>
+    <p style="margin-top:8px;">May 2026. Confidential — not for distribution outside legal counsel engagement.</p>
   </div>
 
 </div>
