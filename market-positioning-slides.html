@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DLT Finance — Market & Product Positioning</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap">
   <style>
     :root {
       /* base — light */
@@ -11,23 +14,47 @@
       --surface: #ffffff;
       --surface2: #f4f6f9;
       --border: #e3e7ee;
-      --text: #1a1d27;
+      --ink: #0E1A22;
+      --text: var(--ink);
       --muted: #5b6577;
 
-      /* brand — darker sage for contrast on white */
-      --brand: #5f9c4a;          /* DLT Finance sage green (dark variant) */
-      --brand-strong: #3e7a2a;
-      --brand-soft: rgba(95, 156, 74, 0.10);
-      --brand-border: rgba(95, 156, 74, 0.32);
-      --brand-accent-light: #b4d3a8;  /* original sage, used in gradients/badges */
+      /* DLT Finance — petrol-navy */
+      --petrol-deep: #062536;
+      --petrol: #0E4A66;
+      --petrol-mid: #11617E;
+      --petrol-grad: linear-gradient(90deg, #062536 0%, #0E4A66 55%, #11617E 100%);
+      --mint: #7BD4C6;
 
-      /* secondary */
+      /* legacy brand-* mapped to petrol so existing components rebrand cleanly */
+      --brand: var(--petrol);
+      --brand-strong: var(--petrol-deep);
+      --brand-soft: rgba(14, 74, 102, 0.08);
+      --brand-border: rgba(14, 74, 102, 0.32);
+      --brand-accent-light: var(--mint);
+
+      /* semantic fills */
       --blue: #3b6cd9;
       --blue-soft: rgba(59, 108, 217, 0.08);
       --blue-border: rgba(59, 108, 217, 0.28);
 
-      --violet: #6b50d9;
-      --amber: #c98b1f;
+      --green: #1f9f6c;
+      --green-soft: rgba(31, 159, 108, 0.08);
+      --green-border: rgba(31, 159, 108, 0.32);
+
+      --yellow: #d4922a;
+      --yellow-soft: rgba(212, 146, 42, 0.12);
+      --yellow-border: rgba(212, 146, 42, 0.45);
+
+      --purple: #6b50d9;
+      --purple-soft: rgba(107, 80, 217, 0.08);
+      --purple-border: rgba(107, 80, 217, 0.32);
+
+      --violet: var(--purple);
+      --amber: var(--yellow);
+
+      /* type */
+      --font-display: 'Helvetica Neue', 'Inter Tight', system-ui, sans-serif;
+      --font-body: 'Inter Tight', 'Helvetica Neue', system-ui, sans-serif;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -35,8 +62,8 @@
     html, body {
       background: #f5f7fa;
       color: var(--text);
-      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-      line-height: 1.55;
+      font-family: var(--font-body);
+      line-height: 1.5;
       -webkit-font-smoothing: antialiased;
     }
 
@@ -53,65 +80,81 @@
     .slide {
       position: relative;
       aspect-ratio: 16 / 9;
-      background:
-        radial-gradient(1100px 600px at 0% 0%, rgba(95, 156, 74, 0.05), transparent 60%),
-        radial-gradient(900px 500px at 100% 100%, rgba(59, 108, 217, 0.04), transparent 60%),
-        #ffffff;
+      background: #ffffff;
       border: 1px solid var(--border);
       border-radius: 18px;
       overflow: hidden;
       box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04);
     }
+    .slide::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 96px;
+      background: var(--petrol-grad);
+      z-index: 0;
+    }
 
     .slide-inner {
       position: absolute;
       inset: 0;
-      padding: 38px 52px;
+      padding: 22px 52px 38px;
       display: flex;
       flex-direction: column;
+      z-index: 1;
     }
 
-    /* ── Slide header ── */
+    /* ── Slide header (sits on the petrol bar) ── */
     .slide-header {
+      position: relative;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 18px;
+      margin-bottom: 22px;
+      min-height: 64px;
     }
     .eyebrow {
+      font-family: var(--font-body);
       font-size: 11px;
       font-weight: 700;
       letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: var(--brand);
+      color: var(--mint);
     }
     .slide-title {
-      font-size: 38px;
+      font-family: var(--font-display);
+      font-size: 34px;
       font-weight: 800;
       letter-spacing: -0.02em;
-      margin-top: 6px;
-      color: var(--text);
+      margin-top: 4px;
+      color: #ffffff;
+      line-height: 1.1;
     }
     .slide-title .accent {
-      background: linear-gradient(135deg, var(--brand-strong) 0%, var(--brand) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: var(--mint);
+      -webkit-text-fill-color: var(--mint);
+      background: none;
     }
 
     .brand-mark {
       display: flex;
       align-items: center;
       gap: 10px;
-      color: var(--text);
+      color: #ffffff;
     }
-    .brand-mark svg { width: 22px; height: 22px; }
+    .brand-mark svg { width: 24px; height: 24px; }
+    .brand-mark svg path {
+      stroke: #ffffff;
+      fill: rgba(255, 255, 255, 0.12);
+    }
     .brand-mark .name {
+      font-family: var(--font-display);
       font-weight: 700;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.06em;
       font-size: 14px;
+      color: #ffffff;
     }
-    .brand-mark .name .light { color: var(--brand); }
+    .brand-mark .name .light { color: var(--mint); }
 
     /* ─────────────────────────────────────────────────────────
        SLIDE 1 — THE MARKET
@@ -120,63 +163,81 @@
     .market-grid {
       flex: 1;
       display: grid;
-      grid-template-columns: 1fr 120px 1fr;
-      gap: 24px;
-      margin-top: 10px;
+      grid-template-rows: 1fr auto 1fr;
+      gap: 10px;
+      margin-top: 4px;
+      min-height: 0;
     }
 
     .col-label {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 16px;
-      text-align: center;
+      margin-bottom: 8px;
     }
 
-    .market-col {
+    .market-row {
       display: flex;
       flex-direction: column;
+      min-height: 0;
     }
+
+    .market-cards {
+      display: grid;
+      gap: 8px;
+      flex: 1;
+      min-height: 0;
+    }
+    .market-cards.state { grid-template-columns: repeat(3, 1fr); }
+    .market-cards.trends { grid-template-columns: repeat(2, 1fr); }
 
     .market-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px 18px;
-      margin-bottom: 12px;
+      border-radius: 10px;
+      padding: 10px 12px;
     }
     .market-card .headline {
-      font-size: 15px;
+      font-size: 12.5px;
       font-weight: 700;
       color: var(--text);
-      margin-bottom: 4px;
-      line-height: 1.35;
+      margin-bottom: 2px;
+      line-height: 1.3;
     }
     .market-card .caption {
-      font-size: 12px;
+      font-size: 10.5px;
       color: var(--muted);
+      line-height: 1.35;
     }
 
-    .market-card.brand {
-      border-left: 3px solid var(--brand);
+    .market-card.brand { border-left: 3px solid var(--brand); }
+    .market-card.blue { border-left: 3px solid var(--blue); }
+    .market-card.yellow {
+      border-left: 3px solid var(--yellow);
+      background: var(--yellow-soft);
     }
-    .market-card.blue {
-      border-left: 3px solid var(--blue);
+    .market-card.yellow .headline { color: var(--ink); }
+    .market-card.yellow .caption {
+      font-weight: 700;
+      color: var(--yellow);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 9.5px;
     }
 
     /* sub-tile row */
     .tile-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 10px;
+      gap: 5px;
+      margin-top: 6px;
     }
     .tile {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 600;
-      padding: 4px 9px;
+      padding: 3px 7px;
       border-radius: 5px;
       background: var(--surface2);
       border: 1px solid var(--border);
@@ -185,47 +246,48 @@
     .tile.b { border-color: var(--blue-border); color: var(--blue); background: var(--blue-soft); }
     .tile.g { border-color: var(--brand-border); color: var(--brand); background: var(--brand-soft); }
 
-    /* center "Leading To" arrow */
+    /* "Leading To" arrow — horizontal, between state & trends */
     .leading-to {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: center;
       justify-content: center;
-      padding-top: 40px;
+      gap: 14px;
+      padding: 2px 0;
     }
     .leading-to .label {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
       letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--brand);
-      margin-bottom: 10px;
     }
-    .leading-to svg { width: 80px; height: 26px; }
+    .leading-to svg { width: 64px; height: 22px; }
 
     /* product category tiles inside trend 3 */
     .cat-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-top: 12px;
+      gap: 5px;
+      margin-top: 6px;
     }
     .cat {
       background: var(--surface2);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 10px;
+      border-radius: 6px;
+      padding: 6px 7px;
     }
     .cat .cat-name {
-      font-size: 12px;
+      font-size: 10.5px;
       font-weight: 700;
       color: var(--brand);
-      margin-bottom: 3px;
+      margin-bottom: 2px;
+      line-height: 1.2;
     }
     .cat .cat-sub {
-      font-size: 10.5px;
+      font-size: 9px;
       color: var(--muted);
-      line-height: 1.4;
+      line-height: 1.3;
     }
 
     /* ─────────────────────────────────────────────────────────
@@ -248,45 +310,109 @@
 
     .wrappers-row {
       display: grid;
-      grid-template-columns: 0.7fr 2fr;
-      gap: 14px;
+      grid-template-columns: 0.55fr 1.7fr 0.75fr;
+      gap: 10px;
       flex: 1;
     }
 
     .panel {
       border-radius: 14px;
-      padding: 18px 18px 16px;
+      padding: 14px 14px 12px;
       display: flex;
       flex-direction: column;
     }
     .panel.micar {
-      background: linear-gradient(180deg, rgba(95, 156, 74, 0.08) 0%, rgba(95, 156, 74, 0.02) 100%);
+      background: linear-gradient(180deg, rgba(14, 74, 102, 0.08) 0%, rgba(14, 74, 102, 0.02) 100%);
       border: 1px solid var(--brand-border);
     }
     .panel.mifid {
       background: linear-gradient(180deg, rgba(59, 108, 217, 0.07) 0%, rgba(59, 108, 217, 0.02) 100%);
       border: 1px solid var(--blue-border);
     }
+    .panel.infra {
+      background: linear-gradient(180deg, rgba(107, 80, 217, 0.07) 0%, rgba(107, 80, 217, 0.02) 100%);
+      border: 1.5px dashed var(--purple-border);
+    }
 
     .panel-title {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
+      gap: 6px;
     }
     .panel-title .badge {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 800;
       letter-spacing: 0.12em;
-      padding: 4px 9px;
+      padding: 4px 8px;
       border-radius: 5px;
     }
     .panel.micar .badge { background: var(--brand); color: #ffffff; }
     .panel.mifid .badge { background: var(--blue); color: #ffffff; }
+    .panel.infra .badge { background: var(--purple); color: #ffffff; }
     .panel-title .hint {
-      font-size: 10.5px;
+      font-size: 10px;
       color: var(--muted);
       letter-spacing: 0.04em;
+      text-align: right;
+    }
+
+    /* Infrastructure / Clearing panel content */
+    .infra-body {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+    .infra-lede {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.35;
+    }
+    .infra-swap {
+      display: flex;
+      align-items: stretch;
+      justify-content: space-between;
+      gap: 6px;
+      background: #ffffff;
+      border: 1px dashed var(--purple-border);
+      border-radius: 8px;
+      padding: 8px 8px;
+    }
+    .infra-side {
+      flex: 1;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--ink);
+      text-align: center;
+      line-height: 1.25;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .infra-side .sub {
+      display: block;
+      font-size: 9px;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-top: 1px;
+    }
+    .infra-arrow {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--purple);
+      align-self: center;
+    }
+    .infra-foot {
+      font-size: 10px;
+      color: var(--muted);
+      font-style: italic;
+      text-align: center;
+      line-height: 1.3;
     }
 
     .product-list {
@@ -823,71 +949,99 @@
 
         <div class="market-grid">
 
-          <!-- LEFT: Market State -->
-          <div class="market-col">
+          <!-- TOP: Market State -->
+          <div class="market-row">
             <div class="col-label">Market State — today</div>
 
-            <div class="market-card brand">
-              <div class="headline">>200 MiCAR licences granted in last 12 months</div>
-              <div class="caption">MiCAR is now a commodity — no longer a moat.</div>
-            </div>
+            <div class="market-cards state">
 
-            <div class="market-card brand">
-              <div class="headline">Crypto spot volumes at 2022 lows</div>
-              <div class="caption">AI boom shifting liquidity away from crypto.</div>
-            </div>
+              <div class="market-card brand">
+                <div class="headline">>200 MiCAR licences granted in last 12 months</div>
+                <div class="caption">MiCAR is now a commodity — no longer a moat.</div>
+              </div>
 
-            <div class="market-card brand">
-              <div class="headline">Crypto actors racing to expand product scope</div>
-              <div class="caption">Strategy to attract and retain capital.</div>
+              <div class="market-card brand">
+                <div class="headline">Crypto spot volumes seeing a temporary dip</div>
+                <div class="caption">AI boom shifting liquidity away from crypto.</div>
+              </div>
+
+              <div class="market-card brand">
+                <div class="headline">Crypto actors racing to expand product scope</div>
+                <div class="caption">Strategy to attract and retain capital.</div>
+              </div>
+
+              <div class="market-card brand">
+                <div class="headline">Crypto going into TradFi infra</div>
+                <div class="caption">On/off-ramps, custody, settlement — meeting TradFi rails.</div>
+              </div>
+
+              <div class="market-card brand">
+                <div class="headline">TradFi &amp; Fintech entering tokenization &amp; structured products</div>
+                <div class="caption">Brokers, banks, fintechs piloting tokenised assets.</div>
+              </div>
+
+              <div class="market-card brand">
+                <div class="headline">Perpification &amp; prediction markets growing fast</div>
+                <div class="caption">New venues, new underlyings, new user behaviour.</div>
+              </div>
+
             </div>
           </div>
 
-          <!-- CENTER: Leading To arrow -->
+          <!-- MIDDLE: Leading To arrow (horizontal, between rows) -->
           <div class="leading-to">
             <div class="label">Leading to</div>
             <svg viewBox="0 0 80 26" fill="none">
-              <line x1="0" y1="13" x2="68" y2="13" stroke="#5f9c4a" stroke-width="2"/>
-              <polygon points="68,5 80,13 68,21" fill="#5f9c4a"/>
+              <line x1="0" y1="13" x2="68" y2="13" stroke="#0E4A66" stroke-width="2"/>
+              <polygon points="68,5 80,13 68,21" fill="#0E4A66"/>
             </svg>
           </div>
 
-          <!-- RIGHT: Market Trends -->
-          <div class="market-col">
+          <!-- BOTTOM: Market Trends -->
+          <div class="market-row">
             <div class="col-label">Market Trends — where it's going</div>
 
-            <div class="market-card blue">
-              <div class="headline">Crypto players going after TradFi securities at speed</div>
-            </div>
+            <div class="market-cards trends">
 
-            <div class="market-card blue">
-              <div class="headline">Expanding into structured securities + new underlyings</div>
-              <div class="tile-row">
-                <span class="tile b">Crypto</span>
-                <span class="tile b">Equities</span>
-                <span class="tile b">Debt</span>
-                <span class="tile b">Precious Metals</span>
-                <span class="tile b">Commodities</span>
-                <span class="tile b">Prediction Markets</span>
+              <div class="market-card blue">
+                <div class="headline">Crypto players going after TradFi securities at speed</div>
               </div>
-            </div>
 
-            <div class="market-card blue">
-              <div class="headline">Rolling out new products at high frequency in few categories</div>
-              <div class="cat-grid">
-                <div class="cat">
-                  <div class="cat-name">Leverage</div>
-                  <div class="cat-sub">Perpetual Futures, Options, Turbos…</div>
-                </div>
-                <div class="cat">
-                  <div class="cat-name">Yield + Downside Protection</div>
-                  <div class="cat-sub">Covered Calls, Shark Fin…</div>
-                </div>
-                <div class="cat">
-                  <div class="cat-name">Delta-1 Security Tokens</div>
-                  <div class="cat-sub">Tokenised equities, ETFs, bonds</div>
+              <div class="market-card blue">
+                <div class="headline">Expanding into structured securities + new underlyings</div>
+                <div class="tile-row">
+                  <span class="tile b">Crypto</span>
+                  <span class="tile b">Equities</span>
+                  <span class="tile b">Debt</span>
+                  <span class="tile b">Precious Metals</span>
+                  <span class="tile b">Commodities</span>
+                  <span class="tile b">Prediction Markets</span>
                 </div>
               </div>
+
+              <div class="market-card blue">
+                <div class="headline">Rolling out new products at high frequency in few categories</div>
+                <div class="cat-grid">
+                  <div class="cat">
+                    <div class="cat-name">Leverage</div>
+                    <div class="cat-sub">Perps, Options, Turbos…</div>
+                  </div>
+                  <div class="cat">
+                    <div class="cat-name">Yield + Downside Protection</div>
+                    <div class="cat-sub">Covered Calls, Shark Fin…</div>
+                  </div>
+                  <div class="cat">
+                    <div class="cat-name">Delta-1 Security Tokens</div>
+                    <div class="cat-sub">Tokenised equities, ETFs, bonds</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="market-card yellow">
+                <div class="headline">Clearing between tokenized assets and CeFi becomes unavoidable</div>
+                <div class="caption">Opportunity · infrastructure still to be built</div>
+              </div>
+
             </div>
           </div>
 
@@ -895,7 +1049,7 @@
 
         <div class="slide-foot">
           <span>Slide 1 · Market View</span>
-          <span>DLT Finance · Confidential</span>
+          <span>2026 | Confidential</span>
         </div>
 
       </div>
@@ -990,6 +1144,31 @@
                 </div>
               </div>
 
+              <!-- INFRASTRUCTURE / CLEARING panel -->
+              <div class="panel infra">
+                <div class="panel-title">
+                  <span class="badge">Infrastructure</span>
+                  <span class="hint">Clearing</span>
+                </div>
+                <div class="infra-body">
+                  <div class="infra-lede">
+                    DLT clears between tokenized and traditional securities.
+                  </div>
+                  <div class="infra-swap">
+                    <div class="infra-side">
+                      Tokenized AAPL
+                      <span class="sub">on-chain</span>
+                    </div>
+                    <div class="infra-arrow">⇄</div>
+                    <div class="infra-side">
+                      Native AAPL
+                      <span class="sub">CSD-settled</span>
+                    </div>
+                  </div>
+                  <div class="infra-foot">Accept one side, deliver the other — and vice versa.</div>
+                </div>
+              </div>
+
             </div>
 
             <!-- Backbone strip -->
@@ -1031,7 +1210,7 @@
 
         <div class="slide-foot">
           <span>Slide 2 · Product Positioning</span>
-          <span>DLT Finance · Confidential</span>
+          <span>2026 | Confidential</span>
         </div>
 
       </div>
@@ -1146,7 +1325,7 @@
 
         <div class="slide-foot">
           <span>Slide 3 · Product Spotlight — Shark Fin</span>
-          <span>DLT Finance · Confidential</span>
+          <span>2026 | Confidential</span>
         </div>
 
       </div>
@@ -1265,7 +1444,7 @@
 
         <div class="slide-foot">
           <span>Slide 4 · Product Spotlight — Principal-Protected Note</span>
-          <span>DLT Finance · Confidential</span>
+          <span>2026 | Confidential</span>
         </div>
 
       </div>
@@ -1368,7 +1547,7 @@
 
         <div class="slide-foot">
           <span>Slide 5 · Post-Acquisition Efficiencies</span>
-          <span>DLT Finance · Confidential</span>
+          <span>2026 | Confidential</span>
         </div>
 
       </div>
