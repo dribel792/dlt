@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DLT Finance — Derivatives Roadmap · Next 12 Months</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --surface: #ffffff;
+      --surface2: #f4f6f9;
+      --border: #e3e7ee;
+      --ink: #0E1A22;
+      --text: var(--ink);
+      --muted: #5b6577;
+
+      --petrol-deep: #062536;
+      --petrol: #0E4A66;
+      --petrol-mid: #11617E;
+      --petrol-grad: linear-gradient(90deg, #062536 0%, #0E4A66 55%, #11617E 100%);
+      --mint: #7BD4C6;
+
+      --brand: var(--petrol);
+      --brand-soft: rgba(14, 74, 102, 0.08);
+      --brand-border: rgba(14, 74, 102, 0.32);
+
+      --blue: #3b6cd9;   --blue-soft: rgba(59,108,217,0.08);   --blue-border: rgba(59,108,217,0.28);
+      --green: #1f9f6c;  --green-soft: rgba(31,159,108,0.08);  --green-border: rgba(31,159,108,0.32);
+      --yellow: #d4922a; --yellow-soft: rgba(212,146,42,0.12); --yellow-border: rgba(212,146,42,0.45);
+      --purple: #6b50d9; --purple-soft: rgba(107,80,217,0.08); --purple-border: rgba(107,80,217,0.32);
+      --red: #c2452f;    --red-soft: rgba(194,69,47,0.08);     --red-border: rgba(194,69,47,0.3);
+
+      --font-display: 'Helvetica Neue', 'Inter Tight', system-ui, sans-serif;
+      --font-body: 'Inter Tight', 'Helvetica Neue', system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      background: #f5f7fa;
+      color: var(--text);
+      font-family: var(--font-body);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .deck { max-width: 1280px; margin: 0 auto; padding: 40px 24px 80px; display: flex; flex-direction: column; gap: 32px; }
+
+    .slide {
+      position: relative; aspect-ratio: 16 / 9; background: #fff;
+      border: 1px solid var(--border); border-radius: 18px; overflow: hidden;
+      box-shadow: 0 12px 32px rgba(15,23,42,0.08), 0 1px 3px rgba(15,23,42,0.04);
+    }
+    .slide::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 92px; background: var(--petrol-grad); z-index: 0; }
+    .slide-inner { position: absolute; inset: 0; padding: 20px 52px 40px; display: flex; flex-direction: column; z-index: 1; }
+
+    .slide-header { position: relative; display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; min-height: 60px; }
+    .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--mint); }
+    .slide-title { font-family: var(--font-display); font-size: 32px; font-weight: 800; letter-spacing: -0.02em; margin-top: 4px; color: #fff; line-height: 1.1; }
+    .slide-title .accent { color: var(--mint); }
+
+    .brand-mark { display: flex; align-items: center; gap: 10px; color: #fff; }
+    .brand-mark svg { width: 24px; height: 24px; }
+    .brand-mark .name { font-family: var(--font-display); font-weight: 700; letter-spacing: 0.06em; font-size: 14px; color: #fff; }
+    .brand-mark .name .light { color: var(--mint); }
+
+    .slide-foot { position: absolute; bottom: 14px; left: 52px; right: 52px; display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); letter-spacing: 0.14em; text-transform: uppercase; }
+
+    .body { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+
+    /* ── Title slide ── */
+    .title-slide .slide-inner { justify-content: center; }
+    .title-slide::before { height: 100%; }
+    .title-wrap { z-index: 2; color: #fff; }
+    .title-wrap .kicker { font-size: 13px; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; color: var(--mint); margin-bottom: 18px; }
+    .title-wrap h1 { font-family: var(--font-display); font-size: 56px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.04; margin-bottom: 20px; }
+    .title-wrap h1 .accent { color: var(--mint); }
+    .title-wrap p { font-size: 18px; color: rgba(255,255,255,0.78); max-width: 760px; }
+    .title-meta { margin-top: 36px; display: flex; gap: 28px; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.6); }
+    .title-meta b { color: var(--mint); font-weight: 700; }
+
+    /* ── generic helpers ── */
+    .lead { font-size: 15px; color: var(--muted); margin-bottom: 16px; max-width: 920px; }
+
+    /* client overview grid */
+    .clients { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; flex: 1; min-height: 0; }
+    .client-card { border: 1px solid var(--border); border-radius: 12px; padding: 16px 16px 14px; display: flex; flex-direction: column; background: var(--surface); }
+    .client-card .cname { font-family: var(--font-display); font-size: 19px; font-weight: 800; margin-bottom: 2px; }
+    .client-card .ctag { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--petrol); margin-bottom: 12px; }
+    .client-card.b2 { border-top: 3px solid var(--blue); }
+    .client-card.vc { border-top: 3px solid var(--purple); }
+    .client-card.px { border-top: 3px solid var(--green); }
+    .client-card ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .client-card li { font-size: 13px; padding-left: 16px; position: relative; color: var(--text); }
+    .client-card li::before { content: '▸'; position: absolute; left: 0; color: var(--petrol); font-size: 11px; top: 1px; }
+    .client-card li b { font-weight: 700; }
+    .pill { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 7px; border-radius: 5px; }
+    .pill.now { background: var(--green-soft); color: var(--green); border: 1px solid var(--green-border); }
+    .pill.next { background: var(--blue-soft); color: var(--blue); border: 1px solid var(--blue-border); }
+    .pill.later { background: var(--yellow-soft); color: var(--yellow); border: 1px solid var(--yellow-border); }
+
+    /* deep-dive layout */
+    .dive { display: grid; grid-template-columns: 1.1fr 1fr; gap: 20px; flex: 1; min-height: 0; }
+    .dive-col h3 { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+    .dive ul { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+    .dive li { font-size: 14.5px; padding-left: 20px; position: relative; }
+    .dive li::before { content: ''; position: absolute; left: 0; top: 8px; width: 7px; height: 7px; border-radius: 2px; background: var(--petrol); }
+    .dive li b { font-weight: 700; }
+    .callout { background: var(--surface2); border: 1px solid var(--border); border-left: 4px solid var(--petrol); border-radius: 10px; padding: 16px 18px; }
+    .callout.warn { border-left-color: var(--red); }
+    .callout .clbl { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--petrol); margin-bottom: 8px; }
+    .callout.warn .clbl { color: var(--red); }
+    .callout p { font-size: 14px; color: var(--text); }
+    .callout p + p { margin-top: 10px; }
+    .needs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .need { font-size: 12px; font-weight: 600; padding: 6px 11px; border-radius: 7px; background: var(--brand-soft); color: var(--petrol); border: 1px solid var(--brand-border); }
+
+    /* matrix table */
+    table.matrix { width: 100%; border-collapse: collapse; flex: 1; }
+    table.matrix th, table.matrix td { text-align: center; padding: 9px 8px; font-size: 13px; border-bottom: 1px solid var(--border); }
+    table.matrix th { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+    table.matrix td.cap { text-align: left; font-weight: 600; font-size: 13.5px; }
+    table.matrix td.cap span { display: block; font-size: 11px; font-weight: 400; color: var(--muted); }
+    .yes { color: var(--green); font-weight: 800; }
+    .soon { color: var(--yellow); font-weight: 800; }
+    .dot-no { color: var(--border); }
+    .verdict { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 3px 8px; border-radius: 5px; }
+    .v-build { background: var(--green-soft); color: var(--green); border: 1px solid var(--green-border); }
+    .v-buy { background: var(--blue-soft); color: var(--blue); border: 1px solid var(--blue-border); }
+    .v-hybrid { background: var(--purple-soft); color: var(--purple); border: 1px solid var(--purple-border); }
+
+    /* conclusion bets */
+    .bets { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; flex: 1; min-height: 0; }
+    .bet { border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; }
+    .bet .rank { font-family: var(--font-display); font-size: 13px; font-weight: 800; color: #fff; background: var(--petrol); width: 26px; height: 26px; border-radius: 7px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
+    .bet h4 { font-family: var(--font-display); font-size: 17px; font-weight: 800; margin-bottom: 6px; }
+    .bet p { font-size: 13px; color: var(--muted); }
+    .bet .why { margin-top: auto; padding-top: 10px; font-size: 12px; color: var(--petrol); font-weight: 600; }
+    .bet.keystone { border: 1px solid var(--brand-border); background: var(--brand-soft); }
+    .bet.keystone .rank { background: var(--mint); color: var(--petrol-deep); }
+
+    /* roadmap timeline */
+    .phases { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; flex: 1; min-height: 0; }
+    .phase { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+    .phase .ph-head { padding: 12px 16px; color: #fff; }
+    .phase.p1 .ph-head { background: var(--petrol); }
+    .phase.p2 .ph-head { background: var(--petrol-mid); }
+    .phase.p3 .ph-head { background: #2a7a92; }
+    .phase .ph-head .when { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.85; }
+    .phase .ph-head .what { font-family: var(--font-display); font-size: 17px; font-weight: 800; margin-top: 2px; }
+    .phase .ph-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 9px; }
+    .phase .ph-body .goal { font-size: 12px; font-style: italic; color: var(--muted); margin-bottom: 4px; }
+    .phase ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+    .phase li { font-size: 12.5px; padding-left: 16px; position: relative; }
+    .phase li::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-weight: 800; font-size: 11px; }
+    .phase .unlocks { margin-top: auto; padding-top: 10px; font-size: 11px; color: var(--petrol); font-weight: 600; }
+
+    /* open questions */
+    .qgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px 22px; flex: 1; min-height: 0; align-content: start; }
+    .q { display: flex; gap: 12px; align-items: flex-start; }
+    .q .qn { font-family: var(--font-display); font-weight: 800; color: var(--mint); background: var(--petrol); width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
+    .q .qt b { font-size: 14px; font-weight: 700; }
+    .q .qt p { font-size: 12.5px; color: var(--muted); }
+
+    @media print {
+      html, body { background: #fff; }
+      .deck { gap: 0; padding: 0; }
+      .slide { box-shadow: none; border-radius: 0; page-break-after: always; border: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck">
+
+    <!-- ─────────── SLIDE 1 — TITLE ─────────── -->
+    <section class="slide title-slide">
+      <div class="slide-inner">
+        <div class="title-wrap">
+          <div class="kicker">Derivatives Engineering · Internal Roadmap</div>
+          <h1>Products &amp; Clients —<br>the next <span class="accent">12 months</span></h1>
+          <p>Three live client opportunities, what each one pulls from our stack, and the build/buy decisions that follow. The goal of this deck: agree on <b>what we build first</b> and why.</p>
+          <div class="title-meta">
+            <span>Clients · <b>Bit2Me · Vancelian · Phemex</b></span>
+            <span>Decision · <b>Build vs Buy</b></span>
+            <span>Horizon · <b>12 months</b></span>
+          </div>
+        </div>
+        <div class="brand-mark" style="position:absolute; top:28px; right:52px;">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#7BD4C6" stroke-width="1.6" fill="rgba(123,212,198,0.12)"/></svg>
+          <div class="name">DLT <span class="light">Finance</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── SLIDE 2 — CLIENTS AT A GLANCE ─────────── -->
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div><div class="eyebrow">The Demand</div><h1 class="slide-title">Three clients, <span class="accent">one trajectory</span></h1></div>
+          <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,0.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
+        </div>
+        <div class="body">
+          <p class="lead">Different starting points, but the same arc: <b>crypto perps now → equity perps next → structured products later.</b> Every one of them wants both asset classes in one place, and every one of them eventually wants options-based payoffs.</p>
+          <div class="clients">
+            <div class="client-card b2">
+              <div class="cname">Bit2Me</div>
+              <div class="ctag">Spanish exchange · retail + pro</div>
+              <ul>
+                <li><span class="pill now">Now</span> &nbsp;Crypto derivatives</li>
+                <li><span class="pill next">Next</span> &nbsp;Fast expansion into <b>equity derivatives</b></li>
+                <li>Liquidity <b>sourced from multiple venues</b> — needs aggregation</li>
+                <li><span class="pill later">Later</span> &nbsp;Structured option strategies — <b>covered calls, shark fin</b></li>
+              </ul>
+            </div>
+            <div class="client-card vc">
+              <div class="cname">Vancelian</div>
+              <div class="ctag">Via d2x · MiFID MTF intro</div>
+              <ul>
+                <li><span class="pill now">Now</span> &nbsp;<b>Equity perps</b>, EUR/USD collateral &amp; settlement</li>
+                <li>Crypto perps — same collateral/settlement currency</li>
+                <li><b>No subaccount structure</b> from d2x → <b>we must own the risk engine</b></li>
+                <li><span class="pill next">Next</span> &nbsp;Yield / downside-protection option strategies</li>
+              </ul>
+            </div>
+            <div class="client-card px">
+              <div class="cname">Phemex</div>
+              <div class="ctag">Established crypto exchange</div>
+              <ul>
+                <li><span class="pill now">Now</span> &nbsp;Crypto <b>and</b> equity perps</li>
+                <li><span class="pill next">Next</span> &nbsp;Structured products</li>
+                <li>Wants breadth — a single venue for both asset classes</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>DLT Finance · Derivatives Roadmap</span><span>02 / 09</span></div>
+      </div>
+    </section>
+
+    <!-- ─────────── SLIDE 3 — USE CASE 1: BIT2ME ─────────── -->
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div><div class="eyebrow">Use Case 01</div><h1 class="slide-title">Bit2Me — <span class="accent">breadth &amp; liquidity</span></h1></div>
+          <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,0.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
+        </div>
+        <div class="body">
+          <div class="dive">
+            <div class="dive-col">
+              <h3>What they want</h3>
+              <ul>
+                <li><b>Crypto derivatives at launch</b> — the immediate, proven demand.</li>
+                <li><b>Rapid expansion into equity derivatives</b> — they don't see crypto and equities as separate businesses.</li>
+                <li>Liquidity is <b>sourced from several different venues</b> — they need us to aggregate and route, not just connect a single book.</li>
+                <li>Later stage: <b>structured option strategies</b> — covered calls (yield) and shark fin (capped upside, protected downside).</li>
+              </ul>
+            </div>
+            <div class="dive-col">
+              <h3>What it means for us</h3>
+              <div class="callout">
+                <div class="clbl">Read-through</div>
+                <p>Bit2Me is the clearest case for a <b>liquidity aggregation + smart order routing</b> layer across heterogeneous sources, and for treating <b>equity delta-1</b> as a first-class product alongside crypto.</p>
+                <p>The structured-product ask is real but <b>later</b> — it should not pull engineering focus from the equity-rails work that unblocks revenue first.</p>
+              </div>
+              <div class="needs">
+                <span class="need">Liquidity aggregation / SOR</span>
+                <span class="need">Equity delta-1 trading</span>
+                <span class="need">Structured products (later)</span>
+                <span class="need">Pricing engine (later)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>DLT Finance · Derivatives Roadmap</span><span>03 / 09</span></div>
+      </div>
+    </section>
+
+    <!-- ─────────── SLIDE 4 — USE CASE 2: VANCELIAN ─────────── -->
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div><div class="eyebrow">Use Case 02</div><h1 class="slide-title">Vancelian — <span class="accent">the risk-engine forcing function</span></h1></div>
+          <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,0.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
+        </div>
+        <div class="body">
+          <div class="dive">
+            <div class="dive-col">
+              <h3>What they want</h3>
+              <ul>
+                <li>Primarily <b>equity perps</b> with <b>EUR/USD as both collateral and settlement currency</b>.</li>
+                <li>Also crypto perps — <b>same</b> collateral and settlement currency (one wallet, two asset classes).</li>
+                <li>Intro came via <b>d2x</b>, a MiFID-regulated MTF, who expect flow routed to them.</li>
+                <li>Strong interest in <b>yield and downside-protection</b> option strategies.</li>
+              </ul>
+            </div>
+            <div class="dive-col">
+              <h3>The blocker</h3>
+              <div class="callout warn">
+                <div class="clbl">Why this is decisive</div>
+                <p>d2x <b>does not offer subaccount structures.</b> That means we cannot lean on the venue to segregate and risk-manage client positions — <b>we have to bring our own risk engine.</b></p>
+                <p>The same engine that solves d2x also delivers the thing all three clients want: <b>one cross-margined account spanning equity and crypto perps</b>, in a single collateral currency.</p>
+              </div>
+              <div class="needs">
+                <span class="need">Risk engine (own)</span>
+                <span class="need">Cross-margin equity + crypto</span>
+                <span class="need">Multi-currency collateral (EUR/USD)</span>
+                <span class="need">Option strategies</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>DLT Finance · Derivatives Roadmap</span><span>04 / 09</span></div>
+      </div>
+    </section>
+
+    <!-- ─────────── SLIDE 5 — USE CASE 3: PHEMEX ─────────── -->
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div><div class="eyebrow">Use Case 03</div><h1 class="slide-title">Phemex — <span class="accent">confirms the pattern</span></h1></div>
+          <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,0.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
+        </div>
+        <div class="body">
+          <div class="dive">
+            <div class="dive-col">
+              <h3>What they want</h3>
+              <ul>
+                <li><b>Crypto and equity perps</b> — both asset classes, from the start.</li>
+                <li><b>Structured products</b> as a growth line.</li>
+                <li>An established crypto venue looking to broaden into equities and yield without rebuilding their core.</li>
+              </ul>
+            </div>
+            <div class="dive-col">
+              <h3>What it means for us</h3>
+              <div class="callout">
+                <div class="clbl">Read-through</div>
+                <p>Phemex adds <b>no net-new requirement</b> — it stacks demand on exactly the three capabilities the others already point to: <b>unified equity + crypto perps, structured products, and the pricing/reporting to support them.</b></p>
+                <p>That convergence is the signal: we are not building bespoke features per client, we are building <b>one platform</b> three clients consume.</p>
+              </div>
+              <div class="needs">
+                <span class="need">Equity + crypto perps</span>
+                <span class="need">Structured products</span>
+                <span class="need">Pricing engine</span>
+                <span class="need">Nexus reporting</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>DLT Finance · Derivatives Roadmap</span><span>05 / 09</span></div>
+      </div>
+    </section>
+
+    <!-- ─────────── SLIDE 6 — DEMAND → CAPABILITY MATRIX ─────────── -->
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div><div class="eyebrow">Synthesis</div><h1 class="slide-title">Demand maps to <span class="accent">eight capabilities</span></h1></div>
+          <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,0.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
+        </div>
+        <div class="body">
+          <p class="lead">Where the three use cases overlap is where we should invest. <span class="yes">●</span> = needed now &nbsp;·&nbsp; <span class="soon">●</span> = needed later.</p>
+          <table class="matrix">
+            <thead>
+              <tr><th style="width:38%">Capability</th><th>Bit2Me</th><th>Vancelian</th><th>Phemex</th><th style="width:16%">Verdict</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="cap">Risk engine <span>cross-margin, our own (solves d2x)</span></td><td class="yes">●</td><td class="yes">●</td><td class="yes">●</td><td><span class="verdict v-build">Build</span></td></tr>
+              <tr><td class="cap">Unified equity + crypto perp account <span>one collateral currency</span></td><td class="yes">●</td><td class="yes">●</td><td class="yes">●</td><td><span class="verdict v-build">Build</span></td></tr>
+              <tr><td class="cap">Delta-1 / tokenized equity trading <span>e.g. tokenized Apple share</span></td><td class="yes">●</td><td class="yes">●</td><td class="yes">●</td><td><span class="verdict v-build">Build</span></td></tr>
+              <tr><td class="cap">Nexus — post-trade &amp; reporting <span>delta-1 + structured products, MiFID</span></td><td class="yes">●</td><td class="yes">●</td><td class="yes">●</td><td><span class="verdict v-build">Build</span></td></tr>
+              <tr><td class="cap">Liquidity aggregation / smart routing <span>multiple sources</span></td><td class="yes">●</td><td class="soon">●</td><td class="soon">●</td><td><span class="verdict v-hybrid">Hybrid</span></td></tr>
+              <tr><td class="cap">Order management &amp; complex fees <span>per-tenant fee schedules</span></td><td class="yes">●</td><td class="yes">●</td><td class="yes">●</td><td><span class="verdict v-build">Build</span></td></tr>
+              <tr><td class="cap">Structured-product pricing engine <span>options, exotics</span></td><td class="soon">●</td><td class="soon">●</td><td class="soon">●</td><td><span class="verdict v-buy">Buy / Integrate</span></td></tr>
+              <tr><td class="cap">Option strategy lifecycle <span>covered call, shark fin, PPN</span></td><td class="soon">●</td><td class="soon">●</td><td class="soon">●</td><td><span class="verdict v-hybrid">Hybrid</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="slide-foot"><span>DLT Finance · Derivatives Roadmap</span><span>06 / 09</span></div>
+      </div>
+    </section>
+
+    <!-- ─────────── SLIDE 7 — CONCLUSION: WHAT WE BUILD ─────────── -->
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div><div class="eyebrow">Conclusion</div><h1 class="slide-title">What we <span class="accent">build</span> — and what we buy</h1></div>
+          <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,0.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
+        </div>
+        <div class="body">
+          <div class="bets">
+            <div class="bet keystone">
+              <div class="rank">1</div>
+              <h4>Risk Engine — the keystone</h4>
+              <p>Our own cross-margin risk engine, spanning equity + crypto perps in one collateral currency. <b>Build, with a licensed margin/VaR library to accelerate.</b></p>
+              <div class="why">Appears in every client's blocker list · turns the d2x subaccount gap into owned infrastructure</div>
+            </div>
+            <div class="bet">
+              <div class="rank">2</div>
+              <h4>Equity Delta-1 + Nexus</h4>
+              <p>Tokenized-equity trading engine plus Nexus for post-trade, settlement and MiFID/EMIR reporting. <b>Build.</b></p>
+              <div class="why">Unlocks the equity expansion all three clients are heading toward</div>
+            </div>
+            <div class="bet">
+              <div class="rank">3</div>
+              <h4>OMS &amp; fee engine + liquidity routing</h4>
+              <p>Multi-tenant order management, flexible fee schedules, and aggregation across liquidity sources. <b>Build core, integrate connectors.</b></p>
+              <div class="why">Table stakes · Bit2Me's multi-source liquidity makes routing non-optional</div>
+            </div>
+            <div class="bet">
+              <div class="rank">4</div>
+              <h4>Structured products</h4>
+              <p>Pricing engine + option-strategy lifecycle (covered call, shark fin, PPN), reported through Nexus. <b>Buy/integrate the pricer, build the wrapper.</b></p>
+              <div class="why">High-margin upsell · everyone wants it, but it's Phase 3 — don't build the pricer from scratch</div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>DLT Finance · Derivatives Roadmap</span><span>07 / 09</span></div>
+      </div>
+    </section>
+
+    <!-- ─────────── SLIDE 8 — 12-MONTH SEQUENCING ─────────── -->
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div><div class="eyebrow">Roadmap</div><h1 class="slide-title">Sequencing the <span class="accent">12 months</span></h1></div>
+          <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,0.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
+        </div>
+        <div class="body">
+          <div class="phases">
+            <div class="phase p1">
+              <div class="ph-head"><div class="when">Phase 1 · Months 0–4</div><div class="what">Foundation</div></div>
+              <div class="ph-body">
+                <div class="goal">Own the risk; go live on crypto + the d2x route.</div>
+                <ul>
+                  <li>Cross-margin risk engine</li>
+                  <li>Unified equity+crypto account</li>
+                  <li>Multi-currency collateral (EUR/USD)</li>
+                  <li>OMS + fee engine v1</li>
+                </ul>
+                <div class="unlocks">Unblocks: Bit2Me crypto · Vancelian / d2x</div>
+              </div>
+            </div>
+            <div class="phase p2">
+              <div class="ph-head"><div class="when">Phase 2 · Months 4–8</div><div class="what">Equity Rails</div></div>
+              <div class="ph-body">
+                <div class="goal">Make equities a first-class product.</div>
+                <ul>
+                  <li>Equity perps + delta-1 trading</li>
+                  <li>Tokenized-equity settlement</li>
+                  <li>Corporate actions handling</li>
+                  <li>Nexus post-trade + MiFID/EMIR reporting</li>
+                  <li>Liquidity aggregation / SOR</li>
+                </ul>
+                <div class="unlocks">Unblocks: equity expansion across all three</div>
+              </div>
+            </div>
+            <div class="phase p3">
+              <div class="ph-head"><div class="when">Phase 3 · Months 8–12</div><div class="what">Structured Products</div></div>
+              <div class="ph-body">
+                <div class="goal">Monetize the upsell everyone flagged.</div>
+                <ul>
+                  <li>Pricing engine (integrated)</li>
+                  <li>Covered call, shark fin, PPN</li>
+                  <li>Strategy lifecycle management</li>
+                  <li>Nexus reporting for structured</li>
+                </ul>
+                <div class="unlocks">Unblocks: high-margin yield/protection lines</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>DLT Finance · Derivatives Roadmap</span><span>08 / 09</span></div>
+      </div>
+    </section>
+
+    <!-- ─────────── SLIDE 9 — OPEN QUESTION TO THE ROUND ─────────── -->
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div><div class="eyebrow">Open Question</div><h1 class="slide-title">What else would <span class="accent">sharpen the offer?</span></h1></div>
+          <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,0.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
+        </div>
+        <div class="body">
+          <p class="lead">Beyond the must-builds — candidates that would meaningfully widen the moat. Flagging for the team to prioritise.</p>
+          <div class="qgrid">
+            <div class="q"><div class="qn">1</div><div class="qt"><b>Funding-rate engine for equity perps</b><p>Funding that reflects equity carry — borrow cost &amp; dividends — not just a crypto-style basis.</p></div></div>
+            <div class="q"><div class="qn">2</div><div class="qt"><b>Corporate-actions service</b><p>Dividends, splits, mergers on tokenized equity. Easy to forget, breaks delta-1 if missing.</p></div></div>
+            <div class="q"><div class="qn">3</div><div class="qt"><b>Liquidation engine + insurance fund</b><p>Auto-deleveraging and a backstop fund — required once we own the risk.</p></div></div>
+            <div class="q"><div class="qn">4</div><div class="qt"><b>Cross-currency margining</b><p>EUR collateral against USD-denominated risk, with FX haircuts.</p></div></div>
+            <div class="q"><div class="qn">5</div><div class="qt"><b>White-label / multi-tenant config</b><p>Per-client risk, fee and product params — these are all B2B2X partners.</p></div></div>
+            <div class="q"><div class="qn">6</div><div class="qt"><b>Real-time risk dashboard + kill switch</b><p>Live exposure view and a hard stop the partner desk can trust.</p></div></div>
+            <div class="q"><div class="qn">7</div><div class="qt"><b>Institutional connectivity (FIX / API)</b><p>Low-latency access for routed flow — especially the d2x relationship.</p></div></div>
+            <div class="q"><div class="qn">8</div><div class="qt"><b>Best-execution &amp; transaction reporting</b><p>MiFIR/EMIR obligations baked into Nexus from day one, not bolted on.</p></div></div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>DLT Finance · Derivatives Roadmap</span><span>09 / 09</span></div>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>
