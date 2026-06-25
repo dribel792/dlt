@@ -24,9 +24,6 @@ In short: **we keep the API, Uphold keeps the balance sheet and the back office*
 3. **Risk moves with it.**
    Counterparty risk, credit risk, and settlement risk on spot become **Uphold's** risk. DLT's risk engine stops modelling spot exposure entirely and focuses only on the internal derivatives/structured books (Part B, Team 2). This is the single biggest reduction in our risk surface.
 
-4. **KYC/AML and spot post-trade reporting follow the flow.**
-   Where Uphold is the executing/settling entity, the spot-side regulatory reporting and AML monitoring sit with Uphold's regime. Our compliance focus narrows to the MiFID products we actually issue.
-
 ### What we must nail down with Uphold (open items to elaborate)
 
 - **Regulatory boundary / who is the executing entity.** Is DLT acting as agent/introducer routing to Uphold (Uphold is principal), or is this white-label where DLT remains the regulated face? This determines licensing, best-execution obligations, and who owns the client relationship of record. **This is the first decision — everything else hangs off it.**
@@ -61,8 +58,8 @@ In short: **we keep the API, Uphold keeps the balance sheet and the back office*
 - 4–5 eng (quant-leaning) + QA + PM.
 
 ### Team 3 — API / Platform
-- **Owns:** the client-facing API surface — the one thing clients integrate against. This includes the **spot pass-through/adapter layer to Uphold** (Part A) plus the derivatives/structured endpoints. Owns auth, rate limits, versioning, SDKs, sandbox, docs, and the unified reporting feed (spot-from-Uphold + our derivatives data in one view).
-- **Why central:** "we keep the API" is the whole strategy for spot. This team is what makes the offload invisible to clients.
+- **Owns:** the MiFID client-facing API surface — the derivatives & structured-product endpoints clients integrate against. Auth, rate limits, versioning, SDKs, sandbox, docs, and the reporting feed for our MiFID instruments.
+- **Why central:** owning the API *is* the MiFID strategy. We are the integration and distribution layer for derivatives and structured products — the API is the product clients build on, and whoever owns it owns the relationship. This is not a spot function; it is the front door to everything in the MiFID box.
 - 4–5 eng + QA + PM.
 
 ### Team 4 — New Products (Financial Engineering + Legal)
@@ -84,10 +81,9 @@ In short: **we keep the API, Uphold keeps the balance sheet and the back office*
 |---|---|---|
 | **Spot trading** | Keep our endpoints, forward to Uphold | **Uphold** |
 | **Spot settlement & risk** | Offload entirely | **Uphold** |
-| **Spot KYC/AML & reporting** | Follows the flow | **Uphold** |
 | **Derivatives/structured post-trade & reporting** | Build & own — moat | **Team 1 (DLT)** |
 | **Risk engine (internal books)** | Build & own — moat | **Team 2 (DLT)** |
-| **Client API (incl. Uphold pass-through)** | Build & own | **Team 3 (DLT)** |
+| **MiFID client API (derivatives & structured)** | Build & own — distribution moat | **Team 3 (DLT)** |
 | **New MiFID products + PRIIPs/legal** | Build & own — velocity | **Team 4 + Legal (DLT)** |
 
 **Headcount ask:** 4 teams × (4–5 eng + 1 QA + 1 PM) ≈ **24–28 product/tech**, plus **financial engineers/quants in Team 4**, plus **1–2 internal legal + external legal retainer**. The deliberate trade: we shed everything spot to Uphold and reinvest that headcount + capital into being the best derivatives/structured-product engine in the MiCAR+MiFID world.
