@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Anduin — Perpetual KO Certificate · Lawyer Priming Workshop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #141720;
+    --surface2: #1c2030;
+    --border: #2a2f42;
+    --accent: #4f8ef7;
+    --accent2: #7c3aed;
+    --green: #22c55e;
+    --red: #ef4444;
+    --yellow: #f59e0b;
+    --text: #e8eaf0;
+    --muted: #7a829a;
+    --label: #a0a8bc;
+    --mono: 'JetBrains Mono','Fira Code',monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter',-apple-system,BlinkMacSystemFont,sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.6; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(13,15,20,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; height: 56px; }
+  nav .logo { font-weight: 800; font-size: 1rem; color: var(--text); letter-spacing: .02em; }
+  nav .logo span { color: var(--accent2); }
+  nav .nav-meta { color: var(--muted); font-size: .78rem; letter-spacing: .04em; }
+
+  .slides { padding-top: 56px; }
+  .slide { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 4.5rem 6vw; border-bottom: 1px solid var(--border); position: relative; }
+  .slide-number { position: absolute; top: 4.5rem; right: 6vw; font-size: .75rem; color: var(--muted); letter-spacing: .1em; }
+  .slide-tag { font-size: .7rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: .75rem; }
+
+  h1 { font-size: clamp(2rem,4vw,3.2rem); font-weight: 900; line-height: 1.12; letter-spacing: -.01em; }
+  h2 { font-size: clamp(1.4rem,3vw,2.1rem); font-weight: 800; line-height: 1.18; margin-bottom: 1.1rem; }
+  h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: .5rem; color: var(--text); }
+  .subtitle { font-size: clamp(1rem,2vw,1.2rem); color: var(--muted); margin-top: 1rem; max-width: 720px; }
+
+  .kicker { display: inline-block; font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; background: rgba(79,142,247,.12); color: var(--accent); border: 1px solid rgba(79,142,247,.25); border-radius: 4px; padding: .2rem .6rem; margin-bottom: 1rem; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 1.5rem; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; margin-top: 1.5rem; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin-top: 1.5rem; }
+  @media (max-width: 900px){ .grid-2,.grid-3,.grid-4 { grid-template-columns: 1fr; } }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem 1.35rem; }
+  .card.accent-border { border-color: var(--accent); }
+  .card.green-border { border-color: var(--green); }
+  .card.red-border { border-color: var(--red); }
+  .card.yellow-border { border-color: var(--yellow); }
+  .card .card-icon { font-size: 1.5rem; margin-bottom: .5rem; }
+  .card h3 { font-size: .98rem; }
+  .card p { color: var(--muted); font-size: .86rem; line-height: 1.55; margin-top: .35rem; }
+  .card .q { font-family: var(--mono); font-size: .72rem; color: var(--accent); }
+
+  table { width: 100%; border-collapse: collapse; margin-top: 1.25rem; font-size: .88rem; }
+  th { text-align: left; padding: .65rem .9rem; background: var(--surface2); color: var(--label); font-size: .72rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+  td { padding: .65rem .9rem; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  .tag-green { color: var(--green); font-weight: 600; }
+  .tag-red { color: var(--red); font-weight: 600; }
+  .tag-yellow { color: var(--yellow); font-weight: 600; }
+  .tag-blue { color: var(--accent); font-weight: 600; }
+
+  .formula { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; font-family: var(--mono); font-size: .9rem; color: var(--accent); margin: 1rem 0; }
+  .formula .comment { color: var(--muted); font-size: .8rem; }
+
+  .callout { border-left: 3px solid var(--accent); background: rgba(79,142,247,.06); border-radius: 0 8px 8px 0; padding: .9rem 1.2rem; margin: 1.1rem 0; }
+  .callout.warn { border-color: var(--yellow); background: rgba(245,158,11,.06); }
+  .callout.danger { border-color: var(--red); background: rgba(239,68,68,.07); }
+  .callout p { color: var(--label); font-size: .9rem; margin: 0; }
+  .callout strong { color: var(--text); }
+
+  .vs-row { display: flex; gap: 1rem; align-items: stretch; margin-top: 1.5rem; }
+  @media (max-width: 900px){ .vs-row { flex-direction: column; } }
+  .vs-col { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.35rem; }
+  .vs-col.left { border-top: 3px solid var(--green); }
+  .vs-col.right { border-top: 3px solid var(--accent2); }
+  .vs-col h3 { font-size: 1rem; margin-bottom: 1rem; color: var(--label); }
+  .vs-col ul { list-style: none; display: flex; flex-direction: column; gap: .55rem; }
+  .vs-col ul li { font-size: .86rem; color: var(--muted); display: flex; gap: .55rem; }
+  .vs-col.left ul li::before { content: '='; color: var(--green); flex-shrink: 0; font-weight: 700; }
+  .vs-col.right ul li::before { content: '+'; color: var(--accent2); flex-shrink: 0; font-weight: 700; }
+
+  .pill { display: inline-block; border-radius: 999px; padding: .15rem .6rem; font-size: .7rem; font-weight: 700; letter-spacing: .04em; }
+  .pill-green { background: rgba(34,197,94,.15); color: var(--green); }
+  .pill-red { background: rgba(239,68,68,.15); color: var(--red); }
+  .pill-blue { background: rgba(79,142,247,.15); color: var(--accent); }
+  .pill-purple { background: rgba(124,58,237,.15); color: #a78bfa; }
+  .pill-yellow { background: rgba(245,158,11,.15); color: var(--yellow); }
+
+  .checklist { list-style: none; margin-top: 1.25rem; display: grid; grid-template-columns: 1fr 1fr; gap: .55rem 2rem; }
+  @media (max-width: 900px){ .checklist { grid-template-columns: 1fr; } }
+  .checklist li { display: flex; gap: .7rem; font-size: .9rem; color: var(--label); align-items: flex-start; padding: .35rem 0; }
+  .checklist li .box { width: 18px; height: 18px; border: 1.5px solid var(--muted); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+  .checklist li b { color: var(--text); font-weight: 600; }
+  .checklist li small { color: var(--muted); }
+
+  .slide-hero { background: radial-gradient(ellipse at 65% 35%, rgba(124,58,237,.12) 0%, transparent 60%), radial-gradient(ellipse at 15% 85%, rgba(79,142,247,.08) 0%, transparent 55%); }
+  footer { padding: 2rem 6vw; text-align: center; color: var(--muted); font-size: .8rem; border-top: 1px solid var(--border); }
+
+  .agenda-list { list-style: none; margin-top: 1.5rem; }
+  .agenda-list li { display: flex; gap: 1.25rem; padding: .7rem 0; border-bottom: 1px solid var(--border); align-items: baseline; }
+  .agenda-list li:last-child { border-bottom: none; }
+  .agenda-list .t { font-family: var(--mono); font-size: .82rem; color: var(--accent); width: 110px; flex-shrink: 0; }
+  .agenda-list .d { color: var(--text); font-size: .95rem; }
+  .agenda-list .d small { color: var(--muted); display: block; font-size: .8rem; }
+
+  /* ===== FRONTEND MOCKUP (scoped .fe) ===== */
+  .fe { background: #0B0E14; border: 1px solid #252B3D; border-radius: 12px; overflow: hidden; font-family: var(--mono); box-shadow: 0 20px 60px rgba(0,0,0,.4); }
+  .fe-head { display: flex; align-items: center; gap: 14px; height: 42px; padding: 0 14px; background: #111520; border-bottom: 1px solid #252B3D; }
+  .fe-logo { font-weight: 700; color: #E8ECF3; font-size: .85rem; }
+  .fe-logo span { color: #8B5CF6; }
+  .fe-tab { display: flex; align-items: center; gap: 8px; font-size: .72rem; color: #E8ECF3; border-bottom: 2px solid #00C076; padding: 10px 0; }
+  .fe-tab .badge { background: rgba(0,192,118,.12); color: #00C076; font-weight: 700; font-size: .62rem; padding: 2px 6px; border-radius: 4px; }
+  .fe-tab .series { color: #3D4A65; font-size: .66rem; }
+  .fe-head .right { margin-left: auto; color: #6B7A99; font-size: .68rem; }
+  .fe-ticker { display: flex; align-items: stretch; background: #111520; border-bottom: 1px solid #252B3D; padding: 0 14px; flex-wrap: wrap; }
+  .fe-tg { display: flex; flex-direction: column; justify-content: center; padding: 8px 18px 8px 0; margin-right: 18px; border-right: 1px solid #252B3D; }
+  .fe-tg:last-child { border-right: none; }
+  .fe-tl { font-size: .6rem; color: #6B7A99; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 2px; }
+  .fe-tv { font-size: .92rem; font-weight: 600; color: #E8ECF3; }
+  .fe-tv.up { color: #00C076; } .fe-tv.warn { color: #F59E0B; } .fe-tv.info { color: #3B82F6; } .fe-tv.pur { color: #8B5CF6; }
+  .fe-body { display: grid; grid-template-columns: 1fr 280px; min-height: 300px; }
+  .fe-chart { position: relative; background: #0B0E14; border-right: 1px solid #252B3D; overflow: hidden; }
+  .fe-chart svg { width: 100%; height: 100%; display: block; }
+  .fe-chart .cap { position: absolute; padding: 3px 8px; border-radius: 4px; font-size: .64rem; background: rgba(11,14,20,.85); }
+  .fe-order { padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+  .fe-dir { display: flex; gap: 6px; }
+  .fe-dir div { flex: 1; text-align: center; padding: 8px; border-radius: 6px; font-size: .74rem; font-weight: 600; border: 1px solid #252B3D; }
+  .fe-dir .long { background: rgba(0,192,118,.12); color: #00C076; border-color: rgba(0,192,118,.3); }
+  .fe-dir .short { color: #6B7A99; }
+  .fe-field { }
+  .fe-field .lab { font-size: .62rem; color: #6B7A99; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 5px; display: flex; justify-content: space-between; }
+  .fe-field .lab .note { color: #8B5CF6; text-transform: none; letter-spacing: 0; }
+  .fe-collat { display: flex; gap: 5px; }
+  .fe-collat span { flex: 1; text-align: center; font-size: .68rem; padding: 6px 0; border-radius: 5px; border: 1px solid #252B3D; color: #6B7A99; }
+  .fe-collat span.on { background: rgba(139,92,246,.14); color: #a78bfa; border-color: rgba(139,92,246,.4); }
+  .fe-slider { height: 6px; border-radius: 3px; background: #252B3D; position: relative; margin: 10px 2px; }
+  .fe-slider .fill { position: absolute; left: 0; top: 0; bottom: 0; width: 33%; background: #8B5CF6; border-radius: 3px; }
+  .fe-slider .knob { position: absolute; left: 33%; top: 50%; width: 14px; height: 14px; border-radius: 50%; background: #E8ECF3; transform: translate(-50%,-50%); }
+  .fe-row { display: flex; justify-content: space-between; font-size: .72rem; padding: 7px 10px; background: #111520; border: 1px solid #252B3D; border-radius: 6px; }
+  .fe-row .k { color: #6B7A99; } .fe-row .v { color: #E8ECF3; }
+  .fe-row .v.warn { color: #F59E0B; } .fe-row .v.up { color: #00C076; }
+  .fe-btn { text-align: center; padding: 11px; border-radius: 7px; background: #00C076; color: #06210f; font-weight: 700; font-size: .8rem; }
+  .fe-addmargin { text-align: center; padding: 8px; border-radius: 6px; border: 1px dashed #8B5CF6; color: #a78bfa; font-size: .72rem; }
+  .fe-marker { display: inline-flex; align-items: center; justify-content: center; width: 17px; height: 17px; border-radius: 50%; background: #8B5CF6; color: #fff; font-size: .62rem; font-weight: 700; margin-right: 6px; flex-shrink: 0; }
+  .fe-legend { margin-top: 1rem; display: grid; grid-template-columns: repeat(2,1fr); gap: .5rem 1.5rem; }
+  .fe-legend div { font-size: .82rem; color: var(--label); display: flex; align-items: flex-start; }
+  @media (max-width: 900px){ .fe-body { grid-template-columns: 1fr; } .fe-legend { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">anduin<span>.</span></div>
+  <div class="nav-meta">PERPETUAL KO CERTIFICATE · LAWYER PRIMING WORKSHOP · CONFIDENTIAL</div>
+</nav>
+
+<div class="slides">
+
+  <!-- 0 · TITLE -->
+  <section class="slide slide-hero">
+    <span class="slide-number">00</span>
+    <span class="kicker">First Counsel Workshop</span>
+    <h1>Building the Perpetual<br>Knock-Out Certificate</h1>
+    <p class="subtitle">Priming counsel on what we are building, why it is a security and not a CFD, and the immediate items we need to lock before the base prospectus.</p>
+    <div class="stat-row" style="display:flex;gap:2.5rem;margin-top:2.5rem;">
+      <div><div style="font-size:2rem;font-weight:800;color:var(--accent);">1 sentence</div><div style="font-size:.78rem;color:var(--muted);">the whole thesis rests on it</div></div>
+      <div><div style="font-size:2rem;font-weight:800;color:var(--red);">3 kill-shots</div><div style="font-size:.78rem;color:var(--muted);">risks that can end the product</div></div>
+      <div><div style="font-size:2rem;font-weight:800;color:var(--green);">1 checklist</div><div style="font-size:.78rem;color:var(--muted);">to leave with owners + dates</div></div>
+    </div>
+  </section>
+
+  <!-- 1 · FRAMING — WHAT WE BUILD + FRONTEND -->
+  <section class="slide">
+    <span class="slide-number">01</span>
+    <span class="slide-tag">Framing · The Goal</span>
+    <h2>The exact experience of a crypto perp — as a regulated security</h2>
+    <p class="subtitle" style="margin-top:.25rem;">The user gets leverage, perpetual holding, funding and liquidation — identical UX to a native perpetual. Legally it is a transferable, prospectus-based security. This is the frontend we intend to build:</p>
+
+    <div class="fe" style="margin-top:1.5rem;">
+      <div class="fe-head">
+        <div class="fe-logo">anduin<span>.</span></div>
+        <div class="fe-tab"><span class="badge">LONG</span> BTC/USD <span class="series">· KO92k · BitMEX</span></div>
+        <div class="right">Custody: Tangany · Kryptoverwahr</div>
+      </div>
+      <div class="fe-ticker">
+        <div class="fe-tg"><div class="fe-tl">Mark Price</div><div class="fe-tv up">102,400.00</div></div>
+        <div class="fe-tg"><div class="fe-tl">KO Barrier</div><div class="fe-tv warn">92,160.00</div></div>
+        <div class="fe-tg"><div class="fe-tl">Implied Leverage</div><div class="fe-tv pur">10.0×</div></div>
+        <div class="fe-tg"><div class="fe-tl">Funding (8h)</div><div class="fe-tv up">+0.011%</div></div>
+        <div class="fe-tg"><div class="fe-tl">Cert Value</div><div class="fe-tv">$10.24</div></div>
+        <div class="fe-tg"><div class="fe-tl">Dist. to KO</div><div class="fe-tv info">10.0%</div></div>
+      </div>
+      <div class="fe-body">
+        <div class="fe-chart">
+          <svg viewBox="0 0 600 300" preserveAspectRatio="none">
+            <polyline points="0,210 60,190 120,205 180,160 240,175 300,120 360,140 420,95 480,110 540,70 600,80" fill="none" stroke="#00C076" stroke-width="2"/>
+            <line x1="0" y1="250" x2="600" y2="250" stroke="#F59E0B" stroke-width="1.5" stroke-dasharray="6 5"/>
+            <line x1="0" y1="80" x2="600" y2="80" stroke="#3B82F6" stroke-width="1" stroke-dasharray="3 4" opacity=".6"/>
+          </svg>
+          <div class="cap" style="left:12px;top:60px;color:#3B82F6;border:1px solid rgba(59,130,246,.3);">Mark 102,400</div>
+          <div class="cap" style="left:12px;bottom:34px;color:#F59E0B;border:1px solid rgba(245,158,11,.3);">Knock-Out Barrier 92,160 — auto-terminate</div>
+        </div>
+        <div class="fe-order">
+          <div class="fe-dir"><div class="long">Long</div><div class="short">Short</div></div>
+          <div class="fe-field">
+            <div class="lab"><span><span class="fe-marker">1</span>Collateral</span><span class="note">non-USD accepted</span></div>
+            <div class="fe-collat"><span>USDC</span><span class="on">BTC</span><span>ETH</span><span>XAUt</span></div>
+          </div>
+          <div class="fe-field">
+            <div class="lab"><span><span class="fe-marker">2</span>Leverage</span><span>10.0×</span></div>
+            <div class="fe-slider"><div class="fill"></div><div class="knob"></div></div>
+          </div>
+          <div class="fe-row"><span class="k"><span class="fe-marker">3</span>Maint. margin buffer</span><span class="v warn">0.5% · $0.51 floor</span></div>
+          <div class="fe-row"><span class="k"><span class="fe-marker">4</span>Next funding</span><span class="v up">+$0.011 · 03:12</span></div>
+          <div class="fe-addmargin"><span class="fe-marker">5</span>+ Add margin — move barrier, lower leverage</div>
+          <div class="fe-btn">Buy / Long · BTC-LONG-KO92k</div>
+        </div>
+      </div>
+    </div>
+    <div class="fe-legend">
+      <div><span class="fe-marker">1</span><span><b style="color:var(--text)">Non-USD collateral</b> — post BTC / ETH / tokenised gold as margin, not just USD.</span></div>
+      <div><span class="fe-marker">2</span><span><b style="color:var(--text)">Leverage 1–30×</b> — fixed at issuance via the barrier; implied leverage then drifts.</span></div>
+      <div><span class="fe-marker">3</span><span><b style="color:var(--text)">Maintenance-margin buffer</b> — deterministic residual floor for perp-parity liquidation.</span></div>
+      <div><span class="fe-marker">4</span><span><b style="color:var(--text)">Funding / carry</b> — passed through by adjusting the barrier each settlement.</span></div>
+      <div><span class="fe-marker">5</span><span><b style="color:var(--text)">Add margin</b> — top-up moves the barrier further away, reducing leverage.</span></div>
+      <div><span class="pill pill-yellow" style="margin-right:6px">KO</span><span>Barrier breach auto-terminates the certificate — the "liquidation".</span></div>
+    </div>
+  </section>
+
+  <!-- 2 · ASPECTS WE MUST REFLECT -->
+  <section class="slide">
+    <span class="slide-number">02</span>
+    <span class="slide-tag">Framing · Mechanics counsel must accommodate</span>
+    <h2>Every perp mechanic has to be legal inside a security wrapper</h2>
+    <p class="subtitle" style="margin-top:.25rem;">Each of these is standard on a crypto exchange. Our question to counsel: can each live inside a prospectus-based transferable security without tipping into a CFD?</p>
+    <div class="grid-4">
+      <div class="card"><div class="card-icon">🪙</div><h3>Non-USD collateral</h3><p>Post BTC, ETH or tokenised gold as margin. Multi-currency, crypto-denominated.</p></div>
+      <div class="card"><div class="card-icon">➕</div><h3>Add margin (top-up)</h3><p>Holder deposits collateral → barrier moves away, implied leverage drops.</p><p class="q">Q6 · CFD risk</p></div>
+      <div class="card"><div class="card-icon">🛡️</div><h3>Maintenance-margin buffer</h3><p>Fixed 0.3–1.0% cash floor at KO for exact perp-parity liquidation.</p><p class="q">Q15 · disclosure</p></div>
+      <div class="card"><div class="card-icon">🔄</div><h3>Funding rate / carry</h3><p>Passed through by adjusting the barrier every settlement (8h crypto / daily TradFi).</p><p class="q">Q1 · Q12</p></div>
+      <div class="card"><div class="card-icon">📈</div><h3>Leverage 1–30×</h3><p>Fixed at issuance; implied leverage drifts as price moves. High tiers may be pro-only.</p><p class="q">Q7</p></div>
+      <div class="card"><div class="card-icon">⛔</div><h3>Knock-out barrier</h3><p>Automatic termination on breach — long from above, short from below.</p></div>
+      <div class="card"><div class="card-icon">♾️</div><h3>Perpetual / open-ended</h3><p>No expiry. Held indefinitely until exit or knock-out. 24/7 trading.</p></div>
+      <div class="card"><div class="card-icon">🌐</div><h3>Multi-asset</h3><p>Crypto, precious metals, equities, commodities — one base prospectus.</p><p class="q">Q17</p></div>
+    </div>
+    <div class="callout"><p><strong>Anchor formula.</strong> Long cert value = (Mark − Barrier) × Contract Size · Implied leverage = Mark ÷ (Mark − Barrier). At Mark 102,400 / Barrier 92,160 → value $10.24, leverage 10.0×.</p></div>
+  </section>
+
+  <!-- 3 · SIMILARITIES & DIFFERENCES -->
+  <section class="slide">
+    <span class="slide-number">03</span>
+    <span class="slide-tag">Framing · Where it fits</span>
+    <h2>It <em>is</em> a Turbo/KO certificate — with three novel edges</h2>
+    <p class="subtitle" style="margin-top:.25rem;">Most of this is 20+ years of established German Turbo/KO practice. The scrutiny — and this workshop — is about the parts that are new.</p>
+    <div class="vs-row">
+      <div class="vs-col left">
+        <h3>Same as a classic Turbo / KO cert</h3>
+        <ul>
+          <li>Leveraged instrument with a knock-out barrier</li>
+          <li>Transferable security — bearer, ISIN, cash-settled</li>
+          <li>Not a CFD — established German precedent since ~2003</li>
+          <li>PRIIPs Category 3, per-Series KID</li>
+          <li>Barrier fixed in Final Terms, distributed via MiFID firms</li>
+          <li>Multi-asset issuance (crypto, metals, equities) already market practice</li>
+        </ul>
+      </div>
+      <div class="vs-col right">
+        <h3>What is new / draws scrutiny</h3>
+        <ul>
+          <li><b style="color:var(--text)">Open-ended / perpetual</b> as a systematic construct for TradFi underlyings</li>
+          <li><b style="color:var(--text)">Venue mark-price reference</b> (Bybit/BitMEX) → BMR question</li>
+          <li><b style="color:var(--text)">Dual issuance</b> — DLT security token <em>and</em> bearer cert; fungibility TBC</li>
+          <li>Funding/carry passthrough via <b style="color:var(--text)">dynamic barrier</b></li>
+          <li><b style="color:var(--text)">Add-margin</b> top-up and non-USD collateral</li>
+          <li>Free wallet-to-wallet transfer after issuance-gate KYC</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout warn"><p><strong>Takeaway for counsel:</strong> we are not inventing a new legal category — we are extending a proven one. The workshop pressure-tests only the right-hand column.</p></div>
+  </section>
+
+  <!-- 4 · CLASSIFICATION THESIS -->
+  <section class="slide">
+    <span class="slide-number">04</span>
+    <span class="slide-tag">Classification · The Thesis</span>
+    <h2>One sentence the whole product rests on</h2>
+    <div class="big-callout" style="background:var(--surface);border:1px solid var(--accent);border-radius:14px;padding:2rem;margin:1.5rem 0;text-align:center;">
+      <div style="font-size:1.5rem;font-weight:800;color:var(--text);line-height:1.4;">"A Perpetual KO Certificate is a <span style="color:var(--green)">transferable security</span>, <span style="color:var(--red)">not a CFD</span>."</div>
+    </div>
+    <div class="grid-3">
+      <div class="card accent-border"><h3>Legal basis</h3><p>Transferable security under MiFID II Art. 4(1)(44). PRIIPs Category 3. Explicitly outside ESMA CFD intervention 2018/796.</p></div>
+      <div class="card accent-border"><h3>Rationale</h3><p>20+ year German Turbo/KO precedent as regulated securities — issued as bearer cert or security token, cash-settled, no contingent liability.</p></div>
+      <div class="card red-border"><h3>Why it is existential</h3><p>If reclassified as a bilateral OTC derivative → 2× retail crypto leverage cap → the product, as designed, is dead.</p></div>
+    </div>
+    <div class="callout"><p><strong>Ask of counsel (15 min in room):</strong> endorse or challenge this thesis out loud. Nominate the owner for a <strong>written classification opinion</strong>. If they don't fully buy it, nothing else on the agenda matters.</p></div>
+  </section>
+
+  <!-- 5 · THREE KILL SHOTS -->
+  <section class="slide">
+    <span class="slide-number">05</span>
+    <span class="slide-tag">Classification · The 3 Kill-Shots</span>
+    <h2>Three risks that can actually end the product</h2>
+    <p class="subtitle" style="margin-top:.25rem;">Not all 17 open questions are equal. These three can force reclassification or block distribution. Spend the most time here.</p>
+    <div class="grid-3">
+      <div class="card red-border">
+        <span class="pill pill-red">KILL-SHOT 1</span>
+        <h3 style="margin-top:.75rem;">CFD reclassification</h3>
+        <p>The <b style="color:var(--text)">add-margin top-up</b> (Q6) and <b style="color:var(--text)">bidirectional / negative-funding barrier</b> (Q12) are the mechanics most arguable as "individual negotiation" or a "bilateral obligation."</p>
+        <p class="q">→ if either forces CFD status, retail caps at 2×.</p>
+      </div>
+      <div class="card red-border">
+        <span class="pill pill-red">KILL-SHOT 2</span>
+        <h3 style="margin-top:.75rem;">BMR / benchmark</h3>
+        <p>Using exchange <b style="color:var(--text)">mark prices</b> (Bybit, BitMEX) as the reference. Is that a "benchmark" under BMR Art. 3(1)(3)? Does the regulated-exchange exemption hold?</p>
+        <p class="q">→ need a clear answer or a fallback (BMR index / spot).</p>
+      </div>
+      <div class="card red-border">
+        <span class="pill pill-red">KILL-SHOT 3</span>
+        <h3 style="margin-top:.75rem;">Free transfer vs AML</h3>
+        <p>KYC at <b style="color:var(--text)">issuance only</b>, then wallet-to-wallet with no per-transfer KYC. Does this survive EU AML/CFT? Is issuer sanctions-freeze + holder register enough?</p>
+        <p class="q">→ this is where a regulator says no.</p>
+      </div>
+    </div>
+    <div class="callout danger"><p><strong>Each kill-shot leaves with a named owner and a date.</strong> Everything else is refinement; these three are go / no-go.</p></div>
+  </section>
+
+  <!-- 6 · CHECKLIST -->
+  <section class="slide">
+    <span class="slide-number">06</span>
+    <span class="slide-tag">Checklist · 15 min — confirm &amp; extend</span>
+    <h2>What we believe we need — please confirm and add</h2>
+    <p class="subtitle" style="margin-top:.25rem;">Our working list of roles and hard requirements. We walk it for ~15 minutes: confirm each, flag the ESMA category, and add anything we've missed.</p>
+    <div class="grid-2" style="margin-top:1.25rem;">
+      <div>
+        <h3 style="color:var(--label);font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;">Hard — needed before base approval</h3>
+        <ul class="checklist" style="grid-template-columns:1fr;">
+          <li><span class="box"></span><span><b>Issuer SPV (#1)</b> — Jersey / Cayman, named cover party</span></li>
+          <li><span class="box"></span><span><b>≥1 Dealer / Manager (#2)</b> — EU MiFID firm, dealer agreement</span></li>
+          <li><span class="box"></span><span><b>Registrar / Administrator (#5)</b> — core register, BNY-class</span></li>
+          <li><span class="box"></span><span><b>Security framework (#8)</b> — if issued secured</span></li>
+          <li><span class="box"></span><span><b>Calculation Agent (#9)</b> — self-appointment? confirm</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="color:var(--label);font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;">Per-Series / operational</h3>
+        <ul class="checklist" style="grid-template-columns:1fr;">
+          <li><span class="box"></span><span><b>Custodian(s) (#7)</b> — Kryptoverwahr: Tangany / HAL / vdH</span></li>
+          <li><span class="box"></span><span><b>Paying Agent (#4)</b> — or fold into Registrar</span></li>
+          <li><span class="box"></span><span><b>Security Agent identity (#8)</b> — per Final Terms</span></li>
+          <li><span class="box"></span><span><b>Hedge account (#3)</b> — operational only, never named</span></li>
+          <li><span class="box"></span><span><b>Transfer Agent (#6)</b> — <span class="tag-green">not needed</span>, on-chain register</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout"><p><strong>For counsel to confirm:</strong> ESMA Category (A/B/C) for each Final-Terms field (primary rejection risk) · paying-agent collapse for sui-generis tokens · pull Ondo &amp; Backed/xStocks approved prospectuses as templates. <em>What are we missing?</em></p></div>
+  </section>
+
+  <!-- 7 · STRUCTURE DECISIONS -->
+  <section class="slide">
+    <span class="slide-number">07</span>
+    <span class="slide-tag">Structure Decisions · 13:45–14:15</span>
+    <h2>Decisions counsel needs from us to start drafting</h2>
+    <table>
+      <thead><tr><th style="width:26%">Decision</th><th>Options on the table</th><th style="width:20%">Drives</th></tr></thead>
+      <tbody>
+        <tr><td><b>SPV jurisdiction</b></td><td>Jersey vs Cayman (third-country route); Liechtenstein AG fallback</td><td class="tag-blue">Prospectus route, custody chain</td></tr>
+        <tr><td><b>Approving NCA</b></td><td>CSSF (Luxembourg) or FMA (Liechtenstein) → EEA passport</td><td class="tag-blue">Filing venue, timeline</td></tr>
+        <tr><td><b>Secured vs unsecured</b></td><td>Collateralised (needs Security Trustee #8) vs unsecured note</td><td class="tag-yellow">Whether #8 exists at all</td></tr>
+        <tr><td><b>Calc-agent</b></td><td>Issuer self-appointment vs independent agent</td><td class="tag-yellow">Conflict disclosure</td></tr>
+        <tr><td><b>Paying agent</b></td><td>Standalone vs collapse into Registrar for tokens</td><td class="tag-blue">Role count</td></tr>
+        <tr><td><b>Base scope</b></td><td>Single multi-asset base (crypto+metals+equities+commodities) vs crypto-first, extend later</td><td class="tag-red">Speed vs breadth</td></tr>
+      </tbody>
+    </table>
+    <div class="callout warn"><p><strong>Goal of this block:</strong> leave with a provisional call on each — enough for counsel to start the base prospectus outline. Not every point needs to be final today, but the SPV and base-scope calls gate everything downstream.</p></div>
+  </section>
+
+  <!-- 8 · REMAINING OPEN ITEMS -->
+  <section class="slide">
+    <span class="slide-number">08</span>
+    <span class="slide-tag">Remaining Items · Park &amp; assign</span>
+    <h2>Open counsel questions — assign owners, don't solve today</h2>
+    <p class="subtitle" style="margin-top:.25rem;">Real questions, but not go / no-go. Table them, give each an owner, resolve in follow-ups.</p>
+    <div class="grid-3">
+      <div class="card"><h3>Financing-rate disclosure</h3><p>Prospectus specificity for the barrier-adjustment formula; fallback if venue unavailable; PRIIPs scenario validity.</p><p class="q">Q1</p></div>
+      <div class="card"><h3>Tap issuance</h3><p>Issue more certs into an existing Series post-launch — same vs new ISIN, documentation.</p><p class="q">Q2</p></div>
+      <div class="card"><h3>High-leverage tiers</h3><p>20–30× product-intervention risk (DE/AT/NL); pro-client-only; KID adverse scenarios.</p><p class="q">Q7</p></div>
+      <div class="card"><h3>Sui-generis token custody</h3><p>Does the token qualify as Kryptowert under KWG §1(11) S.4? Kryptoverwahr scope; chain-of-title.</p><p class="q">Q9</p></div>
+      <div class="card"><h3>MMB disclosure</h3><p>PRIIPs cost vs payoff treatment; per-Series in Final Terms without base amendment; marketing language.</p><p class="q">Q15</p></div>
+      <div class="card"><h3>Per-Series venue election</h3><p>Same underlying across multiple reference venues; KID comparison; disruption fallback.</p><p class="q">Q16</p></div>
+      <div class="card"><h3>Multi-asset extension</h3><p>One base for crypto + metals + equities + commodities; per-class intervention &amp; BMR.</p><p class="q">Q17</p></div>
+      <div class="card"><h3>Token / bearer fungibility</h3><p>Confirm cross-format fungibility for prospectus and PRIIPs purposes.</p><p class="q">S1</p></div>
+      <div class="card"><h3>Per-Series PRIIPs KID</h3><p>KID production pipeline and performance scenarios with variable funding.</p><p class="q">PRIIPs</p></div>
+    </div>
+  </section>
+
+  <!-- 9 · NEXT STEPS -->
+  <section class="slide slide-hero">
+    <span class="slide-number">09</span>
+    <span class="slide-tag">Close · Owners &amp; Dates</span>
+    <h2>What we leave the room with</h2>
+    <ul class="agenda-list">
+      <li><span class="t">Owner + date</span><span class="d">Written classification opinion — security, not CFD<small>Endorse or refute the core thesis</small></span></li>
+      <li><span class="t">Owner + date</span><span class="d">BMR analysis on mark-price reference<small>Exemption or fallback index</small></span></li>
+      <li><span class="t">Owner + date</span><span class="d">AML sign-off on the free-transfer token model<small>Issuance-gate KYC + freeze + register sufficiency</small></span></li>
+      <li><span class="t">Owner + date</span><span class="d">ESMA Category A/B/C mapping for Final-Terms fields<small>Primary rejection risk</small></span></li>
+      <li><span class="t">Milestone</span><span class="d">Classification opinion + base prospectus outline by [date]<small>Next workshop gate</small></span></li>
+    </ul>
+    <div class="callout"><p><strong>Reference material:</strong> KO-cert term sheet · trading mock · prospectus roles &amp; service-provider checklist — all shared as pre-read.</p></div>
+  </section>
+
+</div>
+
+<footer>Anduin — Confidential · Internal planning, not legal advice · Prospectus counsel confirmation required before base-prospectus lockdown</footer>
+</body>
+</html>
