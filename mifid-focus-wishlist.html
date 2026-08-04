@@ -80,6 +80,7 @@
     <div class="eyebrow">DLT Finance · Strategy Note</div>
     <h1>MiFID Focus — Personnel &amp; Setup Wishlist</h1>
     <p class="lede">The operating setup that lets DLT put 100% of its energy on the <strong>MiFID box</strong>: leverage products, structured yield + downside protection, and Delta-1 security tokens — across all underlyings.</p>
+    <p class="lede" style="margin-top:8px"><strong>Scope:</strong> the MiFID engine serves <strong>both B2B and retail</strong>, with the product launchpad targeting <strong>EU + Global</strong> reach. Retail is an explicit distribution channel, not just an institutional API play.</p>
   </header>
 
   <div class="premise">
@@ -161,8 +162,12 @@
   <ul>
     <li><strong>Removes the most duplication, fastest.</strong> Both run a spot execution + post-trade stack. Killing ours frees every engineer maintaining spot.</li>
     <li><strong>Shrinks our risk + capital footprint.</strong> No spot inventory, no settlement float, no spot counterparty risk on our books.</li>
+    <li><strong>Access to Uphold's bigger LP lines → capital efficiency.</strong> Routing spot into Uphold lets us tap <strong>Uphold's larger liquidity-provider lines</strong> instead of funding our own — tighter pricing for clients and materially better capital efficiency for us. We don't tie up balance sheet backing spot liquidity we can source from a bigger partner.</li>
     <li><strong>Lets us be MiFID-pure.</strong> Engineering, risk, compliance, and product all point at one box.</li>
   </ul>
+
+  <h3>Financing discipline — no capital extraction until robust</h3>
+  <div class="callout">Until the offload is complete and the MiFID engine is proven, <strong>we do not extract capital from the business.</strong> Retained capital stays in to keep the business robust through the transition — offloading spot, standing up the derivatives/structured stack, funding the launch cycle. Capital extraction is a <em>later</em>-stage decision, gated on business robustness, not something we do while the model is still being de-risked.</div>
 
   <!-- ============ PART B ============ -->
   <h2>Part B — Team setup to own the MiFID box</h2>
@@ -191,8 +196,18 @@
   <ul>
     <li><strong>Owns:</strong> designing and launching new MiFID products — financial engineers structuring payoffs (notes, certificates, options strategies, new underlyings incl. prediction markets), working hand-in-glove with dedicated legal to produce the PRIIPs KID, term sheet, and product-governance sign-off per launch.</li>
     <li><strong>Mixed by design:</strong> financial engineers + quants + internal legal counsel + a PM, with external legal on retainer for jurisdiction-specific and novel-product questions.</li>
+    <li><strong>Includes pricing logic.</strong> The launchpad owns the <strong>pricing engine</strong> for its products — the pricing/valuation logic for each payoff (options, structured notes, yield products) is part of the team's deliverable, not an external dependency. Structuring and pricing ship together.</li>
     <li><strong>Mandate:</strong> a short, repeatable launch cycle. This team turns "underlyings are open-ended" into shipped product.</li>
   </ul>
+  <div class="callout"><strong>Source note — launchpad squad sizing.</strong> The one-pager specs a leaner <em>flexible product launchpad</em> squad: <strong>1 PM/PO + 3 Devs + 1 QA + 1 PjM</strong> (adds a dedicated Project Manager the other teams don't list). Read this as the <strong>minimum viable launchpad pod</strong> — the unit you replicate per product line — rather than a contradiction of the 4–5 eng team. Confirm whether the launchpad runs as one lean 6-person pod or scales to the fuller Team-4 shape; the two co-exist (start as one pod, grow into the larger team).</div>
+
+  <h3>Cross-cutting — People resources (customer-facing ops)</h3>
+  <p>Beyond the product/tech teams, the setup needs standing <strong>people resources</strong> to run the client relationship — not covered by the engineering teams above, and staffed explicitly:</p>
+  <ul>
+    <li><strong>Tech Support</strong> — front-line and integration support for B2B and retail: API/integration help, incident triage, the human layer behind the SLAs. Scales with the retail + EU/Global footprint.</li>
+    <li><strong>Account Management</strong> — owns the ongoing commercial relationship: onboarding, retention, upsell of new launchpad products, and the feedback loop from clients back into Team 4's pipeline.</li>
+  </ul>
+  <div class="callout">These roles are what make the offering <em>operable</em> at retail + global scale. Without them, "own the API / own the relationship" (Team 3's premise) has no human backing when a client actually needs help.</div>
 
   <!-- ============ SUMMARY ============ -->
   <h2>One-page summary</h2>
@@ -204,12 +219,14 @@
       <tr><td><strong>Derivatives/structured post-trade &amp; reporting</strong></td><td>Build &amp; own — moat</td><td>Team 1 (DLT)</td></tr>
       <tr><td><strong>Risk engine (internal books)</strong></td><td>Build &amp; own — moat</td><td>Team 2 (DLT)</td></tr>
       <tr><td><strong>MiFID client API (derivatives &amp; structured)</strong></td><td>Build &amp; own — distribution moat</td><td>Team 3 (DLT)</td></tr>
-      <tr><td><strong>New MiFID products + PRIIPs/legal</strong></td><td>Build &amp; own — velocity</td><td>Team 4 + Legal (DLT)</td></tr>
+      <tr><td><strong>New MiFID products + PRIIPs/legal + pricing</strong></td><td>Build &amp; own — velocity</td><td>Team 4 + Legal (DLT)</td></tr>
+      <tr class="uphold"><td><strong>Spot liquidity / LP lines</strong></td><td>Source from Uphold's larger book — capital efficiency</td><td>Uphold</td></tr>
+      <tr><td><strong>Tech Support &amp; Account Management</strong></td><td>Build &amp; own — client ops</td><td>People resources (DLT)</td></tr>
     </tbody>
   </table>
 
   <div class="footer-ask">
-    <strong>Headcount ask:</strong> 4 teams × (4–5 eng + 1 QA + 1 PM) ≈ <strong>24–28 product/tech</strong>, plus financial engineers/quants in Team 4, plus <strong>1–2 internal legal + external legal retainer</strong>. The deliberate trade: shed everything spot to Uphold and reinvest that headcount + capital into being the best derivatives/structured-product engine in the MiCAR + MiFID world.
+    <strong>Headcount ask:</strong> 4 teams × (4–5 eng + 1 QA + 1 PM) ≈ <strong>24–28 product/tech</strong>, plus financial engineers/quants in Team 4, plus <strong>1–2 internal legal + external legal retainer</strong>, plus customer-facing <strong>People resources (Tech Support + Account Management)</strong>. The launchpad can start as a single lean pod (1 PM/PO + 3 Devs + 1 QA + 1 PjM) and scale into the fuller Team-4 shape. The deliberate trade: shed everything spot to Uphold — offloading not just risk but <strong>balance-sheet drag</strong>, tapping Uphold's LP lines for capital efficiency — and reinvest that headcount + capital into being the best derivatives/structured-product engine in the MiCAR + MiFID world. <strong>No capital is extracted until the business is robust.</strong>
   </div>
 
   <footer class="doc">DLT Finance · MiFID Focus wishlist · internal strategy note</footer>
