@@ -8,11 +8,11 @@
 
 ## 1. Purpose of this document
 
-This document summarises a structured-products programme under which **DLT Finance**, a German BaFin-regulated financial institution, intends to distribute tokenised **Perpetual Knock-Out Certificates** to clients of Bit2Me. It describes the business model, the legal nature of the instrument, and the investor-protection framework, to support an early, transparent dialogue with the CNMV.
+This document summarises a structured-products programme under which **DLT Finance**, a German BaFin-regulated financial institution, intends to distribute **Tokenised Knock-Out Certificates** to clients of Bit2Me. It describes the business model, the legal nature of the instrument, and the investor-protection framework, to support an early, transparent dialogue with the CNMV.
 
 ## 2. The product in one paragraph
 
-The Perpetual Knock-Out Certificate is an **open-ended, leveraged transferable security** that gives investors economic exposure to an underlying asset (crypto-assets such as BTC/ETH, precious metals, equities/indices, commodities) with a pre-defined **knock-out barrier**. If the reference price touches the barrier, the certificate terminates automatically and any residual value is paid out. The economics are the familiar economics of leverage certificates (turbos / knock-outs) that have been distributed to European retail investors for two decades — the innovation is in the **issuance format** (a security token on a public blockchain) and in the **24/7 tradability** this enables, mirroring the always-open nature of the underlying crypto markets.
+The Tokenised Knock-Out Certificate is an **open-ended, leveraged transferable security** that gives investors economic exposure to an underlying asset (crypto-assets such as BTC/ETH, precious metals, equities/indices, commodities) with a pre-defined **knock-out barrier**. If the reference price touches the barrier, the certificate terminates automatically and any residual value is paid out. The economics are the familiar economics of leverage certificates (turbos / knock-outs) that have been distributed to European retail investors for two decades — the innovation is in the **issuance format** (a security token on a public blockchain) and in the **24/7 tradability** this enables, mirroring the always-open nature of the underlying crypto markets.
 
 Key investor-relevant property: **losses are strictly limited to the amount invested.** There are no margin calls, no negative balances, and no debt obligation of any kind on the investor — a structurally safer profile than CFDs or margin trading.
 
@@ -27,7 +27,6 @@ Key investor-relevant property: **losses are strictly limited to the amount inve
 
 Each certificate is issued natively as a **security token** — a DLT-based representation of the transferable security, following the pattern already established in the European market by tokenised money-market and equity instruments (e.g., the Ondo and xStocks issuance standards). Important design constraints:
 
-- The token is **custodizable by an EEA qualified crypto-custodian** (German Kryptoverwahrgeschäft-licensed institutions such as Tangany or Bankhaus von der Heydt). Institutional-grade custody is a non-negotiable programme requirement.
 - **KYC/AML at primary issuance** is performed by the regulated distributor; the token remains a registered transferable security throughout its life.
 - The blockchain serves as the **register and settlement layer** — it does not change the legal nature of the instrument, which remains a security governed by its terms and the prospectus.
 
