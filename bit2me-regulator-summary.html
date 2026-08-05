@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tokenised Knock-Out Certificates — Programme Summary</title>
+<style>
+  :root {
+    --ink: #1a2332;
+    --muted: #5a6577;
+    --accent: #0f4c81;
+    --accent-light: #eaf1f8;
+    --border: #dde3ea;
+    --bg: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Georgia, 'Times New Roman', serif;
+    color: var(--ink);
+    background: #f4f6f8;
+    line-height: 1.65;
+  }
+  .page {
+    max-width: 820px;
+    margin: 0 auto;
+    background: var(--bg);
+    padding: 64px 72px 72px;
+    min-height: 100vh;
+  }
+  header {
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 24px;
+    margin-bottom: 36px;
+  }
+  h1 {
+    font-size: 28px;
+    line-height: 1.25;
+    margin: 0 0 18px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .meta {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .meta div { margin: 2px 0; }
+  .meta strong { color: var(--ink); }
+  h2 {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 17px;
+    color: var(--accent);
+    margin: 36px 0 12px;
+    padding-top: 8px;
+  }
+  p { margin: 0 0 14px; }
+  ul { margin: 0 0 14px; padding-left: 22px; }
+  li { margin-bottom: 8px; }
+  strong { color: var(--ink); }
+  .callout {
+    background: var(--accent-light);
+    border-left: 4px solid var(--accent);
+    padding: 14px 18px;
+    margin: 18px 0;
+    font-size: 15.5px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 18px 0;
+  }
+  .card {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 18px;
+  }
+  .card h3 {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 10px;
+    color: var(--muted);
+  }
+  .card p { font-size: 15px; margin-bottom: 0; }
+  ol.chain {
+    counter-reset: step;
+    list-style: none;
+    padding-left: 0;
+    margin: 18px 0;
+  }
+  ol.chain li {
+    position: relative;
+    padding-left: 46px;
+    margin-bottom: 14px;
+  }
+  ol.chain li::before {
+    counter-increment: step;
+    content: counter(step);
+    position: absolute;
+    left: 0; top: 2px;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  footer {
+    margin-top: 48px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  @media print {
+    body { background: #fff; }
+    .page { padding: 0; max-width: none; }
+    h2 { page-break-after: avoid; }
+    .card, .callout { page-break-inside: avoid; }
+  }
+  @media (max-width: 700px) {
+    .page { padding: 32px 24px; }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <h1>Tokenised Knock-Out Certificates<br>Programme Summary</h1>
+  <div class="meta">
+    <div><strong>Prepared for:</strong> Bit2Me — for discussion with the Spanish regulator (CNMV)</div>
+    <div><strong>Date:</strong> August 2026</div>
+    <div><strong>Status:</strong> Informational summary — programme in structuring; prospectus approval pending</div>
+  </div>
+</header>
+
+<h2>1. Purpose of this document</h2>
+<p>This document summarises a structured-products programme under which <strong>DLT Finance</strong>, a German BaFin-regulated financial institution, intends to distribute tokenised <strong>Perpetual Knock-Out Certificates</strong> to clients of Bit2Me. It describes the business model, the legal nature of the instrument, and the investor-protection framework, to support an early, transparent dialogue with the CNMV.</p>
+
+<h2>2. The product in one paragraph</h2>
+<p>The Perpetual Knock-Out Certificate is an <strong>open-ended, leveraged transferable security</strong> that gives investors economic exposure to an underlying asset (crypto-assets such as BTC/ETH, precious metals, equities/indices, commodities) with a pre-defined <strong>knock-out barrier</strong>. If the reference price touches the barrier, the certificate terminates automatically and any residual value is paid out. The economics are the familiar economics of leverage certificates (turbos / knock-outs) that have been distributed to European retail investors for two decades — the innovation is in the <strong>issuance format</strong> (a security token on a public blockchain) and in the <strong>24/7 tradability</strong> this enables, mirroring the always-open nature of the underlying crypto markets.</p>
+<div class="callout">
+  Key investor-relevant property: <strong>losses are strictly limited to the amount invested.</strong> There are no margin calls, no negative balances, and no debt obligation of any kind on the investor — a structurally safer profile than CFDs or margin trading.
+</div>
+
+<h2>3. Legal nature of the instrument</h2>
+<ul>
+  <li><strong>Classification:</strong> Transferable security under <strong>MiFID II Art. 4(1)(44)</strong> — a securitised derivative comparable to the knock-out certificates listed on regulated European venues. It is <strong>not</strong> a CFD, not an OTC derivative, and not a crypto-asset under MiCA (financial instruments are expressly excluded from MiCA's scope, Art. 2(4)(a)).</li>
+  <li><strong>Prospectus:</strong> Issued under an <strong>EU Prospectus Regulation (2017/1129) base prospectus</strong> with per-series Final Terms. Approval will be sought from an EEA competent authority, with <strong>passporting into Spain</strong> so the offer to Spanish retail investors is fully prospectus-covered.</li>
+  <li><strong>PRIIPs:</strong> A <strong>Key Information Document (KID)</strong> in Spanish is produced for every series (Category 3; expected SRI 6–7 depending on leverage), with the standard cost, risk and performance-scenario disclosures.</li>
+  <li><strong>Issuer:</strong> A dedicated special-purpose issuance vehicle whose sole business is issuing the certificates and hedging its obligations. Final issuer jurisdiction is being settled with prospectus counsel.</li>
+</ul>
+
+<h2>4. The token format</h2>
+<p>Each certificate is issued natively as a <strong>security token</strong> — a DLT-based representation of the transferable security, following the pattern already established in the European market by tokenised money-market and equity instruments (e.g., the Ondo and xStocks issuance standards). Important design constraints:</p>
+<ul>
+  <li>The token is <strong>custodizable by an EEA qualified crypto-custodian</strong> (German Kryptoverwahrgeschäft-licensed institutions such as Tangany or Bankhaus von der Heydt). Institutional-grade custody is a non-negotiable programme requirement.</li>
+  <li><strong>KYC/AML at primary issuance</strong> is performed by the regulated distributor; the token remains a registered transferable security throughout its life.</li>
+  <li>The blockchain serves as the <strong>register and settlement layer</strong> — it does not change the legal nature of the instrument, which remains a security governed by its terms and the prospectus.</li>
+</ul>
+
+<h2>5. Business model and distribution chain</h2>
+<ol class="chain">
+  <li><strong>Issuer (SPV)</strong> issues each certificate series under the base prospectus and immediately <strong>hedges its exposure back-to-back</strong> on liquid reference markets. The issuer runs a market-neutral book: it takes no directional risk against its investors, and its revenue derives from transparent product spreads and financing charges disclosed in the KID.</li>
+  <li><strong>DLT Finance (BaFin-regulated)</strong> acts as the MiFID distributor and execution intermediary: client onboarding, appropriateness assessment for complex instruments, order handling, best execution, and ongoing MiFID II conduct-of-business compliance.</li>
+  <li><strong>Bit2Me</strong> provides its clients access to the product through its platform, with DLT Finance as the regulated counterparty for the MiFID product. Spanish clients therefore face a regulated EU investment firm, purchasing a prospectus-backed security.</li>
+</ol>
+
+<h2>6. Investor protection summary</h2>
+<ul>
+  <li>Prospectus-approved, EEA-passported transferable security — not an unregulated derivative.</li>
+  <li>Spanish-language PRIIPs KID per series; target-market definition and appropriateness testing under MiFID II product governance.</li>
+  <li>Maximum loss capped at the invested amount; automatic knock-out removes the possibility of debt.</li>
+  <li>Market-neutral, fully hedged issuer; no conflict of interest between issuer and investor P&amp;L.</li>
+  <li>Qualified, licensed custody of the tokens; continuous pricing against transparent, published reference prices defined in the Final Terms.</li>
+</ul>
+
+<h2>7. What is genuinely new — and what is not</h2>
+<div class="grid">
+  <div class="card">
+    <h3>Not new</h3>
+    <p>The payoff (knock-out certificates are a mature, retail-distributed European product class), the regulatory wrapper (Prospectus Regulation + PRIIPs + MiFID II), and the distribution model (regulated intermediary to retail).</p>
+  </div>
+  <div class="card">
+    <h3>New</h3>
+    <p>The instrument is issued and settled as a security token — enabling 24/7 issuance, transfer and redemption in step with the underlying crypto markets, near-instant settlement, and full auditability of the register — while keeping the instrument inside the existing securities-law perimeter.</p>
+  </div>
+</div>
+<p>We believe this combination — a familiar, well-understood retail product delivered through modern settlement technology under the full EU securities framework — is exactly the direction European regulators have encouraged through the DLT Pilot Regime and MiCA's clear demarcation of financial instruments, and we welcome the CNMV's questions and guidance.</p>
+
+<footer>
+  Informational summary only — not an offer of securities. Programme in structuring; prospectus approval pending.
+</footer>
+
+</div>
+</body>
+</html>
