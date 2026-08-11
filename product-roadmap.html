@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DLT Finance — Product Roadmap</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap">
+  <style>
+    :root{
+      --bg:#f5f7fa; --surface:#ffffff; --surface2:#f4f6f9; --border:#e3e7ee;
+      --ink:#0E1A22; --text:var(--ink); --muted:#5b6577;
+      --petrol-deep:#062536; --petrol:#0E4A66; --petrol-mid:#11617E;
+      --petrol-grad:linear-gradient(90deg,#062536 0%,#0E4A66 55%,#11617E 100%);
+      --mint:#7BD4C6;
+      --ws1:#0E4A66; --ws2:#3b6cd9; --ws3:#1f9f6c; --ws4:#6b50d9; --ws5:#d4922a;
+      --font-display:'Helvetica Neue','Inter Tight',system-ui,sans-serif;
+      --font-body:'Inter Tight','Helvetica Neue',system-ui,sans-serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html,body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.5;-webkit-font-smoothing:antialiased;}
+    .wrap{max-width:1280px;margin:0 auto;padding:0 24px 90px;}
+
+    /* Header band */
+    .hero{background:var(--petrol-grad);color:#fff;border-radius:0 0 22px 22px;padding:34px 40px 30px;margin-bottom:30px;box-shadow:0 14px 34px rgba(15,23,42,.12);}
+    .hero .top{display:flex;justify-content:space-between;align-items:flex-start;}
+    .brand-mark{display:flex;align-items:center;gap:10px;color:#fff;}
+    .brand-mark svg{width:26px;height:26px;}
+    .brand-mark .name{font-family:var(--font-display);font-weight:700;letter-spacing:.06em;font-size:15px;}
+    .brand-mark .name .light{color:var(--mint);}
+    .eyebrow{font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--mint);}
+    .hero h1{font-family:var(--font-display);font-size:40px;font-weight:800;letter-spacing:-.02em;line-height:1.05;margin-top:8px;}
+    .hero h1 .accent{color:var(--mint);}
+    .hero p.sub{margin-top:12px;max-width:760px;font-size:15px;color:rgba(255,255,255,.82);}
+    .hero .date{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.6);}
+
+    /* Scenario comparison */
+    .compare{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:30px;}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:22px 24px;box-shadow:0 6px 18px rgba(15,23,42,.05);}
+    .card h3{font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px;}
+    .card .big{font-family:var(--font-display);font-size:38px;font-weight:800;letter-spacing:-.02em;margin-top:6px;}
+    .card .big small{font-size:15px;font-weight:600;color:var(--muted);letter-spacing:0;}
+    .card .barline{height:12px;border-radius:6px;margin-top:14px;background:var(--surface2);overflow:hidden;}
+    .card .barfill{height:100%;border-radius:6px;}
+    .card.seq .barfill{width:100%;background:linear-gradient(90deg,#c2452f,#d4922a);}
+    .card.par .barfill{width:38.2%;background:linear-gradient(90deg,#1f9f6c,#7BD4C6);}
+    .card .note{margin-top:12px;font-size:13px;color:var(--muted);}
+    .save{grid-column:1/-1;text-align:center;font-size:14px;color:var(--ink);background:rgba(31,159,108,.08);border:1px solid rgba(31,159,108,.3);border-radius:12px;padding:12px;}
+    .save b{color:#1f9f6c;}
+
+    /* Controls */
+    .controls{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px;}
+    .toggle{display:inline-flex;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:4px;box-shadow:0 3px 10px rgba(15,23,42,.05);}
+    .toggle button{border:0;background:transparent;font-family:var(--font-body);font-size:13px;font-weight:700;color:var(--muted);padding:9px 18px;border-radius:9px;cursor:pointer;transition:.18s;}
+    .toggle button.active{background:var(--petrol);color:#fff;}
+    .modehint{font-size:13px;color:var(--muted);}
+
+    /* Gantt */
+    .gantt-shell{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px 22px 26px;box-shadow:0 6px 18px rgba(15,23,42,.05);overflow-x:auto;}
+    .gantt{min-width:960px;}
+    .axis{position:relative;height:22px;margin-left:290px;margin-bottom:8px;border-bottom:1px solid var(--border);}
+    .axis .mark{position:absolute;top:0;bottom:0;border-left:1px dashed var(--border);}
+    .axis .mark span{position:absolute;top:2px;left:5px;font-size:10px;color:var(--muted);letter-spacing:.04em;white-space:nowrap;}
+
+    .wsband{margin-top:16px;}
+    .wshead{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+    .wsdot{width:11px;height:11px;border-radius:3px;}
+    .wshead .t{font-size:14px;font-weight:800;letter-spacing:-.01em;}
+    .wshead .meta{font-size:12px;color:var(--muted);font-weight:600;}
+
+    .row{position:relative;height:34px;display:flex;align-items:center;}
+    .row .label{width:290px;flex:0 0 290px;padding-right:14px;font-size:12.5px;color:var(--text);display:flex;align-items:center;gap:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .row .label .code{font-size:10.5px;font-weight:700;color:var(--muted);background:var(--surface2);border-radius:5px;padding:1px 6px;}
+    .track{position:relative;flex:1;height:100%;}
+    .track .grid{position:absolute;top:0;bottom:0;border-left:1px solid rgba(227,231,238,.55);}
+    .bar{position:absolute;top:6px;height:22px;border-radius:6px;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;padding:0 8px;white-space:nowrap;overflow:hidden;box-shadow:0 2px 6px rgba(15,23,42,.12);transition:left .55s cubic-bezier(.4,0,.2,1),width .55s cubic-bezier(.4,0,.2,1);}
+    .bar.par{outline:2px dashed rgba(255,255,255,.7);outline-offset:-4px;}
+    .bar .dur{margin-left:auto;opacity:.85;font-weight:600;padding-left:8px;}
+    .chip-done{position:absolute;top:6px;height:22px;border-radius:6px;background:#1f9f6c;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;gap:5px;padding:0 9px;box-shadow:0 2px 6px rgba(15,23,42,.12);transition:left .55s cubic-bezier(.4,0,.2,1);}
+
+    .legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:20px;font-size:12.5px;color:var(--muted);align-items:center;}
+    .legend .it{display:flex;align-items:center;gap:7px;}
+    .legend .sw{width:26px;height:12px;border-radius:4px;}
+    .legend .sw.dash{outline:2px dashed rgba(14,74,102,.55);outline-offset:-3px;background:rgba(14,74,102,.18);}
+
+    .notes{margin-top:30px;display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+    .notes .card h3{color:var(--petrol);}
+    .notes ul{margin:10px 0 0 2px;list-style:none;}
+    .notes li{position:relative;padding-left:18px;margin-bottom:9px;font-size:13.5px;color:var(--text);}
+    .notes li::before{content:'';position:absolute;left:0;top:8px;width:7px;height:7px;border-radius:2px;background:var(--mint);}
+    .notes li b{color:var(--ink);}
+    .foot{margin-top:34px;text-align:center;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+
+    @media(max-width:760px){.compare,.notes{grid-template-columns:1fr;}.hero h1{font-size:30px;}}
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <div class="top">
+      <div>
+        <div class="eyebrow">Product Roadmap</div>
+        <h1>What we build, <span class="accent">and when</span></h1>
+      </div>
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#7BD4C6" stroke-width="1.6" fill="rgba(123,212,198,0.12)"/></svg>
+        <div class="name">DLT <span class="light">Finance</span></div>
+      </div>
+    </div>
+    <p class="sub">Five product workstreams from crypto perps to structured products. The same scope ships in <b>~6 months if fully resourced</b> — or <b>~16 months</b> serially with one squad. Toggle the Gantt below to see where parallelism buys us time.</p>
+    <div class="date" style="margin-top:16px">Draft · Aug 2026 · planning estimates, not commitments</div>
+  </div>
+
+  <div class="wrap">
+    <!-- Scenario comparison -->
+    <div class="compare">
+      <div class="card seq">
+        <h3>🐢 One squad · serial</h3>
+        <div class="big">68 wks <small>≈ 16 months</small></div>
+        <div class="barline"><div class="barfill"></div></div>
+        <div class="note">Every workstream waits for the previous one. Resource-constrained baseline.</div>
+      </div>
+      <div class="card par">
+        <h3>⚡ Fully resourced · parallel</h3>
+        <div class="big">26 wks <small>≈ 6 months</small></div>
+        <div class="barline"><div class="barfill"></div></div>
+        <div class="note">All 5 workstreams run at once. Perps (26 wks) is the critical path that sets the floor.</div>
+      </div>
+      <div class="save">Parallelising the roadmap cuts time-to-full-suite by <b>~62% (42 weeks / ~10 months)</b> — the entire gap is a resourcing decision, not a technical one.</div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <div class="toggle">
+        <button id="btnPar" class="active" onclick="setMode('par')">⚡ Parallel (resourced)</button>
+        <button id="btnSeq" onclick="setMode('seq')">🐢 Sequential (1 squad)</button>
+      </div>
+      <div class="modehint" id="hint">Showing the fully-resourced plan — all workstreams start together.</div>
+    </div>
+
+    <!-- Gantt -->
+    <div class="gantt-shell">
+      <div class="gantt">
+        <div class="axis" id="axis"></div>
+        <div id="bands"></div>
+      </div>
+    </div>
+
+    <div class="legend">
+      <div class="it"><span class="sw" style="background:var(--ws1)"></span>1 · Derivatives (Perps)</div>
+      <div class="it"><span class="sw" style="background:var(--ws2)"></span>2 · ETP Trading</div>
+      <div class="it"><span class="sw" style="background:var(--ws3)"></span>3 · 24/7 RWA Trading</div>
+      <div class="it"><span class="sw" style="background:var(--ws4)"></span>4 · Structured Products</div>
+      <div class="it"><span class="sw" style="background:var(--ws5)"></span>5 · Spot Trading</div>
+      <div class="it"><span class="sw dash"></span>parallelisable (runs concurrently within its workstream)</div>
+      <div class="it"><span class="sw" style="background:#1f9f6c"></span>✓ done</div>
+    </div>
+
+    <!-- Notes -->
+    <div class="notes">
+      <div class="card">
+        <h3>How to read this</h3>
+        <ul>
+          <li><b>Workstreams 1–5</b> are independent product lines; each can start immediately given a dedicated team.</li>
+          <li><b>Dashed bars</b> are tasks that overlap <i>inside</i> a workstream — e.g. ETP reporting & risk-engine work run alongside the trading-API build.</li>
+          <li><b>Perps is the long pole</b> at 26 weeks, driven almost entirely by the 4-month Risk Engine integration.</li>
+          <li>The sequential view stacks workstreams end-to-end; the parallel view lines them all up at week 0.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Assumptions & open items</h3>
+        <ul>
+          <li><b>ETP 2.1 (Backoffice Adaption)</b> had no duration given — placeholdered at 3 wks and flagged. Needs sizing.</li>
+          <li><b>4 months → 17 weeks</b> used for Risk Engine Integration (1.3).</li>
+          <li>Parallel scenario assumes <b>5 independent squads</b>; shared platform/backoffice teams could create soft dependencies not shown here.</li>
+          <li>Structured Products (4) assumes 4.3 Risk Engine follows the per-product build; 4.2 runs parallel to 4.1.1.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="foot">DLT Finance · Product Roadmap · internal planning draft</div>
+  </div>
+
+  <script>
+    // Task model. dur in weeks. parStart = start when everything runs parallel (per-WS start = 0).
+    // seqOffset = weeks added in the sequential scenario (workstreams end-to-end).
+    const WS = {
+      1:{name:'Derivatives Trading (Perps)', color:getVar('--ws1'), span:26, seqOffset:0},
+      2:{name:'ETP Trading',                 color:getVar('--ws2'), span:8,  seqOffset:26},
+      3:{name:'24/7 RWA Trading',            color:getVar('--ws3'), span:10, seqOffset:34},
+      4:{name:'Structured Products',         color:getVar('--ws4'), span:14, seqOffset:44},
+      5:{name:'Spot Trading',                color:getVar('--ws5'), span:10, seqOffset:58},
+    };
+    const TASKS = [
+      {ws:1, code:'1.1', name:'Back Office Reporting',            start:0,  dur:0, done:true},
+      {ws:1, code:'1.2', name:'Additional Liquidity Sources',    start:0,  dur:3},
+      {ws:1, code:'1.3', name:'Risk Engine Integration',         start:3,  dur:17},
+      {ws:1, code:'1.4', name:'Flow of Funds / Settlement Auto', start:20, dur:6},
+
+      {ws:2, code:'2.1', name:'Backoffice Adaption (TBD)',       start:0,  dur:3, tbd:true},
+      {ws:2, code:'2.2', name:'Trading API Adaption',            start:3,  dur:4},
+      {ws:2, code:'2.3', name:'Reporting',                       start:3,  dur:4, par:true},
+      {ws:2, code:'2.4', name:'Risk Engine Adaption / Reporting',start:3,  dur:5, par:true},
+
+      {ws:3, code:'3.1', name:'LP Integration — Perps & Spot',   start:0,  dur:8},
+      {ws:3, code:'3.2', name:'Orderbook Aggregation — Perps',   start:0,  dur:10, par:true},
+      {ws:3, code:'3.3', name:'Risk Book Handling',              start:0,  dur:6,  par:true},
+      {ws:3, code:'3.4', name:'Back Office Handling',            start:0,  dur:6,  par:true},
+
+      {ws:4, code:'4.1', name:'Pricing Engine (general)',        start:0,  dur:6},
+      {ws:4, code:'4.1.1',name:'Pricing Engine — per Product',   start:6,  dur:4},
+      {ws:4, code:'4.2', name:'Backoffice Adaptions — per Product',start:6,dur:4, par:true},
+      {ws:4, code:'4.3', name:'Risk Engine',                     start:10, dur:4},
+
+      {ws:5, code:'5.1', name:'Structural Improvements & Adaptions',start:0,dur:10},
+    ];
+    const TOTAL = {par:26, seq:68};
+    let mode = 'par';
+
+    function getVar(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+    function offset(t){ return mode==='seq' ? WS[t.ws].seqOffset : 0; }
+    function pct(weeks){ return (weeks/TOTAL[mode])*100; }
+
+    function renderAxis(){
+      const axis=document.getElementById('axis'); axis.innerHTML='';
+      const total=TOTAL[mode];
+      for(let w=0; w<=total; w+=4){
+        const m=document.createElement('div'); m.className='mark';
+        m.style.left=pct(w)+'%';
+        const mo=(w/4.345).toFixed(1).replace(/\.0$/,'');
+        m.innerHTML='<span>w'+w+(w%13===0&&w>0?' · '+Math.round(w/4.345)+'mo':'')+'</span>';
+        axis.appendChild(m);
+      }
+    }
+
+    function render(){
+      renderAxis();
+      const bands=document.getElementById('bands'); bands.innerHTML='';
+      for(const id of Object.keys(WS)){
+        const ws=WS[id];
+        const band=document.createElement('div'); band.className='wsband';
+        const off=ws.seqOffset;
+        band.innerHTML='<div class="wshead"><span class="wsdot" style="background:'+ws.color+'"></span>'+
+          '<span class="t">'+id+' · '+ws.name+'</span>'+
+          '<span class="meta">'+ws.span+' wks critical path</span></div>';
+        const rows=document.createElement('div');
+        for(const t of TASKS.filter(x=>x.ws==id)){
+          const row=document.createElement('div'); row.className='row';
+          const label='<div class="label"><span class="code">'+t.code+'</span>'+t.name+'</div>';
+          const track=document.createElement('div'); track.className='track';
+          const start=t.start+offset(t);
+          if(t.done){
+            track.innerHTML='<div class="chip-done" style="left:'+pct(start)+'%">✓ done</div>';
+          }else{
+            const bar=document.createElement('div');
+            bar.className='bar'+(t.par?' par':'');
+            bar.style.background=ws.color;
+            bar.style.left=pct(start)+'%';
+            bar.style.width=pct(t.dur)+'%';
+            bar.innerHTML='<span>'+t.code+(t.tbd?' ·TBD':'')+'</span><span class="dur">'+t.dur+'w</span>';
+            track.appendChild(bar);
+          }
+          row.innerHTML=label; row.appendChild(track); rows.appendChild(row);
+        }
+        band.appendChild(rows); bands.appendChild(band);
+      }
+    }
+
+    function setMode(m){
+      mode=m;
+      document.getElementById('btnPar').classList.toggle('active',m==='par');
+      document.getElementById('btnSeq').classList.toggle('active',m==='seq');
+      document.getElementById('hint').textContent = m==='par'
+        ? 'Showing the fully-resourced plan — all workstreams start together (~26 weeks).'
+        : 'Showing the single-squad plan — workstreams run end-to-end (~68 weeks).';
+      render();
+    }
+    render();
+  </script>
+</body>
+</html>
