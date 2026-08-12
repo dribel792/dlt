@@ -322,13 +322,28 @@
 
     function gauge(c){
       const cx=66, cy=60, r=46, nr=r*0.72, sw=9;
-      const ang=v=>Math.PI*(1-(v-c.min)/(c.max-c.min)); // min→π (left), max→0 (right)
-      const pt=(v,rad)=>{const a=ang(v);return [(cx+rad*Math.cos(a)).toFixed(2),(cy-rad*Math.sin(a)).toFixed(2)];};
-      const arc=(a,b,col)=>{if(b<=a)return '';const p1=pt(a,r),p2=pt(b,r);
+      // Equal-thirds arc: red=[min,optLo], green=[optLo,optHi], yellow=[optHi,max]
+      // each map to exactly 1/3 of the 180° sweep. Needle uses the same piecewise
+      // mapping so it still lands in the semantically correct zone.
+      const stops=[c.min,c.optLo,c.optHi,c.max];
+      const frac=v=>{ // value → fraction of sweep [0..1]
+        v=Math.max(c.min,Math.min(c.max,v));
+        for(let i=0;i<3;i++){
+          const lo=stops[i],hi=stops[i+1];
+          if(v<=hi||i===2){
+            const local=hi>lo?(v-lo)/(hi-lo):0;
+            return (i+Math.max(0,Math.min(1,local)))/3;
+          }
+        }
+        return 1;
+      };
+      const ang=f=>Math.PI*(1-f); // f=0→π (left), f=1→0 (right)
+      const pt=(f,rad)=>{const a=ang(f);return [(cx+rad*Math.cos(a)).toFixed(2),(cy-rad*Math.sin(a)).toFixed(2)];};
+      const arc=(fa,fb,col)=>{const p1=pt(fa,r),p2=pt(fb,r);
         return '<path d="M '+p1[0]+' '+p1[1]+' A '+r+' '+r+' 0 0 1 '+p2[0]+' '+p2[1]+'" stroke="'+col+'" stroke-width="'+sw+'" fill="none"/>';};
-      const nt=pt(Math.max(c.min,Math.min(c.max,c.cur)),nr);
+      const nt=pt(frac(c.cur),nr);
       return '<svg viewBox="0 0 132 74" class="gsvg">'+
-        arc(c.min,c.optLo,'#c2452f')+arc(c.optLo,c.optHi,'#1f9f6c')+arc(c.optHi,c.max,'#d4922a')+
+        arc(0,1/3,'#c2452f')+arc(1/3,2/3,'#1f9f6c')+arc(2/3,1,'#d4922a')+
         '<line x1="'+cx+'" y1="'+cy+'" x2="'+nt[0]+'" y2="'+nt[1]+'" stroke="#0E1A22" stroke-width="2.6" stroke-linecap="round"/>'+
         '<circle cx="'+cx+'" cy="'+cy+'" r="4.6" fill="#0E1A22"/>'+
         '<text x="'+cx+'" y="'+(cy-14)+'" text-anchor="middle" class="gnum">'+c.cur+'</text>'+
