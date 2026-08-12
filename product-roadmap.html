@@ -49,19 +49,30 @@
     .save{grid-column:1/-1;text-align:center;font-size:14px;color:var(--ink);background:rgba(31,159,108,.08);border:1px solid rgba(31,159,108,.3);border-radius:12px;padding:12px;}
     .save b{color:#1f9f6c;}
 
-    /* Our ask */
-    .ask{position:relative;background:var(--petrol-grad);color:#fff;border-radius:16px;padding:24px 26px;margin-bottom:30px;box-shadow:0 10px 26px rgba(6,37,54,.22);}
-    .ask .asktag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--petrol-deep);background:var(--mint);border-radius:20px;padding:5px 12px;margin-bottom:14px;}
-    .ask .askhead{font-family:var(--font-display);font-size:19px;font-weight:700;line-height:1.4;max-width:900px;}
-    .ask .askhead b{color:var(--mint);}
-    .ask .asksub{margin-top:12px;font-size:14px;color:rgba(255,255,255,.82);}
-    .ask .asksub b{color:#fff;}
-    .askgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:16px;}
-    .askcell{display:flex;flex-direction:column;align-items:center;gap:7px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:11px;padding:14px 12px;text-align:center;}
-    .askcell .role{font-size:13.5px;font-weight:700;letter-spacing:.01em;}
-    .askcell .fte{font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--mint);line-height:1;}
-    .askcell .fte::after{content:' FTE';font-size:10px;font-weight:700;color:rgba(255,255,255,.6);letter-spacing:.06em;}
-    @media(max-width:760px){.askgrid{grid-template-columns:1fr 1fr;}}
+    /* Our ask · Team Capacity Barometer */
+    .ask2{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px 26px 20px;margin-bottom:30px;box-shadow:0 6px 18px rgba(15,23,42,.05);}
+    .ask2-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;}
+    .asktag2{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#fff;background:var(--petrol);border-radius:20px;padding:5px 12px;margin-bottom:10px;}
+    .baro-title{font-family:var(--font-display);font-size:22px;font-weight:800;letter-spacing:-.01em;color:var(--ink);}
+    .baro-sub{margin-top:6px;font-size:13.5px;color:var(--muted);max-width:660px;}
+    .baro-legend{display:flex;gap:16px;font-size:12px;font-weight:700;color:var(--muted);align-items:center;flex-wrap:wrap;}
+    .baro-legend span{display:flex;align-items:center;gap:6px;}
+    .baro-legend i{width:13px;height:13px;border-radius:4px;display:inline-block;}
+    .baro-grid{margin-top:16px;display:flex;flex-direction:column;gap:10px;}
+    .baro-row{display:grid;grid-template-columns:215px 150px 1fr;align-items:center;gap:18px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px 18px;}
+    .baro-label{display:flex;align-items:center;gap:11px;}
+    .baro-ico{font-size:20px;line-height:1;}
+    .baro-name{font-size:14.5px;font-weight:800;color:var(--ink);letter-spacing:-.01em;}
+    .baro-gauge{display:flex;flex-direction:column;align-items:center;}
+    .gsvg{width:132px;height:76px;overflow:visible;}
+    .gnum{font-family:var(--font-display);font-size:22px;font-weight:800;fill:var(--ink);}
+    .baro-opt{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.02em;margin-top:2px;}
+    .baro-text{font-size:13px;line-height:1.5;}
+    .baro-covers b,.baro-gap b{color:var(--ink);}
+    .baro-gap{color:#c2452f;margin-top:4px;}
+    .baro-foot{margin-top:14px;font-size:13px;color:var(--muted);}
+    .baro-foot b{color:var(--ink);}
+    @media(max-width:760px){.baro-row{grid-template-columns:1fr;justify-items:center;text-align:center;}.baro-text{text-align:left;}}
 
     /* Controls */
     .controls{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px;}
@@ -126,21 +137,23 @@
   </div>
 
   <div class="wrap">
-    <!-- Our ask -->
-    <div class="ask">
-      <div class="asktag">🎯 Our ask</div>
-      <p class="askhead">We can start on all five products <b>in parallel</b> — compressing delivery from <b>~18 months</b> (serial, one squad) to <b>~6 months</b> (critical path = Perps).</p>
-      <p class="asksub">That requires <b>12–14 FTEs in total</b>, hired <b>sequentially</b> as workstreams spin up:</p>
-      <div class="askgrid">
-        <div class="askcell"><span class="role">🛠️ Engineering</span><span class="fte">4–5</span></div>
-        <div class="askcell"><span class="role">🧭 Product</span><span class="fte">1–2</span></div>
-        <div class="askcell"><span class="role">📋 Project Manager</span><span class="fte">1</span></div>
-        <div class="askcell"><span class="role">🛡️ Risk Manager</span><span class="fte">1</span></div>
-        <div class="askcell"><span class="role">📈 Trader</span><span class="fte">2</span></div>
-        <div class="askcell"><span class="role">🔧 Solution Engineering</span><span class="fte">1</span></div>
-        <div class="askcell"><span class="role">🤝 Aftersales / Client Dev</span><span class="fte">1</span></div>
+    <!-- Our ask · Team Capacity Barometer -->
+    <section class="ask2">
+      <div class="ask2-head">
+        <div>
+          <div class="asktag2">🎯 Our ask</div>
+          <div class="baro-title">Team Capacity Barometer</div>
+          <p class="baro-sub">Current headcount vs. the zone needed to run each function well. Reaching the optimal zone across the board is what lets the five products run <b>in parallel</b> — compressing delivery from ~18 months to ~6 months.</p>
+        </div>
+        <div class="baro-legend">
+          <span><i style="background:#c2452f"></i>Too small</span>
+          <span><i style="background:#1f9f6c"></i>Optimal zone</span>
+          <span><i style="background:#d4922a"></i>Too big</span>
+        </div>
       </div>
-    </div>
+      <div id="barometer" class="baro-grid"></div>
+      <p class="baro-foot">Plus specialist hires the trading products require but that sit outside current team capacity — <b>Risk Manager ×1</b> and <b>Traders ×2</b>. Total build-out ≈ <b>12–14 FTEs, hired sequentially</b> as workstreams spin up.</p>
+    </section>
 
     <!-- Controls -->
     <div class="controls">
@@ -284,6 +297,58 @@
     }
 
     render();
+
+    // Team Capacity Barometer — current headcount vs. optimal zone per function.
+    const CAP = [
+      {ico:'🛠️', name:'Tech / Engineering', cur:8, min:0, max:16, optLo:12, optHi:13,
+        covers:'Core platform plus all five product builds — 8 backend engineers today.',
+        gap:'4–5 below optimal — every workstream competes for one squad, forcing the serial ~18-month path instead of parallel.'},
+      {ico:'🧭', name:'Product', cur:2, min:0, max:6, optLo:3, optHi:4,
+        covers:'Roadmap ownership across the five product lines — 2 product managers today.',
+        gap:'1–2 short — lines queue behind limited PM bandwidth; hard to drive workstreams concurrently.'},
+      {ico:'🤝', name:'Sales & Business Development', cur:3, min:0, max:8, optLo:1, optHi:6,
+        covers:'Lead gen (ad hoc) + segments 1 & 2, top 10–15 accounts only.',
+        gap:'Segments 3 & 4 untouched, no long-tail follow-up, no dedicated lead gen.'},
+      {ico:'⚙️', name:'Solution Architecture', cur:1, min:0, max:5, optLo:2, optHi:3,
+        covers:'Pre-sales technical scoping for every active deal.',
+        gap:'Single point of failure — becomes the bottleneck right before signing.'},
+      {ico:'✅', name:'Project Management / Onboarding', cur:1, min:0, max:6, optLo:3, optHi:4,
+        covers:'Legal & product alignment after signing, one client at a time.',
+        gap:'Clients can’t be onboarded in parallel — backlog builds up right after close.'},
+      {ico:'🎧', name:'Client Development / Aftersales', cur:0, min:0, max:4, optLo:1, optHi:2,
+        covers:'Nothing today — no dedicated owner.',
+        gap:'Zero cross-/up-sell motion, existing-client revenue left on the table.'},
+    ];
+
+    function gauge(c){
+      const cx=66, cy=60, r=46, nr=r*0.72, sw=9;
+      const ang=v=>Math.PI*(1-(v-c.min)/(c.max-c.min)); // min→π (left), max→0 (right)
+      const pt=(v,rad)=>{const a=ang(v);return [(cx+rad*Math.cos(a)).toFixed(2),(cy-rad*Math.sin(a)).toFixed(2)];};
+      const arc=(a,b,col)=>{if(b<=a)return '';const p1=pt(a,r),p2=pt(b,r);
+        return '<path d="M '+p1[0]+' '+p1[1]+' A '+r+' '+r+' 0 0 1 '+p2[0]+' '+p2[1]+'" stroke="'+col+'" stroke-width="'+sw+'" fill="none"/>';};
+      const nt=pt(Math.max(c.min,Math.min(c.max,c.cur)),nr);
+      return '<svg viewBox="0 0 132 74" class="gsvg">'+
+        arc(c.min,c.optLo,'#c2452f')+arc(c.optLo,c.optHi,'#1f9f6c')+arc(c.optHi,c.max,'#d4922a')+
+        '<line x1="'+cx+'" y1="'+cy+'" x2="'+nt[0]+'" y2="'+nt[1]+'" stroke="#0E1A22" stroke-width="2.6" stroke-linecap="round"/>'+
+        '<circle cx="'+cx+'" cy="'+cy+'" r="4.6" fill="#0E1A22"/>'+
+        '<text x="'+cx+'" y="'+(cy-14)+'" text-anchor="middle" class="gnum">'+c.cur+'</text>'+
+        '</svg>';
+    }
+
+    function renderBarometer(){
+      const el=document.getElementById('barometer'); el.innerHTML='';
+      for(const c of CAP){
+        const optTxt = c.optLo===c.optHi ? ('optimal '+c.optLo) : ('optimal '+c.optLo+'–'+c.optHi);
+        const row=document.createElement('div'); row.className='baro-row';
+        row.innerHTML=
+          '<div class="baro-label"><span class="baro-ico">'+c.ico+'</span><span class="baro-name">'+c.name+'</span></div>'+
+          '<div class="baro-gauge">'+gauge(c)+'<div class="baro-opt">'+optTxt+'</div></div>'+
+          '<div class="baro-text"><div class="baro-covers"><b>Covers:</b> '+c.covers+'</div>'+
+          '<div class="baro-gap"><b>Gap:</b> '+c.gap+'</div></div>';
+        el.appendChild(row);
+      }
+    }
+    renderBarometer();
   </script>
 </body>
 </html>
