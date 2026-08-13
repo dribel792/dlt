@@ -142,39 +142,11 @@
         <div class="name">DLT <span class="light">Finance</span></div>
       </div>
     </div>
-    <p class="sub">Five product workstreams from crypto perps to structured products. Starting <b>1 Sep 2026</b> and run serially by one squad, the full suite is <b>~18 months</b> end-to-end (to early 2028) — that's the plan charted below. Resourced to run in parallel, the same scope compresses to <b>~6 months</b> (critical path = Perps). See our ask.</p>
+    <p class="sub">Five product workstreams from crypto perps to structured products. Starting <b>1 Sep 2026</b> and run serially by one squad, the full suite is <b>~18 months</b> end-to-end (to early 2028) — that's the plan charted below. Resourced to run in parallel, the same scope compresses to <b>~6–7 months</b>, with all five products live by <b>Q1 2027</b>. See our ask below.</p>
     <div class="date" style="margin-top:16px">Draft · Aug 2026 · planning estimates, not commitments</div>
   </div>
 
   <div class="wrap">
-    <!-- Our ask · Team Capacity Barometer -->
-    <section class="ask2">
-      <div class="ask2-head">
-        <div>
-          <div class="asktag2">🎯 Our ask</div>
-          <div class="baro-title">Team Capacity Barometer</div>
-          <p class="baro-sub">Current headcount vs. the zone needed to run each function well. Reaching the optimal zone across the board is what lets the five products run <b>in parallel</b> — compressing delivery from ~18 months to ~6 months.</p>
-        </div>
-        <div class="baro-legend">
-          <span><i style="background:#c2452f"></i>Too small</span>
-          <span><i style="background:#1f9f6c"></i>Optimal zone</span>
-          <span><i style="background:#d4922a"></i>Too big</span>
-        </div>
-      </div>
-      <div id="barometer" class="baro-grid"></div>
-      <div class="baro-takeaway">
-        <div class="tk">
-          <span class="tk-num">12–14</span>
-          <span class="tk-txt"><b>FTEs — total team build-out</b>, hired sequentially as workstreams spin up. Includes the specialist trading hires beyond current capacity: <b>Risk Manager ×1</b> and <b>Traders ×2</b>.</span>
-        </div>
-        <div class="tk-div"></div>
-        <div class="tk">
-          <span class="tk-num">up to €25M</span>
-          <span class="tk-txt"><b>Capital required</b> to run the full product suite at full scale.</span>
-        </div>
-      </div>
-    </section>
-
     <!-- Controls -->
     <div class="controls">
       <div class="toggle">
@@ -201,6 +173,34 @@
       <div class="it"><span class="sw dash"></span>parallelisable (runs concurrently within its workstream)</div>
       <div class="it"><span class="sw" style="background:#1f9f6c"></span>✓ done</div>
     </div>
+
+    <!-- Our ask · Team Capacity Barometer -->
+    <section class="ask2" style="margin-top:30px">
+      <div class="ask2-head">
+        <div>
+          <div class="asktag2">🎯 Our ask</div>
+          <div class="baro-title">Team Capacity Barometer</div>
+          <p class="baro-sub">Current headcount vs. the zone needed to run each function well. Reaching the optimal zone across the board is what lets the five products run <b>in parallel</b> — compressing delivery from ~18 months to ~6 months.</p>
+        </div>
+        <div class="baro-legend">
+          <span><i style="background:#c2452f"></i>Too small</span>
+          <span><i style="background:#1f9f6c"></i>Optimal zone</span>
+          <span><i style="background:#d4922a"></i>Too big</span>
+        </div>
+      </div>
+      <div id="barometer" class="baro-grid"></div>
+      <div class="baro-takeaway">
+        <div class="tk">
+          <span class="tk-num">12–14</span>
+          <span class="tk-txt"><b>FTEs — total team build-out</b>, hired sequentially as workstreams spin up. Includes the specialist trading hires beyond current capacity: <b>Risk Manager ×1</b> and <b>Traders ×2</b>.</span>
+        </div>
+        <div class="tk-div"></div>
+        <div class="tk">
+          <span class="tk-num">up to €25M</span>
+          <span class="tk-txt"><b>Capital required</b> to run the full product suite at full scale.</span>
+        </div>
+      </div>
+    </section>
 
     <!-- Notes -->
     <div class="notes">
@@ -231,15 +231,16 @@
     // Task model. dur in weeks. parStart = start when everything runs parallel (per-WS start = 0).
     // seqOffset = weeks added in the sequential scenario (workstreams end-to-end).
     // parOffset = weeks a workstream is delayed in the PARALLEL scenario.
-    // Perps (1) & Spot (5) can start Sep 2026; WS 2–4 can't kick off before
-    // October 2026 (~1 month = 4.345 wks), then run concurrently (~70% overlap).
-    const OCT = 4.345; // 1 month after the 1 Sep 2026 start
+    // Parallel-mode staggered kick-offs after the 1 Sep 2026 start (Perps):
+    // WS2 ETP → Oct · WS3 RWA → Nov · WS4 Structured → Dec · WS5 Spot → Jan 2027.
+    const MO = 4.345; // one month in weeks
+    const OCT=1*MO, NOV=2*MO, DEC=3*MO, JAN=4*MO;
     const WS = {
       1:{name:'Derivatives Trading (Perps)', color:getVar('--ws1'), span:26, seqOffset:0,  parOffset:0},
       2:{name:'ETP Trading',                 color:getVar('--ws2'), span:12, seqOffset:26, parOffset:OCT},
-      3:{name:'24/7 RWA Trading',            color:getVar('--ws3'), span:16, seqOffset:38, parOffset:OCT},
-      4:{name:'Structured Products',         color:getVar('--ws4'), span:14, seqOffset:54, parOffset:OCT},
-      5:{name:'Spot Trading',                color:getVar('--ws5'), span:10, seqOffset:68, parOffset:0},
+      3:{name:'24/7 RWA Trading',            color:getVar('--ws3'), span:16, seqOffset:38, parOffset:NOV},
+      4:{name:'Structured Products',         color:getVar('--ws4'), span:14, seqOffset:54, parOffset:DEC},
+      5:{name:'Spot Trading',                color:getVar('--ws5'), span:10, seqOffset:68, parOffset:JAN},
     };
     const TASKS = [
       {ws:1, code:'1.1', name:'Back Office Reporting',            start:0,  dur:0, done:true},
@@ -264,7 +265,7 @@
 
       {ws:5, code:'5.1', name:'Structural Improvements & Adaptions',start:0,dur:10},
     ];
-    const TOTAL = {par:26, seq:78};
+    const TOTAL = {par:30.4, seq:78};
     let mode = 'seq';
 
     function getVar(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
@@ -273,7 +274,7 @@
 
     const HINTS = {
       seq:'🐢 <b>Sequential plan</b> — one squad, workstreams run end-to-end from <b>Sep 2026 to early 2028</b> (~18 months). Tasks within each workstream still overlap where they can.',
-      par:'⚡ <b>Parallel plan</b> — fully resourced squads run concurrently. Perps starts <b>Sep 2026</b>; workstreams <b>2–4 kick off in October 2026</b> (not before), then overlap ~70%. Critical path = Perps → <b>~6 months</b> to early 2027.'
+      par:'⚡ <b>Parallel plan</b> — fully resourced squads run concurrently. Perps starts <b>Sep 2026</b>; the rest kick off staggered — <b>ETP Oct</b>, <b>RWA Nov</b>, <b>Structured Products Dec</b>, <b>Spot Jan 2027</b> — then overlap. Full suite live by <b>Q1 2027</b> (~6–7 months).'
     };
     function setMode(m){
       mode=m;
