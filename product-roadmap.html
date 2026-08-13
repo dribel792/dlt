@@ -72,6 +72,16 @@
     .baro-gap{color:#c2452f;margin-top:4px;}
     .baro-foot{margin-top:14px;font-size:13px;color:var(--muted);}
     .baro-foot b{color:var(--ink);}
+    /* Headline takeaway strip */
+    .baro-takeaway{margin-top:18px;display:flex;gap:22px;flex-wrap:wrap;align-items:stretch;
+      background:linear-gradient(90deg,rgba(14,74,102,.07),rgba(123,212,198,.12));
+      border:1.5px solid rgba(14,74,102,.24);border-radius:14px;padding:18px 22px;}
+    .tk{display:flex;align-items:baseline;gap:12px;flex:1;min-width:280px;}
+    .tk-num{font-family:var(--font-display);font-size:34px;font-weight:800;color:var(--petrol);letter-spacing:-.02em;line-height:1;white-space:nowrap;}
+    .tk-txt{font-size:14px;color:var(--ink);font-weight:600;line-height:1.42;}
+    .tk-txt b{color:var(--petrol);}
+    .tk-div{width:1px;background:rgba(14,74,102,.18);align-self:stretch;}
+    @media(max-width:760px){.tk-div{display:none;}}
     @media(max-width:760px){.baro-row{grid-template-columns:1fr;justify-items:center;text-align:center;}.baro-text{text-align:left;}}
 
     /* Controls */
@@ -152,12 +162,26 @@
         </div>
       </div>
       <div id="barometer" class="baro-grid"></div>
-      <p class="baro-foot">Plus specialist hires the trading products require but that sit outside current team capacity — <b>Risk Manager ×1</b> and <b>Traders ×2</b>. Total build-out ≈ <b>12–14 FTEs, hired sequentially</b> as workstreams spin up.</p>
+      <div class="baro-takeaway">
+        <div class="tk">
+          <span class="tk-num">12–14</span>
+          <span class="tk-txt"><b>FTEs — total team build-out</b>, hired sequentially as workstreams spin up. Includes the specialist trading hires beyond current capacity: <b>Risk Manager ×1</b> and <b>Traders ×2</b>.</span>
+        </div>
+        <div class="tk-div"></div>
+        <div class="tk">
+          <span class="tk-num">up to €25M</span>
+          <span class="tk-txt"><b>Capital required</b> to run the full product suite at full scale.</span>
+        </div>
+      </div>
     </section>
 
     <!-- Controls -->
     <div class="controls">
-      <div class="modehint">🐢 <b>Sequential plan</b> — one squad, workstreams run end-to-end from <b>Sep 2026 to early 2028</b> (~18 months). Tasks within each workstream still overlap where they can.</div>
+      <div class="toggle">
+        <button id="btnSeq" class="active" onclick="setMode('seq')">🐢 Sequential</button>
+        <button id="btnPar" onclick="setMode('par')">⚡ Parallel</button>
+      </div>
+      <div class="modehint" id="modehint">🐢 <b>Sequential plan</b> — one squad, workstreams run end-to-end from <b>Sep 2026 to early 2028</b> (~18 months). Tasks within each workstream still overlap where they can.</div>
     </div>
 
     <!-- Gantt -->
@@ -206,12 +230,16 @@
   <script>
     // Task model. dur in weeks. parStart = start when everything runs parallel (per-WS start = 0).
     // seqOffset = weeks added in the sequential scenario (workstreams end-to-end).
+    // parOffset = weeks a workstream is delayed in the PARALLEL scenario.
+    // Perps (1) & Spot (5) can start Sep 2026; WS 2–4 can't kick off before
+    // October 2026 (~1 month = 4.345 wks), then run concurrently (~70% overlap).
+    const OCT = 4.345; // 1 month after the 1 Sep 2026 start
     const WS = {
-      1:{name:'Derivatives Trading (Perps)', color:getVar('--ws1'), span:26, seqOffset:0},
-      2:{name:'ETP Trading',                 color:getVar('--ws2'), span:12, seqOffset:26},
-      3:{name:'24/7 RWA Trading',            color:getVar('--ws3'), span:16, seqOffset:38},
-      4:{name:'Structured Products',         color:getVar('--ws4'), span:14, seqOffset:54},
-      5:{name:'Spot Trading',                color:getVar('--ws5'), span:10, seqOffset:68},
+      1:{name:'Derivatives Trading (Perps)', color:getVar('--ws1'), span:26, seqOffset:0,  parOffset:0},
+      2:{name:'ETP Trading',                 color:getVar('--ws2'), span:12, seqOffset:26, parOffset:OCT},
+      3:{name:'24/7 RWA Trading',            color:getVar('--ws3'), span:16, seqOffset:38, parOffset:OCT},
+      4:{name:'Structured Products',         color:getVar('--ws4'), span:14, seqOffset:54, parOffset:OCT},
+      5:{name:'Spot Trading',                color:getVar('--ws5'), span:10, seqOffset:68, parOffset:0},
     };
     const TASKS = [
       {ws:1, code:'1.1', name:'Back Office Reporting',            start:0,  dur:0, done:true},
@@ -240,8 +268,20 @@
     let mode = 'seq';
 
     function getVar(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
-    function offset(t){ return mode==='seq' ? WS[t.ws].seqOffset : 0; }
+    function offset(t){ return mode==='seq' ? WS[t.ws].seqOffset : WS[t.ws].parOffset; }
     function pct(weeks){ return (weeks/TOTAL[mode])*100; }
+
+    const HINTS = {
+      seq:'🐢 <b>Sequential plan</b> — one squad, workstreams run end-to-end from <b>Sep 2026 to early 2028</b> (~18 months). Tasks within each workstream still overlap where they can.',
+      par:'⚡ <b>Parallel plan</b> — fully resourced squads run concurrently. Perps starts <b>Sep 2026</b>; workstreams <b>2–4 kick off in October 2026</b> (not before), then overlap ~70%. Critical path = Perps → <b>~6 months</b> to early 2027.'
+    };
+    function setMode(m){
+      mode=m;
+      document.getElementById('btnSeq').classList.toggle('active', m==='seq');
+      document.getElementById('btnPar').classList.toggle('active', m==='par');
+      document.getElementById('modehint').innerHTML=HINTS[m];
+      render();
+    }
 
     // Calendar model. Project starts 1 Sep 2026; everything is shown in months.
     const WPM=4.345; // weeks per month
