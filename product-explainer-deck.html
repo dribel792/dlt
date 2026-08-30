@@ -1,0 +1,2416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DLT Finance — Product Explainer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap">
+  <style>
+    :root {
+      /* base — light */
+      --bg: #ffffff;
+      --surface: #ffffff;
+      --surface2: #f4f6f9;
+      --border: #e3e7ee;
+      --ink: #0E1A22;
+      --text: var(--ink);
+      --muted: #5b6577;
+
+      /* DLT Finance — petrol-navy */
+      --petrol-deep: #062536;
+      --petrol: #0E4A66;
+      --petrol-mid: #11617E;
+      --petrol-grad: linear-gradient(90deg, #062536 0%, #0E4A66 55%, #11617E 100%);
+      --mint: #7BD4C6;
+
+      /* legacy brand-* mapped to petrol so existing components rebrand cleanly */
+      --brand: var(--petrol);
+      --brand-strong: var(--petrol-deep);
+      --brand-soft: rgba(14, 74, 102, 0.08);
+      --brand-border: rgba(14, 74, 102, 0.32);
+      --brand-accent-light: var(--mint);
+
+      /* semantic fills */
+      --blue: #3b6cd9;
+      --blue-soft: rgba(59, 108, 217, 0.08);
+      --blue-border: rgba(59, 108, 217, 0.28);
+
+      --green: #1f9f6c;
+      --green-soft: rgba(31, 159, 108, 0.08);
+      --green-border: rgba(31, 159, 108, 0.32);
+
+      --yellow: #d4922a;
+      --yellow-soft: rgba(212, 146, 42, 0.12);
+      --yellow-border: rgba(212, 146, 42, 0.45);
+
+      --purple: #6b50d9;
+      --purple-soft: rgba(107, 80, 217, 0.08);
+      --purple-border: rgba(107, 80, 217, 0.32);
+
+      --violet: var(--purple);
+      --amber: var(--yellow);
+
+      /* type */
+      --font-display: 'Helvetica Neue', 'Inter Tight', system-ui, sans-serif;
+      --font-body: 'Inter Tight', 'Helvetica Neue', system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      background: #f5f7fa;
+      color: var(--text);
+      font-family: var(--font-body);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .deck {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* ── 16:9 slide frame ── */
+    .slide {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04);
+    }
+    .slide::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 96px;
+      background: var(--petrol-grad);
+      z-index: 0;
+    }
+
+    .slide-inner {
+      position: absolute;
+      inset: 0;
+      padding: 22px 52px 38px;
+      display: flex;
+      flex-direction: column;
+      z-index: 1;
+    }
+
+    /* ── Slide header (sits on the petrol bar) ── */
+    .slide-header {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 22px;
+      min-height: 64px;
+    }
+    .eyebrow {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--mint);
+    }
+    .slide-title {
+      font-family: var(--font-display);
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-top: 4px;
+      color: #ffffff;
+      line-height: 1.1;
+    }
+    .slide-title .accent {
+      color: var(--mint);
+      -webkit-text-fill-color: var(--mint);
+      background: none;
+    }
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #ffffff;
+    }
+    .brand-mark svg { width: 24px; height: 24px; }
+    .brand-mark svg path {
+      stroke: #ffffff;
+      fill: rgba(255, 255, 255, 0.12);
+    }
+    .brand-mark .name {
+      font-family: var(--font-display);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      font-size: 14px;
+      color: #ffffff;
+    }
+    .brand-mark .name .light { color: var(--mint); }
+
+    /* ─────────────────────────────────────────────────────────
+       SLIDE 1 — THE MARKET
+       ───────────────────────────────────────────────────────── */
+
+    .market-grid {
+      flex: 1;
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      gap: 14px;
+      margin-top: 4px;
+      min-height: 0;
+    }
+
+    .col-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .market-row {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .market-cards {
+      display: grid;
+      gap: 8px;
+      flex: 1;
+      min-height: 0;
+    }
+    .market-cards.state { grid-template-columns: repeat(3, 1fr); }
+    .market-cards.trends { grid-template-columns: repeat(2, 1fr); }
+
+    .market-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+    .market-card .num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 5px;
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 800;
+      color: #ffffff;
+      background: var(--brand);
+      margin-bottom: 5px;
+    }
+    .market-card.blue .num { background: var(--blue); }
+    .market-card .headline {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 2px;
+      line-height: 1.3;
+    }
+    .market-card .caption {
+      font-size: 10.5px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .market-card.brand { border-left: 3px solid var(--brand); }
+    .market-card.blue { border-left: 3px solid var(--blue); }
+    .market-card.yellow {
+      border-left: 3px solid var(--yellow);
+      background: var(--yellow-soft);
+    }
+    .market-card.yellow .headline { color: var(--ink); }
+    .market-card.yellow .caption {
+      font-weight: 700;
+      color: var(--yellow);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 9.5px;
+    }
+
+    /* sub-tile row */
+    .tile-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 6px;
+    }
+    .tile {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 7px;
+      border-radius: 5px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .tile.b { border-color: var(--blue-border); color: var(--blue); background: var(--blue-soft); }
+    .tile.g { border-color: var(--brand-border); color: var(--brand); background: var(--brand-soft); }
+
+    /* "Leading To" arrow — horizontal, between state & trends */
+    .leading-to {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 2px 0;
+    }
+    .leading-to .label {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--brand);
+    }
+    .leading-to svg { width: 64px; height: 22px; }
+
+    /* product category tiles inside trend 3 */
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px;
+      margin-top: 6px;
+    }
+    .cat {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 7px;
+    }
+    .cat .cat-name {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--brand);
+      margin-bottom: 2px;
+      line-height: 1.2;
+    }
+    .cat .cat-sub {
+      font-size: 9px;
+      color: var(--muted);
+      line-height: 1.3;
+    }
+
+    /* ─────────────────────────────────────────────────────────
+       SLIDE 2 — PRODUCT POSITIONING
+       ───────────────────────────────────────────────────────── */
+
+    .pos-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 22px;
+      margin-top: 8px;
+    }
+
+    .pos-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .wrappers-row {
+      display: grid;
+      grid-template-columns: 0.55fr 1.7fr 0.75fr;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .panel {
+      border-radius: 14px;
+      padding: 14px 14px 12px;
+      display: flex;
+      flex-direction: column;
+    }
+    .panel.micar {
+      background: linear-gradient(180deg, rgba(14, 74, 102, 0.08) 0%, rgba(14, 74, 102, 0.02) 100%);
+      border: 1px solid var(--brand-border);
+    }
+    .panel.mifid {
+      background: linear-gradient(180deg, rgba(59, 108, 217, 0.07) 0%, rgba(59, 108, 217, 0.02) 100%);
+      border: 1px solid var(--blue-border);
+    }
+    .panel.infra {
+      background: linear-gradient(180deg, rgba(107, 80, 217, 0.07) 0%, rgba(107, 80, 217, 0.02) 100%);
+      border: 1.5px dashed var(--purple-border);
+    }
+
+    .panel-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 6px;
+    }
+    .panel-title .badge-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .panel-title .num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 5px;
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+    .panel.micar .panel-title .num { background: var(--brand); }
+    .panel.mifid .panel-title .num { background: var(--blue); }
+    .panel.infra .panel-title .num { background: var(--purple); }
+    .panel-title .badge {
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      padding: 4px 8px;
+      border-radius: 5px;
+    }
+
+    /* Slide 2 intro strip ("read the slide in this order") */
+    .pos-intro {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 14px;
+      margin-bottom: 8px;
+      background: var(--surface2);
+      border-left: 3px solid var(--petrol);
+      border-radius: 8px;
+      font-size: 11px;
+      color: var(--text);
+    }
+    .pos-intro strong { color: var(--petrol); font-weight: 800; }
+    .pos-intro .arrow {
+      color: var(--petrol);
+      font-weight: 800;
+    }
+    .panel.micar .badge { background: var(--brand); color: #ffffff; }
+    .panel.mifid .badge { background: var(--blue); color: #ffffff; }
+    .panel.infra .badge { background: var(--purple); color: #ffffff; }
+    .panel-title .hint {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      text-align: right;
+    }
+
+    /* Infrastructure / Clearing panel content */
+    .infra-body {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+    .infra-lede {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.35;
+    }
+    .infra-swap {
+      display: flex;
+      align-items: stretch;
+      justify-content: space-between;
+      gap: 6px;
+      background: #ffffff;
+      border: 1px dashed var(--purple-border);
+      border-radius: 8px;
+      padding: 8px 8px;
+    }
+    .infra-side {
+      flex: 1;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--ink);
+      text-align: center;
+      line-height: 1.25;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .infra-side .sub {
+      display: block;
+      font-size: 9px;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-top: 1px;
+    }
+    .infra-arrow {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--purple);
+      align-self: center;
+    }
+    .infra-foot {
+      font-size: 10px;
+      color: var(--muted);
+      font-style: italic;
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .product-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .product-item {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 8px 11px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .panel.micar .product-item { border-color: var(--brand-border); }
+
+    /* MIFID inner grid */
+    .mifid-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr 0.85fr;
+      gap: 10px;
+    }
+    .mifid-col {
+      background: #ffffff;
+      border: 1px solid var(--blue-border);
+      border-radius: 8px;
+      padding: 10px 11px;
+    }
+    .mifid-col .col-head {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: 6px;
+    }
+    .mifid-col ul {
+      list-style: none;
+      padding: 0;
+      font-size: 11px;
+      color: var(--text);
+      line-height: 1.55;
+    }
+    .mifid-col li {
+      padding: 1.5px 0;
+      color: var(--text);
+    }
+    .mifid-col li.note {
+      color: var(--muted);
+      font-style: italic;
+      font-size: 10.5px;
+    }
+
+    /* underlyings row */
+    .underlyings {
+      margin-top: 12px;
+    }
+    .underlyings .ul-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .underlyings .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .chip {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 9px;
+      border-radius: 12px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    /* Backbone strip */
+    .backbone {
+      background: linear-gradient(180deg, rgba(95, 156, 74, 0.07) 0%, rgba(95, 156, 74, 0.02) 100%);
+      border: 1px solid var(--brand-border);
+      border-radius: 12px;
+      padding: 12px 16px;
+    }
+    .backbone-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .backbone-head strong {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--brand);
+    }
+    .backbone-head .why {
+      font-size: 10.5px;
+      color: var(--muted);
+    }
+    .backbone-modules {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .mod {
+      background: #ffffff;
+      border: 1px solid var(--brand-border);
+      border-radius: 7px;
+      padding: 8px 10px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .mod .mod-sub {
+      display: block;
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* Takeaways side panel */
+    .takeaways {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 18px;
+      display: flex;
+      flex-direction: column;
+    }
+    .takeaways h3 {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--brand);
+      margin-bottom: 14px;
+    }
+    .takeaways ol {
+      list-style: none;
+      counter-reset: t;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .takeaways li {
+      counter-increment: t;
+      position: relative;
+      padding-left: 28px;
+      font-size: 11.5px;
+      line-height: 1.5;
+      color: var(--text);
+    }
+    .takeaways li::before {
+      content: counter(t);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      background: var(--brand);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .takeaways li strong { color: var(--brand); }
+    .takeaways li .sub {
+      display: block;
+      color: var(--muted);
+      margin-top: 2px;
+      font-size: 11px;
+    }
+
+    /* ─────────────────────────────────────────────────────────
+       SLIDES 3 & 4 — PRODUCT SPOTLIGHTS
+       ───────────────────────────────────────────────────────── */
+
+    .spotlight-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1.55fr 1fr;
+      gap: 18px;
+      margin-top: 6px;
+      min-height: 0;
+    }
+
+    .payoff-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 18px 12px;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    .payoff-card .payoff-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    .payoff-card .payoff-head .h-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .payoff-card .payoff-head .h-cap {
+      font-size: 10.5px;
+      color: var(--muted);
+    }
+    .payoff-card svg {
+      width: 100%;
+      flex: 1;
+      min-height: 0;
+      display: block;
+    }
+    .payoff-card .payoff-note {
+      margin-top: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--brand-strong);
+      text-align: center;
+    }
+
+    .terms-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 0;
+    }
+
+    .terms-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+    }
+    .terms-card .terms-title {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--brand);
+      margin-bottom: 8px;
+    }
+    .terms-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 6px 0;
+      border-bottom: 1px dashed var(--border);
+      font-size: 12px;
+    }
+    .terms-row:last-child { border-bottom: none; }
+    .terms-row .k { color: var(--muted); font-weight: 600; }
+    .terms-row .v { color: var(--text); font-weight: 700; text-align: right; }
+    .terms-row .v.brand { color: var(--brand-strong); }
+
+    .scenarios-card .scenario {
+      display: flex;
+      gap: 10px;
+      padding: 8px 0;
+    }
+    .scenarios-card .scenario + .scenario {
+      border-top: 1px dashed var(--border);
+    }
+    .scenarios-card .scenario .tag {
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      padding: 3px 7px;
+      border-radius: 4px;
+      height: fit-content;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .scenarios-card .scenario .tag.best { background: var(--brand); color: #fff; }
+    .scenarios-card .scenario .tag.worst { background: #ecf0f5; color: #5b6577; }
+    .scenarios-card .scenario .body strong {
+      color: var(--text);
+      display: block;
+      font-size: 11.5px;
+      margin-bottom: 2px;
+    }
+    .scenarios-card .scenario .body span {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+    .scenarios-card .scenario .body em {
+      color: var(--brand-strong);
+      font-style: normal;
+      font-weight: 700;
+    }
+
+    .under-strip {
+      margin-top: 12px;
+      background: linear-gradient(180deg, rgba(95, 156, 74, 0.07) 0%, rgba(95, 156, 74, 0.02) 100%);
+      border: 1px solid var(--brand-border);
+      border-radius: 12px;
+      padding: 11px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .under-strip .ustr-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--brand);
+      flex-shrink: 0;
+    }
+    .under-strip .ustr-note {
+      font-size: 11.5px;
+      color: var(--text);
+      font-weight: 600;
+    }
+    .under-strip .ustr-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-left: auto;
+    }
+
+    /* ─────────────────────────────────────────────────────────
+       SLIDE 5 — POST-ACQUISITION EFFICIENCIES
+       ───────────────────────────────────────────────────────── */
+
+    .synergy-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 22px;
+      margin-top: 8px;
+      min-height: 0;
+    }
+
+    .synergy-main {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-height: 0;
+    }
+
+    .synergy-stacks {
+      display: grid;
+      grid-template-columns: 1fr 110px 1fr;
+      gap: 14px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .syn-stack {
+      border-radius: 14px;
+      padding: 14px 14px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .syn-stack.dlt {
+      background: linear-gradient(180deg, rgba(95, 156, 74, 0.08) 0%, rgba(95, 156, 74, 0.02) 100%);
+      border: 1px solid var(--brand-border);
+    }
+    .syn-stack.uphold {
+      background: linear-gradient(180deg, rgba(59, 108, 217, 0.07) 0%, rgba(59, 108, 217, 0.02) 100%);
+      border: 1px solid var(--blue-border);
+    }
+
+    .syn-stack-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .syn-badge {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      padding: 4px 9px;
+      border-radius: 5px;
+      color: #ffffff;
+    }
+    .syn-badge.dlt { background: var(--brand); }
+    .syn-badge.uphold { background: var(--blue); }
+    .syn-hint {
+      font-size: 10.5px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .syn-row {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 8px 38px 8px 11px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text);
+      position: relative;
+    }
+    .syn-stack.dlt .syn-row { border-color: var(--brand-border); }
+    .syn-stack.uphold .syn-row { border-color: var(--blue-border); }
+
+    .syn-row.overlap {
+      background: linear-gradient(90deg, rgba(95,156,74,0.12), rgba(59,108,217,0.12));
+      border: 1px solid rgba(201, 139, 31, 0.45);
+      box-shadow: 0 0 0 2px rgba(201, 139, 31, 0.10);
+    }
+    .syn-row.overlap::after {
+      content: 'Overlap';
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--amber);
+      background: rgba(201, 139, 31, 0.12);
+      padding: 3px 6px;
+      border-radius: 4px;
+    }
+
+    .syn-merge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-align: center;
+      padding: 6px 0;
+    }
+    .syn-merge-label {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--brand);
+      line-height: 1.3;
+    }
+    .syn-merge svg {
+      width: 64px;
+      height: 64px;
+    }
+    .syn-merge-sub {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .syn-action {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: linear-gradient(180deg, rgba(95, 156, 74, 0.10) 0%, rgba(95, 156, 74, 0.03) 100%);
+      border: 1px solid var(--brand-border);
+      border-radius: 12px;
+      padding: 12px 16px;
+    }
+    .syn-action-tag {
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #ffffff;
+      background: var(--brand);
+      padding: 6px 10px;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+    .syn-action-body strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+    .syn-action-body span {
+      font-size: 11.5px;
+      color: var(--muted);
+    }
+
+    /* ─────────────────────────────────────────────────────────
+       SLIDES 3 & 4 — HERO ("Used by …") STRIP
+       ───────────────────────────────────────────────────────── */
+
+    .hero-strip {
+      margin-top: 12px;
+      background: var(--petrol-grad);
+      color: #ffffff;
+      border-radius: 12px;
+      padding: 12px 18px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 16px;
+      align-items: center;
+    }
+    .hero-strip .h-label {
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--mint);
+      white-space: nowrap;
+    }
+    .hero-strip .h-metrics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 16px;
+      align-items: baseline;
+    }
+    .hero-strip .h-logo {
+      font-size: 13px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 0.02em;
+    }
+    .hero-strip .h-sep {
+      color: rgba(255, 255, 255, 0.35);
+      font-weight: 400;
+    }
+    .hero-strip .h-fact {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.94);
+    }
+    .hero-strip .h-fact em {
+      font-style: normal;
+      color: var(--mint);
+    }
+
+    /* ─────────────────────────────────────────────────────────
+       SLIDE 5 — CATEGORY | LICENSE TABLE
+       ───────────────────────────────────────────────────────── */
+
+    .cat-license {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      margin-top: 4px;
+    }
+    .cat-license .table-head {
+      display: grid;
+      grid-template-columns: 0.9fr 2fr 0.7fr;
+      gap: 10px;
+      padding: 9px 14px;
+      background: var(--petrol);
+      color: #ffffff;
+      border-radius: 10px 10px 0 0;
+      font-family: var(--font-display);
+    }
+    .cat-license .table-head span {
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    .cat-license .table-body {
+      flex: 1;
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+      overflow: hidden;
+    }
+    .cat-license .cat-group {
+      border-bottom: 1px solid var(--border);
+    }
+    .cat-license .cat-group:last-child { border-bottom: none; }
+    .cat-license .cat-row {
+      display: grid;
+      grid-template-columns: 0.9fr 2fr 0.7fr;
+      gap: 10px;
+      padding: 6.5px 14px;
+      align-items: center;
+      border-bottom: 1px dashed var(--border);
+      font-size: 11.5px;
+    }
+    .cat-license .cat-row:last-child { border-bottom: none; }
+    .cat-license .cat-row.head-row {
+      background: var(--surface2);
+    }
+    .cat-license .cat-name-cell {
+      font-weight: 800;
+      font-size: 12px;
+      color: var(--ink);
+      letter-spacing: 0.02em;
+    }
+    .cat-license .cat-name-cell.lev { color: var(--blue); }
+    .cat-license .cat-name-cell.yield { color: var(--green); }
+    .cat-license .cat-name-cell.tradfi { color: var(--purple); }
+    .cat-license .cat-name-cell.misc { color: var(--petrol); }
+    .cat-license .product-cell {
+      color: var(--text);
+      font-weight: 600;
+    }
+    .cat-license .product-cell .sub {
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 10.5px;
+      margin-left: 6px;
+    }
+    .cat-license .lic-cell {
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .cat-license .lic-pill {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 12px;
+      color: #ffffff;
+    }
+    .cat-license .lic-pill.micar { background: var(--brand); }
+    .cat-license .lic-pill.mifid { background: var(--blue); }
+
+    /* ─────────────────────────────────────────────────────────
+       SLIDE 6 — THREE OPERATING MODELS (cards, not matrix)
+       ───────────────────────────────────────────────────────── */
+
+    .ops-models {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 14px;
+      margin-top: 6px;
+      min-height: 0;
+    }
+    .ops-model {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+    }
+    .ops-model.compound {
+      border: 1.5px solid var(--petrol);
+      background: linear-gradient(180deg, rgba(14, 74, 102, 0.05) 0%, #ffffff 100%);
+    }
+    .ops-model-head {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .ops-tag {
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .ops-model h3 {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--petrol);
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
+    .ops-model.compound h3 { color: var(--petrol-deep); }
+    .ops-desc {
+      font-size: 11.5px;
+      color: var(--text);
+      line-height: 1.4;
+    }
+    .ops-components {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .ops-component {
+      background: #ffffff;
+      border: 1px solid var(--petrol-border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .ops-component .comp-tag {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--petrol);
+    }
+    .ops-component .comp-head {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--ink);
+      line-height: 1.25;
+    }
+    .ops-component .comp-body {
+      font-size: 10.5px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+    .ops-foot-label {
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: auto;
+      margin-bottom: 2px;
+    }
+    .ops-logos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .logo {
+      font-family: var(--font-display);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      padding: 5px 11px;
+      border-radius: 6px;
+      color: #ffffff;
+      background: #4b5563;
+      white-space: nowrap;
+    }
+    .logo.kraken   { background: #5741D9; }
+    .logo.bitvavo  { background: #0080FF; }
+    .logo.binance  { background: #F3BA2F; color: #1a1d27; }
+    .logo.nexo     { background: #1A2C5B; }
+    .logo.bitget   { background: #00F0FF; color: #0b1d3a; }
+    .logo.neutral  { background: #4b5563; }
+    .logo.placeholder {
+      background: transparent;
+      color: var(--muted);
+      border: 1.5px dashed var(--border);
+      font-weight: 600;
+    }
+
+    /* slide footer */
+    .slide-foot {
+      position: absolute;
+      bottom: 14px;
+      left: 52px;
+      right: 52px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+
+    /* ── additions for the product explainer deck ── */
+    .wrappers-row.even { grid-template-columns: repeat(3, 1fr); }
+    .panel.yieldp {
+      background: linear-gradient(180deg, rgba(31,159,108,0.08) 0%, rgba(31,159,108,0.02) 100%);
+      border: 1px solid var(--green-border);
+    }
+    .panel.yieldp .panel-title .num { background: var(--green); }
+    .panel.yieldp .badge { background: var(--green); color: #fff; }
+    .panel.yieldp .product-item { border-color: var(--green-border); }
+    .panel.horizon {
+      background: linear-gradient(180deg, rgba(212,146,42,0.10) 0%, rgba(212,146,42,0.02) 100%);
+      border: 1.5px dashed var(--yellow-border);
+    }
+    .panel.horizon .panel-title .num { background: var(--yellow); }
+    .panel.horizon .badge { background: var(--yellow); color: #fff; }
+    .product-item .pi-sub {
+      display: block;
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    /* token angle strip */
+    .token-strip {
+      margin-top: 12px;
+      background: var(--petrol-grad);
+      color: #fff;
+      border-radius: 12px;
+      padding: 11px 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .token-strip .t-label {
+      font-size: 10.5px; font-weight: 800; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--mint); white-space: nowrap;
+    }
+    .token-strip .t-item { font-size: 11.5px; font-weight: 700; color: rgba(255,255,255,0.94); }
+    .token-strip .t-item em { font-style: normal; color: var(--mint); }
+    .token-strip .t-sep { color: rgba(255,255,255,0.35); }
+
+    /* hero strip variant used for our own commercial framing */
+    .hero-strip.econ { background: linear-gradient(90deg, #062536 0%, #0E4A66 100%); }
+
+    /* distributor economics tiles */
+    .econ-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .econ-tile {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--petrol);
+      border-radius: 8px;
+      padding: 9px 11px;
+    }
+    .econ-tile .e-num {
+      font-family: var(--font-display);
+      font-size: 19px; font-weight: 800; color: var(--petrol-deep); line-height: 1.15;
+    }
+    .econ-tile .e-lab { font-size: 10px; color: var(--muted); line-height: 1.3; margin-top: 2px; }
+
+    /* watch-out callout */
+    .watchout {
+      margin-top: 10px;
+      background: var(--yellow-soft);
+      border: 1px solid var(--yellow-border);
+      border-left: 3px solid var(--yellow);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 11.5px;
+      color: var(--text);
+      line-height: 1.4;
+    }
+    .watchout strong { color: var(--yellow); letter-spacing: 0.04em; }
+
+    /* shelf table (Category | Product | Token angle) */
+    .cat-license.shelf .table-head,
+    .cat-license.shelf .cat-row { grid-template-columns: 0.75fr 1.15fr 1.5fr; }
+    .cat-license.shelf .cat-row { padding: 5px 14px; font-size: 11px; line-height: 1.35; }
+    .cat-license.shelf .angle-cell { color: var(--muted); font-size: 10.5px; line-height: 1.35; }
+    .cat-license .cat-name-cell.prot { color: var(--green); }
+    .cat-license .cat-name-cell.hyb { color: var(--yellow); }
+
+    /* why-token grid */
+    .why-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: 1fr 1fr;
+      gap: 10px;
+      margin-top: 6px;
+      min-height: 0;
+    }
+    .why-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--petrol);
+      border-radius: 10px;
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 7px;
+    }
+    .why-card .w-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 22px; height: 22px; border-radius: 6px;
+      font-family: var(--font-display); font-size: 12px; font-weight: 800;
+      color: #fff; background: var(--petrol);
+    }
+    .why-card .w-head { font-size: 15.5px; font-weight: 800; color: var(--ink); line-height: 1.25; }
+    .why-card .w-body { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <div class="deck">
+
+    <!-- ─────────── SLIDE 1 — THE SHELF ─────────── -->
+    <section class="slide">
+      <div class="slide-inner">
+
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow">DLT Finance · Product Explainer</div>
+            <h1 class="slide-title">What You Can <span class="accent">Distribute</span></h1>
+          </div>
+          <div class="brand-mark">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#5f9c4a" stroke-width="1.6" fill="rgba(95,156,74,0.08)"/></svg>
+            <div class="name">DLT <span class="light">Finance</span></div>
+          </div>
+        </div>
+
+        <div class="pos-grid">
+          <div class="pos-stack">
+
+            <div class="wrappers-row even">
+
+              <div class="panel micar">
+                <div class="panel-title">
+                  <span class="badge-group"><span class="num">1</span><span class="badge">Leverage</span></span>
+                  <span class="hint">Directional</span>
+                </div>
+                <div class="product-list">
+                  <div class="product-item">Tokenised Perps<span class="pi-sub">= Knock-Out Certificates</span></div>
+                  <div class="product-item">Turbos · Mini Futures<span class="pi-sub">TradFi ETP shelf, tokenised</span></div>
+                  <div class="product-item">Factor Certificates<span class="pi-sub">Constant 3× / 5×, daily reset</span></div>
+                  <div class="product-item">Options<span class="pi-sub">Vanilla &amp; structured</span></div>
+                </div>
+              </div>
+
+              <div class="panel yieldp">
+                <div class="panel-title">
+                  <span class="badge-group"><span class="num">2</span><span class="badge">Yield + Protection</span></span>
+                  <span class="hint">Income · capital shapes</span>
+                </div>
+                <div class="product-list">
+                  <div class="product-item">Covered Calls<span class="pi-sub">~20–40% APY, upside capped</span></div>
+                  <div class="product-item">Shark Fin<span class="pi-sub">Up to ~30% APR, 100% capital protected</span></div>
+                  <div class="product-item">Downside-Protected Notes<span class="pi-sub">2× BTC upside, max loss 30%</span></div>
+                  <div class="product-item">BRC · Autocallables · Bonus · Discount<span class="pi-sub">The full TradFi income shelf</span></div>
+                </div>
+              </div>
+
+              <div class="panel mifid">
+                <div class="panel-title">
+                  <span class="badge-group"><span class="num">3</span><span class="badge">Delta-1</span></span>
+                  <span class="hint">Access</span>
+                </div>
+                <div class="product-list">
+                  <div class="product-item">xStocks / Tokenised Equities<span class="pi-sub">AAPL, TSLA, NVDA — 24/7, fractional</span></div>
+                  <div class="product-item">Tokenised ETFs<span class="pi-sub">S&amp;P 500, sector, thematic</span></div>
+                  <div class="product-item">Tokenised Bonds &amp; T-Bills<span class="pi-sub">Yield-bearing collateral</span></div>
+                  <div class="product-item">Tokenised Metals &amp; Commodities<span class="pi-sub">XAU, XAG, WTI</span></div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="backbone">
+              <div class="backbone-head">
+                <strong>↑ One issuance + risk backbone — every product, every underlying</strong>
+                <span class="why">New product = new Final Terms, not a new build</span>
+              </div>
+              <div class="backbone-modules">
+                <div class="mod">Base Prospectus <span class="mod-sub">Liechtenstein TVTG · security token</span></div>
+                <div class="mod">Risk &amp; Hedging Engine <span class="mod-sub">Delta hedge on venue partner</span></div>
+                <div class="mod">Custody &amp; Settlement <span class="mod-sub">On-chain DvP, no CSD</span></div>
+                <div class="mod">PRIIPS KID · Reporting <span class="mod-sub">Per product, per language</span></div>
+              </div>
+            </div>
+
+          </div>
+
+          <aside class="takeaways">
+            <h3>Read in this order</h3>
+            <ol>
+              <li><strong>The wrapper is the product.</strong><span class="sub">Every payoff below is issued as a security token. The underlying — BTC, NVDA, gold, EUR/USD — is just a parameter.</span></li>
+              <li><strong>You distribute, we issue.</strong><span class="sub">You need no prospectus, no issuance entity, no hedging book. You need a MiFID distribution permission and an API.</span></li>
+              <li><strong>Two revenue shapes.</strong><span class="sub">Yield products pay you a share of user yield (~30–50%). Leverage products pay you spread on churn.</span></li>
+              <li><strong>Speed is the moat.</strong><span class="sub">First product ~12 weeks. Every product after that is weeks, not quarters.</span></li>
+            </ol>
+          </aside>
+        </div>
+
+        <div class="slide-foot">
+          <span>Slide 1 · The Shelf</span>
+          <span>2026 | Confidential</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── SLIDE 2 — xSTOCKS ─────────── -->
+    <section class="slide">
+      <div class="slide-inner">
+
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow">DLT Finance · Product Spotlight</div>
+            <h1 class="slide-title"><span class="accent">xStocks</span> — tokenised equities, 24/7 and fractional</h1>
+          </div>
+          <div class="brand-mark">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#5f9c4a" stroke-width="1.6" fill="rgba(95,156,74,0.08)"/></svg>
+            <div class="name">DLT <span class="light">Finance</span></div>
+          </div>
+        </div>
+
+        <div class="spotlight-grid">
+
+          <div class="payoff-card">
+            <div class="payoff-head">
+              <span class="h-label">Payoff profile · Delta-1 tracker</span>
+              <span class="h-cap">Token return vs. underlying share</span>
+            </div>
+            <svg viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+              <line x1="50" y1="280" x2="580" y2="280" stroke="#cbd2dc" stroke-width="1"/>
+              <line x1="50" y1="40" x2="50" y2="280" stroke="#cbd2dc" stroke-width="1"/>
+              <text x="22" y="160" fill="#5b6577" font-size="11" transform="rotate(-90, 22, 160)" text-anchor="middle">Token return</text>
+              <text x="315" y="310" fill="#5b6577" font-size="11" text-anchor="middle">Underlying share price</text>
+
+              <line x1="50" y1="190" x2="580" y2="190" stroke-dasharray="3,3" stroke="#d6dbe3"/>
+              <text x="545" y="184" fill="#5b6577" font-size="10">0% return</text>
+
+              <line x1="220" y1="60" x2="220" y2="280" stroke-dasharray="4,4" stroke="#c98b1f" stroke-width="1.2"/>
+              <text x="220" y="52" fill="#c98b1f" font-size="11" font-weight="700" text-anchor="middle">Entry price</text>
+
+              <polygon points="60,257 220,190 220,280 60,280" fill="rgba(208,68,68,0.08)"/>
+              <polygon points="220,190 580,39 580,190" fill="rgba(31,159,108,0.12)"/>
+
+              <polyline points="60,257 580,39" stroke="#5f9c4a" stroke-width="2.6" fill="none"/>
+
+              <text x="452" y="92" fill="#1a1d27" font-size="12" font-weight="700" text-anchor="middle">1:1 with the share</text>
+              <text x="452" y="108" fill="#5b6577" font-size="10.5" text-anchor="middle">no cap, no barrier, no maturity</text>
+              <text x="140" y="240" fill="#5b6577" font-size="10.5" text-anchor="middle">Same downside as holding the stock</text>
+
+              <circle cx="300" cy="156" r="4" fill="#0E4A66"/>
+              <text x="312" y="162" fill="#0E4A66" font-size="10" font-weight="700">Weekend / overnight moves tradable</text>
+            </svg>
+            <div class="payoff-note">The simplest wrapper — and the gateway product that pulls users onto the rest of the shelf.</div>
+          </div>
+
+          <div class="terms-stack">
+            <div class="terms-card">
+              <div class="terms-title">Key Terms</div>
+              <div class="terms-row"><span class="k">Form</span><span class="v">Security token (TVTG)</span></div>
+              <div class="terms-row"><span class="k">Maturity</span><span class="v">Open-end</span></div>
+              <div class="terms-row"><span class="k">Minimum ticket</span><span class="v brand">Fractional, from ~€1</span></div>
+              <div class="terms-row"><span class="k">Trading hours</span><span class="v brand">24 / 7</span></div>
+              <div class="terms-row"><span class="k">Fee</span><span class="v">~0.5–1% p.a. in NAV</span></div>
+              <div class="terms-row"><span class="k">Corporate actions</span><span class="v">Dividends passed through in NAV</span></div>
+            </div>
+
+            <div class="terms-card scenarios-card">
+              <div class="terms-title">Why a client uses it</div>
+              <div class="scenario">
+                <span class="tag best">Best</span>
+                <div class="body">
+                  <strong>Access no local broker gives them</strong>
+                  <span>US single names and ETFs, in <em>€50 clips</em>, on a Sunday night, settling in <em>seconds</em> — no CSD, no T+1.</span>
+                </div>
+              </div>
+              <div class="scenario">
+                <span class="tag worst">Worst</span>
+                <div class="body">
+                  <strong>Equity risk is unchanged</strong>
+                  <span>Full downside of the share. The wrapper changes <em>access and settlement</em>, not market risk.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="hero-strip econ">
+          <span class="h-label">Distributor angle</span>
+          <span class="h-metrics">
+            <span class="h-fact"><em>Gateway SKU</em> — cheapest product to launch, widest audience</span>
+            <span class="h-sep">·</span>
+            <span class="h-fact">Feeds the <em>yield</em> and <em>leverage</em> shelf with existing balances</span>
+            <span class="h-sep">·</span>
+            <span class="h-fact">Token doubles as <em>collateral</em> across the platform</span>
+          </span>
+        </div>
+
+        <div class="slide-foot">
+          <span>Slide 2 · Product Spotlight — xStocks</span>
+          <span>2026 | Confidential</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── SLIDE 3 — TOKENISED PERPS / KO CERTS ─────────── -->
+    <section class="slide">
+      <div class="slide-inner">
+
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow">DLT Finance · Product Spotlight</div>
+            <h1 class="slide-title"><span class="accent">Tokenised Perps</span> — Knock-Out Certificates</h1>
+          </div>
+          <div class="brand-mark">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#5f9c4a" stroke-width="1.6" fill="rgba(95,156,74,0.08)"/></svg>
+            <div class="name">DLT <span class="light">Finance</span></div>
+          </div>
+        </div>
+
+        <div class="spotlight-grid">
+
+          <div class="payoff-card">
+            <div class="payoff-head">
+              <span class="h-label">Payoff profile · 5× long KO certificate</span>
+              <span class="h-cap">Certificate return vs. underlying</span>
+            </div>
+            <svg viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+              <line x1="50" y1="280" x2="580" y2="280" stroke="#cbd2dc" stroke-width="1"/>
+              <line x1="50" y1="40" x2="50" y2="280" stroke="#cbd2dc" stroke-width="1"/>
+              <text x="22" y="160" fill="#5b6577" font-size="11" transform="rotate(-90, 22, 160)" text-anchor="middle">Certificate return</text>
+              <text x="315" y="310" fill="#5b6577" font-size="11" text-anchor="middle">Underlying price</text>
+
+              <line x1="50" y1="190" x2="580" y2="190" stroke-dasharray="3,3" stroke="#d6dbe3"/>
+              <text x="545" y="184" fill="#5b6577" font-size="10">0%</text>
+              <text x="60" y="276" fill="#d04444" font-size="10" font-weight="700">−100%</text>
+
+              <line x1="260" y1="60" x2="260" y2="280" stroke-dasharray="4,4" stroke="#c98b1f" stroke-width="1.2"/>
+              <text x="260" y="52" fill="#c98b1f" font-size="11" font-weight="700" text-anchor="middle">Entry (spot)</text>
+
+              <line x1="140" y1="60" x2="140" y2="280" stroke-dasharray="4,4" stroke="#d04444" stroke-width="1.4"/>
+              <text x="140" y="52" fill="#d04444" font-size="11" font-weight="700" text-anchor="middle">KO barrier</text>
+
+              <rect x="50" y="60" width="90" height="220" fill="rgba(208,68,68,0.07)"/>
+              <text x="95" y="150" fill="#d04444" font-size="10" font-weight="700" text-anchor="middle">Knocked</text>
+              <text x="95" y="164" fill="#d04444" font-size="10" font-weight="700" text-anchor="middle">out</text>
+
+              <line x1="60" y1="220" x2="580" y2="142" stroke="#9aa3b1" stroke-width="1.2" stroke-dasharray="5,4"/>
+              <text x="576" y="136" fill="#9aa3b1" font-size="10" text-anchor="end">Spot (1×) benchmark</text>
+
+              <polyline points="50,280 140,280" stroke="#d04444" stroke-width="2.6" fill="none"/>
+              <polyline points="140,280 440,55" stroke="#5f9c4a" stroke-width="2.6" fill="none"/>
+              <path d="M440 55 L462 38" stroke="#5f9c4a" stroke-width="2.6" stroke-linecap="round"/>
+              <path d="M462 38 L452 41 M462 38 L459 48" stroke="#5f9c4a" stroke-width="2.2" stroke-linecap="round"/>
+
+              <text x="380" y="180" fill="#1a1d27" font-size="12" font-weight="700" text-anchor="middle">≈5× the spot move</text>
+              <text x="380" y="196" fill="#5b6577" font-size="10.5" text-anchor="middle">leverage = distance from barrier</text>
+              <text x="215" y="268" fill="#d04444" font-size="10" text-anchor="middle" font-weight="600">Barrier = liquidation price</text>
+            </svg>
+            <div class="payoff-note">Pricing is identical to a linear perp — it drops onto an existing perp UI with no frontend rebuild.</div>
+          </div>
+
+          <div class="terms-stack">
+            <div class="terms-card">
+              <div class="terms-title">Key Terms</div>
+              <div class="terms-row"><span class="k">Form</span><span class="v">Security token, open-end</span></div>
+              <div class="terms-row"><span class="k">Direction</span><span class="v">Long &amp; short</span></div>
+              <div class="terms-row"><span class="k">Leverage</span><span class="v brand">2× – 20×+ (set by barrier)</span></div>
+              <div class="terms-row"><span class="k">ESMA 2× CFD cap</span><span class="v brand">Does not apply — it's a security</span></div>
+              <div class="terms-row"><span class="k">Margin calls</span><span class="v">None — no negative balance</span></div>
+              <div class="terms-row"><span class="k">Funding</span><span class="v">Priced into the barrier drift</span></div>
+            </div>
+
+            <div class="terms-card scenarios-card">
+              <div class="terms-title">What the user gets</div>
+              <div class="scenario">
+                <span class="tag best">Best</span>
+                <div class="body">
+                  <strong>Perp-style leverage, no perp-style plumbing</strong>
+                  <span>BTC +4% on a 5× long → <em>≈ +20%</em>. No margin account, no funding surprises, no negative balance.</span>
+                </div>
+              </div>
+              <div class="scenario">
+                <span class="tag worst">Worst</span>
+                <div class="body">
+                  <strong>Barrier touched</strong>
+                  <span>Certificate terminates at ≈ zero — <em>total loss of that ticket</em>, but never more. Loss is capped at the stake.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="hero-strip econ">
+          <span class="h-label">Distributor angle</span>
+          <span class="h-metrics">
+            <span class="h-fact">Sell <em>real leverage to EU retail</em> where CFDs are capped at 2×</span>
+            <span class="h-sep">·</span>
+            <span class="h-fact">You take <em>spread on churn</em> — highest turnover product on the shelf</span>
+            <span class="h-sep">·</span>
+            <span class="h-fact">Zero balance sheet: <em>DLT holds the hedge and the risk</em></span>
+          </span>
+        </div>
+
+        <div class="slide-foot">
+          <span>Slide 3 · Product Spotlight — Knock-Out Certificates</span>
+          <span>2026 | Confidential</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── SLIDE 4 — COVERED CALLS DEEP DIVE ─────────── -->
+    <section class="slide">
+      <div class="slide-inner">
+
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow">DLT Finance · Product Spotlight</div>
+            <h1 class="slide-title"><span class="accent">Covered Calls</span> — yield from selling upside</h1>
+          </div>
+          <div class="brand-mark">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#5f9c4a" stroke-width="1.6" fill="rgba(95,156,74,0.08)"/>
+            </svg>
+            <div class="name">DLT <span class="light">Finance</span></div>
+          </div>
+        </div>
+
+        <div class="spotlight-grid">
+
+          <!-- LEFT: Payoff diagram -->
+          <div class="payoff-card">
+            <div class="payoff-head">
+              <span class="h-label">Payoff profile · Covered Call at expiry</span>
+              <span class="h-cap">Return vs. underlying at expiry</span>
+            </div>
+            <svg viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+              <!-- axes -->
+              <line x1="50" y1="280" x2="580" y2="280" stroke="#cbd2dc" stroke-width="1"/>
+              <line x1="50" y1="40" x2="50" y2="280" stroke="#cbd2dc" stroke-width="1"/>
+              <text x="22" y="160" fill="#5b6577" font-size="11" transform="rotate(-90, 22, 160)" text-anchor="middle">Return at expiry (% of underlying)</text>
+              <text x="315" y="310" fill="#5b6577" font-size="11" text-anchor="middle">Underlying price at expiry</text>
+
+              <!-- value lines -->
+              <line x1="50" y1="190" x2="580" y2="190" stroke-dasharray="3,3" stroke="#d6dbe3"/>
+              <line x1="50" y1="100" x2="580" y2="100" stroke-dasharray="3,3" stroke="#d6dbe3"/>
+              <text x="576" y="194" fill="#5b6577" font-size="10" text-anchor="end">0% return</text>
+              <text x="576" y="104" fill="#5b6577" font-size="10" text-anchor="end">Cap (strike + premium)</text>
+
+              <!-- spot (initial) vertical -->
+              <line x1="220" y1="60" x2="220" y2="280" stroke-dasharray="4,4" stroke="#c98b1f" stroke-width="1.2"/>
+              <text x="220" y="52" fill="#c98b1f" font-size="11" font-weight="700" text-anchor="middle">Initial spot</text>
+
+              <!-- strike vertical -->
+              <line x1="420" y1="60" x2="420" y2="280" stroke-dasharray="4,4" stroke="#3b6cd9" stroke-width="1.2"/>
+              <text x="420" y="52" fill="#3b6cd9" font-size="11" font-weight="700" text-anchor="middle">Strike (OTM)</text>
+
+              <!-- shaded loss region (below spot, exposed) -->
+              <polygon points="60,260 220,180 220,280 60,280" fill="rgba(208,68,68,0.10)"/>
+
+              <!-- shaded premium gain region (between spot & strike) -->
+              <polygon points="220,180 420,100 420,190 220,190" fill="rgba(31,159,108,0.14)"/>
+
+              <!-- shaded capped region (above strike) -->
+              <polygon points="420,100 580,100 580,190 420,190" fill="rgba(59,108,217,0.10)"/>
+
+              <!-- benchmark: pure long underlying (dashed) -->
+              <line x1="60" y1="275" x2="580" y2="40" stroke="#9aa3b1" stroke-width="1.2" stroke-dasharray="5,4"/>
+              <text x="555" y="56" fill="#9aa3b1" font-size="10" text-anchor="end">Long underlying (benchmark)</text>
+
+              <!-- payoff polyline: covered call -->
+              <polyline points="60,260 220,180 420,100 580,100" stroke="#5f9c4a" stroke-width="2.6" fill="none"/>
+
+              <!-- annotations -->
+              <text x="140" y="222" fill="#1a1d27" font-size="11" font-weight="700" text-anchor="middle">Exposed to downside</text>
+              <text x="140" y="236" fill="#5b6577" font-size="10" text-anchor="middle">premium cushions loss</text>
+
+              <text x="320" y="148" fill="#1a1d27" font-size="11" font-weight="700" text-anchor="middle">Earn premium + appreciation</text>
+              <text x="320" y="162" fill="#5b6577" font-size="10" text-anchor="middle">tracks underlying up to strike</text>
+
+              <text x="500" y="84" fill="#3b6cd9" font-size="11" font-weight="700" text-anchor="middle">Capped above strike</text>
+            </svg>
+            <div class="payoff-note">Earn option premium · participate in spot up to the strike · downside same as holding the underlying.</div>
+          </div>
+
+          <!-- RIGHT: Key terms + scenarios -->
+          <div class="terms-stack">
+            <div class="terms-card">
+              <div class="terms-title">Key Terms</div>
+              <div class="terms-row"><span class="k">Term</span><span class="v">1 – 4 weeks</span></div>
+              <div class="terms-row"><span class="k">Strike</span><span class="v">5 – 15% OTM</span></div>
+              <div class="terms-row"><span class="k">Premium / Yield</span><span class="v brand">~ 20 – 40% APY</span></div>
+              <div class="terms-row"><span class="k">Settlement</span><span class="v">Cash or physical</span></div>
+              <div class="terms-row"><span class="k">Capital protection</span><span class="v">No (downside same as spot)</span></div>
+            </div>
+
+            <div class="terms-card scenarios-card">
+              <div class="terms-title">What the user earns</div>
+              <div class="scenario">
+                <span class="tag best">Best</span>
+                <div class="body">
+                  <strong>Underlying drifts up but stays below strike</strong>
+                  <span>Keep premium + full underlying appreciation — <em>~20–40% APY</em> on top of spot return.</span>
+                </div>
+              </div>
+              <div class="scenario">
+                <span class="tag worst">Worst</span>
+                <div class="body">
+                  <strong>Underlying tanks</strong>
+                  <span>Premium cushions the loss; exposed to the rest of the downside — <em>same as holding spot</em>.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Hero strip: customer validation -->
+        <div class="hero-strip">
+          <span class="h-label">Used by</span>
+          <span class="h-metrics">
+            <span class="h-logo">Kraken</span>
+            <span class="h-sep">·</span>
+            <span class="h-logo">Bitvavo</span>
+            <span class="h-sep">·</span>
+            <span class="h-logo">Binance</span>
+            <span class="h-sep">·</span>
+            <span class="h-fact"><em>~30%</em> revenue share</span>
+            <span class="h-sep">·</span>
+            <span class="h-fact"><em>several hundred million</em> weekly volume</span>
+          </span>
+        </div>
+
+        <div class="slide-foot">
+          <span>Slide 4 · Product Spotlight — Covered Calls</span>
+          <span>2026 | Confidential</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ─────────── SLIDE 3 — SHARK FIN DEEP DIVE ─────────── -->
+    <section class="slide">
+      <div class="slide-inner">
+
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow">DLT Finance · Product Spotlight</div>
+            <h1 class="slide-title"><span class="accent">Shark Fin</span> — yield with full capital protection</h1>
+          </div>
+          <div class="brand-mark">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#5f9c4a" stroke-width="1.6" fill="rgba(95,156,74,0.08)"/>
+            </svg>
+            <div class="name">DLT <span class="light">Finance</span></div>
+          </div>
+        </div>
+
+        <div class="spotlight-grid">
+
+          <!-- LEFT: Payoff diagram -->
+          <div class="payoff-card">
+            <div class="payoff-head">
+              <span class="h-label">Payoff profile · Bull Shark Fin</span>
+              <span class="h-cap">APR vs. underlying at expiry</span>
+            </div>
+            <svg viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+              <!-- axes -->
+              <line x1="50" y1="280" x2="580" y2="280" stroke="#cbd2dc" stroke-width="1"/>
+              <line x1="50" y1="40" x2="50" y2="280" stroke="#cbd2dc" stroke-width="1"/>
+              <text x="22" y="160" fill="#5b6577" font-size="11" transform="rotate(-90, 22, 160)" text-anchor="middle">APR (yield to user)</text>
+              <text x="315" y="310" fill="#5b6577" font-size="11" text-anchor="middle">Underlying price at expiry</text>
+
+              <!-- value lines -->
+              <line x1="50" y1="240" x2="580" y2="240" stroke-dasharray="3,3" stroke="#d6dbe3"/>
+              <line x1="50" y1="80" x2="580" y2="80" stroke-dasharray="3,3" stroke="#d6dbe3"/>
+              <text x="576" y="84" fill="#5b6577" font-size="10" text-anchor="end">Max APR (~30%)</text>
+              <text x="576" y="252" fill="#5b6577" font-size="10" text-anchor="end">Base APR (~2%)</text>
+
+              <!-- verticals -->
+              <line x1="220" y1="60" x2="220" y2="280" stroke-dasharray="4,4" stroke="#c98b1f" stroke-width="1.2"/>
+              <text x="220" y="52" fill="#c98b1f" font-size="11" font-weight="700" text-anchor="middle">Lower bound (Spot)</text>
+
+              <line x1="450" y1="60" x2="450" y2="280" stroke-dasharray="4,4" stroke="#d04444" stroke-width="1.2"/>
+              <text x="450" y="52" fill="#d04444" font-size="11" font-weight="700" text-anchor="middle">Knock-out barrier</text>
+
+              <!-- shaded fin area -->
+              <polygon points="220,240 450,80 450,240" fill="rgba(95,156,74,0.14)"/>
+
+              <!-- payoff polyline -->
+              <polyline points="60,240 220,240 450,80 450,240 580,240" stroke="#5f9c4a" stroke-width="2.5" fill="none"/>
+
+              <!-- annotations -->
+              <text x="335" y="170" fill="#1a1d27" font-size="12" font-weight="700" text-anchor="middle">Inside fin: APR rises linearly</text>
+              <text x="335" y="186" fill="#5b6577" font-size="10.5" text-anchor="middle">closer to barrier → higher yield</text>
+
+              <text x="135" y="232" fill="#1a1d27" font-size="10" text-anchor="middle">Below spot: base APR</text>
+              <text x="515" y="232" fill="#d04444" font-size="10" text-anchor="middle" font-weight="600">Knocked out: base APR only</text>
+            </svg>
+            <div class="payoff-note">Capital is always returned at maturity — only the yield varies.</div>
+          </div>
+
+          <!-- RIGHT: Key terms + scenarios -->
+          <div class="terms-stack">
+            <div class="terms-card">
+              <div class="terms-title">Key Terms</div>
+              <div class="terms-row"><span class="k">Term</span><span class="v">1 – 3 months</span></div>
+              <div class="terms-row"><span class="k">Base APR</span><span class="v">~ 2% p.a.</span></div>
+              <div class="terms-row"><span class="k">Max APR (fin peak)</span><span class="v">up to 30% p.a.</span></div>
+              <div class="terms-row"><span class="k">Capital protection</span><span class="v brand">100% at maturity</span></div>
+              <div class="terms-row"><span class="k">Settlement</span><span class="v">Cash</span></div>
+            </div>
+
+            <div class="terms-card scenarios-card">
+              <div class="terms-title">What the user earns</div>
+              <div class="scenario">
+                <span class="tag best">Best</span>
+                <div class="body">
+                  <strong>Stays just under the barrier</strong>
+                  <span>Peak fin yield — annualised up to <em>~30% p.a.</em> (≈ <em>7.5% over 3 months</em>).</span>
+                </div>
+              </div>
+              <div class="scenario">
+                <span class="tag worst">Worst</span>
+                <div class="body">
+                  <strong>Knocked out, or stays below spot</strong>
+                  <span>Base APR only (<em>~2% p.a.</em>) — principal returned in full.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Hero strip: customer validation -->
+        <div class="hero-strip">
+          <span class="h-label">Used by</span>
+          <span class="h-metrics">
+            <span class="h-logo">NEXO</span>
+            <span class="h-sep">·</span>
+            <span class="h-logo">Bitget</span>
+            <span class="h-sep">·</span>
+            <span class="h-fact"><em>50%</em> revenue share on user yield</span>
+            <span class="h-sep">·</span>
+            <span class="h-fact"><em>~$60M</em> weekly Bitget</span>
+            <span class="h-sep">·</span>
+            <span class="h-fact"><em>~$5M</em> weekly Nexo</span>
+          </span>
+        </div>
+
+        <div class="slide-foot">
+          <span>Slide 5 · Product Spotlight — Shark Fin</span>
+          <span>2026 | Confidential</span>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ─────────── SLIDE 6 — DOWNSIDE-PROTECTED NOTE ─────────── -->
+    <section class="slide">
+      <div class="slide-inner">
+
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow">DLT Finance · Product Spotlight</div>
+            <h1 class="slide-title"><span class="accent">Downside-Protected Note</span> — 2× BTC upside, 30% max loss</h1>
+          </div>
+          <div class="brand-mark">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#5f9c4a" stroke-width="1.6" fill="rgba(95,156,74,0.08)"/></svg>
+            <div class="name">DLT <span class="light">Finance</span></div>
+          </div>
+        </div>
+
+        <div class="spotlight-grid">
+
+          <div class="payoff-card">
+            <div class="payoff-head">
+              <span class="h-label">Payoff profile · BTC 2× / floor −30%</span>
+              <span class="h-cap">Note return vs. BTC at maturity</span>
+            </div>
+            <svg viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+              <line x1="50" y1="280" x2="580" y2="280" stroke="#cbd2dc" stroke-width="1"/>
+              <line x1="50" y1="40" x2="50" y2="280" stroke="#cbd2dc" stroke-width="1"/>
+              <text x="22" y="160" fill="#5b6577" font-size="11" transform="rotate(-90, 22, 160)" text-anchor="middle">Note return at maturity</text>
+              <text x="315" y="310" fill="#5b6577" font-size="11" text-anchor="middle">BTC price at maturity</text>
+
+              <line x1="50" y1="190" x2="580" y2="190" stroke-dasharray="3,3" stroke="#d6dbe3"/>
+              <line x1="50" y1="245" x2="580" y2="245" stroke-dasharray="3,3" stroke="#d6dbe3"/>
+              <line x1="50" y1="60" x2="580" y2="60" stroke-dasharray="3,3" stroke="#d6dbe3"/>
+              <text x="545" y="184" fill="#5b6577" font-size="10">0%</text>
+              <text x="524" y="240" fill="#1f9f6c" font-size="10" font-weight="700">Floor −30%</text>
+              <text x="60" y="54" fill="#5b6577" font-size="10">Cap +200%</text>
+
+              <line x1="140" y1="70" x2="140" y2="280" stroke-dasharray="4,4" stroke="#1f9f6c" stroke-width="1.2"/>
+              <text x="140" y="62" fill="#1f9f6c" font-size="11" font-weight="700" text-anchor="middle">$70k</text>
+              <line x1="260" y1="90" x2="260" y2="280" stroke-dasharray="4,4" stroke="#c98b1f" stroke-width="1.2"/>
+              <text x="260" y="82" fill="#c98b1f" font-size="11" font-weight="700" text-anchor="middle">$100k · entry</text>
+              <line x1="500" y1="56" x2="500" y2="280" stroke-dasharray="4,4" stroke="#3b6cd9" stroke-width="1.2"/>
+              <text x="500" y="48" fill="#3b6cd9" font-size="11" font-weight="700" text-anchor="middle">$200k · cap</text>
+
+              <polygon points="60,281 140,245 60,245" fill="rgba(31,159,108,0.18)"/>
+              <polygon points="260,190 500,60 500,80" fill="rgba(31,159,108,0.16)"/>
+
+              <line x1="60" y1="281" x2="580" y2="43" stroke="#9aa3b1" stroke-width="1.2" stroke-dasharray="5,4"/>
+              <text x="576" y="37" fill="#9aa3b1" font-size="10" text-anchor="end">Holding BTC (1×)</text>
+
+              <polyline points="50,245 140,245 260,190 500,60 580,60" stroke="#5f9c4a" stroke-width="2.8" fill="none"/>
+
+              <text x="95" y="236" fill="#1f9f6c" font-size="10" font-weight="700" text-anchor="middle">Protected</text>
+              <text x="200" y="215" fill="#5b6577" font-size="10" text-anchor="middle">1:1 down to −30%</text>
+              <text x="390" y="150" fill="#1a1d27" font-size="12" font-weight="700" text-anchor="middle">2× participation</text>
+              <text x="390" y="166" fill="#5b6577" font-size="10.5" text-anchor="middle">$100k → $200k</text>
+              <text x="543" y="80" fill="#3b6cd9" font-size="10" font-weight="600" text-anchor="middle">Capped</text>
+            </svg>
+            <div class="payoff-note">Funded by the floor (a sold 70k put spread) plus BTC basis/funding carry — crypto carry is what pays for terms TradFi rates can't.</div>
+          </div>
+
+          <div class="terms-stack">
+            <div class="terms-card">
+              <div class="terms-title">Key Terms <span style="color:var(--muted);font-weight:600;letter-spacing:0;text-transform:none;">· indicative</span></div>
+              <div class="terms-row"><span class="k">Underlying</span><span class="v">BTC @ $100,000</span></div>
+              <div class="terms-row"><span class="k">Term</span><span class="v">24 – 36 months</span></div>
+              <div class="terms-row"><span class="k">Participation</span><span class="v brand">2× from $100k to $200k</span></div>
+              <div class="terms-row"><span class="k">Max return</span><span class="v">+200% (cap at $200k)</span></div>
+              <div class="terms-row"><span class="k">Max loss</span><span class="v brand">30% (floor at $70k)</span></div>
+              <div class="terms-row"><span class="k">Settlement</span><span class="v">Cash · security token</span></div>
+            </div>
+
+            <div class="terms-card scenarios-card">
+              <div class="terms-title">€10,000 invested</div>
+              <div class="scenario">
+                <span class="tag best">Best</span>
+                <div class="body">
+                  <strong>BTC $180k (+80%)</strong>
+                  <span>2× participation → <em>+160%</em> → <em>€26,000</em>. Holding BTC would have paid €18,000.</span>
+                </div>
+              </div>
+              <div class="scenario">
+                <span class="tag worst">Worst</span>
+                <div class="body">
+                  <strong>BTC $40k (−60%)</strong>
+                  <span>Floor holds → loss capped at <em>−30%</em> → <em>€7,000</em>. Holding BTC would have paid €4,000.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="hero-strip econ">
+          <span class="h-label">Distributor angle</span>
+          <span class="h-metrics">
+            <span class="h-fact">The product that <em>converts hesitant TradFi money</em> into crypto exposure</span>
+            <span class="h-sep">·</span>
+            <span class="h-fact">Longer tenor → <em>sticky AUM</em>, not churn</span>
+            <span class="h-sep">·</span>
+            <span class="h-fact">Terms are a dial: <em>2–3× participation</em> depending on tenor, floor and vol</span>
+          </span>
+        </div>
+
+        <div class="slide-foot">
+          <span>Slide 6 · Product Spotlight — Downside-Protected Note</span>
+          <span>2026 | Confidential</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── SLIDE 7 — TOKENISED TRADFI ETPs ─────────── -->
+    <section class="slide">
+      <div class="slide-inner">
+
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow">DLT Finance · Product Spotlight</div>
+            <h1 class="slide-title">Tokenised <span class="accent">TradFi ETPs</span> — turbos, mini futures, factor certs</h1>
+          </div>
+          <div class="brand-mark">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#5f9c4a" stroke-width="1.6" fill="rgba(95,156,74,0.08)"/></svg>
+            <div class="name">DLT <span class="light">Finance</span></div>
+          </div>
+        </div>
+
+        <div class="spotlight-grid">
+
+          <div class="payoff-card">
+            <div class="payoff-head">
+              <span class="h-label">One product, a whole leverage ladder</span>
+              <span class="h-cap">Return vs. underlying, by barrier distance</span>
+            </div>
+            <svg viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+              <line x1="50" y1="280" x2="580" y2="280" stroke="#cbd2dc" stroke-width="1"/>
+              <line x1="50" y1="40" x2="50" y2="280" stroke="#cbd2dc" stroke-width="1"/>
+              <text x="22" y="160" fill="#5b6577" font-size="11" transform="rotate(-90, 22, 160)" text-anchor="middle">Product return</text>
+              <text x="315" y="310" fill="#5b6577" font-size="11" text-anchor="middle">Underlying price</text>
+
+              <line x1="50" y1="190" x2="580" y2="190" stroke-dasharray="3,3" stroke="#d6dbe3"/>
+              <text x="560" y="184" fill="#5b6577" font-size="10">0%</text>
+              <text x="62" y="276" fill="#d04444" font-size="10" font-weight="700">−100%</text>
+
+              <line x1="320" y1="60" x2="320" y2="280" stroke-dasharray="4,4" stroke="#c98b1f" stroke-width="1.2"/>
+              <text x="320" y="52" fill="#c98b1f" font-size="11" font-weight="700" text-anchor="middle">Entry (spot)</text>
+
+              <line x1="60" y1="220" x2="580" y2="142" stroke="#9aa3b1" stroke-width="1.2" stroke-dasharray="5,4"/>
+              <text x="576" y="136" fill="#9aa3b1" font-size="10" text-anchor="end">Spot (1×)</text>
+
+              <polyline points="200,280 500,55" stroke="#0E4A66" stroke-width="2.4" fill="none"/>
+              <polyline points="240,280 440,55" stroke="#3b6cd9" stroke-width="2.4" fill="none"/>
+              <polyline points="280,280 380,55" stroke="#6b50d9" stroke-width="2.4" fill="none"/>
+
+              <circle cx="200" cy="280" r="3.5" fill="#0E4A66"/>
+              <circle cx="240" cy="280" r="3.5" fill="#3b6cd9"/>
+              <circle cx="280" cy="280" r="3.5" fill="#6b50d9"/>
+
+              <text x="506" y="52" fill="#0E4A66" font-size="11" font-weight="700">3×</text>
+              <text x="446" y="52" fill="#3b6cd9" font-size="11" font-weight="700">5×</text>
+              <text x="386" y="52" fill="#6b50d9" font-size="11" font-weight="700">10×</text>
+
+              <text x="230" y="262" fill="#5b6577" font-size="10" text-anchor="middle">barriers</text>
+              <text x="430" y="215" fill="#1a1d27" font-size="11.5" font-weight="700" text-anchor="middle">Same wrapper, same prospectus</text>
+              <text x="430" y="231" fill="#5b6577" font-size="10.5" text-anchor="middle">a new strike is a Final Terms line, not a build</text>
+            </svg>
+            <div class="payoff-note">One base prospectus spawns hundreds of listed lines — the shelf density that makes an ETP business work.</div>
+          </div>
+
+          <div class="terms-stack">
+            <div class="terms-card">
+              <div class="terms-title">Why distributors make money here</div>
+              <div class="terms-row"><span class="k">Blended issuer margin</span><span class="v">~15–30 bps round trip</span></div>
+              <div class="terms-row"><span class="k">Your rebate share</span><span class="v brand">30 – 50%</span></div>
+              <div class="terms-row"><span class="k">Turnover / AUM</span><span class="v">20 – 40× per year</span></div>
+              <div class="terms-row"><span class="k">Your capital at risk</span><span class="v brand">Zero — DLT issues &amp; hedges</span></div>
+              <div class="terms-row"><span class="k">Time to first line</span><span class="v">~12 weeks</span></div>
+            </div>
+
+            <div class="terms-card">
+              <div class="terms-title">Worked example · indicative</div>
+              <div class="econ-grid" style="grid-template-columns:repeat(2,1fr);">
+                <div class="econ-tile"><div class="e-num">€50M</div><div class="e-lab">product AUM on your platform</div></div>
+                <div class="econ-tile"><div class="e-num">€1.5bn</div><div class="e-lab">annual turnover at 30× churn</div></div>
+                <div class="econ-tile"><div class="e-num">€3.0M</div><div class="e-lab">gross issuer margin at 20 bps</div></div>
+                <div class="econ-tile"><div class="e-num">€1.2M</div><div class="e-lab">to you at a 40% rebate share</div></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="hero-strip econ">
+          <span class="h-label">The pitch</span>
+          <span class="h-metrics">
+            <span class="h-fact">Leveraged certificates are the <em>highest-churn retail product in Europe</em></span>
+            <span class="h-sep">·</span>
+            <span class="h-fact">Revenue scales with <em>turnover, not balances</em></span>
+            <span class="h-sep">·</span>
+            <span class="h-fact">You bring the users — <em>we bring the licence, the paper and the book</em></span>
+          </span>
+        </div>
+
+        <div class="slide-foot">
+          <span>Slide 7 · Product Spotlight — Tokenised TradFi ETPs</span>
+          <span>2026 | Confidential</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── SLIDE 8 — PREDICTION MARKETS ─────────── -->
+    <section class="slide">
+      <div class="slide-inner">
+
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow">DLT Finance · On The Horizon</div>
+            <h1 class="slide-title"><span class="accent">Prediction Markets</span> — event contracts as securities</h1>
+          </div>
+          <div class="brand-mark">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#5f9c4a" stroke-width="1.6" fill="rgba(95,156,74,0.08)"/></svg>
+            <div class="name">DLT <span class="light">Finance</span></div>
+          </div>
+        </div>
+
+        <div class="spotlight-grid">
+
+          <div class="payoff-card">
+            <div class="payoff-head">
+              <span class="h-label">Payoff profile · YES contract</span>
+              <span class="h-cap">Settlement value vs. outcome</span>
+            </div>
+            <svg viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+              <line x1="50" y1="280" x2="580" y2="280" stroke="#cbd2dc" stroke-width="1"/>
+              <line x1="50" y1="40" x2="50" y2="280" stroke="#cbd2dc" stroke-width="1"/>
+              <text x="22" y="160" fill="#5b6577" font-size="11" transform="rotate(-90, 22, 160)" text-anchor="middle">Settlement value</text>
+              <text x="315" y="310" fill="#5b6577" font-size="11" text-anchor="middle">Outcome measure at resolution (e.g. BTC ≥ $150k)</text>
+
+              <line x1="50" y1="90" x2="580" y2="90" stroke-dasharray="3,3" stroke="#d6dbe3"/>
+              <line x1="50" y1="240" x2="580" y2="240" stroke-dasharray="3,3" stroke="#d6dbe3"/>
+              <text x="545" y="84" fill="#5b6577" font-size="10">€1.00</text>
+              <text x="545" y="234" fill="#5b6577" font-size="10">€0.00</text>
+
+              <line x1="50" y1="165" x2="580" y2="165" stroke-dasharray="5,4" stroke="#c98b1f" stroke-width="1.3"/>
+              <text x="60" y="159" fill="#c98b1f" font-size="10.5" font-weight="700">Entry €0.55 — the market's implied probability</text>
+
+              <line x1="320" y1="70" x2="320" y2="280" stroke-dasharray="4,4" stroke="#3b6cd9" stroke-width="1.2"/>
+              <text x="320" y="62" fill="#3b6cd9" font-size="11" font-weight="700" text-anchor="middle">Threshold</text>
+
+              <polygon points="320,90 580,90 580,165 320,165" fill="rgba(31,159,108,0.14)"/>
+              <polygon points="60,165 320,165 320,240 60,240" fill="rgba(208,68,68,0.09)"/>
+
+              <polyline points="60,240 320,240" stroke="#d04444" stroke-width="2.8" fill="none"/>
+              <polyline points="320,90 580,90" stroke="#5f9c4a" stroke-width="2.8" fill="none"/>
+              <circle cx="320" cy="240" r="4" fill="#fff" stroke="#d04444" stroke-width="2"/>
+              <circle cx="320" cy="90" r="4" fill="#5f9c4a"/>
+
+              <text x="450" y="122" fill="#1f9f6c" font-size="12" font-weight="700" text-anchor="middle">+€0.45 per contract</text>
+              <text x="190" y="212" fill="#d04444" font-size="12" font-weight="700" text-anchor="middle">−€0.55 per contract</text>
+              <text x="450" y="138" fill="#5b6577" font-size="10.5" text-anchor="middle">binary — no partial outcomes</text>
+            </svg>
+            <div class="payoff-note">Same rails as every other product: a tokenised, cash-settled contract with a defined reference source.</div>
+          </div>
+
+          <div class="terms-stack">
+            <div class="terms-card">
+              <div class="terms-title">Key Terms</div>
+              <div class="terms-row"><span class="k">Form</span><span class="v">Cash-settled event contract, tokenised</span></div>
+              <div class="terms-row"><span class="k">Payoff</span><span class="v">€1 if YES · €0 if NO</span></div>
+              <div class="terms-row"><span class="k">Price range</span><span class="v brand">€0.00 – €1.00 = implied odds</span></div>
+              <div class="terms-row"><span class="k">Reference</span><span class="v">Named official source / index</span></div>
+              <div class="terms-row"><span class="k">Ticket</span><span class="v">Fractional, from cents</span></div>
+              <div class="terms-row"><span class="k">Revenue model</span><span class="v">Fee on notional traded</span></div>
+            </div>
+
+            <div class="terms-card scenarios-card">
+              <div class="terms-title">Why it belongs on this shelf</div>
+              <div class="scenario">
+                <span class="tag best">Pull</span>
+                <div class="body">
+                  <strong>Highest-engagement product in the market right now</strong>
+                  <span>Non-correlated to price direction — it trades on <em>news flow</em>, so it monetises flat and falling markets.</span>
+                </div>
+              </div>
+              <div class="scenario">
+                <span class="tag worst">Reality</span>
+                <div class="body">
+                  <strong>Regulation is the gating item, not the tech</strong>
+                  <span>The wrapper, oracle and settlement are <em>the same rails</em> we already run. Timing depends on the permission, not the build.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="watchout">
+          <strong>WATCH-OUT ·</strong> Binary options are prohibited for EU <em>retail</em> clients under ESMA product intervention (made permanent by national measures). Viable routes: (1) professional / elective-professional clients, (2) restructure as a non-binary payoff — a capped range certificate or range accrual with a graded outcome — which sits outside the ban, (3) non-EU distribution. We would scope the wrapper with counsel before committing a launch date.
+        </div>
+
+        <div class="slide-foot">
+          <span>Slide 8 · On The Horizon — Prediction Markets</span>
+          <span>2026 | Confidential</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── SLIDE 9 — THE REST OF THE SHELF ─────────── -->
+    <section class="slide">
+      <div class="slide-inner">
+
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow">DLT Finance · Product Map</div>
+            <h1 class="slide-title">What Else Is <span class="accent">Possible</span></h1>
+          </div>
+          <div class="brand-mark">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#5f9c4a" stroke-width="1.6" fill="rgba(95,156,74,0.08)"/></svg>
+            <div class="name">DLT <span class="light">Finance</span></div>
+          </div>
+        </div>
+
+        <div class="cat-license shelf">
+          <div class="table-head">
+            <span>Category</span>
+            <span>Instrument</span>
+            <span>Token angle</span>
+          </div>
+
+          <div class="table-body">
+
+            <div class="cat-group">
+              <div class="cat-row head-row">
+                <div class="cat-name-cell yield">Yield-bearing</div>
+                <div class="product-cell">Discount Certificate <span class="sub">capped tracker</span></div>
+                <div class="angle-cell">7–28 day roll, sub-€10 tickets, auto-rolls in-app</div>
+              </div>
+              <div class="cat-row">
+                <div class="cat-name-cell"></div>
+                <div class="product-cell">Reverse Convertible <span class="sub">BRC</span></div>
+                <div class="angle-cell">High coupon paid on-chain in stablecoin</div>
+              </div>
+              <div class="cat-row">
+                <div class="cat-name-cell"></div>
+                <div class="product-cell">Autocallable <span class="sub">Express · Phoenix</span></div>
+                <div class="angle-cell">Auto-redemption = automatic on-chain repayment, no ops</div>
+              </div>
+              <div class="cat-row">
+                <div class="cat-name-cell"></div>
+                <div class="product-cell">Carry / Basis Note</div>
+                <div class="angle-cell">Packages perp funding into a token — user runs no margin account</div>
+              </div>
+              <div class="cat-row">
+                <div class="cat-name-cell"></div>
+                <div class="product-cell">Dual Investment · Range Accrual</div>
+                <div class="angle-cell">"Earn while it stays in range" — 7-day tenor, retail-simple</div>
+              </div>
+              <div class="cat-row">
+                <div class="cat-name-cell"></div>
+                <div class="product-cell">Staking-Enhanced Tracker</div>
+                <div class="angle-cell">Staking yield accrues inside the token's NAV</div>
+              </div>
+              <div class="cat-row">
+                <div class="cat-name-cell"></div>
+                <div class="product-cell">Tokenised T-Bill / MMF Note</div>
+                <div class="angle-cell">Yield-bearing cash leg that also works as collateral</div>
+              </div>
+            </div>
+
+            <div class="cat-group">
+              <div class="cat-row head-row">
+                <div class="cat-name-cell prot">Downside-protected</div>
+                <div class="product-cell">Principal-Protected Note</div>
+                <div class="angle-cell">100% capital back at maturity, redemption on-chain</div>
+              </div>
+              <div class="cat-row">
+                <div class="cat-name-cell"></div>
+                <div class="product-cell">Sprinter <span class="sub">leveraged, floored</span></div>
+                <div class="angle-cell">The BTC 2× / −30% note generalised to any underlying</div>
+              </div>
+              <div class="cat-row">
+                <div class="cat-name-cell"></div>
+                <div class="product-cell">Bonus Certificate</div>
+                <div class="angle-cell">Bonus if the barrier holds, uncapped upside if it rallies</div>
+              </div>
+              <div class="cat-row">
+                <div class="cat-name-cell"></div>
+                <div class="product-cell">Twin-Win Certificate</div>
+                <div class="angle-cell">Pays on moves in either direction inside the barrier</div>
+              </div>
+              <div class="cat-row">
+                <div class="cat-name-cell"></div>
+                <div class="product-cell">Capital-Protected Basket Note</div>
+                <div class="angle-cell">One token, multi-asset basket, single KID</div>
+              </div>
+            </div>
+
+            <div class="cat-group">
+              <div class="cat-row head-row">
+                <div class="cat-name-cell hyb">Hybrid &amp; collateral</div>
+                <div class="product-cell">Outperformance Certificate <span class="sub">e.g. BTC vs ETH</span></div>
+                <div class="angle-cell">A two-leg pair trade collapsed into one tradable token</div>
+              </div>
+              <div class="cat-row">
+                <div class="cat-name-cell"></div>
+                <div class="product-cell">Tokenised Gold + Call Overlay</div>
+                <div class="angle-cell">Yield on metal — a holding that pays for itself</div>
+              </div>
+              <div class="cat-row">
+                <div class="cat-name-cell"></div>
+                <div class="product-cell">Tokenised Credit / Private Credit Note</div>
+                <div class="angle-cell">Fixed coupon, fractional access to a wholesale-only asset</div>
+              </div>
+              <div class="cat-row">
+                <div class="cat-name-cell"></div>
+                <div class="product-cell">Lombard Borrow <span class="sub">against any token above</span></div>
+                <div class="angle-cell">One collateral pool across the whole shelf</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="token-strip">
+          <span class="t-label">Every line above</span>
+          <span class="t-item"><em>Same</em> base prospectus family</span>
+          <span class="t-sep">·</span>
+          <span class="t-item"><em>Same</em> custody &amp; settlement rail</span>
+          <span class="t-sep">·</span>
+          <span class="t-item"><em>Same</em> API for you</span>
+          <span class="t-sep">·</span>
+          <span class="t-item">Any of the <em>5 underlying classes</em></span>
+        </div>
+
+        <div class="slide-foot">
+          <span>Slide 9 · What Else Is Possible</span>
+          <span>2026 | Confidential</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────── SLIDE 10 — WHY THE TOKEN WRAPPER ─────────── -->
+    <section class="slide">
+      <div class="slide-inner">
+
+        <div class="slide-header">
+          <div>
+            <div class="eyebrow">DLT Finance · The Argument</div>
+            <h1 class="slide-title">Why the <span class="accent">Token Wrapper</span> Wins</h1>
+          </div>
+          <div class="brand-mark">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#5f9c4a" stroke-width="1.6" fill="rgba(95,156,74,0.08)"/></svg>
+            <div class="name">DLT <span class="light">Finance</span></div>
+          </div>
+        </div>
+
+        <div class="why-grid">
+          <div class="why-card">
+            <span class="w-num">1</span>
+            <div class="w-head">Settlement without a CSD</div>
+            <div class="w-body">The token <em>is</em> the security under Liechtenstein TVTG. Delivery is an on-chain transfer — no Clearstream, no T+1, no settlement fails.</div>
+          </div>
+          <div class="why-card">
+            <span class="w-num">2</span>
+            <div class="w-head">Fractional by default</div>
+            <div class="w-body">A €100,000 structured note becomes a €10 ticket. Products that were private-bank-only become mass retail.</div>
+          </div>
+          <div class="why-card">
+            <span class="w-num">3</span>
+            <div class="w-head">24/7 secondary market</div>
+            <div class="w-body">Crypto users expect Sunday liquidity. Tokenised paper is the only structured product that can give it to them.</div>
+          </div>
+          <div class="why-card">
+            <span class="w-num">4</span>
+            <div class="w-head">Every product is collateral</div>
+            <div class="w-body">One pool. A user's tokenised note or xStock margins their next trade — balances stay on your platform instead of leaving.</div>
+          </div>
+          <div class="why-card">
+            <span class="w-num">5</span>
+            <div class="w-head">One backbone, N products</div>
+            <div class="w-body">New underlying or new payoff = Final Terms plus a KID. Weeks, not quarters — and no new build on your side.</div>
+          </div>
+          <div class="why-card">
+            <span class="w-num">6</span>
+            <div class="w-head">You distribute, we carry the risk</div>
+            <div class="w-body">DLT is the issuer, holds the hedge and owns the paper. You need a MiFID distribution permission and an API key.</div>
+          </div>
+        </div>
+
+        <div class="token-strip">
+          <span class="t-label">Next step</span>
+          <span class="t-item">Pick <em>two products</em> for a first wave</span>
+          <span class="t-sep">·</span>
+          <span class="t-item">We return <em>indicative terms and economics</em> in 2 weeks</span>
+          <span class="t-sep">·</span>
+          <span class="t-item">First line live in <em>~12 weeks</em></span>
+        </div>
+
+        <div class="slide-foot">
+          <span>Slide 10 · Why the Token Wrapper</span>
+          <span>2026 | Confidential</span>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>
