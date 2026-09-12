@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexo × DLT × Anduin — KO Certificate Flows with Anduin as Issuer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --text: #17213a;
+      --text-muted: #5b6478;
+      --accent: #2d5f7f;
+      --accent-soft: #eaf1f6;
+      --border: #dfe2ea;
+      --bg: #ffffff;
+      --bg-soft: #f6f7fa;
+      --warn: #8a4a1e;
+      --warn-soft: #faf1e7;
+      --ok: #2f5d3e;
+      --ok-soft: #ecf4ee;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page { max-width: 1100px; margin: 0 auto; padding: 48px 56px; }
+
+    header.doc-header {
+      border-bottom: 2px solid var(--text);
+      padding-bottom: 20px;
+      margin-bottom: 36px;
+    }
+
+    header.doc-header .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 11px;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    header.doc-header h1 {
+      font-size: 28px;
+      line-height: 1.25;
+      margin: 0 0 8px 0;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    header.doc-header .meta { font-size: 13px; color: var(--text-muted); }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 48px 0 14px 0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h3 { font-size: 16px; font-weight: 600; margin: 28px 0 10px 0; }
+    h4 { font-size: 14px; font-weight: 600; margin: 20px 0 8px 0; color: var(--accent); }
+
+    p { margin: 0 0 12px 0; }
+    strong { font-weight: 600; }
+
+    .lead { font-size: 15px; color: var(--text-muted); margin-bottom: 24px; }
+
+    table.legend {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 24px 0;
+      font-size: 13px;
+    }
+
+    table.legend thead th {
+      text-align: left;
+      background: var(--accent-soft);
+      font-weight: 600;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    table.legend td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    .info-box {
+      background: var(--accent-soft);
+      border-left: 3px solid var(--accent);
+      padding: 14px 18px;
+      margin: 16px 0 24px 0;
+      border-radius: 2px;
+      font-size: 13.5px;
+    }
+
+    .info-box.warn {
+      background: var(--warn-soft);
+      border-left-color: var(--warn);
+    }
+
+    .info-box.ok {
+      background: var(--ok-soft);
+      border-left-color: var(--ok);
+    }
+
+    .info-box h4 {
+      margin: 0 0 8px 0;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .info-box.warn h4 { color: var(--warn); }
+    .info-box.ok h4 { color: var(--ok); }
+
+    .info-box ul { margin: 8px 0 0 0; padding-left: 20px; }
+    .info-box li { margin-bottom: 4px; }
+
+    .scenario {
+      background: var(--bg-soft);
+      border-left: 3px solid var(--accent);
+      padding: 12px 16px;
+      margin: 12px 0 16px 0;
+      font-size: 13.5px;
+    }
+
+    .scenario strong { color: var(--accent); }
+
+    .diagram-wrap {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 20px;
+      margin: 8px 0 28px 0;
+      overflow-x: auto;
+    }
+
+    .mermaid { text-align: center; }
+
+    .diagram-wrap .mermaid .note .noteText,
+    .diagram-wrap .mermaid .noteText {
+      fill: #17213a !important;
+    }
+
+    .recipe {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 16px 18px;
+      margin-bottom: 20px;
+      background: var(--bg-soft);
+    }
+
+    .recipe h4 { margin-top: 0; color: var(--text); text-transform: none; letter-spacing: 0; }
+    .recipe ol { margin: 8px 0 0 0; padding-left: 22px; font-size: 13px; }
+    .recipe li { margin-bottom: 6px; }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.92em;
+      background: var(--bg-soft);
+      padding: 1px 6px;
+      border-radius: 3px;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 2px 8px;
+      border-radius: 3px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    .tag-book { background: var(--ok-soft); color: var(--ok); }
+    .tag-open { background: var(--warn-soft); color: var(--warn); }
+    .tag-instant { background: var(--accent-soft); color: var(--accent); }
+
+    footer.doc-footer {
+      border-top: 1px solid var(--border);
+      margin-top: 56px;
+      padding-top: 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    @media print {
+      html, body { font-size: 10.5pt; }
+      .page { max-width: none; padding: 12mm 10mm; }
+    }
+
+    @page { size: A4 landscape; margin: 10mm; }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <header class="doc-header">
+      <div class="eyebrow">Nexo × DLT × Anduin — Integration Proposal</div>
+      <h1>KO Certificate Flows with Anduin as Issuer: Flow of Funds, B-Book Operation &amp; Data Sharing</h1>
+      <div class="meta">Prepared by Anduin · September 2026 · Working draft — extends the KO Certificate Trading Flow (July 2026) and follows the structure of the Issuance MVP Flows Architecture (Flows A–D)</div>
+    </header>
+
+    <p class="lead">
+      This document describes what changes when <strong>Anduin steps into the Issuer role</strong> of the
+      Nexo × DLT × Issuer KO certificate setup. The flow of funds is <strong>unchanged</strong> from the
+      July 2026 trading-flow document — Anduin simply <em>is</em> the Issuer: it holds
+      <strong>Tangany Account 4</strong>, issues the certificates, and is the legal counterparty of every
+      client cert trade and every hedge. What this document adds on top: (1) the
+      <strong>operating model</strong> — Nexo runs the technical lift, Anduin only ever consumes data;
+      (2) how the <strong>b-book works</strong> and who carries which risk; (3) exactly
+      <strong>which data is shared, when, and through which mechanism</strong>, structured along
+      Flows A–D of the Anduin issuance architecture.
+    </p>
+
+    <p class="lead">
+      <strong>Core assumption.</strong> Nexo intends / requests to run the technical lift on their side:
+      quoting, execution, funding sync, re-marking, KO monitoring, hedge-order transmission and the full
+      b-book operation all run on Nexo infrastructure. <strong>Anduin never operates real-time trading
+      systems in this setup — Anduin is a data consumer and the system of record.</strong> Anduin's
+      golden record, document set and archives must nonetheless be complete enough to stand up as the
+      issuer's evidence trail, which is why the data-sharing obligations below are load-bearing, not
+      nice-to-have.
+    </p>
+
+    <h2>1 · Role split — who does what</h2>
+
+    <table class="legend">
+      <thead>
+        <tr><th style="width:16%">Party</th><th style="width:44%">Role &amp; responsibility</th><th>What they run technically</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Anduin</strong> (Issuer)</td>
+          <td>Issuer of record. Owns the golden record per series, generates and publishes Final Terms + PRIIPs KID, mints the tokens, holds Tangany Account 4 (cert inventory + cash counterparty of every client trade), is the <em>legal</em> sender of hedge orders to Nexo, and carries the issuer's legal/regulatory risk (KO defensibility, doc accuracy, MiCA/PRIIPs obligations).</td>
+          <td>Registry + doc-gen, token contracts, golden record DB, append-only archive, public levels/docs endpoints. <strong>No real-time trading systems.</strong> Consumes Nexo's data feeds.</td>
+        </tr>
+        <tr>
+          <td><strong>Nexo</strong> (Technical operator + LP)</td>
+          <td>Runs the client-facing UI and OCS, provides all quoting <em>on behalf of Anduin</em>, executes client orders, performs the 8h funding sync and re-marking, monitors the KO barrier against venue mark prices, declares KOs and halts trading, transmits hedge orders (technically) on behalf of Anduin to Nexo-the-LP, and <strong>operates the b-book fully on Anduin's behalf</strong>. B-book profits are shared.</td>
+          <td>UI, OCS, pricing/quoting engine, lifecycle daemon (funding + KO), hedge/b-book engine, data-push infrastructure to Anduin and DLT.</td>
+        </tr>
+        <tr>
+          <td><strong>DLT</strong></td>
+          <td>Unchanged from the trading-flow doc: MiCA reporting counterparty, records each security-token purchase and ledger movement at T+0, receives trading fees (A3), transit account for non-German cash legs, receives pledges from non-German clients (MAY pledge onward to Anduin). Executes client orders as <strong>prop (Eigenhandel)</strong>, back-to-back against Anduin — for German clients under its Investment and Contract Brokerage licence (see §2.1). DLT does <strong>not</strong> store quotes — quote archival is Anduin's obligation alone.</td>
+          <td>Reporting service (SQS consumer), Tangany A3.</td>
+        </tr>
+        <tr>
+          <td><strong>Tangany</strong></td>
+          <td>Qualified custodian for all four accounts. Physical settlement layer (T+0 book entries, T+1 physical net) — identical to the trading-flow doc.</td>
+          <td>Accounts A1 (users), A2 (Nexo), A3 (DLT), A4 (<strong>Anduin</strong>).</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="info-box">
+      <h4>What is unchanged vs the July 2026 trading-flow doc</h4>
+      <ul>
+        <li><strong>All money flows.</strong> A4 is simply Anduin's account. German clients settle cert cash legs directly A1 ↔ A4 and pledge to Anduin; non-German clients route cash via A3 and pledge to DLT (DLT MAY pledge onward to Anduin). Never to Nexo.</li>
+        <li><strong>Pledge before buying</strong>, book-entry only. Trading fees (0.06% of notional, USDC) to A3. No funding cash flows, no session settlement — financing is baked into the 8h strike/barrier adjustment at the venue’s funding timestamps.</li>
+        <li><strong>T+0 book entries / T+1 physical bulk net</strong> between Tangany accounts.</li>
+        <li><strong>Earn opt-in/out</strong> only affects Transfer to/from Futures (A2 ↔ A1 sweeps).</li>
+      </ul>
+    </div>
+
+    <h2>2 · The b-book — how it works and who carries what <span class="tag tag-book">Profit share</span></h2>
+
+    <p class="lead">
+      Legally there are two clean bilateral relationships. Technically there is one operator running
+      everything. Keeping those two views separate is the whole trick.
+    </p>
+
+    <h3>2.1 Legal view</h3>
+    <div class="recipe">
+      <h4>Two back-to-back positions</h4>
+      <ol>
+        <li><strong>Client ↔ Anduin:</strong> the client buys/sells KO certificates against Anduin (A4). Anduin is short the cert exposure.</li>
+        <li><strong>Anduin ↔ Nexo:</strong> for every fill, <strong>Anduin sends a hedge order to Nexo (legally)</strong> — a perp position that offsets the cert delta. After the hedge, <strong>Anduin is flat market risk</strong>: its residual exposure is counterparty exposure to Nexo, not market exposure.</li>
+        <li><strong>Nexo ↔ market:</strong> Nexo now holds the client flow risk and decides for itself whether to internalise it (<strong>b-book</strong>: keep the risk, earn the client's losses / pay the client's gains) or lay it off externally (a-book, e.g. ByBit) — entirely at Nexo's discretion, as in the trading-flow doc.</li>
+      </ol>
+    </div>
+
+    <div class="info-box">
+      <h4>DLT's execution role &amp; best execution</h4>
+      <p style="margin:0">
+        DLT executes client orders as <strong>proprietary trading (Eigenhandel)</strong> with
+        <strong>back-to-back trades against Anduin</strong>. For <strong>German clients</strong> DLT
+        acts instead under its <strong>Investment and Contract Brokerage licence</strong>
+        (Anlage- und Abschlussvermittlung), brokering the trade between the client and Anduin.
+        Since no other trading venue lists these tokens, executing back-to-back against Anduin's
+        quotes is sufficient to satisfy <strong>best-execution requirements</strong>.
+      </p>
+    </div>
+
+    <h3>2.2 Technical view</h3>
+    <p>
+      Since Nexo runs the technical lift, <strong>the hedge order is technically generated and sent by
+      Nexo, on behalf of Anduin, to Nexo-the-LP</strong>. Nexo is simultaneously the transmitting agent
+      (acting for Anduin) and the receiving liquidity provider. Nexo then
+      <strong>operates the b-book fully on Anduin's behalf</strong>: netting long/short client flow,
+      deciding warehousing vs external hedging, managing the venue account.
+    </p>
+    <p>
+      For this to be defensible, the agency relationship must be evidenced in data: every hedge order
+      must exist as a record that reads <em>"Anduin instructs Nexo"</em> (order ID, series, size,
+      direction, timestamp, triggering client fill) and must be shared with Anduin — see the
+      data-sharing matrix. Without that record, "legally Anduin's hedge order" is an assertion, not a fact.
+    </p>
+
+    <h3>2.3 Economics</h3>
+    <table class="legend">
+      <thead>
+        <tr><th>P&amp;L component</th><th>Who earns it</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Trading fees (0.06% notional)</td><td>DLT (A3)</td><td>Unchanged from trading-flow doc.</td></tr>
+        <tr><td>Issuer spread / margin in the cert price + funding spread</td><td>Anduin</td><td>Baked into quote construction and the 8h strike adjustment; accrues to the issuer.</td></tr>
+        <tr><td><strong>B-book result</strong> (net client losses − net client gains − external hedge costs)</td><td><strong>Shared: Nexo ↔ Anduin</strong></td><td>Nexo operates the book, Anduin's flow feeds it. <strong>Share % and settlement cadence: commercial term, TBD.</strong> Requires a periodic b-book P&amp;L statement from Nexo with sufficient granularity for Anduin to verify (per-series attribution, external hedge fills, fees).</td></tr>
+        <tr><td>Market risk of warehoused flow</td><td>Nexo</td><td>Nexo chose to b-book; a losing book is Nexo's loss. Anduin stays flat via its hedge.</td></tr>
+        <tr><td>Counterparty risk on the hedge</td><td>Anduin (on Nexo)</td><td>Anduin's hedge claims are only as good as Nexo's ability to pay — mitigation (collateral, netting agreement, exposure limits) is a legal workstream, out of scope here but flagged.</td></tr>
+      </tbody>
+    </table>
+
+    <p>
+      The quoting and execution flow. The <strong>quoting flow</strong> comes first: Nexo consumes the
+      orderbook of the underlying venue (e.g. ByBit) and constructs a cert book from it — this happens
+      <strong>on behalf of Anduin</strong>; that price flow then goes into the <strong>DLT AWS
+      server</strong>, where spread / fees are added, and is streamed to the user. The execution legs
+      are identical to the KO Certificate Trading Flow doc, with Anduin as the Issuer (client buys 10
+      certs, later sells at profit; the Issuer hedges each fill with a perp against Nexo; Nexo may
+      hedge externally at its own discretion):
+    </p>
+
+    <div class="diagram-wrap">
+      <div class="mermaid">
+sequenceDiagram
+ autonumber
+ actor U as User
+ participant UI as App UI<br/>(DLT AWS)
+ participant OCS as OCS<br/>(DLT AWS)
+ participant ISS as Anduin<br/>(Issuer)
+ participant N2 as Nexo<br/>(pricing + hedge counterparty)
+ participant V as Underlying venue<br/>(e.g. ByBit)
+
+ Note over U,V: Quoting flow — continuous, on behalf of Anduin
+ V-->>N2: Underlying orderbook
+ N2->>N2: Construct cert book from it<br/>(on behalf of Anduin)
+ N2-->>UI: Price flow into the DLT AWS server
+ Note over UI: Spread / fees added
+ UI->>U: Stream cert prices to the user
+
+ Note over U: Pledge happens BEFORE buying —<br/>German: to the Issuer only · non-German: to DLT only
+ U->>UI: Buy 10 KO certs BTC-LONG-KO63k
+ UI->>OCS: Forward order
+ Note over OCS: Assign OID 01
+ OCS->>ISS: Route OID 01 to Issuer
+ Note over ISS: Fill 10 certs at 700 USDC<br/>from own inventory in A4
+ ISS-->>OCS: OID 01 execution info
+ OCS-->>UI: OID 01 filled
+ UI-->>U: 10 KO certs held
+ Note over ISS: Create hedge order H-01
+ ISS->>N2: Open 1 BTC long perp at 70,000 as hedge
+ N2-->>ISS: Hedge fill confirmed
+ Note over N2: Nexo MAY hedge externally e.g. ByBit<br/>at its own discretion — not required
+ Note over ISS: Issuer records the token ledger movement<br/>and the hedge trade
+ Note over U: Price moves then client sells
+
+ U->>UI: Sell 10 KO certs
+ UI->>OCS: Forward order
+ Note over OCS: Assign OID 02
+ OCS->>ISS: Route OID 02 to Issuer
+ Note over ISS: Buy back 10 certs at 1,500 USDC<br/>certs returned to A4 and cancelled
+ ISS-->>OCS: OID 02 execution info
+ OCS-->>UI: OID 02 filled
+ UI-->>U: Position closed, +8,000 USDC vs purchase
+ Note over ISS: Create hedge order H-02
+ ISS->>N2: Close 1 BTC perp hedge<br/>+8,000 USDC realized on hedge
+ N2-->>ISS: Hedge close confirmed
+ Note over ISS: Issuer records token cancellation<br/>and the hedge trade
+      </div>
+    </div>
+
+    <h2>3 · End-to-end data flow — the 14 steps</h2>
+
+    <p class="lead">
+      The single-page view of <strong>how data moves</strong> across the whole certificate lifecycle.
+      Every step below is one concrete data movement (or the computation that triggers one); the
+      numbering runs continuously from series creation to knock-out and carries through the master
+      diagram. Flows A–D in the following sections give the full detail per phase — this section is
+      the map.
+    </p>
+
+    <div class="recipe">
+      <h4>Series creation &amp; quoting start — Flow A detail in §4</h4>
+      <ol>
+        <li><strong>Nexo → Anduin:</strong> series creation request with the full parameter set —
+          underlying, direction, KO/liquidation price, token count, maintenance buffer, ratio,
+          funding spread, reference price source.</li>
+        <li><strong>Anduin → Nexo:</strong> creation confirmed — Anduin validates, builds the golden
+          record, generates + publishes Final Terms and PRIIPs KID, mints to A4, and replies with
+          <code>series_id</code>, <code>token_address</code> and the doc URLs.</li>
+        <li><strong>Underlying venue → Nexo:</strong> Nexo consumes the orderbook of the underlying
+          venue (e.g. ByBit) and constructs the certificate book from it — on behalf of Anduin.</li>
+        <li><strong>Nexo → Users:</strong> Nexo streams firm cert prices to users (the price flow runs
+          into the DLT AWS server, where spread / fees are added, before it reaches the user — see the
+          quoting flow in §2.3).</li>
+        <li><strong>Nexo → Anduin (drop copy):</strong> every quote Nexo streams is drop-copied to
+          Anduin's insert-only quote archive, delivered over SQS (only Anduin stores quotes — see §4).</li>
+      </ol>
+    </div>
+
+    <div class="recipe">
+      <h4>At re-mark / funding (every 8h) — Flow B detail in §5</h4>
+      <ol start="6">
+        <li><strong>Nexo (compute):</strong> Nexo calculates the new contract values from the venue's
+          published funding rate — K' = K × (1 + f ± s), B' = K' × (1 ± buffer) — and re-marks its
+          quoting.</li>
+        <li><strong>Nexo → Anduin (drop copy, instant):</strong> the complete level row
+          <code>(series_id, funding_ts, f, s, K', B')</code> the moment it is committed — Anduin's
+          levels endpoint is what the Final Terms reference.</li>
+      </ol>
+    </div>
+
+    <div class="recipe">
+      <h4>User trades on price — Flow C detail in §6</h4>
+      <ol start="8">
+        <li><strong>Nexo (execute):</strong> Nexo executes the client order against Anduin's A4
+          inventory at the pinned quote.</li>
+        <li><strong>Nexo → DLT <em>and</em> Anduin (drop copy, instant):</strong> execution details —
+          trade ID, <code>quote_id</code>, series, side, size, price, client reference, timestamp —
+          to DLT (SQS reporting rail) and to Anduin's trade ledger.</li>
+        <li><strong>Nexo → Nexo-the-LP:</strong> Nexo sends the hedge order to itself as liquidity
+          provider — technically transmitted by Nexo, legally Anduin instructing Nexo (§2).</li>
+        <li><strong>Nexo → Anduin (drop copy, instant):</strong> the hedge order + fill record,
+          flagged "on behalf of Anduin" and linked to the triggering trade ID — this record is what
+          makes the agency construction real.</li>
+      </ol>
+    </div>
+
+    <div class="recipe">
+      <h4>At knock-out — Flow D detail in §7</h4>
+      <ol start="12">
+        <li><strong>Underlying venue → Nexo:</strong> Nexo observes the mark price of the underlying
+          venue against the latest committed barrier — every reference tick.</li>
+        <li><strong>Nexo (halt):</strong> on touch, Nexo stops trading of the series immediately —
+          quotes pulled, orders blocked, KO declared at the mark price reached.</li>
+        <li><strong>Nexo → Anduin (drop copy, instant):</strong> the full liquidation package —
+          trigger tick + ±60s reference stream, level row in force, hedge unwind executions + VWAP,
+          the liquidation/residual-value determination with all inputs, and payout records per
+          holder (KO event also to DLT via SQS).</li>
+      </ol>
+    </div>
+
+    <div class="diagram-wrap">
+      <div class="mermaid">
+sequenceDiagram
+  actor U as Users
+  participant V as Underlying venue<br/>(e.g. ByBit)
+  participant NX as Nexo<br/>(operator + LP)
+  participant NLP as Nexo LP<br/>(b-book)
+  participant ADN as Anduin<br/>(issuer · golden record)
+  participant DLT as DLT Reporting<br/>(SQS)
+
+  Note over NX,ADN: Series creation
+  NX->>ADN: 1 · Series creation request<br/>(underlying, direction, KO price, size,<br/>buffer, ratio, funding spread, ref source)
+  ADN-->>NX: 2 · Creation confirmed: series_id,<br/>token_address, Final Terms + KID URLs
+
+  Note over U,DLT: Quoting
+  V-->>NX: 3 · Consume underlying orderbook<br/>→ construct cert book
+  NX->>U: 4 · Stream cert prices to users
+  NX-->>ADN: 5 · Drop copy of EVERY quote via SQS<br/>(Anduin quote archive — only Anduin stores quotes)
+
+  Note over V,ADN: At re-mark / funding (8h)
+  NX->>NX: 6 · Calculate new contract values<br/>K' = K × (1 + f ± s) · B' = K' × (1 ± buffer)
+  NX-->>ADN: 7 · Drop copy: level row<br/>(series_id, funding_ts, f, s, K', B')
+
+  Note over U,DLT: User trades on price
+  NX->>NX: 8 · Execute client order<br/>(fill vs A4 inventory at pinned quote)
+  NX-->>DLT: 9 · Drop copy of execution → DLT
+  NX-->>ADN: 9 · Drop copy of execution → Anduin<br/>(trade id, quote_id, px, size, client ref, ts)
+  NX->>NLP: 10 · Hedge order to itself-as-LP<br/>(legally: Anduin instructs Nexo)
+  NX-->>ADN: 11 · Drop copy: hedge order + fill<br/>("on behalf of Anduin", links trade id)
+
+  Note over V,ADN: At knock-out
+  V-->>NX: 12 · Observe mark price<br/>vs committed barrier
+  NX->>NX: 13 · Barrier touched → stop trading<br/>of the series (KO declared)
+  NX-->>ADN: 14 · Drop copy: liquidation package<br/>(trigger evidence, unwind fills + VWAP,<br/>RV determination, payouts)
+      </div>
+    </div>
+
+    <div class="info-box">
+      <h4>Reading the map</h4>
+      <ul>
+        <li><strong>Direction of data:</strong> after step 2, everything flows <em>from Nexo</em> — Anduin is a data consumer and the system of record; DLT receives trade/KO events on its existing reporting rail (quotes go only to Anduin).</li>
+        <li><strong>Drop copies are load-bearing:</strong> steps 5, 7, 9, 11 and 14 are what make Anduin's golden record, the KO defence and the b-book profit-share audit possible (§2.3, §8).</li>
+        <li><strong>Latency classes:</strong> steps 7, 9, 11, 14 are instant push-on-commit; step 5 may be batched (1s batches) — see the data-sharing matrix in §8.</li>
+      </ul>
+    </div>
+
+    <h2>4 · Flow A — Series creation, documents &amp; quoting start</h2>
+
+    <div class="scenario">
+      <strong>Trigger.</strong> Nexo wants a new certificate series (new underlying, direction, or
+      leverage band). Nexo requests creation from Anduin; Anduin runs issuance (golden record → docs →
+      mint) and hands back everything Nexo needs to render and quote the product.
+    </div>
+
+    <div class="recipe">
+      <h4>Sequence</h4>
+      <ol>
+        <li><strong>Series request — Nexo → Anduin API.</strong> Nexo requests creation of a series
+          including: underlying + direction, <strong>KO / liquidation price</strong> (initial strike &amp;
+          barrier), <strong>number of tokens</strong> (max size), <strong>maintenance buffer</strong>
+          (barrier distance), ratio, funding-spread, reference price source and hedge instrument.
+          <span class="tag tag-open">MVP note</span> this MAY be a manual process initially (structurer
+          form / ticket into Anduin's admin UI); the API is the target state. Either way the parameter
+          set and the validation rules are identical.</li>
+        <li><strong>Anduin issuance kicks off.</strong> Anduin validates and creates the golden record
+          (status <code>draft</code>), runs <strong>document creation</strong> (Final Terms rendered
+          deterministically from the record + PRIIPs KID with SRI and performance scenarios), publishes
+          both (status <code>filed</code>), then <strong>deploys and mints</strong> the full size to
+          treasury in A4 (status <code>live</code>).</li>
+        <li><strong>Links back to Nexo.</strong> Anduin returns <code>series_id</code>,
+          <code>token_address</code>, and the public URLs of <strong>Final Terms and PRIIPs KID</strong> —
+          Nexo renders these in its UI (docs must be one click away from the order ticket; publication
+          legally opens the offer and must precede any purchasable cert).</li>
+        <li><strong>Quoting commences — by Nexo, on behalf of Anduin.</strong> Once docs are published and
+          the series is live, Nexo's pricing engine starts streaming quotes to users.
+          <strong>Every quote Nexo provides on Anduin's behalf must be stored — by Anduin, and only by
+          Anduin</strong> (Anduin's archive rule: if the issuer published it or computed money from it,
+          it lands in an insert-only table). DLT does <strong>not</strong> need to store quotes.
+          Mechanism: <strong>SQS, same pattern as the existing DLT reporting rail</strong> — quotes are
+          batched (e.g. 1s COPY batches) onto a dedicated quote queue that <strong>Anduin consumes</strong>;
+          the existing DLT queues carry trade events only, unchanged.</li>
+      </ol>
+    </div>
+
+    <div class="diagram-wrap">
+      <div class="mermaid">
+sequenceDiagram
+  autonumber
+  participant NX as Nexo<br/>(operator)
+  participant ADN as Anduin<br/>(registry + doc-gen)
+  participant WEB as Anduin docs site<br/>(public URLs)
+
+  Note over NX,ADN: 01: Series request (API — MAY be manual initially)
+  NX->>ADN: Create series: underlying, direction,<br/>KO price, token count, maintenance buffer,<br/>ratio, funding spread, ref source
+  Note over ADN: Validate → golden record<br/>status draft
+  ADN->>ADN: Generate Final Terms + PRIIPs KID<br/>(deterministic from golden record)
+  ADN->>WEB: Publish docs, verify hash<br/>status filed
+  ADN->>ADN: Deploy token + mint max_size<br/>to treasury (A4) — status live
+  ADN-->>NX: series_id, token_address,<br/>Final Terms URL, KID URL
+  Note over NX: Render doc links in UI —<br/>publication precedes any sale
+
+  Note over NX,WEB: 02: Quoting commences (Nexo on behalf of Anduin)
+  NX->>NX: Pricing engine streams firm quotes<br/>to users for the live series
+  NX-->>ADN: EVERY quote via SQS (dedicated queue,<br/>1s batches) → Anduin quote archive (insert-only)<br/>— only Anduin stores quotes, not DLT
+      </div>
+    </div>
+
+    <div class="info-box">
+      <h4>Flow A data shared with Anduin</h4>
+      <ul>
+        <li><strong>Inbound to Anduin (request):</strong> full series parameter set (this is what Anduin builds the golden record from — Anduin validates, it does not blindly mint what is requested).</li>
+        <li><strong>Outbound from Anduin:</strong> series identifiers + doc URLs (golden record fields Nexo needs for rendering and quoting: strike, barrier, ratio, tier sizes).</li>
+        <li><strong>Continuous once live:</strong> every quote (Nexo → Anduin via SQS; DLT stores no quotes).</li>
+      </ul>
+    </div>
+
+    <h2>5 · Flow B — Funding sync &amp; re-marking <span class="tag tag-instant">Instant sharing</span></h2>
+
+    <div class="scenario">
+      <strong>Trigger.</strong> Every 8h at the hedge venue's published funding timestamp. Financing is
+      funding pass-through into the strike (K' = K × (1 + f ± s)), barrier follows (B' = K' × (1 ± buffer)).
+      No client cash flows, no doc amendments — Final Terms define the formula; current levels are
+      published via endpoint only.
+    </div>
+
+    <div class="recipe">
+      <h4>Sequence</h4>
+      <ol>
+        <li><strong>Nexo runs the sync.</strong> Nexo's lifecycle daemon detects the venue's published
+          funding rate, computes the new strike and barrier per live series, and
+          <strong>re-marks the certs</strong> (its pricing engine swaps in K' before the next quote).</li>
+        <li><strong>Data shared INSTANTLY with Anduin.</strong> On every adjustment, Nexo pushes the
+          complete level row per series — <code>(series_id, funding_ts, f, s, K_old, K_new, B_new)</code> —
+          to Anduin the moment it is committed. Not end-of-day, not batched:
+          <strong>instant</strong>, because Anduin's published levels are what the Final Terms formula
+          points at, and a gap between what Nexo quotes against and what Anduin publishes is a
+          regulatory problem, not a cosmetic one.</li>
+        <li><strong>Anduin reflects it.</strong> Anduin appends to <code>level_history</code> and serves
+          the authoritative <strong>levels endpoint</strong> (<code>GET /series/:id/levels</code>) that
+          the docs reference and the website renders. Docs are never amended per adjustment.</li>
+      </ol>
+    </div>
+
+    <div class="diagram-wrap">
+      <div class="mermaid">
+sequenceDiagram
+  autonumber
+  participant V as Hedge venue<br/>(funding rate)
+  participant NX as Nexo<br/>(lifecycle + pricing)
+  participant ADN as Anduin<br/>(level_history + levels endpoint)
+
+  V-->>NX: Published 8h funding rate f<br/>(venue ts is the scheduling authority)
+  NX->>NX: Per live series:<br/>K' = K × (1 + f ± s)<br/>B' = K' × (1 ± buffer)
+  NX->>NX: Re-mark: pricing swaps in K'<br/>before next quote
+  NX->>ADN: INSTANT push: level row<br/>(series_id, funding_ts, f, s, K', B')
+  ADN->>ADN: Append level_history<br/>(idempotent on series_id + funding_ts)
+  ADN-->>ADN: Levels endpoint serves new row<br/>(docs reference this — never amended)
+  ADN-->>NX: Ack
+  Note over NX,ADN: No ack within SLA → discrepancy alert:<br/>quoted strike vs published levels must never diverge
+      </div>
+    </div>
+
+    <div class="info-box warn">
+      <h4>Flow B guardrails</h4>
+      <ul>
+        <li><strong>Idempotency:</strong> the push is keyed <code>(series_id, funding_ts)</code>; re-delivery upserts the identical row, never double-applies.</li>
+        <li><strong>Ordering &amp; replay:</strong> if Anduin's ingestion is down over a funding ts, Nexo buffers and replays all missed events in order on reconnect. Anduin flags the affected series until levels catch up.</li>
+        <li><strong>Restatements:</strong> if the venue restates a rate, Nexo pushes a correction row under the same key; Anduin appends the correction and auto-publishes a note on the levels endpoint.</li>
+        <li><strong>Daily recon:</strong> Anduin recomputes each day's level chain from the venue's published rates (public data) and diffs against what Nexo pushed — pass-through must be provably clean since Anduin's docs promise a pure formula.</li>
+      </ul>
+    </div>
+
+    <h2>6 · Flow C — Trade, settlement &amp; hedge</h2>
+
+    <div class="scenario">
+      <strong>Trigger.</strong> Continuous. Clients hit Nexo's streamed quotes; Nexo executes against
+      Anduin's inventory in A4; cash and cert legs settle per the trading-flow doc; every fill produces
+      a hedge record and feeds the b-book.
+    </div>
+
+    <div class="recipe">
+      <h4>Sequence</h4>
+      <ol>
+        <li><strong>Execution by Nexo.</strong> Client order → UI → OCS → fill against A4 inventory at
+          the pinned quote. <strong>Nexo shares execution details with Anduin</strong> — instantly, per
+          fill — so Anduin reflects it in the golden record's trade ledger: trade ID, referenced
+          <code>quote_id</code>, series, side, size, price, client reference, timestamp, and the
+          resulting outstanding. Outstanding per series is <em>derived</em> from these events, never
+          overwritten — Anduin cannot compute its own exposure, RV obligations, or the profit-share
+          check without a complete fill stream.</li>
+        <li><strong>Settlement — unchanged, as outlined in the trading-flow doc.</strong> German:
+          cash directly A1 ↔ A4; non-German: A1 → A3 → A4 (and back on sale) with A3 holding funds only
+          for a second; cert legs directly A4 ↔ A1; fee (0.06%) to A3; T+0 book entries, T+1 physical
+          net; SQS events to DLT per trade. A4 is Anduin's account, so <strong>Anduin additionally
+          receives the settlement confirmations</strong> (Tangany account statements / T+1 net files)
+          and reconciles them against the fill stream daily.</li>
+        <li><strong>Hedge — legal vs technical.</strong> For every fill,
+          <strong>Anduin sends the hedge order to Nexo (legally)</strong>, while
+          <strong>technically the hedge order is generated and sent by Nexo on behalf of Anduin to
+          Nexo-the-LP</strong>. The hedge record (order + fill: instrument, size, direction, price,
+          timestamp, triggering trade ID, "on behalf of Anduin" flag) is pushed to Anduin instantly —
+          this record is what makes the agency construction real.</li>
+        <li><strong>B-book operation.</strong> Nexo operates the b-book fully on Anduin's behalf:
+          netting client flow, warehousing or externally hedging at its own discretion.
+          <strong>B-book profits are shared</strong> — Nexo delivers a periodic P&amp;L statement
+          (daily position/PnL snapshot + monthly settlement statement proposed); Anduin verifies it
+          against the quote/fill/hedge streams it already holds.</li>
+      </ol>
+    </div>
+
+    <div class="info-box">
+      <h4>What changes when a German client is involved</h4>
+      <p style="margin:0">
+        Not much in the flow itself — the difference is who Anduin must be able to identify. For
+        <strong>non-German clients</strong> Anduin does not hold the end-client relationship: it only
+        needs to know <strong>which trades / orders DLT made</strong> (a DLT-level reference is
+        sufficient). For <strong>German clients</strong> Anduin holds the client relationship, so the
+        client must be identified and reflected in the golden record —
+        <strong>the SQS fill messages for German clients therefore contain client information</strong>;
+        for non-German clients they carry the DLT reference only.
+      </p>
+    </div>
+
+    <div class="diagram-wrap">
+      <div class="mermaid">
+sequenceDiagram
+  autonumber
+  participant NX as Nexo<br/>(UI + OCS + pricing)
+  participant A1 as Tangany A1<br/>(User)
+  participant A3 as Tangany A3<br/>(DLT Master)
+  participant A4 as Tangany A4<br/>(Anduin)
+  participant NLP as Nexo LP<br/>(b-book)
+  participant ADN as Anduin<br/>(golden record + archive)
+  participant DLT as DLT Reporting<br/>(SQS)
+
+  Note over NX: Client order executed against A4 inventory<br/>at the pinned quote (execution flow — see §2.3)
+  NX-->>ADN: INSTANT: execution details<br/>(trade id, quote_id, px, size, client ref, ts)
+  Note over ADN: Append trade ledger —<br/>outstanding derived, golden record never edited
+  NX-->>DLT: SQS trade event (existing rail)
+
+  Note over A1,A4: Settlement — as per trading-flow doc
+  alt German client
+    A1->>A4: T+0 book: cash A1 → A4 (direct)
+  else Non-German client
+    A1->>A3: T+0 book: cash A1 → A3 (transit)
+    A3->>A4: T+0 book: cash A3 → A4 (immediate)
+  end
+  A4->>A1: T+0 book: certs A4 → A1
+  A1->>A3: T+0 book: trading fee to A3
+
+  Note over NX,NLP: Hedge — legal: Anduin instructs Nexo ·<br/>technical: Nexo transmits on behalf of Anduin
+  NX->>NLP: Hedge order (on behalf of Anduin)
+  NLP-->>NX: Hedge fill
+  NX-->>ADN: INSTANT: hedge order + fill record<br/>(flags "on behalf of Anduin", links trade id)
+  Note over NLP: Nexo operates b-book fully<br/>on Anduin's behalf —<br/>warehouse or hedge externally
+  NLP-->>ADN: Periodic b-book P&amp;L statement<br/>(profits shared — % TBD)
+      </div>
+    </div>
+
+    <h2>7 · Flow D — Knock-out &amp; settlement</h2>
+
+    <div class="scenario">
+      <strong>Trigger.</strong> The reference price touches the barrier. Because Nexo provides the
+      trading, <strong>Nexo observes the mark prices of the underlying venue, declares the KO and halts
+      trading immediately</strong>. It then unwinds the hedge on behalf of Anduin and pays back the
+      user. Everything is shared with Anduin — this is the flow where the issuer's legal risk
+      concentrates, so evidence completeness is the binding requirement.
+    </div>
+
+    <div class="recipe">
+      <h4>Sequence</h4>
+      <ol>
+        <li><strong>Detection &amp; declaration (Nexo).</strong> Nexo monitors every reference tick
+          (the mark price source named in the Final Terms) against the latest committed barrier. On
+          touch: <strong>KO declared, trading halted immediately</strong> — quotes pulled, orders
+          blocked for the series.</li>
+        <li><strong>Evidence first → shared with Anduin.</strong> The trigger tick plus the surrounding
+          ±60s of the reference stream and the level row in force are captured and
+          <strong>pushed to Anduin instantly</strong>. The KO is only defensible if the issuer holds the
+          exact market data acted on — Anduin archives this before anything else proceeds.</li>
+        <li><strong>Hedge unwind (Nexo, on behalf of Anduin).</strong> Nexo unwinds the series' hedge
+          contribution; every unwind execution is shared with Anduin — the
+          <strong>unwind VWAP feeds the residual value</strong>.</li>
+        <li><strong>Residual value &amp; payout (Nexo pays the user).</strong> RV is computed per Final
+          Terms against the <em>strike</em> (long: <code>RV = max(0, (unwind_VWAP − K) × ratio −
+          costs)</code>). Nexo pays the residual value back to the user: cash leg from A4 per the
+          trading-flow doc (German: A4 → A1 direct; non-German: A4 → A3 → A1), certs debited from A1,
+          returned to A4 and cancelled. RV = 0 follows the identical process minus the cash transfer —
+          the zero-RV determination with its inputs is itself an artifact Anduin must receive.</li>
+        <li><strong>All information shared with Anduin.</strong> Trigger evidence, halt timestamp,
+          unwind executions + VWAP, RV calculation with all inputs, payout records per holder, and the
+          final token cancellation. Anduin closes the series in the golden record
+          (<code>knocked_out → settled</code>), publishes the KO notice on its docs/levels pages (trigger
+          ts, trigger price, RV determination, payment date), retires the treasury tokens, and archives
+          the full package (≥7y retention, docs stay retrievable at their URLs).</li>
+      </ol>
+    </div>
+
+    <div class="diagram-wrap">
+      <div class="mermaid">
+sequenceDiagram
+  autonumber
+  participant V as Underlying venue<br/>(mark price)
+  participant NX as Nexo<br/>(monitoring + trading)
+  actor U as User
+  participant A1 as Tangany A1<br/>(User)
+  participant A4 as Tangany A4<br/>(Anduin)
+  participant NLP as Nexo LP<br/>(hedge/b-book)
+  participant ADN as Anduin<br/>(archive + golden record)
+  participant DLT as DLT Reporting<br/>(SQS)
+
+  V-->>NX: Mark price touches barrier
+  NX->>NX: KO DECLARED — halt trading immediately<br/>(quotes pulled, orders blocked)
+  NX-->>ADN: INSTANT: trigger tick + ±60s reference stream<br/>+ level row in force (evidence first)
+  Note over ADN: Archive before anything else —<br/>this is the issuer's KO defence
+  NX-->>U: Position terminated (knocked out)
+
+  NX->>NLP: Unwind series hedge<br/>(on behalf of Anduin)
+  NLP-->>NX: Unwind fills (VWAP)
+  NX-->>ADN: INSTANT: unwind executions + VWAP
+
+  NX->>NX: RV = max(0, (VWAP − K) × ratio − costs)<br/>per Final Terms — vs strike, not barrier
+  NX-->>ADN: RV determination + all inputs<br/>(also when RV = 0)
+
+  Note over A1,A4: Payout — as per trading-flow doc
+  A1->>A4: T+0 book: certs A1 → A4 (cancelled)
+  alt RV &gt; 0 — German direct / non-German via A3
+    A4->>A1: T+0 book: RV cash A4 → A1
+  else RV = 0
+    Note over A4: No cash leg — identical process otherwise
+  end
+  NX-->>ADN: Payout records per holder
+  NX-->>DLT: SQS KO event (existing rail)
+  Note over ADN: Series knocked_out → settled ·<br/>KO notice published · tokens retired ·<br/>full package archived ≥7y
+      </div>
+    </div>
+
+    <div class="info-box warn">
+      <h4>Flow D non-negotiables (issuer's legal exposure)</h4>
+      <ul>
+        <li><strong>Evidence before action reaches Anduin's archive.</strong> If Nexo declares a KO and Anduin never receives the tick evidence, Anduin cannot defend the termination against a holder dispute. The evidence push is part of the KO procedure, not an after-the-fact report.</li>
+        <li><strong>KO during Nexo downtime is still a KO</strong> — trigger = first qualifying tick; Nexo must replay after reconnect and the declaration backdates to the touch.</li>
+        <li><strong>RV = 0 produces the same artifact set.</strong> The zero-RV determination with inputs is the defence when a holder disputes receiving nothing.</li>
+        <li><strong>No early action.</strong> Nothing is unwound pre-touch; pre-KO only quoting changes (ask pulled near the barrier, bid stays up).</li>
+      </ul>
+    </div>
+
+    <h2>8 · Data-sharing matrix — what, when, how</h2>
+
+    <p class="lead">
+      One table to negotiate from. "Instant" means publish-on-commit to SQS (seconds not
+      minutes); "batched" means the existing 1s-batch style used for quote archival. Mechanism column
+      is the proposal, not yet agreed with all parties.
+    </p>
+
+    <table class="legend">
+      <thead>
+        <tr>
+          <th>#</th><th>Data</th><th>Flow</th><th>Direction</th><th>Latency</th><th>Mechanism (proposal)</th><th>Why Anduin needs it</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td><td>Series creation request (KO price, token count, maintenance buffer, ratio, spreads, ref source)</td>
+          <td>A</td><td>Nexo → Anduin</td><td>On request</td>
+          <td>Anduin API <span class="tag tag-open">manual initially</span></td>
+          <td>Input to the golden record; Anduin validates before minting.</td>
+        </tr>
+        <tr>
+          <td>2</td><td>Series identifiers + Final Terms / PRIIPs KID links</td>
+          <td>A</td><td>Anduin → Nexo</td><td>On issuance</td>
+          <td>API response / webhook</td>
+          <td>Nexo renders docs in the UI; publication precedes any sale.</td>
+        </tr>
+        <tr>
+          <td>3</td><td><strong>Every quote</strong> provided by Nexo on behalf of Anduin (quote_id, series, side, tiers, ts, TTL, inputs)</td>
+          <td>A/C</td><td>Nexo → <strong>Anduin</strong> only (DLT stores no quotes)</td><td>Batched (~1s)</td>
+          <td>SQS — dedicated quote queue (same pattern as the DLT reporting rail), Anduin as consumer; existing DLT queues carry trade events only. <span class="tag tag-open">Open</span> for the publicly quoted books: SQS vs a periodic data dump into an S3 bucket — see §9.</td>
+          <td>Regulatory record of what was offered; price-pinning evidence for trades; profit-share audit input.</td>
+        </tr>
+        <tr>
+          <td>4</td><td>Funding-sync level rows (funding_ts, f, s, K', B') + restatement corrections</td>
+          <td>B</td><td>Nexo → Anduin</td><td><strong>Instant</strong></td>
+          <td>SQS — dedicated level queue, idempotent on (series_id, funding_ts), ordered replay after downtime</td>
+          <td>Anduin's levels endpoint is what the Final Terms formula references — quoted strike and published levels must never diverge.</td>
+        </tr>
+        <tr>
+          <td>5</td><td>Execution details per fill (trade id, quote_id, px, size, client ref, ts) — <strong>client ref identifies the end client for German clients</strong> (golden-record requirement); DLT-level reference only for non-German clients</td>
+          <td>C</td><td>Nexo → Anduin</td><td><strong>Instant</strong></td>
+          <td>SQS — dedicated fill queue (same envelope style as #4)</td>
+          <td>Golden-record trade ledger; outstanding is derived from fills; exposure, KO payout set and profit-share checks all depend on it.</td>
+        </tr>
+        <tr>
+          <td>6</td><td>Trade / settlement events to DLT</td>
+          <td>C</td><td>Nexo → DLT</td><td>T+0 (existing)</td>
+          <td>Existing SQS rail — unchanged</td>
+          <td>MiCA / T+0 book-entry reporting as in the trading-flow doc.</td>
+        </tr>
+        <tr>
+          <td>7</td><td>Hedge orders + fills, flagged "on behalf of Anduin" (instrument, size, px, ts, triggering trade id)</td>
+          <td>C</td><td>Nexo → Anduin</td><td><strong>Instant</strong></td>
+          <td>SQS — dedicated hedge queue</td>
+          <td>Evidences the agency construction (legally Anduin's order); proves Anduin is flat; profit-share audit input.</td>
+        </tr>
+        <tr>
+          <td>8</td><td>B-book P&amp;L statement (positions, per-series attribution, external hedge costs, net result, Anduin's share)</td>
+          <td>C</td><td>Nexo → Anduin</td><td>Daily snapshot + monthly settlement <span class="tag tag-open">cadence TBD</span></td>
+          <td>Signed statement (API/SFTP) + reconciliation against #3/#5/#7</td>
+          <td>Basis of the profit share; Anduin must be able to independently verify it.</td>
+        </tr>
+        <tr>
+          <td>9</td><td>KO package: trigger tick + ±60s reference stream + level row, halt ts, unwind executions + VWAP, RV determination with inputs (incl. RV = 0), payout records</td>
+          <td>D</td><td>Nexo → Anduin</td><td><strong>Instant, evidence first</strong></td>
+          <td>SQS — dedicated KO queue; KO procedure incomplete until Anduin acks the evidence</td>
+          <td>The issuer's KO defence file; publication + ≥7y archive obligations sit with Anduin.</td>
+        </tr>
+        <tr>
+          <td>10</td><td>Tangany A4 statements / T+1 physical net files</td>
+          <td>C/D</td><td>Tangany → Anduin</td><td>T+1</td>
+          <td>Existing custodian reporting (A4 is Anduin's account)</td>
+          <td>Daily cash/cert reconciliation vs fill stream (#5) and payouts (#9).</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="info-box ok">
+      <h4>Design principle</h4>
+      <p style="margin:0">
+        Nexo operates, <strong>Anduin can always reconstruct</strong>. Every number Anduin publishes
+        (levels), owes (RV payouts), or earns (spread, profit share) must be recomputable from the
+        streams above without asking Nexo. If a data item fails that test, its latency or granularity
+        is wrong.
+      </p>
+    </div>
+
+    <h2>9 · Open questions</h2>
+
+    <table class="legend">
+      <thead>
+        <tr><th style="width:34%">Question</th><th>Current proposal / note</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Quote drop-copy transport: SQS or S3 dump?</td>
+          <td>Decided: quotes go to Anduin only (DLT stores no quotes). Open: for the books quoted to the public, is SQS (dedicated quote queue, 1s batches) the right transport, or should Anduin instead receive a periodic data dump into an S3 bucket? Also open: whether Nexo or Anduin owns/operates the queue/bucket infrastructure.</td>
+        </tr>
+        <tr>
+          <td>Anduin intervention mechanism on quoting</td>
+          <td>How does Anduin intervene if it believes Nexo is quoting wrongly on its behalf (stale inputs, wrong levels, deviation from the formula)? Candidates: per-series halt / kill-switch Anduin can trigger, automated deviation alerts (quote stream vs Anduin's own reference calculation), contractual right to instruct an immediate quoting halt. To be designed.</td>
+        </tr>
+        <tr>
+          <td>Day-one scope: edge cases left untouched?</td>
+          <td>Do we consciously leave certain edge cases out of scope at launch — e.g. delisting of the underlying, a user exercising their contract? Proposal: cover them in the Final Terms fallback clauses, but without an operational build on day one.</td>
+        </tr>
+        <tr>
+          <td>B-book profit share % and settlement cadence</td>
+          <td>Commercial term, TBD. Proposal: daily P&amp;L snapshot, monthly cash settlement, data rails #3/#5/#7 contractually defined as the audit basis.</td>
+        </tr>
+        <tr>
+          <td>Series creation: API vs manual at launch</td>
+          <td>Manual (structurer form into Anduin admin) acceptable for MVP; API is target state. Parameter set identical either way.</td>
+        </tr>
+        <tr>
+          <td>SLA for "instant" pushes (#4, #5, #7, #9) and downtime behaviour</td>
+          <td>Propose: push on commit, ack required; Nexo buffers + replays in order after Anduin downtime; #4 discrepancy (quoted strike vs published levels) alerts both sides; #9 KO procedure not complete until evidence acked.</td>
+        </tr>
+        <tr>
+          <td>Who serves the public levels endpoint</td>
+          <td>Anduin (authoritative, referenced by Final Terms), fed by #4; Nexo renders the same data in its UI.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <footer class="doc-footer">
+      Working draft · Anduin as Issuer — flow of funds, b-book &amp; data sharing · September 2026 ·
+      Companion to: KO Certificate Trading Flow (Nexo, July 2026) and Issuance MVP Flows Architecture (Anduin, August 2026)
+    </footer>
+
+  </div>
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'neutral',
+      securityLevel: 'loose',
+      themeVariables: {
+        fontFamily: 'Inter, sans-serif',
+        fontSize: '12px',
+        primaryColor: '#eaf1f6',
+        primaryTextColor: '#17213a',
+        primaryBorderColor: '#2d5f7f',
+        lineColor: '#5b6478',
+        actorBkg: '#eaf1f6',
+        actorBorder: '#2d5f7f',
+        actorTextColor: '#17213a',
+        noteBkgColor: '#faf1e7',
+        noteBorderColor: '#8a4a1e',
+        noteTextColor: '#17213a',
+        sequenceNumberColor: '#ffffff',
+        activationBkgColor: '#dfe2ea',
+        signalTextColor: '#17213a',
+        labelTextColor: '#17213a'
+      },
+      sequence: {
+        diagramMarginX: 20,
+        diagramMarginY: 16,
+        actorMargin: 40,
+        noteMargin: 18,
+        messageMargin: 32,
+        wrap: true,
+        useMaxWidth: true
+      }
+    });
+
+    async function renderAll() {
+      const nodes = document.querySelectorAll('.mermaid');
+      for (const node of nodes) {
+        let src = node.innerHTML.trim()
+          .replace(/&amp;/g, '&')
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
+          .replace(/&quot;/g, '"')
+          .replace(/&#39;/g, "'");
+        try {
+          const id = 'm-' + Math.random().toString(36).slice(2);
+          const { svg, bindFunctions } = await mermaid.render(id, src);
+          node.innerHTML = svg;
+          if (bindFunctions) bindFunctions(node);
+        } catch (err) {
+          console.error('Mermaid render error:', err);
+          node.innerHTML = '<pre style="color:#a33;font-size:12px;white-space:pre-wrap;">' +
+            (err && err.message ? err.message : String(err)) + '</pre>';
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', renderAll);
+  </script>
+</body>
+</html>

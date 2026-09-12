@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexo × DLT × Issuer — KO Certificate Trading (End-to-End)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --text: #17213a;
+      --text-muted: #5b6478;
+      --accent: #2d5f7f;
+      --accent-soft: #eaf1f6;
+      --border: #dfe2ea;
+      --bg: #ffffff;
+      --bg-soft: #f6f7fa;
+      --warn: #8a4a1e;
+      --warn-soft: #faf1e7;
+      --ok: #2f5d3e;
+      --ok-soft: #ecf4ee;
+      --mode-a: #2d5f7f;
+      --mode-b: #6b4c9a;
+      --mode-c: #5b6478;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page { max-width: 1100px; margin: 0 auto; padding: 48px 56px; }
+
+    header.doc-header {
+      border-bottom: 2px solid var(--text);
+      padding-bottom: 20px;
+      margin-bottom: 36px;
+    }
+
+    header.doc-header .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 11px;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    header.doc-header h1 {
+      font-size: 28px;
+      line-height: 1.25;
+      margin: 0 0 8px 0;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    header.doc-header .meta { font-size: 13px; color: var(--text-muted); }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 48px 0 14px 0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h3 { font-size: 16px; font-weight: 600; margin: 28px 0 10px 0; }
+    h4 { font-size: 14px; font-weight: 600; margin: 20px 0 8px 0; color: var(--accent); }
+
+    p { margin: 0 0 12px 0; }
+    strong { font-weight: 600; }
+
+    .lead { font-size: 15px; color: var(--text-muted); margin-bottom: 24px; }
+
+    table.legend {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 24px 0;
+      font-size: 13px;
+    }
+
+    table.legend thead th {
+      text-align: left;
+      background: var(--accent-soft);
+      font-weight: 600;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    table.legend td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    table.legend td:first-child { font-weight: 600; white-space: nowrap; width: 28%; }
+    table.legend td:last-child { color: var(--text-muted); width: 22%; }
+
+    .info-box {
+      background: var(--accent-soft);
+      border-left: 3px solid var(--accent);
+      padding: 14px 18px;
+      margin: 16px 0 24px 0;
+      border-radius: 2px;
+      font-size: 13.5px;
+    }
+
+    .info-box.warn {
+      background: var(--warn-soft);
+      border-left-color: var(--warn);
+    }
+
+    .info-box h4 {
+      margin: 0 0 8px 0;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .info-box ul { margin: 8px 0 0 0; padding-left: 20px; }
+    .info-box li { margin-bottom: 4px; }
+
+    .scenario {
+      background: var(--bg-soft);
+      border-left: 3px solid var(--accent);
+      padding: 12px 16px;
+      margin: 12px 0 16px 0;
+      font-size: 13.5px;
+    }
+
+    .scenario strong { color: var(--accent); }
+
+    .diagram-wrap {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 20px;
+      margin: 8px 0 28px 0;
+      overflow-x: auto;
+    }
+
+    .mermaid { text-align: center; }
+
+  /* Mermaid sequence notes only — do not target .actor (hides header labels) */
+    .diagram-wrap .mermaid .note .noteText,
+    .diagram-wrap .mermaid .noteText {
+      fill: #17213a !important;
+    }
+
+    .recipe {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 16px 18px;
+      margin-bottom: 20px;
+      background: var(--bg-soft);
+    }
+
+    .recipe h4 { margin-top: 0; color: var(--text); text-transform: none; letter-spacing: 0; }
+
+    .recipe ol { margin: 8px 0 0 0; padding-left: 22px; font-size: 13px; }
+    .recipe li { margin-bottom: 6px; }
+    .recipe .split { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted); }
+
+    .case-section { break-inside: avoid; page-break-inside: avoid; }
+    .case-section + .case-section { page-break-before: always; }
+
+    .mode-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      margin: 20px 0 28px 0;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .mode-toolbar label { font-weight: 600; font-size: 13px; margin-right: 4px; }
+
+    .mode-toolbar button {
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .mode-toolbar button:hover { background: var(--accent-soft); }
+    .mode-toolbar button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+    .mode-toolbar .divider {
+      width: 1px;
+      height: 22px;
+      background: var(--border);
+      margin: 0 4px;
+    }
+
+    .mode-toolbar .earn-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .scenario-block { display: none; }
+    body[data-scenario="1"][data-earn="in"]  .scenario-block[data-scenario="1"][data-earn="in"],
+    body[data-scenario="1"][data-earn="out"] .scenario-block[data-scenario="1"][data-earn="out"],
+    body[data-scenario="2"][data-earn="in"]  .scenario-block[data-scenario="2"][data-earn="in"],
+    body[data-scenario="2"][data-earn="out"] .scenario-block[data-scenario="2"][data-earn="out"],
+    body[data-scenario="3"][data-earn="in"]  .scenario-block[data-scenario="3"][data-earn="in"],
+    body[data-scenario="3"][data-earn="out"] .scenario-block[data-scenario="3"][data-earn="out"] {
+      display: block;
+    }
+
+    .step-block {
+      font-size: 13px;
+      margin: 10px 0;
+      padding: 10px 14px;
+      border-left: 2px solid var(--border);
+      background: var(--bg);
+    }
+
+    .step-block .num { font-weight: 700; color: var(--accent); margin-right: 6px; }
+
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin: 16px 0;
+    }
+
+    .results-table th, .results-table td {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+    }
+
+    .results-table th { background: var(--accent-soft); }
+
+    footer.doc-footer {
+      border-top: 1px solid var(--border);
+      margin-top: 56px;
+      padding-top: 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.92em;
+      background: var(--bg-soft);
+      padding: 1px 6px;
+      border-radius: 3px;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 2px 8px;
+      border-radius: 3px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    .tag-book { background: var(--ok-soft); color: var(--ok); }
+    .tag-tier2 { background: var(--warn-soft); color: var(--warn); }
+
+    @media print {
+      html, body { font-size: 10.5pt; }
+      .page { max-width: none; padding: 12mm 10mm; }
+      .mode-toolbar { position: static; }
+      .case-section + .case-section { page-break-before: always; }
+    }
+
+    @page { size: A4 landscape; margin: 10mm; }
+  </style>
+</head>
+<body data-scenario="1" data-earn="in">
+  <div class="page">
+
+    <header class="doc-header">
+      <div class="eyebrow">Nexo × DLT × Issuer — Integration Proposal</div>
+      <h1>KO Certificate Trading Flow: End-to-End with Issuer Hedging (USDC)</h1>
+      <div class="meta">Prepared by Nexo · July 2026 · Working draft — amends the Futures Trading Flow (May 2026) for certificate trading</div>
+    </header>
+
+    <p class="lead">
+      This document describes the <strong>money-flow and execution model</strong> for Nexo × DLT
+      <strong>KO certificate (turbo) trading</strong>. Between User, App UI, OCS and the
+      <strong>Issuer</strong>, <strong>only KO certificates are traded</strong>: every client order is a
+      purchase or sale of KO certificates executed against the Issuer. The Issuer then creates
+      <strong>hedge orders against Nexo</strong> — entering into a perp position with Nexo — while
+      <strong>Nexo does not have to hedge externally (e.g. ByBit) and can decide for itself</strong>.
+    </p>
+
+    <p class="lead">
+      <strong>Custody model.</strong> All parties are part of the Tangany setup — <strong>the Issuer
+      onboards with Tangany as well</strong> and receives <strong>Tangany Account 4 (Issuer)</strong>.
+      Client collateral physically sits in <strong>Tangany Account 1 (User account)</strong> with the
+      internal sub-split <code>(1.1) Free</code> (transit / non-earmarked) and <code>(1.2) Futures</code>
+      (trading-wallet portion) unchanged. Account 4 is the <strong>source of the certificates issued</strong>
+      and the <strong>source for the hedging positions against Nexo</strong>.
+    </p>
+
+    <p class="lead">
+      <strong>Earn opt-in / opt-out</strong> applies <em>only</em> to
+      <strong>Transfer to Futures</strong> and <strong>Transfer from Futures</strong>.
+      All other transactions (cert purchases/sales, fees, knock-out redemptions) are opt-in/out agnostic
+      because funds remain in Account 1 throughout the trade lifecycle.
+    </p>
+
+    <p class="lead">
+      <strong>Pledge model (amended).</strong> Pledging always happens <strong>before buying</strong>.
+      Funds can <strong>no longer be pledged to Nexo</strong>. <strong>Non-German clients</strong> pledge
+      funds <strong>only to DLT</strong>, and DLT <strong>MAY pledge them onward to the Issuer</strong>.
+      <strong>German clients</strong> (onboarded with the Issuer) pledge <strong>only to the Issuer</strong> —
+      no pledge to DLT. As before, pledges are a <strong>legal / book-entry arrangement only — no physical
+      fund movement</strong> between Tangany accounts for the pledged amount.
+    </p>
+
+    <p class="lead">
+      <strong>T+0 vs T+1 (amended).</strong> <strong>DLT records each purchase of security tokens and any
+      ledger movement</strong> as an individual book entry at <strong>T+0</strong>. The <strong>Issuer
+      records (a) any ledger movement of the tokens it issues and (b) each hedge trade it makes</strong>
+      against Nexo. <strong>Physical net settlement</strong> between Tangany accounts remains on a
+      <strong>T+1 bulk basis</strong> (net delta vs prior state) on the operational layer.
+    </p>
+
+    <div class="info-box warn">
+      <h4>German vs non-German clients</h4>
+      <p style="margin:0">For <strong>German clients only</strong>, each client is <strong>onboarded with the
+      Issuer</strong> in addition to the Tangany onboarding. All actors in this document (User, Nexo, DLT,
+      Issuer) are onboarded with Tangany. The two client groups settle and pledge differently:</p>
+      <ul>
+        <li><strong>German clients:</strong> cert cash legs move <strong>directly A1 ↔ A4</strong>; the pledge goes <strong>only to the Issuer</strong>.</li>
+        <li><strong>Non-German clients:</strong> cert cash legs <strong>always move through A3 first</strong> — A1 → A3 → A4 on purchase, A4 → A3 → A1 on sale — even though the funds sit in A3 only for a second; the pledge goes <strong>only to DLT</strong> (DLT MAY pledge onward to the Issuer).</li>
+        <li>Pledging always happens <strong>before buying</strong>. Trading fees go to A3 in both cases; the security (cert) legs settle directly A4 ↔ A1 in both cases.</li>
+      </ul>
+    </div>
+
+    <div class="info-box">
+      <h4>What changed vs the perp flow</h4>
+      <ul>
+        <li><strong>Instrument:</strong> clients trade KO certificates (securities), not perps. The perp only exists as the Issuer's hedge against Nexo.</li>
+        <li><strong>New actor / account:</strong> Issuer with Tangany Account 4 — source of issued certs and of the hedge positions vs Nexo.</li>
+        <li><strong>Execution:</strong> User → App UI → OCS → Issuer (certs only). Issuer → Nexo (perp hedge). Nexo may hedge externally at its own discretion.</li>
+        <li><strong>Funding:</strong> positive / negative funding <strong>does not exist</strong> — it is baked into the certificate terms (8h strike/barrier adjustment at the hedge venue’s funding timestamps). No client-side session settlement either. The <strong>trading fee remains</strong>.</li>
+        <li><strong>Pledge:</strong> always before buying. Non-German: User → DLT only (DLT MAY pledge onward to the Issuer). German: User → Issuer only. Never to Nexo.</li>
+        <li><strong>German vs non-German routing:</strong> German clients settle cert cash legs directly A1 ↔ A4; non-German clients always route them through A3 first (A1 → A3 → A4 / A4 → A3 → A1), even if A3 holds the funds only for a second.</li>
+        <li><strong>Liquidation → Knock-out:</strong> instead of margin liquidation, the certificate terminates when spot touches the barrier; loss is bounded to the premium paid.</li>
+      </ul>
+    </div>
+
+    <h2>Sub-ledger model (Accounts 1–4)</h2>
+
+    <table class="legend">
+      <thead>
+        <tr><th>Component</th><th>Description</th><th>Physical Tangany?</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Account 1 (User)</td>
+          <td>Per-user custodian account. Holds the client's USDC / collateral assets and the KO certificates the client owns.</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td>(1.1) Free</td>
+          <td>Transit bucket inside A1. Used before debiting A1 → A3 / A4. Returns to zero after each TX.</td>
+          <td>Book only</td>
+        </tr>
+        <tr>
+          <td>(1.2) Futures</td>
+          <td>Earmarked trading-wallet balance (USDC, collateral assets, certs). Pledged portion tracked here.</td>
+          <td>Book only</td>
+        </tr>
+        <tr>
+          <td>Account 2 (Nexo Master)</td>
+          <td>Earn-sweep destination for <em>Transfer to/from Futures</em> when client is opt-in. <strong>Not</strong> touched for cert trade events (purchases, fees, redemptions). Also Nexo's account for the Issuer's hedge perp legs.</td>
+          <td>Yes (Earn opt-in sweeps only)</td>
+        </tr>
+        <tr>
+          <td>Account 3 (DLT Master)</td>
+          <td>Counterparty for trading fees and collateral swaps; MiCA reporting counterparty. Records every security-token purchase / ledger movement at T+0.</td>
+          <td>Yes (T+1 net)</td>
+        </tr>
+        <tr>
+          <td>Account 4 (Issuer)</td>
+          <td><strong>New.</strong> Issuer pool. Source of the KO certificates issued (cert inventory) and counterparty for every cert purchase / sale / knock-out redemption. Also the source for the hedging positions the Issuer holds against Nexo.</td>
+          <td>Yes (T+1 net)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="info-box">
+      <h4>Canonical recipes</h4>
+      <ul>
+        <li><strong>Pledge (always before buying):</strong> German clients pledge only to the Issuer; non-German clients pledge only to DLT (DLT MAY pledge onward to the Issuer). Book-entry only.</li>
+        <li><strong>Buy certs (client pays):</strong> internal <code>(1.2) → (1.1)</code> → T+0 cash leg: <em>German</em> Debit USDC A1 → Credit A4 (direct); <em>non-German</em> Debit A1 → Credit A3 → immediately Debit A3 → Credit A4 → T+0 book: Debit certs A4 → Credit A1 → internal <code>(1.1) → (1.2)</code> → SQS to DLT. Issuer records the token ledger movement.</li>
+        <li><strong>Sell certs / KO redemption (client receives):</strong> internal certs <code>(1.2) → (1.1)</code> → T+0 book: Debit certs A1 → Credit A4 (cancelled) → T+0 cash leg: <em>German</em> Debit USDC A4 → Credit A1 (direct); <em>non-German</em> Debit A4 → Credit A3 → immediately Debit A3 → Credit A1 → internal <code>(1.1) → (1.2)</code> → SQS to DLT.</li>
+        <li><strong>Hedge (Issuer-side):</strong> for every client cert fill the Issuer opens/closes a perp position against Nexo out of A4. Never touches client accounts. Nexo may hedge externally at its own discretion.</li>
+        <li><strong>Trading fees:</strong> always settled in <strong>USDC</strong> to A3, even when collateral is BTC or other assets. 0.06% of notional.</li>
+        <li><strong>No funding / no session settlement:</strong> financing is baked into the certificate terms — there are no funding or session-settlement transactions on client accounts.</li>
+        <li><strong>Earn opt-in only:</strong> on <em>Transfer to Futures</em> add A2 → A1 (un-sweep) before the internal alloc; on <em>Transfer from Futures</em> add A1 → A2 (re-sweep) after the internal alloc.</li>
+      </ul>
+    </div>
+
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart LR
+ subgraph A1["Account 1 User"]
+ Free["1.1 Free"]
+ Fut["1.2 Futures"]
+ Free <-->|internal alloc| Fut
+ end
+ A2["Account 2 Nexo Master"]
+ A3["Account 3 DLT Master"]
+ A4["Account 4 Issuer"]
+ A2 -->|Earn opt-in transfer in| Free
+ Free -->|Earn opt-in transfer out| A2
+ Fut -->|trading fees| A3
+ Fut -->|cert cash German direct| A4
+ Fut -->|cert cash non-German transit| A3
+ A3 -->|non-German transit| A4
+ A4 -->|non-German proceeds via A3| A3
+ A4 -->|certs and German proceeds| Fut
+ A4 <-->|hedge perp vs Nexo| A2
+      </div>
+    </div>
+
+    <h2>Actors &amp; responsibilities</h2>
+
+    <table class="legend">
+      <thead>
+        <tr><th>Actor</th><th>Role &amp; responsibility</th><th>Owned / operated by</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>User</td>
+          <td>Retail client: allocates to trading wallet, buys / sells KO certificates. German clients are additionally onboarded with the Issuer.</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Nexo UI</td>
+          <td>Client-facing trading UI (cert order entry, balances, positions).</td>
+          <td>Hosted on DLT AWS, run by Nexo</td>
+        </tr>
+        <tr>
+          <td>Tangany Account 1 (User)</td>
+          <td>Qualified custodian per-user account. Physical home of collateral and the client's certs; internal Free/Futures split.</td>
+          <td>Tangany · Per user</td>
+        </tr>
+        <tr>
+          <td>Tangany Account 2 (Nexo Master)</td>
+          <td>Nexo pool. Touched only by Earn opt-in sweeps on Transfer to / from Futures, and by the Issuer's hedge perp legs on the Nexo side.</td>
+          <td>Nexo · Pooled</td>
+        </tr>
+        <tr>
+          <td>Tangany Account 3 (DLT Master)</td>
+          <td>DLT pool. Counterparty for fee / collateral-swap legs; records each security-token purchase and any ledger movement at T+0; MiCA reporting counterparty.</td>
+          <td>DLT Finance · Pooled</td>
+        </tr>
+        <tr>
+          <td>Tangany Account 4 (Issuer)</td>
+          <td><strong>New.</strong> Issuer pool. Cert inventory (source of issued certs), counterparty of every client cert trade, and source of the hedge positions against Nexo.</td>
+          <td>Issuer · Pooled</td>
+        </tr>
+        <tr>
+          <td>OCS</td>
+          <td>Order Creation Service: assigns OID, routes 100% of cert orders to the Issuer, returns fill to UI.</td>
+          <td>Hosted on DLT AWS, built by Nexo</td>
+        </tr>
+        <tr>
+          <td>Issuer</td>
+          <td><strong>New.</strong> Issues the KO certificates and fills all client orders from A4. Creates hedge orders against Nexo (perp positions) for every fill. Records any ledger movement of the tokens it issues and each hedge trade it makes. Onboards German clients. Onboarded with Tangany.</td>
+          <td>Issuer</td>
+        </tr>
+        <tr>
+          <td>Nexo (Hedge counterparty)</td>
+          <td>Takes the Issuer's perp hedge positions. <strong>Does not have to hedge externally (e.g. ByBit)</strong> — decides for itself whether and where to hedge.</td>
+          <td>Nexo</td>
+        </tr>
+        <tr>
+          <td>DLT Reporting Service</td>
+          <td>Passive SQS consumer for regulatory / MiCA reporting.</td>
+          <td>DLT</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Execution flow <span class="tag tag-book">Certs client-side · 100% hedged issuer-side</span></h2>
+
+    <div class="scenario">
+      <strong>Example.</strong> Client buys 10 KO certificates (BTC-LONG-KO63k, ratio 0.1 → delta ≈ 1 BTC),
+      later sells at profit. Client orders trade <strong>only certs</strong> against the Issuer; the Issuer
+      hedges each fill with a perp position against Nexo; Nexo may hedge externally at its own discretion.
+    </div>
+
+    <div class="info-box">
+      <h4>Worked example — the certificate</h4>
+      <ul>
+        <li><strong>Series:</strong> BTC-LONG-KO63k · open-end knock-out (turbo long) · ratio 0.1 · strike = barrier = 63,000 USDC.</li>
+        <li><strong>Price:</strong> (BTC spot − 63,000) × 0.1 → 700 USDC per cert at spot 70,000 (≈10× effective leverage at issue).</li>
+        <li><strong>Delta:</strong> 10 certs ≈ 1 BTC exposure → the Issuer hedges with a 1 BTC perp against Nexo.</li>
+        <li><strong>Financing:</strong> baked into the 8h strike/barrier adjustment — no funding cash flows, no session settlement for the client.</li>
+        <li><strong>Knock-out:</strong> if spot touches 63,000 the cert terminates at residual value (0 in the examples below).</li>
+      </ul>
+    </div>
+
+    <div class="diagram-wrap">
+      <div class="mermaid">
+sequenceDiagram
+ autonumber
+ actor U as User
+ participant UI as App UI<br/>(DLT AWS)
+ participant OCS as OCS<br/>(DLT AWS)
+ participant ISS as Issuer
+ participant N2 as Nexo<br/>(Hedge counterparty)
+
+ Note over U: Pledge happens BEFORE buying —<br/>German: to the Issuer only · non-German: to DLT only
+ U->>UI: Buy 10 KO certs BTC-LONG-KO63k
+ UI->>OCS: Forward order
+ Note over OCS: Assign OID 01
+ OCS->>ISS: Route OID 01 to Issuer
+ Note over ISS: Fill 10 certs at 700 USDC<br/>from own inventory in A4
+ ISS-->>OCS: OID 01 execution info
+ OCS-->>UI: OID 01 filled
+ UI-->>U: 10 KO certs held
+ Note over ISS: Create hedge order H-01
+ ISS->>N2: Open 1 BTC long perp at 70,000 as hedge
+ N2-->>ISS: Hedge fill confirmed
+ Note over N2: Nexo MAY hedge externally e.g. ByBit<br/>at its own discretion — not required
+ Note over ISS: Issuer records the token ledger movement<br/>and the hedge trade
+ Note over U: Price moves then client sells
+
+ U->>UI: Sell 10 KO certs
+ UI->>OCS: Forward order
+ Note over OCS: Assign OID 02
+ OCS->>ISS: Route OID 02 to Issuer
+ Note over ISS: Buy back 10 certs at 1,500 USDC<br/>certs returned to A4 and cancelled
+ ISS-->>OCS: OID 02 execution info
+ OCS-->>UI: OID 02 filled
+ UI-->>U: Position closed, +8,000 USDC vs purchase
+ Note over ISS: Create hedge order H-02
+ ISS->>N2: Close 1 BTC perp hedge<br/>+8,000 USDC realized on hedge
+ N2-->>ISS: Hedge close confirmed
+ Note over ISS: Issuer records token cancellation<br/>and the hedge trade
+      </div>
+    </div>
+
+    <h2>Purchase &amp; sale money flow — German vs non-German clients</h2>
+
+    <p class="lead">
+      Two settlement variants for the same trade (buy 10 certs at 700, sell at 1,500).
+      <strong>German clients</strong> pledge only to the Issuer and settle cash legs
+      <strong>directly A1 ↔ A4</strong>. <strong>Non-German clients</strong> pledge only to DLT and every
+      cert cash leg <strong>always moves through A3 first</strong> — even though A3 holds the funds only
+      for a second. In both variants the pledge happens <strong>before buying</strong>, the trading fee goes
+      to A3, and the cert (security) legs settle directly A4 ↔ A1.
+    </p>
+
+    <h3>German client — direct A1 ↔ A4, pledge to Issuer</h3>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+sequenceDiagram
+ autonumber
+ actor U as User<br/>(German)
+ participant A1 as Tangany A1<br/>(User Account)
+ participant A3 as Tangany A3<br/>(DLT Master)
+ participant A4 as Tangany A4<br/>(Issuer)
+ participant ISS as Issuer
+
+ Note over U,ISS: Pledge — happens before buying
+ U->>ISS: Pledge collateral to the Issuer<br/>(book-entry only — never to DLT, never to Nexo)
+
+ Note over U,ISS: Buy 10 certs at 700 USDC
+ A1->>A4: T+0 book: Debit 7,000 USDC from A1,<br/>credit 7,000 USDC to A4 (direct)
+ A4->>A1: T+0 book: Debit 10 certs from A4,<br/>credit 10 certs to A1
+ A1->>A3: T+0 book: 42 USDC trading fee
+
+ Note over U,ISS: Sell 10 certs at 1,500 USDC
+ A1->>A4: T+0 book: Debit 10 certs from A1,<br/>credit 10 certs to A4 (cancelled)
+ A4->>A1: T+0 book: Debit 15,000 USDC from A4,<br/>credit 15,000 USDC to A1 (direct)
+ A1->>A3: T+0 book: 46 USDC trading fee
+      </div>
+    </div>
+
+    <h3>Non-German client — always via A3, pledge to DLT</h3>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+sequenceDiagram
+ autonumber
+ actor U as User<br/>(non-German)
+ participant A1 as Tangany A1<br/>(User Account)
+ participant A3 as Tangany A3<br/>(DLT Master)
+ participant A4 as Tangany A4<br/>(Issuer)
+ participant DLT as DLT
+ participant ISS as Issuer
+
+ Note over U,ISS: Pledge — happens before buying
+ U->>DLT: Pledge collateral to DLT<br/>(book-entry only — never to Nexo)
+ DLT-->>ISS: MAY pledge onward to the Issuer<br/>(book-entry, optional)
+
+ Note over U,ISS: Buy 10 certs at 700 USDC — cash always via A3 first
+ A1->>A3: T+0 book: Debit 7,000 USDC from A1,<br/>credit 7,000 USDC to A3 (transit)
+ A3->>A4: T+0 book: Debit 7,000 USDC from A3,<br/>credit 7,000 USDC to A4<br/>(immediately — A3 holds only for a second)
+ A4->>A1: T+0 book: Debit 10 certs from A4,<br/>credit 10 certs to A1
+ A1->>A3: T+0 book: 42 USDC trading fee
+
+ Note over U,ISS: Sell 10 certs at 1,500 USDC — cash always via A3 first
+ A1->>A4: T+0 book: Debit 10 certs from A1,<br/>credit 10 certs to A4 (cancelled)
+ A4->>A3: T+0 book: Debit 15,000 USDC from A4,<br/>credit 15,000 USDC to A3 (transit)
+ A3->>A1: T+0 book: Debit 15,000 USDC from A3,<br/>credit 15,000 USDC to A1<br/>(immediately — A3 holds only for a second)
+ A1->>A3: T+0 book: 46 USDC trading fee
+      </div>
+    </div>
+
+    <h2>Atomic transactions (money flow recipes)</h2>
+
+    <p class="lead">Each recipe lists internal sub-ledger moves, T+0 book entries, and SQS. Earn variants only where noted. <strong>There are no funding recipes:</strong> positive / negative funding does not exist for certs — it is baked into the certificate terms.</p>
+
+    <div class="recipe">
+      <h4>Transfer to Futures <span class="tag tag-tier2">Earn opt-in / opt-out</span></h4>
+      <p><strong>Example:</strong> Client allocates 10,000 USDC to the trading wallet.</p>
+      <p><strong>Earn opt-in</strong> (A1 starts at 0):</p>
+      <ol>
+        <li>T+0: Debit 10,000 USDC from A2 → Credit A1.</li>
+        <li>Internal: move 10,000 USDC from (1.1) Free → (1.2) Futures. <span class="split">Split: 0 Free / 10,000 Futures</span></li>
+        <li>SQS: Client deposited 10,000 USDC to trading wallet.</li>
+      </ol>
+      <p><strong>Earn opt-out</strong> (funds already in A1):</p>
+      <ol>
+        <li>No Tangany TX.</li>
+        <li>Internal: (1.1) Free → (1.2) Futures (10,000 USDC).</li>
+        <li>SQS: same.</li>
+      </ol>
+    </div>
+
+    <div class="recipe">
+      <h4>Transfer from Futures <span class="tag tag-tier2">Earn opt-in / opt-out</span></h4>
+      <p><strong>Example:</strong> Client withdraws 10,000 USDC from the trading wallet.</p>
+      <ol>
+        <li>Internal: move 10,000 USDC from (1.2) Futures → (1.1) Free. <span class="split">Split: 10,000 Free / 0 Futures</span></li>
+        <li><strong>Opt-in:</strong> T+0 Debit A1 → Credit A2 (10,000 USDC). <strong>Opt-out:</strong> no Tangany TX.</li>
+        <li>SQS: 10,000 USDC transferred out of trading wallet.</li>
+      </ol>
+    </div>
+
+    <div class="recipe">
+      <h4>Buy KO certificates (outbound purchase, DvP)</h4>
+      <p><strong>Example:</strong> Client buys 10 certs at 700 USDC = 7,000 USDC.</p>
+      <ol>
+        <li>Pledge — <strong>before buying</strong>: <em>German</em> client pledges collateral to the Issuer; <em>non-German</em> client pledges to DLT (DLT MAY pledge onward to the Issuer). Book-entry only, never to Nexo.</li>
+        <li>Internal: (1.2) Futures → (1.1) Free (7,000 USDC).</li>
+        <li>T+0 cash leg — <strong>German:</strong> Debit 7,000 USDC from A1 → Credit A4 (direct). <strong>Non-German:</strong> Debit 7,000 USDC from A1 → Credit A3, then immediately Debit 7,000 USDC from A3 → Credit A4 (always via A3 first, even if only for a second). <span class="split">(1.1) returns to 0</span></li>
+        <li>T+0 book: Debit 10 certs from A4 → Credit A1; internal certs (1.1) → (1.2).</li>
+        <li>SQS: Client bought 10 BTC-LONG-KO63k at 700. DLT records the security-token purchase at T+0; the Issuer records the token ledger movement.</li>
+        <li>Issuer-side: Issuer opens the hedge perp against Nexo out of A4 (never touches client accounts).</li>
+      </ol>
+    </div>
+
+    <div class="recipe">
+      <h4>Sell KO certificates / Knock-out redemption (inbound, DvP)</h4>
+      <p><strong>Example:</strong> Client sells 10 certs at 1,500 USDC = 15,000 USDC. (A knock-out is the same recipe with proceeds = residual value, 0 in our examples.)</p>
+      <ol>
+        <li>Internal: certs (1.2) Futures → (1.1) Free.</li>
+        <li>T+0 book: Debit 10 certs from A1 → Credit A4 (returned and cancelled).</li>
+        <li>T+0 cash leg — <strong>German:</strong> Debit 15,000 USDC from A4 → Credit A1 (direct). <strong>Non-German:</strong> Debit 15,000 USDC from A4 → Credit A3, then immediately Debit 15,000 USDC from A3 → Credit A1 (always via A3 first). Internal (1.1) → (1.2).</li>
+        <li>SQS: Client sold 10 BTC-LONG-KO63k at 1,500. DLT and Issuer record the ledger movements.</li>
+        <li>Issuer-side: Issuer closes the hedge perp against Nexo.</li>
+      </ol>
+    </div>
+
+    <div class="recipe">
+      <h4>Trading fee (outbound)</h4>
+      <p><strong>Example:</strong> 42 USDC trading fee on purchase (0.06% of 70,000 notional). Fees exist on every cert purchase and sale; there is <strong>no</strong> funding fee, session settlement or liquidation fee.</p>
+      <ol>
+        <li>Internal: (1.2) Futures → (1.1) Free (42 USDC).</li>
+        <li>T+0 book: Debit A1 → Credit A3 (42 USDC). <span class="split">(1.1) returns to 0</span></li>
+        <li>SQS: Client charged 42 USDC trading fee.</li>
+      </ol>
+    </div>
+
+    <div class="recipe">
+      <h4>Collateral swap (multi-asset)</h4>
+      <p>
+        Triggered automatically whenever a USDC obligation (cert purchase price / trading fee) cannot be
+        fully covered by the available USDC in <code>(1.2) Futures</code>. Sells just enough of an
+        available non-USDC collateral asset (at current mark) to cover the shortage, then the original
+        outbound transaction stands covered.
+      </p>
+      <p><strong>Example:</strong> Sell 0.1006 BTC @ 70,000 for 7,042 USDC to cover a cert purchase + fee.</p>
+      <ol>
+        <li>Internal: 0.1006 BTC (1.2) → (1.1) Free.</li>
+        <li>T+0: Debit 0.1006 BTC A1 → Credit A3.</li>
+        <li>T+0: Debit 7,042 USDC A3 → Credit A1.</li>
+        <li>Internal: 7,042 USDC (1.1) → (1.2) Futures.</li>
+        <li>SQS: BTC → USDC swap.</li>
+      </ol>
+    </div>
+
+    <h2>End-to-end scenarios</h2>
+
+    <p class="lead">
+      Each scenario combines the execution flow and the money flow in a single diagram. The four Tangany
+      ledgers (A1 / A2 / A3 / A4) are the columns; internal <code>(1.1) Free</code> / <code>(1.2) Futures</code>
+      sub-balance changes appear as orange notes anchored under A1. Use the toolbar to switch scenarios and
+      toggle <strong>Earn opt-in</strong> (TRUE adds the A2 ↔ A1 sweep legs at the start and end; FALSE
+      removes them). Every diagram shows <strong>both client variants</strong> in alt boxes: <strong>German</strong>
+      (pledge to the Issuer · cash legs directly A1 ↔ A4) vs <strong>non-German</strong> (pledge to DLT ·
+      cash legs always via A3 first). Note there are <strong>no funding or session-settlement events</strong> in any scenario —
+      financing is baked into the certificate.
+    </p>
+
+    <div class="mode-toolbar" id="scenario-toolbar">
+      <label>Scenario:</label>
+      <button type="button" class="active" data-scenario="1">1 — Positive PnL (USDC)</button>
+      <button type="button" data-scenario="2">2 — Knock-out (USDC)</button>
+      <button type="button" data-scenario="3">3 — Positive PnL (BTC collateral)</button>
+      <span class="divider"></span>
+      <span class="earn-toggle">
+        <span>Earn opt-in:</span>
+        <button type="button" class="active" id="earn-btn" data-earn="in">TRUE</button>
+      </span>
+    </div>
+
+    <!-- ============================================================
+         SCENARIO 1 — POSITIVE PNL (USDC collateral)
+         ============================================================ -->
+
+    <!-- S1 / Earn opt-in -->
+    <div class="scenario-block" data-scenario="1" data-earn="in">
+      <h3>Scenario 1 — Positive PnL (USDC collateral) · Earn opt-in</h3>
+      <div class="scenario">
+        <strong>Trade.</strong> Start 10,000 USDC. Buy 10 KO certs (BTC-LONG-KO63k) at 700 = 7,000 USDC
+        → BTC 70k → 75k → 78k (no funding, no session settlement) → sell 10 certs at 1,500 = 15,000 USDC.
+        Issuer hedges each fill with a 1 BTC perp against Nexo. Pledge happens <em>before buying</em> and is
+        book-entry only (German: to the Issuer · non-German: to DLT, which MAY pledge onward to the Issuer).
+      </div>
+      <div class="diagram-wrap">
+        <div class="mermaid">
+sequenceDiagram
+ autonumber
+ actor U as User
+ participant UI as Nexo UI<br/>(DLT AWS)
+ participant A1 as Tangany A1<br/>(User Account)
+ participant A2 as Tangany A2<br/>(Nexo Master)
+ participant A3 as Tangany A3<br/>(DLT Master)
+ participant A4 as Tangany A4<br/>(Issuer)
+ participant OCS as OCS<br/>(DLT AWS)
+ participant DLT as DLT<br/>(Riskless principal)
+ participant ISS as Issuer
+ participant N2 as Nexo<br/>(Hedge counterparty)
+ participant DRS as DLT Reporting<br/>Service (SQS)
+
+ Note over U,DRS: 01: Pre-trade wallet funding (Earn opt-in)
+ U->>UI: Transfers 10,000 USDC to Futures
+ A2->>A1: T+0 book: Debit 10,000 USDC from A2,<br/>credit 10,000 USDC to A1<br/>(un-sweep)
+ Note over A1: Move 10,000 USDC from (1.1) Free > (1.2) Futures
+ Note over A1: Free: 0<br/>Futures: 10,000
+ UI-->>U: 10,000 USDC visible as buying power
+
+ Note over U,DRS: 02: Pledge — happens before buying
+ alt German client — onboarded with the Issuer
+ U->>ISS: Pledge collateral to the Issuer<br/>(book-entry only, no Tangany move)
+ Note over ISS: German clients pledge only to the Issuer —<br/>never to DLT, never to Nexo
+ else Non-German client
+ U->>DLT: Pledge collateral to DLT<br/>(book-entry only, no Tangany move)
+ Note over DLT: DLT MAY pledge onward to the Issuer<br/>(book-entry, optional). Never to Nexo.
+ end
+
+ Note over U,DRS: 03: Buying 10 KO certificates (BTC-LONG-KO63k)
+ U->>UI: Buy 10 KO certs (delta 1 BTC)
+ UI->>OCS: Forward order
+ Note over OCS: Assign OID-01
+ OCS->>ISS: Route OID-01 to Issuer
+ Note over ISS: Fill 10 certs at 700 USDC<br/>from own inventory (A4)
+ ISS-->>OCS: Return OID-01 execution info
+ OCS-->>UI: Return OID-01 details
+ Note over A1: Move 7,000 USDC from (1.2) Futures > (1.1) Free
+ Note over A1: Free: 7,000<br/>Futures: 3,000
+ alt German client — funds move A1 > A4 directly
+ A1->>A4: T+0 book: Debit 7,000 USDC from A1,<br/>credit 7,000 USDC to A4
+ else Non-German client — funds always via A3 first
+ A1->>A3: T+0 book: Debit 7,000 USDC from A1,<br/>credit 7,000 USDC to A3 (transit)
+ A3->>A4: T+0 book: Debit 7,000 USDC from A3,<br/>credit 7,000 USDC to A4<br/>(immediately — A3 holds only for a second)
+ end
+ Note over A1: Free: 0<br/>Futures: 3,000
+ A4->>A1: T+0 book: Debit 10 certs from A4,<br/>credit 10 certs to A1
+ Note over A1: Move 10 certs from (1.1) Free > (1.2) Futures
+ Note over A1: Free: 0<br/>Futures: 3,000 USDC + 10 certs
+ Note over ISS: Calculate trading fee:<br/>0.06% of 70,000 notional = 42 USDC
+ ISS->>A1: Request 42 USDC trading fee
+ Note over A1: Move 42 USDC from (1.2) Futures > (1.1) Free
+ Note over A1: Free: 42<br/>Futures: 2,958 USDC + 10 certs
+ A1->>A3: T+0 book: Debit 42 USDC from A1,<br/>credit 42 USDC to A3
+ Note over A1: Free: 0<br/>Futures: 2,958 USDC + 10 certs
+ UI-->>U: Confirm order
+ ISS->>N2: Open 1 BTC long perp at 70,000<br/>as hedge (out of A4)
+ N2-->>ISS: Hedge fill confirmed
+ Note over N2: Nexo MAY hedge externally<br/>at its own discretion
+ Note over ISS: Issuer records the token ledger movement<br/>and the hedge trade
+ ISS-->>DRS: SQS event with the cert trade details to DLT
+ Note over U: Client sees 10 KO certs as open position
+
+ Note over U,DRS: 04: BTC price surged from 70,000 to 75,000 USDC
+ Note over U: Cert value: 700 > 1,200 per cert<br/>uPnL = +5,000 USDC (unrealized)
+ Note over U,DRS: No funding round and no session settlement —<br/>financing is baked into the certificate terms
+
+ Note over U,DRS: 05: BTC price surged even further from 75,000 to 78,000 USDC
+ Note over U: Cert value: 1,200 > 1,500 per cert<br/>uPnL = +8,000 USDC (unrealized)
+
+ Note over U,DRS: 06: Selling the certificates
+ U->>UI: Sell 10 KO certs
+ UI->>OCS: Forward order
+ Note over OCS: Assign OID-02
+ OCS->>ISS: Route OID-02 to Issuer
+ Note over ISS: Buy back 10 certs at 1,500 USDC
+ ISS-->>OCS: Return OID-02 execution info
+ OCS-->>UI: Return OID-02 details
+ Note over A1: Move 10 certs from (1.2) Futures > (1.1) Free
+ A1->>A4: T+0 book: Debit 10 certs from A1,<br/>credit 10 certs to A4 (cancelled)
+ alt German client — funds move A4 > A1 directly
+ A4->>A1: T+0 book: Debit 15,000 USDC from A4,<br/>credit 15,000 USDC to A1
+ else Non-German client — funds always via A3 first
+ A4->>A3: T+0 book: Debit 15,000 USDC from A4,<br/>credit 15,000 USDC to A3 (transit)
+ A3->>A1: T+0 book: Debit 15,000 USDC from A3,<br/>credit 15,000 USDC to A1<br/>(immediately — A3 holds only for a second)
+ end
+ Note over A1: Free: 15,000<br/>Futures: 2,958
+ Note over A1: Move 15,000 USDC from (1.1) Free > (1.2) Futures
+ Note over A1: Free: 0<br/>Futures: 17,958
+ Note over ISS: Calculate trading fee:<br/>0.06% of 78,000 notional = 46 USDC
+ ISS->>A1: Request 46 USDC trading fee
+ Note over A1: Move 46 USDC from (1.2) Futures > (1.1) Free
+ Note over A1: Free: 46<br/>Futures: 17,912
+ A1->>A3: T+0 book: Debit 46 USDC from A1,<br/>credit 46 USDC to A3
+ Note over A1: Free: 0<br/>Futures: 17,912
+ UI-->>U: Confirm order
+ ISS->>N2: Close 1 BTC perp hedge<br/>+8,000 USDC realized on hedge
+ N2-->>ISS: Hedge close confirmed
+ Note over ISS: Issuer records token cancellation<br/>and the hedge trade
+ ISS-->>DRS: SQS event with the trade details to DLT
+ Note over U: Client sees position closed,<br/>+8,000 USDC vs purchase price
+
+ Note over U,DRS: 07: Post-trade wallet movements (Earn opt-in)
+ U->>UI: Transfers 17,912 USDC out of Futures Wallet
+ Note over A1: Move 17,912 USDC from (1.2) Futures > (1.1) Free
+ Note over A1: Free: 17,912<br/>Futures: 0
+ A1->>A2: T+0 book: Debit 17,912 USDC from A1,<br/>credit 17,912 USDC to A2<br/>(sweep)
+ Note over A1: Free: 0<br/>Futures: 0
+ UI-->>U: 0 USDC visible as buying power
+        </div>
+      </div>
+      <p><strong>Position results:</strong> 10,000 − 7,000 purchase + 15,000 sale − 88 fees = <strong>17,912 USDC</strong> swept back to A2. (No funding legs — baked into the cert.)</p>
+    </div>
+
+    <!-- S1 / Earn opt-out -->
+    <div class="scenario-block" data-scenario="1" data-earn="out">
+      <h3>Scenario 1 — Positive PnL (USDC collateral) · Earn opt-out</h3>
+      <div class="scenario">
+        <strong>Trade.</strong> Same as opt-in. Funds already sit in A1; no A2 ↔ A1 sweeps at start or end.
+      </div>
+      <div class="diagram-wrap">
+        <div class="mermaid">
+sequenceDiagram
+ autonumber
+ actor U as User
+ participant UI as Nexo UI<br/>(DLT AWS)
+ participant A1 as Tangany A1<br/>(User Account)
+ participant A2 as Tangany A2<br/>(Nexo Master)
+ participant A3 as Tangany A3<br/>(DLT Master)
+ participant A4 as Tangany A4<br/>(Issuer)
+ participant OCS as OCS<br/>(DLT AWS)
+ participant DLT as DLT<br/>(Riskless principal)
+ participant ISS as Issuer
+ participant N2 as Nexo<br/>(Hedge counterparty)
+ participant DRS as DLT Reporting<br/>Service (SQS)
+
+ Note over U,DRS: 01: Pre-trade — funds already in A1 (Earn opt-out)
+ U->>UI: Transfers 10,000 USDC to Futures (internal alloc only)
+ Note over A1: Move 10,000 USDC from (1.1) Free > (1.2) Futures
+ Note over A1: Free: 0<br/>Futures: 10,000
+ UI-->>U: 10,000 USDC visible as buying power
+
+ Note over U,DRS: 02: Pledge — happens before buying
+ alt German client — onboarded with the Issuer
+ U->>ISS: Pledge collateral to the Issuer<br/>(book-entry only, no Tangany move)
+ Note over ISS: German clients pledge only to the Issuer —<br/>never to DLT, never to Nexo
+ else Non-German client
+ U->>DLT: Pledge collateral to DLT<br/>(book-entry only, no Tangany move)
+ Note over DLT: DLT MAY pledge onward to the Issuer<br/>(book-entry, optional). Never to Nexo.
+ end
+
+ Note over U,DRS: 03: Buying 10 KO certificates (BTC-LONG-KO63k)
+ U->>UI: Buy 10 KO certs (delta 1 BTC)
+ UI->>OCS: Forward order
+ Note over OCS: Assign OID-01
+ OCS->>ISS: Route OID-01 to Issuer
+ Note over ISS: Fill 10 certs at 700 USDC<br/>from own inventory (A4)
+ ISS-->>OCS: Return OID-01 execution info
+ OCS-->>UI: Return OID-01 details
+ Note over A1: Move 7,000 USDC from (1.2) Futures > (1.1) Free
+ Note over A1: Free: 7,000<br/>Futures: 3,000
+ alt German client — funds move A1 > A4 directly
+ A1->>A4: T+0 book: Debit 7,000 USDC from A1,<br/>credit 7,000 USDC to A4
+ else Non-German client — funds always via A3 first
+ A1->>A3: T+0 book: Debit 7,000 USDC from A1,<br/>credit 7,000 USDC to A3 (transit)
+ A3->>A4: T+0 book: Debit 7,000 USDC from A3,<br/>credit 7,000 USDC to A4<br/>(immediately — A3 holds only for a second)
+ end
+ Note over A1: Free: 0<br/>Futures: 3,000
+ A4->>A1: T+0 book: Debit 10 certs from A4,<br/>credit 10 certs to A1
+ Note over A1: Move 10 certs from (1.1) Free > (1.2) Futures
+ Note over A1: Free: 0<br/>Futures: 3,000 USDC + 10 certs
+ Note over ISS: Calculate trading fee:<br/>0.06% of 70,000 notional = 42 USDC
+ ISS->>A1: Request 42 USDC trading fee
+ Note over A1: Move 42 USDC from (1.2) Futures > (1.1) Free
+ Note over A1: Free: 42<br/>Futures: 2,958 USDC + 10 certs
+ A1->>A3: T+0 book: Debit 42 USDC from A1,<br/>credit 42 USDC to A3
+ Note over A1: Free: 0<br/>Futures: 2,958 USDC + 10 certs
+ UI-->>U: Confirm order
+ ISS->>N2: Open 1 BTC long perp at 70,000<br/>as hedge (out of A4)
+ N2-->>ISS: Hedge fill confirmed
+ Note over N2: Nexo MAY hedge externally<br/>at its own discretion
+ Note over ISS: Issuer records the token ledger movement<br/>and the hedge trade
+ ISS-->>DRS: SQS event with the cert trade details to DLT
+ Note over U: Client sees 10 KO certs as open position
+
+ Note over U,DRS: 04: BTC price surged from 70,000 to 75,000 USDC
+ Note over U: Cert value: 700 > 1,200 per cert<br/>uPnL = +5,000 USDC (unrealized)
+ Note over U,DRS: No funding round and no session settlement —<br/>financing is baked into the certificate terms
+
+ Note over U,DRS: 05: BTC price surged even further from 75,000 to 78,000 USDC
+ Note over U: Cert value: 1,200 > 1,500 per cert<br/>uPnL = +8,000 USDC (unrealized)
+
+ Note over U,DRS: 06: Selling the certificates
+ U->>UI: Sell 10 KO certs
+ UI->>OCS: Forward order
+ Note over OCS: Assign OID-02
+ OCS->>ISS: Route OID-02 to Issuer
+ Note over ISS: Buy back 10 certs at 1,500 USDC
+ ISS-->>OCS: Return OID-02 execution info
+ OCS-->>UI: Return OID-02 details
+ Note over A1: Move 10 certs from (1.2) Futures > (1.1) Free
+ A1->>A4: T+0 book: Debit 10 certs from A1,<br/>credit 10 certs to A4 (cancelled)
+ alt German client — funds move A4 > A1 directly
+ A4->>A1: T+0 book: Debit 15,000 USDC from A4,<br/>credit 15,000 USDC to A1
+ else Non-German client — funds always via A3 first
+ A4->>A3: T+0 book: Debit 15,000 USDC from A4,<br/>credit 15,000 USDC to A3 (transit)
+ A3->>A1: T+0 book: Debit 15,000 USDC from A3,<br/>credit 15,000 USDC to A1<br/>(immediately — A3 holds only for a second)
+ end
+ Note over A1: Free: 15,000<br/>Futures: 2,958
+ Note over A1: Move 15,000 USDC from (1.1) Free > (1.2) Futures
+ Note over A1: Free: 0<br/>Futures: 17,958
+ Note over ISS: Calculate trading fee:<br/>0.06% of 78,000 notional = 46 USDC
+ ISS->>A1: Request 46 USDC trading fee
+ Note over A1: Move 46 USDC from (1.2) Futures > (1.1) Free
+ Note over A1: Free: 46<br/>Futures: 17,912
+ A1->>A3: T+0 book: Debit 46 USDC from A1,<br/>credit 46 USDC to A3
+ Note over A1: Free: 0<br/>Futures: 17,912
+ UI-->>U: Confirm order
+ ISS->>N2: Close 1 BTC perp hedge<br/>+8,000 USDC realized on hedge
+ N2-->>ISS: Hedge close confirmed
+ Note over ISS: Issuer records token cancellation<br/>and the hedge trade
+ ISS-->>DRS: SQS event with the trade details to DLT
+ Note over U: Client sees position closed,<br/>+8,000 USDC vs purchase price
+
+ Note over U,DRS: 07: Post-trade — funds remain in A1 (Earn opt-out)
+ Note over A1: Free: 0<br/>Futures: 17,912
+ UI-->>U: Position closed. 17,912 USDC visible as Futures balance
+        </div>
+      </div>
+      <p><strong>Position results:</strong> 10,000 − 7,000 purchase + 15,000 sale − 88 fees = <strong>17,912 USDC</strong> retained in (1.2) Futures.</p>
+    </div>
+
+    <!-- ============================================================
+         SCENARIO 2 — KNOCK-OUT (USDC collateral)
+         ============================================================ -->
+
+    <!-- S2 / Earn opt-in -->
+    <div class="scenario-block" data-scenario="2" data-earn="in">
+      <h3>Scenario 2 — Knock-out (USDC collateral) · Earn opt-in</h3>
+      <div class="scenario">
+        <strong>Trade.</strong> Start 10,000 USDC. Buy 10 KO certs at 700 = 7,000 USDC → BTC falls
+        70k → 65k (uPnL −5,000, nothing settles) → BTC touches the <strong>63,000 barrier → knock-out</strong>:
+        the certs terminate at residual value 0. Loss is <strong>bounded to the premium paid + fees</strong> —
+        no liquidation fee, no margin call, no negative balance. The Issuer closes its 1 BTC hedge against Nexo.
+      </div>
+      <div class="diagram-wrap">
+        <div class="mermaid">
+sequenceDiagram
+ autonumber
+ actor U as User
+ participant UI as Nexo UI<br/>(DLT AWS)
+ participant A1 as Tangany A1<br/>(User Account)
+ participant A2 as Tangany A2<br/>(Nexo Master)
+ participant A3 as Tangany A3<br/>(DLT Master)
+ participant A4 as Tangany A4<br/>(Issuer)
+ participant OCS as OCS<br/>(DLT AWS)
+ participant DLT as DLT<br/>(Riskless principal)
+ participant ISS as Issuer
+ participant N2 as Nexo<br/>(Hedge counterparty)
+ participant DRS as DLT Reporting<br/>Service (SQS)
+
+ Note over U,DRS: 01: Pre-trade wallet funding (Earn opt-in)
+ U->>UI: Transfers 10,000 USDC to Futures
+ A2->>A1: T+0 book: Debit 10,000 USDC from A2,<br/>credit 10,000 USDC to A1<br/>(un-sweep)
+ Note over A1: Move 10,000 USDC from (1.1) Free > (1.2) Futures
+ Note over A1: Free: 0<br/>Futures: 10,000
+ UI-->>U: 10,000 USDC visible as buying power
+
+ Note over U,DRS: 02: Pledge — happens before buying
+ alt German client — onboarded with the Issuer
+ U->>ISS: Pledge collateral to the Issuer<br/>(book-entry only, no Tangany move)
+ Note over ISS: German clients pledge only to the Issuer —<br/>never to DLT, never to Nexo
+ else Non-German client
+ U->>DLT: Pledge collateral to DLT<br/>(book-entry only, no Tangany move)
+ Note over DLT: DLT MAY pledge onward to the Issuer<br/>(book-entry, optional). Never to Nexo.
+ end
+
+ Note over U,DRS: 03: Buying 10 KO certificates (BTC-LONG-KO63k)
+ U->>UI: Buy 10 KO certs (delta 1 BTC)
+ UI->>OCS: Forward order
+ Note over OCS: Assign OID-01
+ OCS->>ISS: Route OID-01 to Issuer
+ Note over ISS: Fill 10 certs at 700 USDC<br/>from own inventory (A4)
+ ISS-->>OCS: Return OID-01 execution info
+ OCS-->>UI: Return OID-01 details
+ Note over A1: Move 7,000 USDC from (1.2) Futures > (1.1) Free
+ Note over A1: Free: 7,000<br/>Futures: 3,000
+ alt German client — funds move A1 > A4 directly
+ A1->>A4: T+0 book: Debit 7,000 USDC from A1,<br/>credit 7,000 USDC to A4
+ else Non-German client — funds always via A3 first
+ A1->>A3: T+0 book: Debit 7,000 USDC from A1,<br/>credit 7,000 USDC to A3 (transit)
+ A3->>A4: T+0 book: Debit 7,000 USDC from A3,<br/>credit 7,000 USDC to A4<br/>(immediately — A3 holds only for a second)
+ end
+ Note over A1: Free: 0<br/>Futures: 3,000
+ A4->>A1: T+0 book: Debit 10 certs from A4,<br/>credit 10 certs to A1
+ Note over A1: Move 10 certs from (1.1) Free > (1.2) Futures
+ Note over A1: Free: 0<br/>Futures: 3,000 USDC + 10 certs
+ Note over ISS: Calculate trading fee:<br/>0.06% of 70,000 notional = 42 USDC
+ ISS->>A1: Request 42 USDC trading fee
+ Note over A1: Move 42 USDC from (1.2) Futures > (1.1) Free
+ Note over A1: Free: 42<br/>Futures: 2,958 USDC + 10 certs
+ A1->>A3: T+0 book: Debit 42 USDC from A1,<br/>credit 42 USDC to A3
+ Note over A1: Free: 0<br/>Futures: 2,958 USDC + 10 certs
+ UI-->>U: Confirm order
+ ISS->>N2: Open 1 BTC long perp at 70,000<br/>as hedge (out of A4)
+ N2-->>ISS: Hedge fill confirmed
+ Note over N2: Nexo MAY hedge externally<br/>at its own discretion
+ Note over ISS: Issuer records the token ledger movement<br/>and the hedge trade
+ ISS-->>DRS: SQS event with the cert trade details to DLT
+ Note over U: Client sees 10 KO certs as open position
+
+ Note over U,DRS: 04: BTC price fell from 70,000 to 65,000 USDC
+ Note over U: Cert value: 700 > 200 per cert<br/>uPnL = -5,000 USDC (unrealized)
+ Note over U,DRS: No funding, no session settlement, no margin call —<br/>nothing settles while the client holds the cert
+
+ Note over U,DRS: 05: BTC price touches the 63,000 knock-out barrier
+ Note over ISS: KO event — certificate series terminates<br/>Residual value: 0 USDC
+ ISS->>OCS: Knock-out notification for the series
+ OCS-->>UI: Position terminated (knocked out)
+ Note over A1: Move 10 certs from (1.2) Futures > (1.1) Free
+ A1->>A4: T+0 book: Debit 10 certs from A1,<br/>credit 10 certs to A4 (cancelled)
+ Note over A1: Free: 0<br/>Futures: 2,958 USDC
+ Note over A4: Residual value 0 — no USDC leg<br/>(a residual > 0 would follow the sale recipe:<br/>German direct A4 > A1 · non-German A4 > A3 > A1)
+ ISS->>N2: Close 1 BTC perp hedge
+ N2-->>ISS: Hedge close confirmed
+ Note over ISS: Issuer records the KO cancellation<br/>and the hedge trade
+ ISS-->>DRS: SQS event with the KO details to DLT
+ UI-->>U: Position knocked out
+ Note over U: Loss bounded to premium 7,000 + 42 fee —<br/>no liquidation fee, no negative balance
+
+ Note over U,DRS: 06: Post-trade wallet movements (Earn opt-in)
+ U->>UI: Transfers 2,958 USDC out of Futures Wallet
+ Note over A1: Move 2,958 USDC from (1.2) Futures > (1.1) Free
+ Note over A1: Free: 2,958<br/>Futures: 0
+ A1->>A2: T+0 book: Debit 2,958 USDC from A1,<br/>credit 2,958 USDC to A2<br/>(sweep)
+ Note over A1: Free: 0<br/>Futures: 0
+ UI-->>U: 0 USDC visible as buying power
+        </div>
+      </div>
+      <p><strong>Position results:</strong> 10,000 − 7,000 premium − 42 fee = <strong>2,958 USDC</strong> swept back to A2. Loss bounded to the premium — the KO replaces liquidation.</p>
+    </div>
+
+    <!-- S2 / Earn opt-out -->
+    <div class="scenario-block" data-scenario="2" data-earn="out">
+      <h3>Scenario 2 — Knock-out (USDC collateral) · Earn opt-out</h3>
+      <div class="scenario">
+        <strong>Trade.</strong> Same as opt-in. Funds already sit in A1; no A2 ↔ A1 sweeps at start or end.
+      </div>
+      <div class="diagram-wrap">
+        <div class="mermaid">
+sequenceDiagram
+ autonumber
+ actor U as User
+ participant UI as Nexo UI<br/>(DLT AWS)
+ participant A1 as Tangany A1<br/>(User Account)
+ participant A2 as Tangany A2<br/>(Nexo Master)
+ participant A3 as Tangany A3<br/>(DLT Master)
+ participant A4 as Tangany A4<br/>(Issuer)
+ participant OCS as OCS<br/>(DLT AWS)
+ participant DLT as DLT<br/>(Riskless principal)
+ participant ISS as Issuer
+ participant N2 as Nexo<br/>(Hedge counterparty)
+ participant DRS as DLT Reporting<br/>Service (SQS)
+
+ Note over U,DRS: 01: Pre-trade — funds already in A1 (Earn opt-out)
+ U->>UI: Transfers 10,000 USDC to Futures (internal alloc only)
+ Note over A1: Move 10,000 USDC from (1.1) Free > (1.2) Futures
+ Note over A1: Free: 0<br/>Futures: 10,000
+ UI-->>U: 10,000 USDC visible as buying power
+
+ Note over U,DRS: 02: Pledge — happens before buying
+ alt German client — onboarded with the Issuer
+ U->>ISS: Pledge collateral to the Issuer<br/>(book-entry only, no Tangany move)
+ Note over ISS: German clients pledge only to the Issuer —<br/>never to DLT, never to Nexo
+ else Non-German client
+ U->>DLT: Pledge collateral to DLT<br/>(book-entry only, no Tangany move)
+ Note over DLT: DLT MAY pledge onward to the Issuer<br/>(book-entry, optional). Never to Nexo.
+ end
+
+ Note over U,DRS: 03: Buying 10 KO certificates (BTC-LONG-KO63k)
+ U->>UI: Buy 10 KO certs (delta 1 BTC)
+ UI->>OCS: Forward order
+ Note over OCS: Assign OID-01
+ OCS->>ISS: Route OID-01 to Issuer
+ Note over ISS: Fill 10 certs at 700 USDC<br/>from own inventory (A4)
+ ISS-->>OCS: Return OID-01 execution info
+ OCS-->>UI: Return OID-01 details
+ Note over A1: Move 7,000 USDC from (1.2) Futures > (1.1) Free
+ Note over A1: Free: 7,000<br/>Futures: 3,000
+ alt German client — funds move A1 > A4 directly
+ A1->>A4: T+0 book: Debit 7,000 USDC from A1,<br/>credit 7,000 USDC to A4
+ else Non-German client — funds always via A3 first
+ A1->>A3: T+0 book: Debit 7,000 USDC from A1,<br/>credit 7,000 USDC to A3 (transit)
+ A3->>A4: T+0 book: Debit 7,000 USDC from A3,<br/>credit 7,000 USDC to A4<br/>(immediately — A3 holds only for a second)
+ end
+ Note over A1: Free: 0<br/>Futures: 3,000
+ A4->>A1: T+0 book: Debit 10 certs from A4,<br/>credit 10 certs to A1
+ Note over A1: Move 10 certs from (1.1) Free > (1.2) Futures
+ Note over A1: Free: 0<br/>Futures: 3,000 USDC + 10 certs
+ Note over ISS: Calculate trading fee:<br/>0.06% of 70,000 notional = 42 USDC
+ ISS->>A1: Request 42 USDC trading fee
+ Note over A1: Move 42 USDC from (1.2) Futures > (1.1) Free
+ Note over A1: Free: 42<br/>Futures: 2,958 USDC + 10 certs
+ A1->>A3: T+0 book: Debit 42 USDC from A1,<br/>credit 42 USDC to A3
+ Note over A1: Free: 0<br/>Futures: 2,958 USDC + 10 certs
+ UI-->>U: Confirm order
+ ISS->>N2: Open 1 BTC long perp at 70,000<br/>as hedge (out of A4)
+ N2-->>ISS: Hedge fill confirmed
+ Note over N2: Nexo MAY hedge externally<br/>at its own discretion
+ Note over ISS: Issuer records the token ledger movement<br/>and the hedge trade
+ ISS-->>DRS: SQS event with the cert trade details to DLT
+ Note over U: Client sees 10 KO certs as open position
+
+ Note over U,DRS: 04: BTC price fell from 70,000 to 65,000 USDC
+ Note over U: Cert value: 700 > 200 per cert<br/>uPnL = -5,000 USDC (unrealized)
+ Note over U,DRS: No funding, no session settlement, no margin call —<br/>nothing settles while the client holds the cert
+
+ Note over U,DRS: 05: BTC price touches the 63,000 knock-out barrier
+ Note over ISS: KO event — certificate series terminates<br/>Residual value: 0 USDC
+ ISS->>OCS: Knock-out notification for the series
+ OCS-->>UI: Position terminated (knocked out)
+ Note over A1: Move 10 certs from (1.2) Futures > (1.1) Free
+ A1->>A4: T+0 book: Debit 10 certs from A1,<br/>credit 10 certs to A4 (cancelled)
+ Note over A1: Free: 0<br/>Futures: 2,958 USDC
+ Note over A4: Residual value 0 — no USDC leg<br/>(a residual > 0 would follow the sale recipe:<br/>German direct A4 > A1 · non-German A4 > A3 > A1)
+ ISS->>N2: Close 1 BTC perp hedge
+ N2-->>ISS: Hedge close confirmed
+ Note over ISS: Issuer records the KO cancellation<br/>and the hedge trade
+ ISS-->>DRS: SQS event with the KO details to DLT
+ UI-->>U: Position knocked out
+ Note over U: Loss bounded to premium 7,000 + 42 fee —<br/>no liquidation fee, no negative balance
+
+ Note over U,DRS: 06: Post-trade — funds remain in A1 (Earn opt-out)
+ Note over A1: Free: 0<br/>Futures: 2,958
+ UI-->>U: 2,958 USDC visible as Futures balance
+        </div>
+      </div>
+      <p><strong>Position results:</strong> 10,000 − 7,000 premium − 42 fee = <strong>2,958 USDC</strong> retained in (1.2) Futures.</p>
+    </div>
+
+    <!-- ============================================================
+         SCENARIO 3 — POSITIVE PNL (BTC collateral)
+         ============================================================ -->
+
+    <!-- S3 / Earn opt-in -->
+    <div class="scenario-block" data-scenario="3" data-earn="in">
+      <h3>Scenario 3 — Positive PnL (BTC collateral) · Earn opt-in</h3>
+      <div class="scenario">
+        <strong>Trade.</strong> Start 0.15 BTC (~10,500 USDC @ 70k). Buy 10 KO certs at 700 = 7,000 USDC
+        + 42 USDC fee with <strong>0 USDC</strong> in <code>(1.2)</code> — the purchase is debited immediately,
+        leaving (1.2) USDC at <strong>−7,042</strong>; an <strong>async collateral swap</strong> (BTC → USDC,
+        sell 0.1006 BTC @ 70,000) brings it back to 0. BTC 70k → 78k, sell 10 certs at 1,500 = 15,000 USDC.
+        Note the difference vs the perp flow: because a cert is <em>purchased</em> (not margined), the swap
+        must cover the full purchase price, not just the fee.
+      </div>
+      <div class="diagram-wrap">
+        <div class="mermaid">
+sequenceDiagram
+ autonumber
+ actor U as User
+ participant UI as Nexo UI<br/>(DLT AWS)
+ participant A1 as Tangany A1<br/>(User Account)
+ participant A2 as Tangany A2<br/>(Nexo Master)
+ participant A3 as Tangany A3<br/>(DLT Master)
+ participant A4 as Tangany A4<br/>(Issuer)
+ participant OCS as OCS<br/>(DLT AWS)
+ participant DLT as DLT<br/>(Riskless principal)
+ participant ISS as Issuer
+ participant N2 as Nexo<br/>(Hedge counterparty)
+ participant DRS as DLT Reporting<br/>Service (SQS)
+
+ Note over U,DRS: 01: Pre-trade wallet funding (Earn opt-in)
+ U->>UI: Transfers 0.15 BTC to Futures
+ A2->>A1: T+0 book: Debit 0.15 BTC from A2,<br/>credit 0.15 BTC to A1<br/>(un-sweep)
+ Note over A1: Move 0.15 BTC from (1.1) Free > (1.2) Futures
+ Note over A1: Free: 0 USDC + 0 BTC<br/>Futures: 0 USDC + 0.15 BTC (worth 10,500)
+ UI-->>U: 0.15 BTC visible (~9,450 USDC buying power at 90% LTV)
+
+ Note over U,DRS: 02: Pledge — happens before buying
+ alt German client — onboarded with the Issuer
+ U->>ISS: Pledge collateral to the Issuer<br/>(book-entry only, no Tangany move)
+ Note over ISS: German clients pledge only to the Issuer —<br/>never to DLT, never to Nexo
+ else Non-German client
+ U->>DLT: Pledge collateral to DLT<br/>(book-entry only, no Tangany move)
+ Note over DLT: DLT MAY pledge onward to the Issuer<br/>(book-entry, optional). Never to Nexo.
+ end
+
+ Note over U,DRS: 03: Buying 10 KO certificates (BTC-LONG-KO63k)
+ U->>UI: Buy 10 KO certs (delta 1 BTC)
+ UI->>OCS: Forward order
+ Note over OCS: Assign OID-01
+ OCS->>ISS: Route OID-01 to Issuer
+ Note over ISS: Fill 10 certs at 700 USDC<br/>from own inventory (A4)
+ ISS-->>OCS: Return OID-01 execution info
+ OCS-->>UI: Return OID-01 details
+ Note over A1: Move 7,000 USDC from (1.2) Futures > (1.1) Free
+ Note over A1: Free: 7,000 USDC + 0 BTC<br/>Futures: -7,000 USDC + 0.15 BTC
+ alt German client — funds move A1 > A4 directly
+ A1->>A4: T+0 book: Debit 7,000 USDC from A1,<br/>credit 7,000 USDC to A4
+ else Non-German client — funds always via A3 first
+ A1->>A3: T+0 book: Debit 7,000 USDC from A1,<br/>credit 7,000 USDC to A3 (transit)
+ A3->>A4: T+0 book: Debit 7,000 USDC from A3,<br/>credit 7,000 USDC to A4<br/>(immediately — A3 holds only for a second)
+ end
+ Note over A1: Free: 0 USDC + 0 BTC<br/>Futures: -7,000 USDC + 0.15 BTC
+ A4->>A1: T+0 book: Debit 10 certs from A4,<br/>credit 10 certs to A1
+ Note over A1: Move 10 certs from (1.1) Free > (1.2) Futures
+ Note over A1: Free: 0 USDC + 0 BTC<br/>Futures: -7,000 USDC + 0.15 BTC + 10 certs
+ Note over ISS: Calculate trading fee:<br/>0.06% of 70,000 notional = 42 USDC
+ ISS->>A1: Request 42 USDC trading fee
+ Note over A1: Move 42 USDC from (1.2) Futures > (1.1) Free
+ Note over A1: Free: 42 USDC + 0 BTC<br/>Futures: -7,042 USDC + 0.15 BTC + 10 certs
+ A1->>A3: T+0 book: Debit 42 USDC from A1,<br/>credit 42 USDC to A3
+ Note over A1: Free: 0 USDC + 0 BTC<br/>Futures: -7,042 USDC + 0.15 BTC + 10 certs
+ UI-->>U: Confirm order
+ ISS->>N2: Open 1 BTC long perp at 70,000<br/>as hedge (out of A4)
+ N2-->>ISS: Hedge fill confirmed
+ Note over N2: Nexo MAY hedge externally<br/>at its own discretion
+ Note over ISS: Issuer records the token ledger movement<br/>and the hedge trade
+ ISS-->>DRS: SQS event with the cert trade details to DLT
+ Note over U: Client sees 10 KO certs as open position
+
+ Note over U,DRS: 03b: Async Collateral Swap (covers the -7,042 USDC shortage)
+ Note over ISS: Detect (1.2) USDC = -7,042 — trigger Collateral Swap (BTC > USDC)<br/>Sell 0.1006 BTC at 70,000 = 7,042 USDC
+ Note over A1: Move 0.1006 BTC from (1.2) Futures > (1.1) Free
+ Note over A1: Free: 0 USDC + 0.1006 BTC<br/>Futures: -7,042 USDC + 0.0494 BTC + 10 certs
+ A1->>A3: T+0 book: Debit 0.1006 BTC from A1,<br/>credit 0.1006 BTC to A3
+ Note over A1: Free: 0 USDC + 0 BTC<br/>Futures: -7,042 USDC + 0.0494 BTC + 10 certs
+ A3->>A1: T+0 book: Debit 7,042 USDC from A3,<br/>credit 7,042 USDC to A1
+ Note over A1: Free: 7,042 USDC + 0 BTC<br/>Futures: -7,042 USDC + 0.0494 BTC + 10 certs
+ Note over A1: Move 7,042 USDC from (1.1) Free > (1.2) Futures
+ Note over A1: Free: 0 USDC + 0 BTC<br/>Futures: 0 USDC + 0.0494 BTC + 10 certs
+ ISS-->>DRS: SQS event with the swap details to DLT (BTC > USDC)
+
+ Note over U,DRS: 04: BTC price surged from 70,000 to 75,000 USDC
+ Note over U: Cert value: 700 > 1,200 per cert<br/>uPnL = +5,000 USDC (unrealized)
+ Note over U,DRS: No funding round and no session settlement —<br/>financing is baked into the certificate terms
+
+ Note over U,DRS: 05: BTC price surged even further from 75,000 to 78,000 USDC
+ Note over U: Cert value: 1,200 > 1,500 per cert<br/>uPnL = +8,000 USDC (unrealized)<br/>Remaining 0.0494 BTC collateral now worth 3,853
+
+ Note over U,DRS: 06: Selling the certificates
+ U->>UI: Sell 10 KO certs
+ UI->>OCS: Forward order
+ Note over OCS: Assign OID-02
+ OCS->>ISS: Route OID-02 to Issuer
+ Note over ISS: Buy back 10 certs at 1,500 USDC
+ ISS-->>OCS: Return OID-02 execution info
+ OCS-->>UI: Return OID-02 details
+ Note over A1: Move 10 certs from (1.2) Futures > (1.1) Free
+ A1->>A4: T+0 book: Debit 10 certs from A1,<br/>credit 10 certs to A4 (cancelled)
+ alt German client — funds move A4 > A1 directly
+ A4->>A1: T+0 book: Debit 15,000 USDC from A4,<br/>credit 15,000 USDC to A1
+ else Non-German client — funds always via A3 first
+ A4->>A3: T+0 book: Debit 15,000 USDC from A4,<br/>credit 15,000 USDC to A3 (transit)
+ A3->>A1: T+0 book: Debit 15,000 USDC from A3,<br/>credit 15,000 USDC to A1<br/>(immediately — A3 holds only for a second)
+ end
+ Note over A1: Free: 15,000 USDC + 0 BTC<br/>Futures: 0 USDC + 0.0494 BTC
+ Note over A1: Move 15,000 USDC from (1.1) Free > (1.2) Futures
+ Note over A1: Free: 0 USDC + 0 BTC<br/>Futures: 15,000 USDC + 0.0494 BTC
+ Note over ISS: Calculate trading fee:<br/>0.06% of 78,000 notional = 46 USDC
+ ISS->>A1: Request 46 USDC trading fee
+ Note over A1: Move 46 USDC from (1.2) Futures > (1.1) Free
+ Note over A1: Free: 46 USDC + 0 BTC<br/>Futures: 14,954 USDC + 0.0494 BTC
+ A1->>A3: T+0 book: Debit 46 USDC from A1,<br/>credit 46 USDC to A3
+ Note over A1: Free: 0 USDC + 0 BTC<br/>Futures: 14,954 USDC + 0.0494 BTC
+ UI-->>U: Confirm order
+ ISS->>N2: Close 1 BTC perp hedge<br/>+8,000 USDC realized on hedge
+ N2-->>ISS: Hedge close confirmed
+ Note over ISS: Issuer records token cancellation<br/>and the hedge trade
+ ISS-->>DRS: SQS event with the trade details to DLT
+ Note over U: Client sees position closed
+ Note over A1: (1.2) USDC = 14,954 — positive, no further swap needed
+
+ Note over U,DRS: 07: Post-trade wallet movements (Earn opt-in)
+ U->>UI: Transfers 14,954 USDC + 0.0494 BTC out of Futures Wallet
+ Note over A1: Move 14,954 USDC + 0.0494 BTC from (1.2) Futures > (1.1) Free
+ Note over A1: Free: 14,954 USDC + 0.0494 BTC<br/>Futures: 0 USDC + 0 BTC
+ A1->>A2: T+0 book: Debit 14,954 USDC + 0.0494 BTC from A1,<br/>credit to A2<br/>(sweep)
+ Note over A1: Free: 0 USDC + 0 BTC<br/>Futures: 0 USDC + 0 BTC
+ UI-->>U: 0 visible as buying power
+        </div>
+      </div>
+      <p>
+        <strong>Position results:</strong> initial 0.15 BTC → final
+        <strong>0.0494 BTC + 14,954 USDC</strong> swept back to A2.
+        Cert PnL +8,000 USDC − 88 USDC fees; purchase (7,000) + open fee (42) funded via collateral swap
+        of 0.1006 BTC at 70,000. No funding legs — baked into the cert.
+      </p>
+    </div>
+
+    <!-- S3 / Earn opt-out -->
+    <div class="scenario-block" data-scenario="3" data-earn="out">
+      <h3>Scenario 3 — Positive PnL (BTC collateral) · Earn opt-out</h3>
+      <div class="scenario">
+        <strong>Trade.</strong> Same as opt-in (incl. the automatic <strong>collateral swap</strong> covering
+        the purchase + fee). Funds already sit in A1; no A2 ↔ A1 sweeps at start or end.
+      </div>
+      <div class="diagram-wrap">
+        <div class="mermaid">
+sequenceDiagram
+ autonumber
+ actor U as User
+ participant UI as Nexo UI<br/>(DLT AWS)
+ participant A1 as Tangany A1<br/>(User Account)
+ participant A2 as Tangany A2<br/>(Nexo Master)
+ participant A3 as Tangany A3<br/>(DLT Master)
+ participant A4 as Tangany A4<br/>(Issuer)
+ participant OCS as OCS<br/>(DLT AWS)
+ participant DLT as DLT<br/>(Riskless principal)
+ participant ISS as Issuer
+ participant N2 as Nexo<br/>(Hedge counterparty)
+ participant DRS as DLT Reporting<br/>Service (SQS)
+
+ Note over U,DRS: 01: Pre-trade — funds already in A1 (Earn opt-out)
+ U->>UI: Transfers 0.15 BTC to Futures (internal alloc only)
+ Note over A1: Move 0.15 BTC from (1.1) Free > (1.2) Futures
+ Note over A1: Free: 0 USDC + 0 BTC<br/>Futures: 0 USDC + 0.15 BTC (worth 10,500)
+ UI-->>U: 0.15 BTC visible (~9,450 USDC buying power at 90% LTV)
+
+ Note over U,DRS: 02: Pledge — happens before buying
+ alt German client — onboarded with the Issuer
+ U->>ISS: Pledge collateral to the Issuer<br/>(book-entry only, no Tangany move)
+ Note over ISS: German clients pledge only to the Issuer —<br/>never to DLT, never to Nexo
+ else Non-German client
+ U->>DLT: Pledge collateral to DLT<br/>(book-entry only, no Tangany move)
+ Note over DLT: DLT MAY pledge onward to the Issuer<br/>(book-entry, optional). Never to Nexo.
+ end
+
+ Note over U,DRS: 03: Buying 10 KO certificates (BTC-LONG-KO63k)
+ U->>UI: Buy 10 KO certs (delta 1 BTC)
+ UI->>OCS: Forward order
+ Note over OCS: Assign OID-01
+ OCS->>ISS: Route OID-01 to Issuer
+ Note over ISS: Fill 10 certs at 700 USDC<br/>from own inventory (A4)
+ ISS-->>OCS: Return OID-01 execution info
+ OCS-->>UI: Return OID-01 details
+ Note over A1: Move 7,000 USDC from (1.2) Futures > (1.1) Free
+ Note over A1: Free: 7,000 USDC + 0 BTC<br/>Futures: -7,000 USDC + 0.15 BTC
+ alt German client — funds move A1 > A4 directly
+ A1->>A4: T+0 book: Debit 7,000 USDC from A1,<br/>credit 7,000 USDC to A4
+ else Non-German client — funds always via A3 first
+ A1->>A3: T+0 book: Debit 7,000 USDC from A1,<br/>credit 7,000 USDC to A3 (transit)
+ A3->>A4: T+0 book: Debit 7,000 USDC from A3,<br/>credit 7,000 USDC to A4<br/>(immediately — A3 holds only for a second)
+ end
+ Note over A1: Free: 0 USDC + 0 BTC<br/>Futures: -7,000 USDC + 0.15 BTC
+ A4->>A1: T+0 book: Debit 10 certs from A4,<br/>credit 10 certs to A1
+ Note over A1: Move 10 certs from (1.1) Free > (1.2) Futures
+ Note over A1: Free: 0 USDC + 0 BTC<br/>Futures: -7,000 USDC + 0.15 BTC + 10 certs
+ Note over ISS: Calculate trading fee:<br/>0.06% of 70,000 notional = 42 USDC
+ ISS->>A1: Request 42 USDC trading fee
+ Note over A1: Move 42 USDC from (1.2) Futures > (1.1) Free
+ Note over A1: Free: 42 USDC + 0 BTC<br/>Futures: -7,042 USDC + 0.15 BTC + 10 certs
+ A1->>A3: T+0 book: Debit 42 USDC from A1,<br/>credit 42 USDC to A3
+ Note over A1: Free: 0 USDC + 0 BTC<br/>Futures: -7,042 USDC + 0.15 BTC + 10 certs
+ UI-->>U: Confirm order
+ ISS->>N2: Open 1 BTC long perp at 70,000<br/>as hedge (out of A4)
+ N2-->>ISS: Hedge fill confirmed
+ Note over N2: Nexo MAY hedge externally<br/>at its own discretion
+ Note over ISS: Issuer records the token ledger movement<br/>and the hedge trade
+ ISS-->>DRS: SQS event with the cert trade details to DLT
+ Note over U: Client sees 10 KO certs as open position
+
+ Note over U,DRS: 03b: Async Collateral Swap (covers the -7,042 USDC shortage)
+ Note over ISS: Detect (1.2) USDC = -7,042 — trigger Collateral Swap (BTC > USDC)<br/>Sell 0.1006 BTC at 70,000 = 7,042 USDC
+ Note over A1: Move 0.1006 BTC from (1.2) Futures > (1.1) Free
+ Note over A1: Free: 0 USDC + 0.1006 BTC<br/>Futures: -7,042 USDC + 0.0494 BTC + 10 certs
+ A1->>A3: T+0 book: Debit 0.1006 BTC from A1,<br/>credit 0.1006 BTC to A3
+ Note over A1: Free: 0 USDC + 0 BTC<br/>Futures: -7,042 USDC + 0.0494 BTC + 10 certs
+ A3->>A1: T+0 book: Debit 7,042 USDC from A3,<br/>credit 7,042 USDC to A1
+ Note over A1: Free: 7,042 USDC + 0 BTC<br/>Futures: -7,042 USDC + 0.0494 BTC + 10 certs
+ Note over A1: Move 7,042 USDC from (1.1) Free > (1.2) Futures
+ Note over A1: Free: 0 USDC + 0 BTC<br/>Futures: 0 USDC + 0.0494 BTC + 10 certs
+ ISS-->>DRS: SQS event with the swap details to DLT (BTC > USDC)
+
+ Note over U,DRS: 04: BTC price surged from 70,000 to 75,000 USDC
+ Note over U: Cert value: 700 > 1,200 per cert<br/>uPnL = +5,000 USDC (unrealized)
+ Note over U,DRS: No funding round and no session settlement —<br/>financing is baked into the certificate terms
+
+ Note over U,DRS: 05: BTC price surged even further from 75,000 to 78,000 USDC
+ Note over U: Cert value: 1,200 > 1,500 per cert<br/>uPnL = +8,000 USDC (unrealized)<br/>Remaining 0.0494 BTC collateral now worth 3,853
+
+ Note over U,DRS: 06: Selling the certificates
+ U->>UI: Sell 10 KO certs
+ UI->>OCS: Forward order
+ Note over OCS: Assign OID-02
+ OCS->>ISS: Route OID-02 to Issuer
+ Note over ISS: Buy back 10 certs at 1,500 USDC
+ ISS-->>OCS: Return OID-02 execution info
+ OCS-->>UI: Return OID-02 details
+ Note over A1: Move 10 certs from (1.2) Futures > (1.1) Free
+ A1->>A4: T+0 book: Debit 10 certs from A1,<br/>credit 10 certs to A4 (cancelled)
+ alt German client — funds move A4 > A1 directly
+ A4->>A1: T+0 book: Debit 15,000 USDC from A4,<br/>credit 15,000 USDC to A1
+ else Non-German client — funds always via A3 first
+ A4->>A3: T+0 book: Debit 15,000 USDC from A4,<br/>credit 15,000 USDC to A3 (transit)
+ A3->>A1: T+0 book: Debit 15,000 USDC from A3,<br/>credit 15,000 USDC to A1<br/>(immediately — A3 holds only for a second)
+ end
+ Note over A1: Free: 15,000 USDC + 0 BTC<br/>Futures: 0 USDC + 0.0494 BTC
+ Note over A1: Move 15,000 USDC from (1.1) Free > (1.2) Futures
+ Note over A1: Free: 0 USDC + 0 BTC<br/>Futures: 15,000 USDC + 0.0494 BTC
+ Note over ISS: Calculate trading fee:<br/>0.06% of 78,000 notional = 46 USDC
+ ISS->>A1: Request 46 USDC trading fee
+ Note over A1: Move 46 USDC from (1.2) Futures > (1.1) Free
+ Note over A1: Free: 46 USDC + 0 BTC<br/>Futures: 14,954 USDC + 0.0494 BTC
+ A1->>A3: T+0 book: Debit 46 USDC from A1,<br/>credit 46 USDC to A3
+ Note over A1: Free: 0 USDC + 0 BTC<br/>Futures: 14,954 USDC + 0.0494 BTC
+ UI-->>U: Confirm order
+ ISS->>N2: Close 1 BTC perp hedge<br/>+8,000 USDC realized on hedge
+ N2-->>ISS: Hedge close confirmed
+ Note over ISS: Issuer records token cancellation<br/>and the hedge trade
+ ISS-->>DRS: SQS event with the trade details to DLT
+ Note over U: Client sees position closed
+ Note over A1: (1.2) USDC = 14,954 — positive, no further swap needed
+
+ Note over U,DRS: 07: Post-trade — funds remain in A1 (Earn opt-out)
+ Note over A1: Free: 0 USDC + 0 BTC<br/>Futures: 14,954 USDC + 0.0494 BTC
+ UI-->>U: Position closed. 14,954 USDC + 0.0494 BTC visible as Futures balance
+        </div>
+      </div>
+      <p>
+        <strong>Position results:</strong> initial 0.15 BTC → final
+        <strong>0.0494 BTC + 14,954 USDC</strong> retained in (1.2) Futures.
+        Cert PnL +8,000 USDC − 88 USDC fees; purchase (7,000) + open fee (42) funded via collateral swap
+        of 0.1006 BTC at 70,000.
+      </p>
+    </div>
+
+    <footer class="doc-footer">
+      Nexo × DLT × Issuer — KO Certificate Trading End-to-End Flow · For discussion · July 2026
+    </footer>
+
+  </div>
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'neutral',
+      securityLevel: 'loose',
+      themeVariables: {
+        fontFamily: 'Inter, sans-serif',
+        fontSize: '12px',
+        primaryColor: '#eaf1f6',
+        primaryTextColor: '#17213a',
+        primaryBorderColor: '#2d5f7f',
+        lineColor: '#5b6478',
+        actorBkg: '#eaf1f6',
+        actorBorder: '#2d5f7f',
+        actorTextColor: '#17213a',
+        noteBkgColor: '#faf1e7',
+        noteBorderColor: '#8a4a1e',
+        noteTextColor: '#17213a',
+        sequenceNumberColor: '#ffffff',
+        activationBkgColor: '#dfe2ea',
+        signalTextColor: '#17213a',
+        labelTextColor: '#17213a'
+      },
+      sequence: {
+        diagramMarginX: 20,
+        diagramMarginY: 16,
+        actorMargin: 40,
+        noteMargin: 18,
+        messageMargin: 32,
+        wrap: true,
+        useMaxWidth: true
+      }
+    });
+
+    // Track which mermaid nodes have already been rendered to avoid re-rendering on tab switch.
+    const renderedNodes = new WeakSet();
+
+    async function renderVisibleMermaid() {
+      // Render any visible .mermaid block that has not been processed yet.
+      const allNodes = document.querySelectorAll('.mermaid');
+      const toRender = [];
+      allNodes.forEach((node) => {
+        if (renderedNodes.has(node)) return;
+        // Render only if currently visible (offsetParent is null when display:none ancestor).
+        if (node.offsetParent === null) return;
+        toRender.push(node);
+      });
+      for (const node of toRender) {
+        // Capture source the first time we see the node — use innerHTML so <br/> tags are preserved
+        // (textContent strips them entirely). Decode the few entities the browser may have escaped.
+        if (!node.dataset.src) {
+          let html = node.innerHTML.trim();
+          html = html
+            .replace(/&amp;/g, '&')
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, "'");
+          node.dataset.src = html;
+        }
+        const source = node.dataset.src;
+        try {
+          const id = 'm-' + Math.random().toString(36).slice(2);
+          const { svg, bindFunctions } = await mermaid.render(id, source);
+          node.innerHTML = svg;
+          if (bindFunctions) bindFunctions(node);
+          renderedNodes.add(node);
+        } catch (err) {
+          console.error('Mermaid render error:', err);
+          node.innerHTML = '<pre style="color:#a33;font-size:12px;white-space:pre-wrap;">' +
+            (err && err.message ? err.message : String(err)) + '</pre>';
+        }
+      }
+    }
+
+    window.__renderVisibleMermaid = renderVisibleMermaid;
+    document.addEventListener('DOMContentLoaded', renderVisibleMermaid);
+  </script>
+  <script>
+    (function () {
+      const toolbar = document.getElementById('scenario-toolbar');
+      if (!toolbar) return;
+
+      const scenarioButtons = toolbar.querySelectorAll('button[data-scenario]');
+      const earnBtn = document.getElementById('earn-btn');
+
+      scenarioButtons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          const s = btn.getAttribute('data-scenario');
+          document.body.setAttribute('data-scenario', s);
+          scenarioButtons.forEach(function (b) { b.classList.toggle('active', b === btn); });
+          if (window.__renderVisibleMermaid) window.__renderVisibleMermaid();
+        });
+      });
+
+      if (earnBtn) {
+        earnBtn.addEventListener('click', function () {
+          const current = document.body.getAttribute('data-earn');
+          const next = current === 'in' ? 'out' : 'in';
+          document.body.setAttribute('data-earn', next);
+          earnBtn.setAttribute('data-earn', next);
+          earnBtn.textContent = next === 'in' ? 'TRUE' : 'FALSE';
+          earnBtn.classList.toggle('active', next === 'in');
+          if (window.__renderVisibleMermaid) window.__renderVisibleMermaid();
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

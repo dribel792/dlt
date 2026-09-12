@@ -99,7 +99,8 @@ html,body{background:#f5f7fa;color:var(--text);font-family:var(--font-body);line
 .mx-note{background:#fff;border:1px solid var(--border);border-radius:8px;padding:6px 11px;display:flex;flex-direction:column;justify-content:center}
 .mx-note .t{font-size:10.5px;font-weight:700;color:var(--petrol)}
 .mx-note .s{font-size:9.5px;color:var(--muted);line-height:1.35;margin-top:2px}
-.mx-legend{display:flex;gap:16px;align-items:center;font-size:10.5px;color:var(--muted);margin-top:2px}
+.mx-legend{display:flex;gap:13px;align-items:center;font-size:10px;color:var(--muted);margin-top:2px;white-space:nowrap}
+.mx-legend .lg{white-space:nowrap}
 .mx-legend b{color:var(--ink);font-weight:600}
 .mx-legend .lg{display:inline-flex;align-items:center;gap:6px}
 .mx-legend .sw{width:9px;height:9px;border-radius:50%;display:inline-block}
@@ -220,6 +221,89 @@ ul.plain li{font-size:11.5px;line-height:1.42;padding-left:14px;position:relativ
 ul.plain li::before{content:'';position:absolute;left:0;top:7px;width:5px;height:5px;border-radius:50%;background:var(--petrol)}
 ul.plain li b{font-weight:700}
 .assum{font-size:9.5px;color:var(--muted);line-height:1.4;font-style:italic}
+
+/* ── 24/7 availability column in the matrix ── */
+.matrix.m247{grid-template-columns:132px repeat(3,1fr) 96px 186px}
+.matrix.m247 .mx-note{overflow:hidden}
+.matrix.m247 .mx-note .t{font-size:10px}
+.matrix.m247 .mx-note .s{font-size:9px;line-height:1.3;margin-top:1px}
+.matrix.m247 .mx-c .lab{font-size:10.5px}
+.matrix.m247 .mx-c .sub{font-size:9px}
+.mx-c.focus{box-shadow:0 0 0 2px var(--purple)}
+.mx-h.h247{background:var(--purple)}
+.mx-247{border-radius:8px;border:1px solid var(--purple-border);background:var(--purple-soft);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px 6px;text-align:center}
+.mx-247 .v{font-family:var(--font-display);font-size:15px;font-weight:800;color:var(--purple);line-height:1;letter-spacing:-.02em}
+.mx-247 .k{font-size:8.5px;color:var(--muted);margin-top:3px;line-height:1.2}
+.mx-247.off{background:var(--surface2);border-color:var(--border);border-style:dashed}
+.mx-247.off .v{color:#aab2c0;font-size:13px}
+.mx-c.focus{box-shadow:0 0 0 2px var(--purple-border)}
+.mx-c .c247{position:absolute;top:5px;right:6px;font-size:7.5px;font-weight:800;letter-spacing:.04em;color:#fff;background:var(--purple);padding:1px 4px;border-radius:4px;line-height:1.35}
+.mx-c.focus .dot{display:none}
+
+/* ── two-sided gap map (product positioning) ── */
+.gap2{flex:1;display:grid;grid-template-columns:1fr 236px 1fr;gap:11px;min-height:0}
+.side{border:1px solid var(--border);border-radius:12px;padding:11px 12px;display:flex;flex-direction:column;min-height:0}
+.side.crypto{border-color:var(--blue-border);background:var(--blue-soft)}
+.side.tradfi{border-color:var(--green-border);background:var(--green-soft)}
+.side-head{display:flex;align-items:baseline;gap:8px}
+.side-head .st{font-size:14.5px;font-weight:800;letter-spacing:-.015em}
+.side.crypto .side-head .st{color:var(--blue)} .side.tradfi .side-head .st{color:var(--green)}
+.side-head .sw{font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-left:auto}
+.side-sub{font-size:10.5px;color:var(--muted);margin:3px 0 9px;line-height:1.35}
+.hasmiss{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.hm{background:#fff;border:1px solid var(--border);border-radius:8px;padding:7px 9px}
+.hm .hl{font-size:8.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;margin-bottom:4px;color:var(--muted)}
+.hm.miss{border-color:var(--red-border);border-style:dashed;background:var(--red-soft)}
+.hm.miss .hl{color:var(--red)}
+.hm ul{list-style:none;display:flex;flex-direction:column;gap:2px}
+.hm li{font-size:10px;line-height:1.3;color:var(--muted)}
+.hm.miss li{color:var(--ink);font-weight:600}
+.fill{background:#fff;border-radius:9px;padding:8px 10px;border:1px solid var(--border);margin-top:9px}
+.fill .fl{font-size:8.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;margin-bottom:5px}
+.side.crypto .fill{border-color:var(--blue-border)} .side.crypto .fill .fl{color:var(--blue)}
+.side.tradfi .fill{border-color:var(--green-border)} .side.tradfi .fill .fl{color:var(--green)}
+.fillrow{display:flex;align-items:center;gap:9px;padding:5px 0;border-bottom:1px solid var(--border)}
+.fillrow:last-child{border-bottom:none}
+.fillrow .fn{flex:1;min-width:0}
+.fillrow .fn b{font-size:11px;font-weight:700;display:block;line-height:1.25}
+.fillrow .fn span{font-size:9.5px;color:var(--muted);display:block;line-height:1.3;margin-top:1px}
+.fillrow .fp{flex:0 0 46px;text-align:right;font-family:var(--font-display);font-size:16px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.fillrow .fp small{display:block;font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.side.crypto .fillrow .fp{color:var(--blue)} .side.tradfi .fillrow .fp{color:var(--green)}
+.fillrow.dim .fp{color:var(--muted)!important}
+.fillrow.dim .fn b{color:var(--muted);font-weight:600}
+.engine{border-radius:12px;background:var(--petrol);color:#fff;padding:12px 13px;display:flex;flex-direction:column;min-height:0;position:relative}
+.engine .el{font-size:9.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--mint)}
+.engine .eh{font-size:15px;font-weight:800;letter-spacing:-.015em;margin-top:4px;line-height:1.15}
+.engine .ep{font-size:10.5px;color:rgba(255,255,255,.7);margin-top:6px;line-height:1.4}
+.ecell{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-radius:7px;padding:6px 9px;margin-top:6px}
+.ecell b{font-size:10.5px;display:block}
+.ecell span{font-size:9.5px;color:rgba(255,255,255,.62);display:block;line-height:1.25}
+.arrows{display:flex;justify-content:space-between;font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--mint);margin-top:auto;padding-top:9px;gap:6px}
+.mixbar{margin-top:10px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:9px 13px}
+.mixbar .mb-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.mixbar .mb-t{font-size:9.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--petrol)}
+.mixbar .mb-s{font-size:10px;color:var(--muted)}
+.mixtrack{height:24px;display:flex;border-radius:6px;overflow:hidden;border:1px solid var(--border)}
+.mixtrack div{display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;white-space:nowrap}
+.mixkey{display:flex;gap:15px;margin-top:6px;font-size:9.5px;color:var(--muted);flex-wrap:wrap}
+.mixkey i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px;font-style:normal}
+.figcap{font-size:9.5px;color:var(--muted);font-style:italic;margin-top:6px;text-align:center}
+.fig-legend{display:flex;gap:16px;justify-content:center;font-size:10px;color:var(--muted);margin-top:6px}
+.fig-legend .lgd{display:inline-flex;align-items:center;gap:6px}
+.fig-legend .dt{width:8px;height:8px;border-radius:50%;display:inline-block}
+
+
+.sidemid{background:#fff;border:1px solid var(--border);border-radius:9px;padding:8px 10px;margin-top:9px}
+.sidemid .sl{font-size:8.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.sidemid p{font-size:10.5px;line-height:1.45;color:var(--ink)}
+.sidemid p+p{margin-top:5px}
+.sidemid .tick{display:flex;gap:7px;align-items:flex-start;font-size:10.5px;line-height:1.4;padding:3px 0}
+.sidemid .tick i{flex:0 0 auto;font-style:normal;font-weight:800;font-size:10px}
+.side.crypto .sidemid .tick i{color:var(--blue)} .side.tradfi .sidemid .tick i{color:var(--green)}
+
+.tightp table.econ td{padding:4px 8px}
+.tightp table.econ th{padding:0 8px 5px}
 @media print{
   body{background:#fff}
   .deck{max-width:none;padding:0;gap:0}
@@ -243,7 +327,7 @@ ul.plain li b{font-weight:700}
     <div class="cover-wrap">
       <div class="cover-eyebrow">Board Strategy · 2026</div>
       <h1 class="cover-h1">CeFi, DeFi and TradFi<br>are becoming <span class="accent">one market</span></h1>
-      <p class="cover-sub">Spot crypto is finished as a differentiator. The growth is on two axes — crypto-native players expanding into new asset classes and new product types, and TradFi reaching into DeFi for the one thing it cannot build itself: 24/7 liquidity in real-world assets. This deck shows where that demand sits, which products carry the revenue, and how much money is actually in them.</p>
+      <p class="cover-sub">Spot crypto is finished as a differentiator. The growth is on three axes — crypto-native players expanding into new <b>asset classes</b> and new <b>product types</b>, and TradFi reaching into DeFi for the one thing it cannot build itself: <b>24/7 markets in real-world assets</b>. This deck shows where that demand sits, which products carry the revenue, and how much money is actually in them.</p>
       <div class="converge">
         <div class="cnode"><div class="cn-t">CeFi</div><div class="cn-s">Exchanges &amp; brokers. Distribution, users, licences. Racing to widen product scope.</div></div>
         <div class="carrow">→</div>
@@ -268,14 +352,14 @@ ul.plain li b{font-weight:700}
         <div class="stat"><div class="sv">&gt;200</div><div class="sl">MiCAR licences granted in the last 12 months — the licence is a commodity, not a moat</div></div>
         <div class="stat"><div class="sv y">↓</div><div class="sl">Crypto spot volumes in a structural dip — AI is pulling speculative capital away</div></div>
         <div class="stat"><div class="sv r">~10&nbsp;bps</div><div class="sl">Where spot take rates land once every competitor holds the same licence</div></div>
-        <div class="stat"><div class="sv p">13%</div><div class="sl">Share of platform revenue spot realistically contributes at maturity <span style="opacity:.7">(illustrative, slide 10)</span></div></div>
+        <div class="stat"><div class="sv p">8%</div><div class="sl">Share of platform revenue spot realistically contributes at maturity <span style="opacity:.7">(illustrative, slide 11)</span></div></div>
       </div>
       <div class="split" style="flex:1">
         <div class="panel">
           <div class="panel-head"><span class="panel-t">What everyone is doing about it</span></div>
           <ul class="plain" style="margin-top:2px">
             <li><b>Crypto-native players are widening product scope fast</b> — not to win spot, but to hold the deposit. Every additional product is a reason for a client not to move their balance.</li>
-            <li><b>Two axes of expansion, run in parallel:</b> new <b>asset classes</b> (equities, metals, commodities, debt, prediction markets) and new <b>product types</b> (leverage, yield, downside protection).</li>
+            <li><b>Three axes of expansion, run in parallel:</b> new <b>asset classes</b> (equities, metals, commodities, debt), new <b>product types</b> (leverage, yield, downside protection) and new <b>hours</b> — 24/7 on real-world assets, which is the axis nobody else can open.</li>
             <li><b>TradFi is coming the other way</b> — banks, brokers and CFD houses now want the 24/7 availability that only crypto rails deliver, wrapped so it arrives as a regulated instrument.</li>
             <li><b>Nobody is buying a licence any more; they are buying a shelf.</b> A distributor picks the counterparty that can list the widest range of products fastest, on the widest range of underlyings.</li>
             <li><b>The two flows meet in the middle.</b> That intersection is a licensing, risk and clearing problem — which is precisely the part DLT already owns.</li>
@@ -288,8 +372,8 @@ ul.plain li b{font-weight:700}
                 <p>Spot → leverage → yield &amp; downside protection. Same client, same underlying, 5–20× the take rate.</p>
               </div>
               <div class="card" style="background:var(--purple-soft);border-color:var(--purple-border)">
-                <h4 style="color:var(--purple)">↓ Axis 2 · More asset classes</h4>
-                <p>Crypto → equities, metals, commodities, debt, prediction markets. Same engine, new shelves.</p>
+                <h4 style="color:var(--purple)">↓ Axis 2 · More asset classes, more hours</h4>
+                <p>Crypto → equities, metals, commodities, debt — and 5 days → 7. Same engine, new shelves, 104 extra trading days.</p>
               </div>
             </div>
           </div>
@@ -300,7 +384,7 @@ ul.plain li b{font-weight:700}
             <thead><tr><th>Dimension</th><th>Spot only</th><th>Full product suite</th></tr></thead>
             <tbody>
               <tr><td><b>Take rate</b></td><td class="mono neg">5–20 bps</td><td class="mono pos">100–400 bps</td></tr>
-              <tr><td><b>Revenue / active user / yr</b></td><td class="mono neg">~$22</td><td class="mono pos">~$175 blended</td></tr>
+              <tr><td><b>Revenue / active user / yr</b></td><td class="mono neg">~$14</td><td class="mono pos">~$175 blended</td></tr>
               <tr><td><b>Client stickiness</b></td><td>Price-shops on fees</td><td>Held by open positions</td></tr>
               <tr><td><b>Competitive barrier</b></td><td>MiCAR — 200+ holders</td><td>MiFID + risk engine</td></tr>
               <tr><td><b>Balance-sheet upside</b></td><td>None</td><td>B-book, financing, structuring</td></tr>
@@ -309,10 +393,10 @@ ul.plain li b{font-weight:700}
           <div style="margin-top:14px">
             <div class="panel-t" style="margin-bottom:8px">Revenue per active user per year</div>
             <div class="bars">
-              <div class="barrow"><div class="barlab">Spot only</div><div class="bartrack" style="height:20px"><div class="barfill" style="width:13%;background:linear-gradient(90deg,#8b95a8,#c3cad6)"></div></div><div class="barval">$22</div></div>
+              <div class="barrow"><div class="barlab">Spot only</div><div class="bartrack" style="height:20px"><div class="barfill" style="width:8%;background:linear-gradient(90deg,#8b95a8,#c3cad6)"></div></div><div class="barval">$14</div></div>
               <div class="barrow"><div class="barlab">Full product suite</div><div class="bartrack" style="height:20px"><div class="barfill" style="width:100%;background:linear-gradient(90deg,#1f9f6c,#11617E)"></div></div><div class="barval pos">$175</div></div>
             </div>
-            <p style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.45">Same client, same acquisition cost, same licence spend. <b>Eight times the revenue</b> — because the products above spot are the ones people actually pay for.</p>
+            <p style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.45">Same client, same acquisition cost, same licence spend. <b>Twelve times the revenue</b> — because the products above spot are the ones people actually pay for.</p>
           </div>
           <div class="callout" style="margin-top:auto"><div class="ct">The board takeaway</div><p>Spot buys us the client. <b>Leverage and structured products are what we monetise them with.</b> The rest of this deck is about those products and their commercials.</p></div>
         </div>
@@ -326,7 +410,7 @@ ul.plain li b{font-weight:700}
 <section class="slide">
   <div class="slide-inner">
     <div class="slide-header">
-      <div><div class="eyebrow">DLT Finance · Where the Market Is Going</div><h1 class="slide-title">Two axes of expansion — <span class="accent">asset classes × products</span></h1></div>
+      <div><div class="eyebrow">DLT Finance · Where the Market Is Going</div><h1 class="slide-title">Three axes of expansion — <span class="accent">asset class × product × availability</span></h1></div>
       <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
     </div>
     <div class="body">
@@ -334,52 +418,60 @@ ul.plain li b{font-weight:700}
         <span class="lg"><span class="sw" style="background:var(--green)"></span><b>Live &amp; commoditised</b> — everyone has it</span>
         <span class="lg"><span class="sw" style="background:var(--yellow)"></span><b>Being built now</b> — where the race is</span>
         <span class="lg"><span class="sw" style="background:#c3cad6"></span><b>Open gap</b> — no credible supply yet</span>
-        <span style="margin-left:auto">Rows = asset classes ↓ &nbsp;·&nbsp; Columns = product categories →</span>
+        <span class="lg"><span class="sw" style="background:var(--purple)"></span><b>24/7 RWA markets</b> — the focus zone</span>
+        <span style="margin-left:auto">Rows = asset classes ↓ · Columns = products → · Purple = availability</span>
       </div>
-      <div class="matrix">
+      <div class="matrix m247">
         <div class="mx-h corner"><div class="t">Asset class ↓ / Product →</div></div>
-        <div class="mx-h"><div class="t">Delta-1</div><div class="s">Spot · tokens · ETPs — own the thing</div></div>
-        <div class="mx-h"><div class="t">Leverage</div><div class="s">Perps · turbos · options · mini futures</div></div>
+        <div class="mx-h" style="background:#8b95a8"><div class="t">Delta-1</div><div class="s">Spot · tokens · ETPs — commodity, funnel only</div></div>
+        <div class="mx-h"><div class="t">Leverage</div><div class="s">Perps · CFDs · turbos · mini futures</div></div>
         <div class="mx-h"><div class="t">Yield &amp; Downside Protection</div><div class="s">Shark fin · covered calls · PPNs · BRCs</div></div>
+        <div class="mx-h h247"><div class="t">24/7?</div><div class="s">Weekend vol. as % of weekday</div></div>
         <div class="mx-h corner" style="background:var(--surface2);border:1px solid var(--border)"><div class="t">Where the demand is</div></div>
 
         <div class="mx-r"><div class="t">Crypto</div><div class="s">BTC · ETH · majors</div></div>
         <div class="mx-c live"><span class="dot"></span><div class="lab">Spot trading</div><div class="sub">MiCAR · 200+ providers</div></div>
         <div class="mx-c live"><span class="dot"></span><div class="lab">Crypto perps</div><div class="sub">~5× spot volume</div></div>
         <div class="mx-c build"><span class="dot"></span><div class="lab">Shark fin · dual currency</div><div class="sub">Nexo &amp; Bitget live with us</div></div>
-        <div class="mx-note"><div class="t">Saturated on Delta-1</div><div class="s">Money has moved to leverage and yield. Spot is now the acquisition channel.</div></div>
+        <div class="mx-247"><div class="v">Native</div><div class="k">always on</div></div>
+        <div class="mx-note"><div class="t">Product gap, not hours</div><div class="s">Already 24/7. What they lack is leverage depth, yield and protection — that is what we sell them.</div></div>
 
         <div class="mx-r"><div class="t">Equities &amp; ETFs</div><div class="s">US &amp; EU single names</div></div>
-        <div class="mx-c build"><span class="dot"></span><div class="lab">Tokenised equities</div><div class="sub">xStocks · Ondo · 24/7</div></div>
-        <div class="mx-c build"><span class="dot"></span><div class="lab">Equity perps · CFDs · turbos</div><div class="sub">MiFID required</div></div>
+        <div class="mx-c build focus"><span class="c247">24/7</span><div class="lab">Tokenised equities</div><div class="sub">xStocks · Ondo · continuous</div></div>
+        <div class="mx-c build focus"><span class="c247">24/7</span><div class="lab">Equity CFDs · perps · turbos</div><div class="sub">MiFID required</div></div>
         <div class="mx-c gap"><span class="dot"></span><div class="lab">Structured on tokenised equity</div><div class="sub">Almost nobody</div></div>
-        <div class="mx-note"><div class="t">The land grab</div><div class="s">Biggest addressable pool, weakest incumbent supply in crypto distribution.</div></div>
+        <div class="mx-247"><div class="v">10.3%</div><div class="k">weakest — no ref. price</div></div>
+        <div class="mx-note"><div class="t">The land grab</div><div class="s">Biggest pool. Dies at the weekend only for lack of a reference price — tokenised spot now supplies one.</div></div>
 
         <div class="mx-r"><div class="t">Precious metals</div><div class="s">Gold · silver · platinum</div></div>
-        <div class="mx-c live"><span class="dot"></span><div class="lab">Tokenised gold</div><div class="sub">PAXG · XAUT</div></div>
-        <div class="mx-c build"><span class="dot"></span><div class="lab">Metal perps</div><div class="sub">17% weekend ratio</div></div>
+        <div class="mx-c live focus"><span class="c247">24/7</span><div class="lab">Tokenised gold</div><div class="sub">PAXG · XAUT</div></div>
+        <div class="mx-c build focus"><span class="c247">24/7</span><div class="lab">Metal CFDs · perps</div><div class="sub">Deep weekend book</div></div>
         <div class="mx-c gap"><span class="dot"></span><div class="lab">Gold-linked yield notes</div><div class="sub">Open</div></div>
-        <div class="mx-note"><div class="t">Weekend engine</div><div class="s">Holds ~1/6 of weekday volume on days TradFi is shut.</div></div>
+        <div class="mx-247"><div class="v">17.2%</div><div class="k">weekend engine</div></div>
+        <div class="mx-note"><div class="t">Ship first</div><div class="s">Holds ~1/6 of weekday volume when TradFi is shut, on an already-liquid hedge venue.</div></div>
 
         <div class="mx-r"><div class="t">Commodities</div><div class="s">Oil · gas · copper</div></div>
         <div class="mx-c gap"><span class="dot"></span><div class="lab">No retail spot</div><div class="sub">Structurally hard</div></div>
-        <div class="mx-c build"><span class="dot"></span><div class="lab">Commodity perps</div><div class="sub">44.5% weekend ratio</div></div>
+        <div class="mx-c build focus"><span class="c247">24/7</span><div class="lab">Commodity CFDs · perps</div><div class="sub">Best weekend ratio of all</div></div>
         <div class="mx-c gap"><span class="dot"></span><div class="lab">—</div><div class="sub">Open</div></div>
-        <div class="mx-note"><div class="t">Leverage-only class</div><div class="s">Retail can only access it synthetically — perps are the product.</div></div>
+        <div class="mx-247"><div class="v">44.5%</div><div class="k">strongest</div></div>
+        <div class="mx-note"><div class="t">Ship first</div><div class="s">Leverage-only class — reachable only synthetically, and it barely slows at the weekend.</div></div>
 
         <div class="mx-r"><div class="t">Debt &amp; money market</div><div class="s">T-bills · credit</div></div>
         <div class="mx-c build"><span class="dot"></span><div class="lab">Tokenised bonds &amp; MMFs</div><div class="sub">Fast-growing</div></div>
         <div class="mx-c gap"><span class="dot"></span><div class="lab">—</div><div class="sub">Open</div></div>
         <div class="mx-c build"><span class="dot"></span><div class="lab">Zero-interest credit · PPNs</div><div class="sub">Balance-sheet product</div></div>
-        <div class="mx-note"><div class="t">Yield floor</div><div class="s">The risk-free leg every structured product is built on top of.</div></div>
+        <div class="mx-247"><div class="v">Native</div><div class="k">stablecoin repo clears Sun.</div></div>
+        <div class="mx-note"><div class="t">Yield floor</div><div class="s">The risk-free leg under every structured product — and why weekend margin can move at all.</div></div>
 
         <div class="mx-r"><div class="t">Prediction markets</div><div class="s">Events · macro</div></div>
         <div class="mx-c build"><span class="dot"></span><div class="lab">Event contracts</div><div class="sub">Polymarket · Kalshi</div></div>
         <div class="mx-c gap"><span class="dot"></span><div class="lab">—</div><div class="sub">Open</div></div>
         <div class="mx-c gap"><span class="dot"></span><div class="lab">Securitised graded payoff</div><div class="sub">Our design, unbuilt</div></div>
+        <div class="mx-247"><div class="v">Native</div><div class="k">always on</div></div>
         <div class="mx-note"><div class="t">New user behaviour</div><div class="s">Pulls a demographic that never traded a derivative before.</div></div>
       </div>
-      <div class="callout g"><div class="ct">Read the matrix this way</div><p>Green is where margin has already gone to zero. <b>Yellow and grey is the entire strategy</b> — and note that both directions of travel pass through one capability: a MiFID licence plus a risk engine that can price and hedge a leveraged or structured payoff on any underlying. That is the asset we own and competitors do not.</p></div>
+      <div class="callout g"><div class="ct">Read the matrix this way</div><p>Green is where margin has already gone to zero — <b>Delta-1 is a commodity and we treat it as a funnel, not a bet.</b> The strategy is the purple zone and the yellow cells beside it: <b>24/7 RWA markets — leveraged CFDs plus delta-1 on equities, metals and commodities</b> — and the structured shelf we sell back into crypto. Both directions pass through one capability: a MiFID licence plus a risk engine that can price and hedge any payoff on any underlying, at any hour. That is the asset we own and competitors do not.</p></div>
     </div>
     <div class="slide-foot"><span>Slide 3 · The Expansion Matrix</span><span>2026 | Confidential</span></div>
   </div>
@@ -389,100 +481,81 @@ ul.plain li b{font-weight:700}
 <section class="slide">
   <div class="slide-inner">
     <div class="slide-header">
-      <div><div class="eyebrow">DLT Finance · Strategy</div><h1 class="slide-title">Product <span class="accent">Positioning</span></h1></div>
+      <div><div class="eyebrow">DLT Finance · Strategy</div><h1 class="slide-title">Two customers. Two gaps. <span class="accent">One engine.</span></h1></div>
       <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
     </div>
     <div class="body">
-      <div class="pos-grid">
-        <div class="shell">
-          <div class="shell-head"><span class="shell-badge">MiCAR</span><span class="shell-cap">Spot<br>crypto</span></div>
-          <div class="shell-items">
-            <div class="shell-item">Spot Trading</div>
-            <div class="shell-item">Margin Trading</div>
-            <div class="shell-item">Lending / Borrowing<span class="sub">excl. EMT</span></div>
-          </div>
-          <div class="meter" style="margin-top:14px">
-            <div class="ml">Share of platform revenue</div>
-            <div class="mt"><div class="mf" style="width:13%;background:linear-gradient(90deg,#8b95a8,#c3cad6)"></div></div>
-            <div class="mv" style="color:var(--muted)">~13%</div>
-          </div>
-          <div class="callout y" style="margin-top:auto"><div class="ct">Commodity</div><p style="font-size:11px">Over 200 licence holders. Table stakes — <b>acquisition, not margin.</b> We defend it, we do not invest to win it.</p></div>
-        </div>
+      <div class="gap2">
 
-        <div class="shell">
-          <div class="shell-head"><span class="shell-badge mifid">MiFID</span><span class="shell-cap">Derivatives · Structured · Securities</span></div>
-          <div class="pillars">
-            <div class="pillar">
-              <div class="ph">Leverage</div>
-              <ul>
-                <li>Perpetual Futures</li>
-                <li>Securitised Perps <span class="m">(KO certs)</span></li>
-                <li>Options</li>
-                <li>Turbos</li>
-                <li>Mini Futures</li>
-              </ul>
-              <div class="meter">
-                <div class="ml">Share of platform revenue</div>
-                <div class="mt"><div class="mf" style="width:80%;background:linear-gradient(90deg,#1f9f6c,#11617E)"></div></div>
-                <div class="mv">~80%</div>
-              </div>
-              <div class="tagline">from just ~7% of users</div>
-            </div>
-            <div class="pillar">
-              <div class="ph">Yield + Downside Protection</div>
-              <ul>
-                <li>Covered Calls <span class="m">(20–40% APY)</span></li>
-                <li>Shark Fin</li>
-                <li>Principal-Protected Notes</li>
-                <li>Zero-Interest Credit</li>
-                <li>BRC · Sprinters</li>
-              </ul>
-              <div class="meter">
-                <div class="ml">Share of platform revenue</div>
-                <div class="mt"><div class="mf" style="width:5%;background:linear-gradient(90deg,#6b50d9,#a99bf0)"></div></div>
-                <div class="mv">~5%</div>
-              </div>
-              <div class="tagline">~5% of users · locks the deposit for 1–3 months</div>
-            </div>
-            <div class="pillar">
-              <div class="ph">Delta-1 Security Tokens</div>
-              <ul>
-                <li>Tokenised Equities</li>
-                <li>Tokenised ETFs</li>
-                <li>Tokenised Bonds</li>
-                <li class="m">All major underlyings</li>
-              </ul>
-              <div class="meter">
-                <div class="ml">Share of platform revenue</div>
-                <div class="mt"><div class="mf" style="width:13%;background:linear-gradient(90deg,#3b6cd9,#8fb0f0)"></div></div>
-                <div class="mv">~13%</div>
-              </div>
-              <div class="tagline">100% of users · thin margin, but it is the whole funnel</div>
-            </div>
+        <div class="side crypto">
+          <div class="side-head"><span class="st">Crypto companies</span><span class="sw">Exchanges · CeFi · neobanks</span></div>
+          <div class="side-sub">They own the crypto client and already trade around the clock. What they cannot build is a regulated payoff — no MiFID licence, no risk engine, no issuance.</div>
+          <div class="hasmiss">
+            <div class="hm has"><div class="hl">They already have</div><ul><li>Spot crypto · MiCAR</li><li>24/7 operations</li><li>Users &amp; deposits</li><li>Margin &amp; lending</li></ul></div>
+            <div class="hm miss"><div class="hl">They are missing</div><ul><li>Leverage in a wrapper</li><li>Downside protection</li><li>Structured yield</li><li>MiFID issuance</li></ul></div>
           </div>
-          <div class="underlyings">
-            <div class="ul-lab">All underlyings</div>
-            <div class="chips">
-              <span class="pill">Crypto</span><span class="pill">Equities</span><span class="pill">Debt</span><span class="pill">Precious Metals</span><span class="pill">Commodities</span><span class="pill">Prediction Markets</span>
-            </div>
+          <div class="sidemid">
+            <div class="sl">Why they buy from us</div>
+            <div class="tick"><i>→</i><span>They cannot issue an ISIN. We can — 30× leverage arrives as a security they can list.</span></div>
+            <div class="tick"><i>→</i><span>They cannot price or hedge a structured payoff. We run the book, they sell the product.</span></div>
+            <div class="tick"><i>→</i><span><b>Live today:</b> Nexo and Bitget on shark fin and dual currency. Securitised perps with Nexo in Q4 is the next step.</span></div>
+          </div>
+          <div class="fill" style="margin-top:auto">
+            <div class="fl">We fill it with</div>
+            <div class="fillrow"><div class="fn"><b>Securitised perps &amp; leverage</b><span>KO certs, perps, turbos, mini futures — 30× inside an ISIN</span></div><div class="fp">62%<small>of rev</small></div></div>
+            <div class="fillrow"><div class="fn"><b>Yield &amp; downside protection</b><span>Shark fin, covered calls, PPNs, BRCs — low volume, <b>fat margin</b></span></div><div class="fp">8%<small>of rev</small></div></div>
           </div>
         </div>
 
-        <div class="read-order">
-          <div class="ro-t">Read in this order</div>
-          <div class="ro-item"><div class="n">1</div><div><b>MiCAR is a commodity.</b><span>Spot crypto is table stakes — over 200 licence holders. It is no longer a moat.</span></div></div>
-          <div class="ro-item"><div class="n">2</div><div><b>MiFID is the moat.</b><span>Risk engine plus post-trade lets us ship any MiFID product fast — derivatives, structured, securities — on any underlying.</span></div></div>
-          <div class="ro-item"><div class="n">3</div><div><b>One backbone, three product lines.</b><span>KYC, risk, post-trade and reporting are built once and reused. Each new product is incremental margin on a fixed cost base.</span></div></div>
-          <div class="ro-item"><div class="n">4</div><div><b>The revenue is concentrated.</b><span>Leverage carries the P&amp;L. Yield holds the deposit. Delta-1 acquires the client. All three are needed — only one pays for the business.</span></div></div>
+        <div class="engine">
+          <div class="el">The asset in the middle</div>
+          <div class="eh">MiFID licence + risk engine + issuance</div>
+          <div class="ep">One engine prices, hedges and wraps any payoff on any underlying, at any hour. Built once, sold into both directions.</div>
+          <div class="ecell"><b>Risk Engine</b><span>Margining · limits · liquidation · 24/7 mark</span></div>
+          <div class="ecell"><b>Issuance &amp; Wrapper</b><span>ISIN · prospectus · MiFID-eligible</span></div>
+          <div class="ecell"><b>Post-Trade / Reporting</b><span>Derivatives · securities · MiCAR spot</span></div>
+          <div class="ecell"><b>KYC / AML</b><span>Onboarding · monitoring</span></div>
+          <div class="ecell" style="margin-top:10px;background:rgba(123,212,198,.14);border-color:rgba(123,212,198,.4)"><b style="color:#7BD4C6">Build once, sell twice</b><span style="color:rgba(255,255,255,.75)">Each new product and each new asset class is incremental margin on a cost base we have already paid for.</span></div>
+          <div class="arrows"><span>← products out</span><span>24/7 out →</span></div>
         </div>
+
+        <div class="side tradfi">
+          <div class="side-head"><span class="st">TradFi</span><span class="sw">Banks · brokers · CFD houses</span></div>
+          <div class="side-sub">They own the balance sheet, the licence and the client. What they cannot build is a market that stays open — no weekend reference price, no weekend hedge venue.</div>
+          <div class="hasmiss">
+            <div class="hm has"><div class="hl">They already have</div><ul><li>MiFID licence</li><li>Equities, ETFs, CFDs</li><li>Clients &amp; balance sheet</li><li>Structured shelf</li></ul></div>
+            <div class="hm miss"><div class="hl">They are missing</div><ul><li>24/7 availability</li><li>Weekend hedge venue</li><li>Continuous ref. price</li><li>Crypto exposure</li></ul></div>
+          </div>
+          <div class="sidemid">
+            <div class="sl">Why they buy from us</div>
+            <div class="tick"><i>→</i><span>You cannot quote what you cannot hedge. RWA perps are now a real weekend hedge venue — but a bank cannot hold a perp on a DEX.</span></div>
+            <div class="tick"><i>→</i><span>We deliver the 24/7 mark and the hedge counterparty as a feed plus an ISIN. No migration, no wallet.</span></div>
+            <div class="tick"><i>→</i><span><b>+104 trading days</b> on a fixed cost base, and 2–5× the weekday spread — they are usually the only venue quoting.</span></div>
+          </div>
+          <div class="fill" style="margin-top:auto">
+            <div class="fl">We fill it with</div>
+            <div class="fillrow"><div class="fn"><b>24/7 RWA markets</b><span>Leveraged CFDs <i>plus</i> delta-1 on equities, metals, commodities — <b>the growth engine</b></span></div><div class="fp">20%<small>of rev</small></div></div>
+            <div class="fillrow"><div class="fn"><b>Crypto spot &amp; tokenised delta-1</b><span>MiCAR rails for institutions that cannot touch a wallet</span></div><div class="fp">8%<small>of rev</small></div></div>
+          </div>
+        </div>
+
       </div>
-      <div class="backbone">
-        <div class="bb-h"><span class="bb-t">↑ Shared backbone — powers both shells above</span><span class="bb-s">Build once · reuse across MiCAR and MiFID</span></div>
-        <div class="bb-grid">
-          <div class="bb-cell"><b>Spot Post-Trading / Reporting</b><span>MiCAR</span></div>
-          <div class="bb-cell"><b>KYC / AML</b><span>Onboarding · monitoring</span></div>
-          <div class="bb-cell"><b>Risk Engine</b><span>Margining · limits · liquidation</span></div>
-          <div class="bb-cell"><b>Post-Trade / Reporting</b><span>Derivatives · equities</span></div>
+
+      <div class="mixbar">
+        <div class="mb-h"><span class="mb-t">Where the revenue actually lands</span><span class="mb-s">Illustrative, per 100,000 active users — full build on slide 11</span></div>
+        <div class="mixtrack">
+          <div style="width:62%;background:linear-gradient(90deg,#0E4A66,#11617E)">Leverage — crypto · 62%</div>
+          <div style="width:20%;background:linear-gradient(90deg,#1f9f6c,#3b6cd9)">24/7 RWA · 20%</div>
+          <div style="width:8%;background:#6b50d9;font-size:9px">Yield 8%</div>
+          <div style="width:8%;background:#8b95a8;font-size:9px">Spot 8%</div>
+          <div style="width:2%;background:#c3cad6"></div>
+        </div>
+        <div class="mixkey">
+          <span><i style="background:#0E4A66"></i>Leverage on crypto — <b>the engine today</b></span>
+          <span><i style="background:#1f9f6c"></i>24/7 RWA markets — CFD + delta-1, <b>the engine next</b></span>
+          <span><i style="background:#6b50d9"></i>Yield &amp; downside protection — <b>thin volume, fattest margin</b></span>
+          <span><i style="background:#8b95a8"></i>Crypto spot — commodity, funnel only</span>
+          <span><i style="background:#c3cad6"></i>Lending / other 2%</span>
         </div>
       </div>
     </div>
@@ -544,7 +617,204 @@ ul.plain li b{font-weight:700}
   </div>
 </section>
 
-<!-- ═══════════ SLIDE 6 — PERPS ═══════════ -->
+<!-- ═══════════ SLIDE 6 — LIQUIDITY TRANSMISSION ═══════════ -->
+<section class="slide">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <div><div class="eyebrow">DLT Finance · How the Two Markets Join Up</div><h1 class="slide-title">Crypto liquidity in, <span class="accent">regulated 24/7 markets out</span></h1></div>
+      <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
+    </div>
+    <div class="body">
+      <div class="split" style="grid-template-columns:1fr 268px;flex:1">
+        <div class="panel">
+          <div class="panel-head"><span class="panel-t">Liquidity transmission — crypto venues → DLT engine → regulated distribution</span></div>
+          <svg viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram: DLT sources liquidity from DeFi and crypto venues, transforms it, and delivers it to TradFi brokers and banks">
+  <defs>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#3b6cd9"/>
+    </marker>
+    <marker id="ar2" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#1f9f6c"/>
+    </marker>
+    <marker id="ar3" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#d4922a"/>
+    </marker>
+    <linearGradient id="gcore" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6b50d9" stop-opacity=".10"/>
+      <stop offset="100%" stop-color="#6b50d9" stop-opacity=".03"/>
+    </linearGradient>
+    <linearGradient id="gflow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#3b6cd9" stop-opacity=".9"/>
+      <stop offset="100%" stop-color="#6b50d9" stop-opacity=".9"/>
+    </linearGradient>
+    <linearGradient id="gflow2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#6b50d9" stop-opacity=".9"/>
+      <stop offset="100%" stop-color="#1f9f6c" stop-opacity=".9"/>
+    </linearGradient>
+  </defs>
+
+  <!-- column headers -->
+  <text x="140" y="26" fill="#3b6cd9" font-family="Inter Tight, system-ui, sans-serif" font-size="11" font-weight="700" letter-spacing="1.6" text-anchor="middle">CRYPTO / DEFI</text>
+  <text x="140" y="42" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10.5" text-anchor="middle">24/7 liquidity source</text>
+
+  <text x="500" y="26" fill="#6b50d9" font-family="Inter Tight, system-ui, sans-serif" font-size="11" font-weight="700" letter-spacing="1.6" text-anchor="middle">DLT ENGINE</text>
+  <text x="500" y="42" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10.5" text-anchor="middle">transformation layer</text>
+
+  <text x="862" y="26" fill="#1f9f6c" font-family="Inter Tight, system-ui, sans-serif" font-size="11" font-weight="700" letter-spacing="1.6" text-anchor="middle">TRADFI</text>
+  <text x="862" y="42" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10.5" text-anchor="middle">regulated distribution</text>
+
+  <line x1="285" y1="56" x2="285" y2="556" stroke="#e3e7ee" stroke-dasharray="3 6"/>
+  <line x1="716" y1="56" x2="716" y2="556" stroke="#e3e7ee" stroke-dasharray="3 6"/>
+
+  <!-- LEFT: sources -->
+  <g>
+    <rect x="18" y="70" width="244" height="66" rx="11" fill="#ffffff" stroke="#3b6cd9" stroke-opacity=".55"/>
+    <text x="36" y="94" fill="#0E1A22" font-family="Inter Tight, system-ui, sans-serif" font-size="13" font-weight="700">RWA Perpetual DEXs</text>
+    <text x="36" y="112" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10.5">Indices · single names · metals · energy</text>
+    <text x="36" y="127" fill="#3b6cd9" font-family="Inter Tight, system-ui, sans-serif" font-size="9.5">~$3.4B/day · funding-marked · 24/7</text>
+  </g>
+  <g>
+    <rect x="18" y="146" width="244" height="66" rx="11" fill="#ffffff" stroke="#3b6cd9" stroke-opacity=".55"/>
+    <text x="36" y="170" fill="#0E1A22" font-family="Inter Tight, system-ui, sans-serif" font-size="13" font-weight="700">Tokenised Equity Spot</text>
+    <text x="36" y="188" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10.5">xStocks (Backed) · Ondo Global Markets</text>
+    <text x="36" y="203" fill="#3b6cd9" font-family="Inter Tight, system-ui, sans-serif" font-size="9.5">1:1 collateralised · continuous reference</text>
+  </g>
+  <g>
+    <rect x="18" y="222" width="244" height="66" rx="11" fill="#ffffff" stroke="#3b6cd9" stroke-opacity=".55"/>
+    <text x="36" y="246" fill="#0E1A22" font-family="Inter Tight, system-ui, sans-serif" font-size="13" font-weight="700">Crypto Market Makers</text>
+    <text x="36" y="264" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10.5">Principal quotes · RFQ · block size</text>
+    <text x="36" y="279" fill="#3b6cd9" font-family="Inter Tight, system-ui, sans-serif" font-size="9.5">weekend-staffed desks</text>
+  </g>
+  <g>
+    <rect x="18" y="298" width="244" height="66" rx="11" fill="#ffffff" stroke="#3b6cd9" stroke-opacity=".55"/>
+    <text x="36" y="322" fill="#0E1A22" font-family="Inter Tight, system-ui, sans-serif" font-size="13" font-weight="700">Stablecoin Money Markets</text>
+    <text x="36" y="340" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10.5">USDC collateral · on-chain repo · T-bill yield</text>
+    <text x="36" y="355" fill="#3b6cd9" font-family="Inter Tight, system-ui, sans-serif" font-size="9.5">instant settlement, incl. weekends</text>
+  </g>
+  <g>
+    <rect x="18" y="374" width="244" height="66" rx="11" fill="#ffffff" stroke="#3b6cd9" stroke-opacity=".55"/>
+    <text x="36" y="398" fill="#0E1A22" font-family="Inter Tight, system-ui, sans-serif" font-size="13" font-weight="700">CEX Derivatives</text>
+    <text x="36" y="416" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10.5">Beta / correlation overlay hedges</text>
+    <text x="36" y="431" fill="#3b6cd9" font-family="Inter Tight, system-ui, sans-serif" font-size="9.5">residual + basis risk management</text>
+  </g>
+
+  <!-- CENTRE: DLT engine -->
+  <rect x="312" y="70" width="376" height="440" rx="16" fill="url(#gcore)" stroke="#6b50d9" stroke-opacity=".55"/>
+  <text x="500" y="98" fill="#6b50d9" font-family="Inter Tight, system-ui, sans-serif" font-size="10" font-weight="700" letter-spacing="1.4" text-anchor="middle">FOUR TRANSFORMATIONS</text>
+
+  <g>
+    <rect x="332" y="112" width="336" height="72" rx="10" fill="#f4f6f9" stroke="#e3e7ee"/>
+    <text x="350" y="134" fill="#6b50d9" font-family="Inter Tight, system-ui, sans-serif" font-size="9.5" font-weight="700">01 · PRICE</text>
+    <text x="350" y="153" fill="#0E1A22" font-family="Inter Tight, system-ui, sans-serif" font-size="12.5" font-weight="700">Synthetic reference price</text>
+    <text x="350" y="171" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10.5">Perp mid + tokenised spot + funding basis →</text>
+    <text x="350" y="185" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10.5">one auditable, timestamped 24/7 mark</text>
+  </g>
+  <g>
+    <rect x="332" y="196" width="336" height="72" rx="10" fill="#f4f6f9" stroke="#e3e7ee"/>
+    <text x="350" y="218" fill="#6b50d9" font-family="Inter Tight, system-ui, sans-serif" font-size="9.5" font-weight="700">02 · RISK</text>
+    <text x="350" y="237" fill="#0E1A22" font-family="Inter Tight, system-ui, sans-serif" font-size="12.5" font-weight="700">Netting &amp; hedge routing</text>
+    <text x="350" y="255" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10.5">Internalise offsetting client flow, route only</text>
+    <text x="350" y="269" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10.5">the net delta out to perp / spot venues</text>
+  </g>
+  <g>
+    <rect x="332" y="280" width="336" height="72" rx="10" fill="#f4f6f9" stroke="#e3e7ee"/>
+    <text x="350" y="302" fill="#6b50d9" font-family="Inter Tight, system-ui, sans-serif" font-size="9.5" font-weight="700">03 · SETTLEMENT</text>
+    <text x="350" y="321" fill="#0E1A22" font-family="Inter Tight, system-ui, sans-serif" font-size="12.5" font-weight="700">Collateral &amp; cash transformation</text>
+    <text x="350" y="339" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10.5">USDC ↔ EUR/USD fiat · margin, funding and</text>
+    <text x="350" y="353" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10.5">variation flows that clear on a Sunday</text>
+  </g>
+  <g>
+    <rect x="332" y="364" width="336" height="72" rx="10" fill="#f4f6f9" stroke="#e3e7ee"/>
+    <text x="350" y="386" fill="#6b50d9" font-family="Inter Tight, system-ui, sans-serif" font-size="9.5" font-weight="700">04 · WRAPPER</text>
+    <text x="350" y="405" fill="#0E1A22" font-family="Inter Tight, system-ui, sans-serif" font-size="12.5" font-weight="700">Regulated instrument</text>
+    <text x="350" y="423" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10.5">Securitised certificate / CFD reference feed —</text>
+    <text x="350" y="437" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10.5">ISIN, prospectus, MiFID-eligible, custody-ready</text>
+  </g>
+
+  <rect x="332" y="450" width="336" height="42" rx="10" fill="#0E4A66" stroke="#6b50d9" stroke-opacity=".3"/>
+  <text x="500" y="470" fill="#ffffff" font-family="Inter Tight, system-ui, sans-serif" font-size="11.5" font-weight="600" text-anchor="middle">Client never touches a wallet, token or DEX</text>
+  <text x="500" y="485" fill="#7BD4C6" font-family="Inter Tight, system-ui, sans-serif" font-size="9" text-anchor="middle">crypto-native execution · TradFi-native experience</text>
+
+  <!-- RIGHT: distribution -->
+  <g>
+    <rect x="742" y="96" width="240" height="62" rx="11" fill="#ffffff" stroke="#1f9f6c" stroke-opacity=".55"/>
+    <text x="760" y="120" fill="#0E1A22" font-family="Inter Tight, system-ui, sans-serif" font-size="13" font-weight="700">CFD Brokers</text>
+    <text x="760" y="138" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10.5">Weekend quotes on existing platform</text>
+    <text x="760" y="151" fill="#1f9f6c" font-family="Inter Tight, system-ui, sans-serif" font-size="9.5">MT5 / proprietary front end</text>
+  </g>
+  <g>
+    <rect x="742" y="170" width="240" height="62" rx="11" fill="#ffffff" stroke="#1f9f6c" stroke-opacity=".55"/>
+    <text x="760" y="194" fill="#0E1A22" font-family="Inter Tight, system-ui, sans-serif" font-size="13" font-weight="700">Retail Brokerage / Neobank</text>
+    <text x="760" y="212" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10.5">24/7 spot equities &amp; metals in-app</text>
+    <text x="760" y="225" fill="#1f9f6c" font-family="Inter Tight, system-ui, sans-serif" font-size="9.5">fractional · instant · always on</text>
+  </g>
+  <g>
+    <rect x="742" y="244" width="240" height="62" rx="11" fill="#ffffff" stroke="#1f9f6c" stroke-opacity=".55"/>
+    <text x="760" y="268" fill="#0E1A22" font-family="Inter Tight, system-ui, sans-serif" font-size="13" font-weight="700">Private Bank / Wealth</text>
+    <text x="760" y="286" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10.5">Weekend hedging for concentrated books</text>
+    <text x="760" y="299" fill="#1f9f6c" font-family="Inter Tight, system-ui, sans-serif" font-size="9.5">certificate in standard custody</text>
+  </g>
+  <g>
+    <rect x="742" y="318" width="240" height="62" rx="11" fill="#ffffff" stroke="#1f9f6c" stroke-opacity=".55"/>
+    <text x="760" y="342" fill="#0E1A22" font-family="Inter Tight, system-ui, sans-serif" font-size="13" font-weight="700">Prop / Treasury Desks</text>
+    <text x="760" y="360" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10.5">Gap-risk management into Monday open</text>
+    <text x="760" y="373" fill="#1f9f6c" font-family="Inter Tight, system-ui, sans-serif" font-size="9.5">event-driven, out-of-hours</text>
+  </g>
+
+  <!-- flows in -->
+  <path d="M262,103 C288,103 296,140 310,140" stroke="url(#gflow)" stroke-width="2.2" fill="none" marker-end="url(#ar)"/>
+  <path d="M262,179 C288,179 296,152 310,152" stroke="url(#gflow)" stroke-width="2.2" fill="none" marker-end="url(#ar)"/>
+  <path d="M262,255 C290,255 292,232 310,232" stroke="url(#gflow)" stroke-width="2.2" fill="none" marker-end="url(#ar)"/>
+  <path d="M262,331 C290,331 292,316 310,316" stroke="url(#gflow)" stroke-width="2.2" fill="none" marker-end="url(#ar)"/>
+  <path d="M262,407 C290,407 292,330 310,330" stroke="url(#gflow)" stroke-width="2.2" fill="none" marker-end="url(#ar)"/>
+
+  <!-- flows out -->
+  <path d="M690,150 C712,150 716,127 740,127" stroke="url(#gflow2)" stroke-width="2.2" fill="none" marker-end="url(#ar2)"/>
+  <path d="M690,232 C712,232 716,201 740,201" stroke="url(#gflow2)" stroke-width="2.2" fill="none" marker-end="url(#ar2)"/>
+  <path d="M690,316 C712,316 716,275 740,275" stroke="url(#gflow2)" stroke-width="2.2" fill="none" marker-end="url(#ar2)"/>
+  <path d="M690,400 C712,400 716,349 740,349" stroke="url(#gflow2)" stroke-width="2.2" fill="none" marker-end="url(#ar2)"/>
+
+  <!-- return / hedge loop -->
+  <path d="M862,392 L862,548 L140,548 L140,452" stroke="#d4922a" stroke-width="2" stroke-dasharray="6 5" fill="none" marker-end="url(#ar3)" opacity=".85"/>
+  <rect x="392" y="532" width="216" height="32" rx="8" fill="#ffffff" stroke="#d4922a" stroke-opacity=".4"/>
+  <text x="500" y="552" fill="#d4922a" font-family="Inter Tight, system-ui, sans-serif" font-size="9.5" font-weight="600" text-anchor="middle">NET CLIENT DELTA HEDGED BACK ON-CHAIN</text>
+
+  <!-- bottom caption -->
+  <text x="140" y="470" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10" text-anchor="middle">liquidity in</text>
+  <text x="862" y="410" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10" text-anchor="middle">exposure out</text>
+
+  <text x="500" y="596" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10.5" text-anchor="middle">One continuous loop: DeFi supplies the price and the hedge · DLT supplies the transformation and the wrapper · TradFi supplies the client.</text>
+</svg>
+          <div class="fig-legend">
+            <span class="lgd"><span class="dt" style="background:#3b6cd9"></span>Crypto-native liquidity source</span>
+            <span class="lgd"><span class="dt" style="background:#6b50d9"></span>DLT transformation layer</span>
+            <span class="lgd"><span class="dt" style="background:#1f9f6c"></span>Regulated distribution</span>
+            <span class="lgd"><span class="dt" style="background:#d4922a"></span>Hedge return flow</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;min-height:0">
+          <div class="panel" style="flex:0 0 auto">
+            <div class="panel-t" style="margin-bottom:7px">What the picture says</div>
+            <ul class="plain">
+              <li><b>The two markets are already merging.</b> Price, hedge and settlement for real-world assets now exist on-chain, continuously. The wrapper was the only missing piece.</li>
+              <li><b>We are the transformation, not a venue.</b> Four conversions — price, risk, settlement, legal wrapper — and we charge for all four.</li>
+              <li><b>The client never sees crypto.</b> A CFD broker gets a feed and a hedge counterparty. A bank gets an ISIN in standard custody.</li>
+            </ul>
+          </div>
+          <div class="panel" style="flex:1;min-height:0">
+            <div class="panel-t" style="margin-bottom:7px">Why this is the strategy slide</div>
+            <p style="font-size:11px;line-height:1.45;color:var(--ink)">Everything left of the engine is <b>free, liquid and open 24/7</b>. Everything right of it is <b>licensed, trusted and closed at the weekend</b>. Neither side can cross without us.</p>
+            <p style="font-size:11px;line-height:1.45;color:var(--ink);margin-top:8px">That is why <b>24/7 RWA markets — leveraged CFDs plus delta-1 on equities, metals and commodities</b> — is the line we push, and why delta-1 on crypto alone is a commodity we defend, not fund.</p>
+            <div class="callout g" style="margin-top:auto"><div class="ct">The loop</div><p style="font-size:11px">DeFi supplies the price and the hedge · DLT the transformation and wrapper · TradFi the client. Client delta is hedged straight back on-chain — <b>we take a cut on every leg.</b></p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot"><span>Slide 6 · Liquidity Transmission</span><span>2026 | Confidential</span></div>
+  </div>
+</section>
+
+<!-- ═══════════ SLIDE 7 — PERPS ═══════════ -->
 <section class="slide">
   <div class="slide-inner">
     <div class="slide-header">
@@ -599,11 +869,11 @@ ul.plain li b{font-weight:700}
         </span>
       </div>
     </div>
-    <div class="slide-foot"><span>Slide 6 · Product — Perps</span><span>2026 | Confidential</span></div>
+    <div class="slide-foot"><span>Slide 7 · Product — Perps</span><span>2026 | Confidential</span></div>
   </div>
 </section>
 
-<!-- ═══════════ SLIDE 7 — SECURITISED PERPS ═══════════ -->
+<!-- ═══════════ SLIDE 8 — SECURITISED PERPS ═══════════ -->
 <section class="slide">
   <div class="slide-inner">
     <div class="slide-header">
@@ -685,11 +955,11 @@ ul.plain li b{font-weight:700}
         </span>
       </div>
     </div>
-    <div class="slide-foot"><span>Slide 7 · Product — Securitised Perps</span><span>2026 | Confidential</span></div>
+    <div class="slide-foot"><span>Slide 8 · Product — Securitised Perps</span><span>2026 | Confidential</span></div>
   </div>
 </section>
 
-<!-- ═══════════ SLIDE 8 — SHARK FIN ═══════════ -->
+<!-- ═══════════ SLIDE 9 — SHARK FIN ═══════════ -->
 <section class="slide">
   <div class="slide-inner">
     <div class="slide-header">
@@ -770,15 +1040,15 @@ ul.plain li b{font-weight:700}
         </span>
       </div>
     </div>
-    <div class="slide-foot"><span>Slide 8 · Product — Shark Fin</span><span>2026 | Confidential</span></div>
+    <div class="slide-foot"><span>Slide 9 · Product — Shark Fin</span><span>2026 | Confidential</span></div>
   </div>
 </section>
 
-<!-- ═══════════ SLIDE 9 — 24/7 SPOT & CFD EQUITIES ═══════════ -->
+<!-- ═══════════ SLIDE 10 — 24/7 SPOT & CFD EQUITIES ═══════════ -->
 <section class="slide">
   <div class="slide-inner">
     <div class="slide-header">
-      <div><div class="eyebrow">DLT Finance · Product 4 of 4</div><h1 class="slide-title">24/7 spot &amp; CFD on <span class="accent">equities, metals, commodities</span></h1></div>
+      <div><div class="eyebrow">DLT Finance · Product 4 of 4 · The Growth Engine</div><h1 class="slide-title"><span class="accent">24/7 RWA markets</span> — CFD leverage + delta-1 on equities, metals, commodities</h1></div>
       <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
     </div>
     <div class="body">
@@ -833,83 +1103,88 @@ ul.plain li b{font-weight:700}
         </span>
       </div>
     </div>
-    <div class="slide-foot"><span>Slide 9 · Product — 24/7 Spot &amp; CFD</span><span>2026 | Confidential</span></div>
+    <div class="slide-foot"><span>Slide 10 · Product — 24/7 RWA Markets</span><span>2026 | Confidential</span></div>
   </div>
 </section>
 
-<!-- ═══════════ SLIDE 10 — WHERE THE MONEY IS ═══════════ -->
+<!-- ═══════════ SLIDE 11 — WHERE THE MONEY IS ═══════════ -->
 <section class="slide">
   <div class="slide-inner">
     <div class="slide-header">
-      <div><div class="eyebrow">DLT Finance · The Commercial Picture</div><h1 class="slide-title">7% of users. <span class="accent">80% of the revenue.</span></h1></div>
+      <div><div class="eyebrow">DLT Finance · The Commercial Picture</div><h1 class="slide-title">Leverage pays for the business. <span class="accent">24/7 grows it.</span></h1></div>
       <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
     </div>
     <div class="body">
       <div class="split" style="flex:1">
-        <div class="panel">
+        <div class="panel tightp">
           <div class="panel-head"><span class="panel-t">Illustrative model</span><span class="panel-cap">per 100,000 active users, annual</span></div>
           <table class="econ">
-            <thead><tr><th>Product</th><th class="r">Users</th><th class="r">Rev / user</th><th class="r">Revenue</th><th class="r">% of total</th></tr></thead>
+            <thead><tr><th>Product line</th><th class="r">Users</th><th class="r">Rev / user</th><th class="r">Revenue</th><th class="r">% of total</th></tr></thead>
             <tbody>
-              <tr><td><b>Securitised perps &amp; leverage</b><br><span style="font-size:10px;color:var(--muted)">fees + financing + b-book</span></td><td class="r mono">7,000</td><td class="r mono">$2,000</td><td class="r mono">$14.0M</td><td class="r mono pos">80%</td></tr>
-              <tr><td><b>Delta-1 spot &amp; tokens</b><br><span style="font-size:10px;color:var(--muted)">every user touches it</span></td><td class="r mono">100,000</td><td class="r mono">$22</td><td class="r mono">$2.2M</td><td class="r mono">13%</td></tr>
-              <tr><td><b>Yield &amp; protection (Shark Fin et al.)</b><br><span style="font-size:10px;color:var(--muted)">50% share on user yield</span></td><td class="r mono">5,000</td><td class="r mono">$180</td><td class="r mono">$0.9M</td><td class="r mono">5%</td></tr>
-              <tr><td><b>Lending / financing / other</b></td><td class="r mono">—</td><td class="r mono">—</td><td class="r mono">$0.4M</td><td class="r mono">2%</td></tr>
-              <tr class="total"><td><b>Total</b></td><td class="r mono">100,000</td><td class="r mono">$175 blended</td><td class="r mono">$17.5M</td><td class="r mono">100%</td></tr>
+              <tr><td><b>Leverage — crypto</b><br><span style="font-size:9.5px;color:var(--muted)">securitised perps · fees + financing + b-book</span></td><td class="r mono">7,000</td><td class="r mono">$1,550</td><td class="r mono">$10.85M</td><td class="r mono pos">62%</td></tr>
+              <tr><td><b>24/7 RWA markets</b><br><span style="font-size:9.5px;color:var(--muted)">CFD leverage ~15pp + delta-1 ~5pp · equities, metals, commodities</span></td><td class="r mono">9,000</td><td class="r mono">$389</td><td class="r mono">$3.50M</td><td class="r mono pos">20%</td></tr>
+              <tr><td><b>Yield &amp; downside protection</b><br><span style="font-size:9.5px;color:var(--muted)">shark fin, covered calls, PPNs · low volume, fattest margin</span></td><td class="r mono">5,000</td><td class="r mono">$280</td><td class="r mono">$1.40M</td><td class="r mono">8%</td></tr>
+              <tr><td><b>Crypto spot &amp; tokenised delta-1</b><br><span style="font-size:9.5px;color:var(--muted)">commodity — everyone touches it, nobody pays for it</span></td><td class="r mono">100,000</td><td class="r mono">$14</td><td class="r mono">$1.40M</td><td class="r mono">8%</td></tr>
+              <tr><td><b>Lending / financing / other</b></td><td class="r mono">—</td><td class="r mono">—</td><td class="r mono">$0.35M</td><td class="r mono">2%</td></tr>
+              <tr class="total"><td><b>Total</b></td><td class="r mono">100,000</td><td class="r mono">$175 blended</td><td class="r mono">$17.50M</td><td class="r mono">100%</td></tr>
             </tbody>
           </table>
-          <div class="meter" style="margin-top:16px;padding-top:0">
+          <div class="meter" style="margin-top:10px;padding-top:0">
             <div class="ml">Revenue mix · $17.5M per 100,000 active users</div>
-            <div class="mt" style="height:26px;display:flex">
-              <div style="width:80%;background:linear-gradient(90deg,#0E4A66,#11617E);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10.5px;font-weight:700">Leverage · $14.0M</div>
-              <div style="width:13%;background:#3b6cd9;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700">$2.2M</div>
-              <div style="width:5%;background:#6b50d9"></div>
+            <div class="mt" style="height:22px;display:flex">
+              <div style="width:62%;background:linear-gradient(90deg,#0E4A66,#11617E);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10.5px;font-weight:700">Leverage — crypto · $10.85M</div>
+              <div style="width:20%;background:linear-gradient(90deg,#1f9f6c,#3b6cd9);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700">24/7 · $3.5M</div>
+              <div style="width:8%;background:#6b50d9"></div>
+              <div style="width:8%;background:#8b95a8"></div>
               <div style="width:2%;background:#c3cad6"></div>
             </div>
-            <div style="display:flex;gap:14px;margin-top:7px;font-size:10px;color:var(--muted)">
-              <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#0E4A66;margin-right:4px"></span>Leverage 80%</span>
-              <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#3b6cd9;margin-right:4px"></span>Delta-1 13%</span>
-              <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#6b50d9;margin-right:4px"></span>Yield 5%</span>
+            <div style="display:flex;gap:12px;margin-top:6px;font-size:9.5px;color:var(--muted);flex-wrap:wrap">
+              <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#0E4A66;margin-right:4px"></span>Leverage — crypto 62%</span>
+              <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#1f9f6c;margin-right:4px"></span>24/7 RWA 20%</span>
+              <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#6b50d9;margin-right:4px"></span>Yield &amp; protection 8%</span>
+              <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#8b95a8;margin-right:4px"></span>Crypto spot 8%</span>
               <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#c3cad6;margin-right:4px"></span>Other 2%</span>
             </div>
           </div>
-          <div style="margin-top:16px">
-            <div class="panel-t" style="margin-bottom:6px">Sensitivity — everything turns on leverage adoption</div>
+          <div style="margin-top:10px">
+            <div class="panel-t" style="margin-bottom:5px">Sensitivity — everything still turns on leverage adoption</div>
             <table class="econ">
               <thead><tr><th>Leverage uptake</th><th class="r">Leverage rev</th><th class="r">Total rev</th><th class="r">Blended / user</th><th class="r">vs. base</th></tr></thead>
               <tbody>
-                <tr><td>4% of users</td><td class="r mono">$8.0M</td><td class="r mono">$11.5M</td><td class="r mono">$115</td><td class="r mono neg">&minus;34%</td></tr>
-                <tr><td><b>7% of users — base case</b></td><td class="r mono">$14.0M</td><td class="r mono">$17.5M</td><td class="r mono">$175</td><td class="r mono">—</td></tr>
-                <tr><td>10% of users</td><td class="r mono">$20.0M</td><td class="r mono">$23.5M</td><td class="r mono">$235</td><td class="r mono pos">+34%</td></tr>
+                <tr><td>4% of users</td><td class="r mono">$6.2M</td><td class="r mono">$12.85M</td><td class="r mono">$129</td><td class="r mono neg">&minus;27%</td></tr>
+                <tr><td><b>7% of users — base case</b></td><td class="r mono">$10.85M</td><td class="r mono">$17.50M</td><td class="r mono">$175</td><td class="r mono">—</td></tr>
+                <tr><td>10% of users</td><td class="r mono">$15.5M</td><td class="r mono">$22.15M</td><td class="r mono">$222</td><td class="r mono pos">+27%</td></tr>
               </tbody>
             </table>
-            <p style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.45">Three points of leverage adoption is worth <b>±$6M a year per 100,000 users</b>. Nothing else on the shelf has that gearing — which is why securitised perps is a sequencing decision, not a product decision.</p>
+            <p style="font-size:10px;color:var(--muted);margin-top:5px;line-height:1.35">Three points of leverage adoption is worth <b>±$4.7M a year per 100,000 users</b>. 24/7 has the same gearing on a bigger base — and is the only line that adds <b>104 trading days</b>, not more users.</p>
           </div>
-          <div class="assum" style="margin-top:auto">Illustrative and driver-based — the drivers are the input, the totals are arithmetic. Leverage rev/user assumes ~$1.4M annual notional at ~5 bps ($700 fees) plus ~$1,300 net b-book on a ~$2,500 average account, consistent with listed CFD brokers. Yield: $5,000 ticket × 2 p.a. × ~1.8% retained. Spot: ~$11,000 annual turnover at 20 bps. Swap in our own book before this leaves the room.</div>
+          <div class="assum" style="margin-top:auto;font-size:9px">Driver-based and illustrative. Leverage: ~$1.1M notional at ~5 bps + ~$1,000 net b-book on a ~$2,500 account. 24/7 RWA: weekend CFD at 2–5× spread + RWA delta-1 turnover. Yield: $5,000 × 2 p.a. × ~2.8%. Spot: ~$7,000 at 20 bps. Swap in our own book before this leaves the room.</div>
         </div>
         <div style="display:flex;flex-direction:column;gap:10px;min-height:0">
           <div class="panel" style="flex:0 0 auto">
             <div class="panel-t" style="margin-bottom:8px">The inversion</div>
             <div class="bars">
-              <div class="barrow"><div class="barlab">Share of users</div><div class="bartrack" style="height:22px"><div class="barfill" style="width:7%;background:linear-gradient(90deg,#0E4A66,#11617E)"></div></div><div class="barval">7%</div></div>
-              <div class="barrow"><div class="barlab">Share of revenue</div><div class="bartrack" style="height:22px"><div class="barfill" style="width:80%;background:linear-gradient(90deg,#1f9f6c,#11617E)"></div></div><div class="barval pos">80%</div></div>
+              <div class="barrow"><div class="barlab">Leverage — share of users</div><div class="bartrack" style="height:20px"><div class="barfill" style="width:7%;background:linear-gradient(90deg,#0E4A66,#11617E)"></div></div><div class="barval">7%</div></div>
+              <div class="barrow"><div class="barlab">Leverage — share of rev</div><div class="bartrack" style="height:20px"><div class="barfill" style="width:62%;background:linear-gradient(90deg,#1f9f6c,#11617E)"></div></div><div class="barval pos">62%</div></div>
+              <div class="barrow"><div class="barlab">Spot — share of users</div><div class="bartrack" style="height:20px"><div class="barfill" style="width:100%;background:linear-gradient(90deg,#8b95a8,#c3cad6)"></div></div><div class="barval">100%</div></div>
+              <div class="barrow"><div class="barlab">Spot — share of rev</div><div class="bartrack" style="height:20px"><div class="barfill" style="width:8%;background:linear-gradient(90deg,#8b95a8,#c3cad6)"></div></div><div class="barval">8%</div></div>
             </div>
-            <p style="font-size:11.5px;color:var(--muted);margin-top:9px;line-height:1.45">This is not a crypto anomaly. It is the standard shape of every retail broker P&amp;L — a small, high-frequency leveraged cohort funds the platform, and everyone else is acquisition and retention. We should build for it deliberately rather than discover it accidentally.</p>
+            <p style="font-size:11.5px;color:var(--muted);margin-top:9px;line-height:1.45">This is the standard shape of every retail broker P&amp;L — a small leveraged cohort funds the platform and everyone else is acquisition. <b>Delta-1 is the funnel, not the business.</b></p>
           </div>
           <div class="panel" style="flex:1;min-height:0">
             <div class="panel-t" style="margin-bottom:6px">What this means for the strategy</div>
             <ul class="plain">
-              <li><b>Keep investing in spot and Delta-1 — as acquisition.</b> It is 13% of revenue and 100% of the funnel. It does not need to pay for itself directly.</li>
-              <li><b>Leverage is the P&amp;L. Fund it first.</b> Securitised perps with Nexo in Q4 is the single highest-value item on the roadmap.</li>
-              <li><b>Yield products hold the balance</b> between leverage trades. They are cheap to add on the shared backbone and each one raises blended revenue per user.</li>
-              <li><b>Every new asset class multiplies the shelf.</b> One risk engine × six asset classes × three product categories. That grid is the business.</li>
+              <li><b>Leverage is the P&amp;L. Fund it first.</b> Securitised perps with Nexo in Q4 is still the single highest-value item on the roadmap.</li>
+              <li><b>24/7 RWA markets are the growth line.</b> CFD leverage plus delta-1 on equities, metals and commodities — 20% of revenue on a fixed cost base, and the only thing TradFi cannot copy.</li>
+              <li><b>Yield &amp; downside protection punches above its volume.</b> 8% of revenue from 5% of users, at the fattest margin on the shelf — and it locks the deposit for 1–3 months.</li>
+              <li><b>Stop investing to win Delta-1.</b> 100% of users, 8% of revenue, 200+ competitors. Defend it as acquisition; do not fund it as a product line.</li>
             </ul>
-            <div class="callout g" style="margin-top:auto"><div class="ct">The ask</div><p>Endorse the sequencing: <b>securitised perps → 24/7 metals &amp; commodities → structured shelf on new underlyings.</b> Everything else is downstream of the MiFID risk engine we already have.</p></div>
+            <div class="callout g" style="margin-top:auto"><div class="ct">The ask</div><p>Endorse the sequencing: <b>securitised perps → 24/7 RWA markets (commodities &amp; metals first) → structured shelf on new underlyings.</b> Everything else is downstream of the MiFID risk engine we already have.</p></div>
           </div>
         </div>
       </div>
     </div>
-    <div class="slide-foot"><span>Slide 10 · Where the Money Is</span><span>2026 | Confidential</span></div>
+    <div class="slide-foot"><span>Slide 11 · Where the Money Is</span><span>2026 | Confidential</span></div>
   </div>
 </section>
 
