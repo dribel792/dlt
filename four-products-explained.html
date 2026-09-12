@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DLT Finance — The Four Products, Explained Simply</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --surface2:#f4f6f9; --border:#e3e7ee;
+  --ink:#0E1A22; --text:var(--ink); --muted:#5b6577;
+  --petrol-deep:#062536; --petrol:#0E4A66; --petrol-mid:#11617E;
+  --petrol-grad:linear-gradient(90deg,#062536 0%,#0E4A66 55%,#11617E 100%);
+  --mint:#7BD4C6;
+  --brand:var(--petrol); --brand-soft:rgba(14,74,102,.08); --brand-border:rgba(14,74,102,.32);
+  --blue:#3b6cd9; --blue-soft:rgba(59,108,217,.08); --blue-border:rgba(59,108,217,.28);
+  --green:#1f9f6c; --green-soft:rgba(31,159,108,.09); --green-border:rgba(31,159,108,.32);
+  --yellow:#d4922a; --yellow-soft:rgba(212,146,42,.12); --yellow-border:rgba(212,146,42,.45);
+  --purple:#6b50d9; --purple-soft:rgba(107,80,217,.08); --purple-border:rgba(107,80,217,.32);
+  --red:#d04444; --red-soft:rgba(208,68,68,.08); --red-border:rgba(208,68,68,.30);
+  --font-display:'Helvetica Neue','Inter Tight',system-ui,sans-serif;
+  --font-body:'Inter Tight','Helvetica Neue',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#f5f7fa;color:var(--text);font-family:var(--font-body);line-height:1.5;-webkit-font-smoothing:antialiased}
+.deck{max-width:1280px;margin:0 auto;padding:40px 24px 80px;display:flex;flex-direction:column;gap:32px}
+
+/* ── 16:9 slide frame ── */
+.slide{position:relative;aspect-ratio:16/9;background:#fff;border:1px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:0 12px 32px rgba(15,23,42,.08),0 1px 3px rgba(15,23,42,.04)}
+.slide::before{content:'';position:absolute;top:0;left:0;right:0;height:96px;background:var(--petrol-grad);z-index:0}
+.slide.cover::before{height:100%}
+.slide-inner{position:absolute;inset:0;padding:22px 52px 38px;display:flex;flex-direction:column;z-index:1}
+.slide-header{position:relative;display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;min-height:64px}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--mint)}
+.slide-title{font-family:var(--font-display);font-size:33px;font-weight:800;letter-spacing:-.02em;margin-top:4px;color:#fff;line-height:1.1}
+.slide-title .accent{color:var(--mint)}
+.brand-mark{display:flex;align-items:center;gap:10px;color:#fff}
+.brand-mark svg{width:24px;height:24px}
+.brand-mark .name{font-family:var(--font-display);font-weight:700;letter-spacing:.06em;font-size:14px;color:#fff}
+.brand-mark .name .light{color:var(--mint)}
+.slide-foot{position:absolute;bottom:14px;left:52px;right:52px;display:flex;justify-content:space-between;font-size:10px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase}
+.slide.cover .slide-foot{color:rgba(255,255,255,.55)}
+.body{flex:1;min-height:0;display:flex;flex-direction:column;gap:12px}
+
+/* ── generic components ── */
+.col-label{font-size:10.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px 13px}
+.card h4{font-size:13px;font-weight:700;letter-spacing:-.01em;margin-bottom:3px}
+.card p{font-size:11.5px;color:var(--muted);line-height:1.45}
+.num{display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:5px;background:var(--petrol);color:#fff;font-size:10.5px;font-weight:700;margin-bottom:7px}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.stat{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 13px}
+.stat .sv{font-family:var(--font-display);font-size:26px;font-weight:800;letter-spacing:-.03em;line-height:1.05;color:var(--petrol)}
+.stat .sv.g{color:var(--green)} .stat .sv.y{color:var(--yellow)} .stat .sv.r{color:var(--red)} .stat .sv.p{color:var(--purple)}
+.stat .sl{font-size:10.5px;color:var(--muted);margin-top:4px;line-height:1.35}
+
+.callout{border-radius:10px;padding:11px 14px;border-left:3px solid var(--petrol);background:var(--brand-soft)}
+.callout.g{border-left-color:var(--green);background:var(--green-soft)}
+.callout.y{border-left-color:var(--yellow);background:var(--yellow-soft)}
+.callout .ct{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--petrol);margin-bottom:3px}
+.callout.g .ct{color:var(--green)} .callout.y .ct{color:var(--yellow)}
+.callout p{font-size:12px;line-height:1.5;color:var(--ink)}
+.pill{display:inline-block;padding:3px 9px;border-radius:99px;font-size:10.5px;font-weight:600;background:#fff;border:1px solid var(--border);color:var(--ink)}
+
+/* ── COVER ── */
+.cover-wrap{flex:1;display:flex;flex-direction:column;justify-content:center;color:#fff}
+.cover-eyebrow{font-size:12px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--mint)}
+.cover-h1{font-family:var(--font-display);font-size:56px;font-weight:800;letter-spacing:-.03em;line-height:1.05;margin-top:14px}
+.cover-h1 .accent{color:var(--mint)}
+.cover-sub{font-size:15px;color:rgba(255,255,255,.72);margin-top:16px;max-width:720px;line-height:1.55}
+.converge{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:14px;margin-top:34px;max-width:900px}
+.cnode{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:13px 15px}
+.cnode .cn-t{font-size:14px;font-weight:700;color:#fff}
+.cnode .cn-s{font-size:11px;color:rgba(255,255,255,.6);margin-top:4px;line-height:1.4}
+.carrow{font-size:20px;color:var(--mint);font-weight:700}
+
+/* ── MATRIX ── */
+.matrix{flex:1;display:grid;grid-template-columns:150px repeat(3,1fr) 190px;grid-auto-rows:minmax(0,1fr);gap:5px;min-height:0}
+.mx-h{background:var(--petrol);color:#fff;border-radius:8px;display:flex;flex-direction:column;justify-content:center;padding:7px 11px}
+.mx-h .t{font-size:12.5px;font-weight:700;line-height:1.15}
+.mx-h .s{font-size:9.5px;color:rgba(255,255,255,.66);margin-top:2px;line-height:1.25}
+.mx-h.corner{background:transparent;color:var(--muted)}
+.mx-h.corner .t{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.mx-r{background:var(--surface2);border:1px solid var(--border);border-radius:8px;display:flex;flex-direction:column;justify-content:center;padding:6px 11px}
+.mx-r .t{font-size:12px;font-weight:700}
+.mx-r .s{font-size:9.5px;color:var(--muted);margin-top:1px}
+.mx-c{border-radius:8px;border:1px solid var(--border);background:#fff;display:flex;flex-direction:column;justify-content:center;padding:6px 10px;position:relative}
+.mx-c .lab{font-size:11px;font-weight:600;color:var(--ink);line-height:1.25}
+.mx-c .sub{font-size:9.5px;color:var(--muted);margin-top:1px}
+.mx-c.live{background:var(--green-soft);border-color:var(--green-border)}
+.mx-c.build{background:var(--yellow-soft);border-color:var(--yellow-border)}
+.mx-c.gap{background:var(--surface2);border-style:dashed}
+.mx-c.gap .lab{color:var(--muted)}
+.mx-c .dot{position:absolute;top:6px;right:8px;width:7px;height:7px;border-radius:50%}
+.mx-c.live .dot{background:var(--green)} .mx-c.build .dot{background:var(--yellow)} .mx-c.gap .dot{background:#c3cad6}
+.mx-note{background:#fff;border:1px solid var(--border);border-radius:8px;padding:6px 11px;display:flex;flex-direction:column;justify-content:center}
+.mx-note .t{font-size:10.5px;font-weight:700;color:var(--petrol)}
+.mx-note .s{font-size:9.5px;color:var(--muted);line-height:1.35;margin-top:2px}
+.mx-legend{display:flex;gap:13px;align-items:center;font-size:10px;color:var(--muted);margin-top:2px;white-space:nowrap}
+.mx-legend .lg{white-space:nowrap}
+.mx-legend b{color:var(--ink);font-weight:600}
+.mx-legend .lg{display:inline-flex;align-items:center;gap:6px}
+.mx-legend .sw{width:9px;height:9px;border-radius:50%;display:inline-block}
+
+/* ── POSITIONING (two shells) ── */
+.pos-grid{flex:1;display:grid;grid-template-columns:230px 1fr 300px;gap:12px;min-height:0}
+.shell{border:1px solid var(--border);border-radius:12px;background:var(--surface2);padding:12px;display:flex;flex-direction:column;min-height:0}
+.shell-head{display:flex;align-items:center;gap:9px;margin-bottom:10px}
+.shell-badge{background:var(--petrol);color:#fff;font-size:11.5px;font-weight:700;padding:4px 12px;border-radius:7px}
+.shell-badge.mifid{background:var(--blue)}
+.shell-cap{font-size:10.5px;color:var(--muted);margin-left:auto;text-align:right;line-height:1.25}
+.shell-items{display:flex;flex-direction:column;gap:7px}
+.shell-item{background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 11px;font-size:12px;font-weight:600;text-align:center}
+.shell-item .sub{display:block;font-size:9.5px;font-weight:400;color:var(--muted);margin-top:1px}
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;flex:1;min-height:0}
+.pillar{background:#fff;border:1px solid var(--border);border-radius:9px;padding:10px 11px;display:flex;flex-direction:column}
+.pillar .ph{font-size:12.5px;font-weight:700;color:var(--blue);line-height:1.2;margin-bottom:7px}
+.pillar ul{list-style:none;display:flex;flex-direction:column;gap:3px}
+.pillar li{font-size:11px;color:var(--ink);line-height:1.35}
+.pillar li .m{color:var(--muted);font-size:10px}
+.pillar .tagline{padding-top:6px;font-size:10px;color:var(--muted);font-style:italic;line-height:1.35}
+.meter{margin-top:auto;padding-top:10px}
+.meter .ml{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.meter .mt{height:14px;background:var(--surface2);border:1px solid var(--border);border-radius:4px;overflow:hidden;position:relative}
+.meter .mf{height:100%;border-radius:3px}
+.meter .mv{font-size:14px;font-weight:800;color:var(--petrol);margin-top:4px;font-variant-numeric:tabular-nums}
+.underlyings{margin-top:9px}
+.underlyings .ul-lab{font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.backbone{margin-top:10px;background:var(--green-soft);border:1px solid var(--green-border);border-radius:10px;padding:9px 13px}
+.backbone .bb-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
+.backbone .bb-t{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green)}
+.backbone .bb-s{font-size:10.5px;color:var(--muted)}
+.bb-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.bb-cell{background:#fff;border:1px solid var(--border);border-radius:7px;padding:6px 9px}
+.bb-cell b{font-size:10.5px;display:block}
+.bb-cell span{font-size:9.5px;color:var(--muted)}
+.read-order{background:#fff;border:1px solid var(--border);border-radius:12px;padding:13px;display:flex;flex-direction:column;gap:10px;min-height:0}
+.read-order .ro-t{font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--petrol)}
+.ro-item{display:flex;gap:9px}
+.ro-item .n{flex:0 0 18px;height:18px;border-radius:5px;background:var(--petrol);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.ro-item b{font-size:11.5px;display:block;line-height:1.3}
+.ro-item span{font-size:10.5px;color:var(--muted);line-height:1.4;display:block;margin-top:2px}
+
+/* ── product spotlight ── */
+.spot-grid{flex:1;display:grid;grid-template-columns:1.35fr 1fr;gap:12px;min-height:0}
+.panel{background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;min-height:0}
+.panel-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.panel-t{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--petrol)}
+.panel-cap{font-size:10.5px;color:var(--muted)}
+.panel svg{width:100%;flex:1;min-height:0}
+.panel-note{margin-top:7px;font-size:11px;font-weight:600;color:var(--petrol);text-align:center}
+.terms{display:flex;flex-direction:column;gap:0}
+.trow{display:flex;justify-content:space-between;align-items:baseline;padding:5.5px 0;border-bottom:1px solid var(--border);font-size:11.5px}
+.trow:last-child{border-bottom:none}
+.trow .k{color:var(--muted)}
+.trow .v{font-weight:700}
+.trow .v.b{color:var(--petrol)}
+.trow .v.g{color:var(--green)}
+.trow .v.r{color:var(--red)}
+.scen{display:flex;gap:9px;padding:7px 0;border-bottom:1px solid var(--border)}
+.scen:last-child{border-bottom:none}
+.tag{flex:0 0 auto;height:19px;padding:0 9px;border-radius:5px;font-size:10px;font-weight:700;display:inline-flex;align-items:center}
+.tag.best{background:var(--petrol);color:#fff}
+.tag.worst{background:#e8ecf2;color:var(--muted)}
+.scen .sb strong{font-size:11.5px;display:block}
+.scen .sb span{font-size:10.5px;color:var(--muted);line-height:1.4;display:block;margin-top:1px}
+.scen .sb em{font-style:normal;font-weight:700;color:var(--petrol)}
+
+/* ── commercial strip ── */
+.comm{background:var(--petrol);border-radius:10px;padding:9px 16px;display:flex;align-items:center;gap:14px;margin-top:10px}
+.comm .cl{font-size:9.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--mint);flex:0 0 auto}
+.comm .cm{display:flex;align-items:center;gap:13px;flex-wrap:wrap;flex:1}
+.comm .cf{font-size:11.5px;color:rgba(255,255,255,.85)}
+.comm .cf em{font-style:normal;font-weight:800;color:#fff}
+.comm .csep{color:rgba(255,255,255,.28)}
+
+/* ── econ table ── */
+table.econ{width:100%;border-collapse:collapse;font-size:11.5px}
+table.econ th{text-align:left;font-size:9.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:0 8px 6px;border-bottom:1px solid var(--border)}
+table.econ th.r,table.econ td.r{text-align:right}
+table.econ td{padding:6px 8px;border-bottom:1px solid var(--border);line-height:1.3}
+table.econ tr:last-child td{border-bottom:none}
+table.econ td b{font-weight:700}
+table.econ .mono{font-variant-numeric:tabular-nums;font-weight:700}
+table.econ tr.total td{background:var(--brand-soft);font-weight:700;border-bottom:none}
+table.econ tr.total td:first-child{border-radius:7px 0 0 7px}
+table.econ tr.total td:last-child{border-radius:0 7px 7px 0}
+.pos{color:var(--green)} .neg{color:var(--red)}
+
+/* ── bars ── */
+.bars{display:flex;flex-direction:column;gap:7px}
+.barrow{display:grid;grid-template-columns:135px 1fr 56px;align-items:center;gap:10px}
+.barlab{font-size:11px;font-weight:600}
+.bartrack{height:16px;background:var(--surface2);border-radius:5px;overflow:hidden;border:1px solid var(--border)}
+.barfill{height:100%;border-radius:4px}
+.barval{font-size:11.5px;font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+
+/* ── clock / 24-7 ── */
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.day{border-radius:8px;border:1px solid var(--border);padding:7px 6px;text-align:center;background:#fff}
+.day.closed{background:var(--red-soft);border-color:var(--red-border)}
+.day .dn{font-size:10.5px;font-weight:700}
+.day .dh{font-size:9.5px;color:var(--muted);margin-top:2px}
+.day.closed .dh{color:var(--red);font-weight:600}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:12px;flex:1;min-height:0}
+.split3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;flex:1;min-height:0}
+.flowbox{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:9px}
+.fnode{background:#fff;border:1px solid var(--border);border-radius:9px;padding:9px 11px;text-align:center}
+.fnode.a{background:var(--blue-soft);border-color:var(--blue-border)}
+.fnode.b{background:var(--purple-soft);border-color:var(--purple-border)}
+.fnode.c{background:var(--green-soft);border-color:var(--green-border)}
+.fnode .ft{font-size:11.5px;font-weight:700;line-height:1.2}
+.fnode .fs{font-size:9.5px;color:var(--muted);margin-top:2px;line-height:1.3}
+.farrow{font-size:16px;color:var(--petrol);font-weight:700}
+ul.plain{list-style:none;display:flex;flex-direction:column;gap:5px}
+ul.plain li{font-size:11.5px;line-height:1.42;padding-left:14px;position:relative;color:var(--ink)}
+ul.plain li::before{content:'';position:absolute;left:0;top:7px;width:5px;height:5px;border-radius:50%;background:var(--petrol)}
+ul.plain li b{font-weight:700}
+.assum{font-size:9.5px;color:var(--muted);line-height:1.4;font-style:italic}
+
+/* ── 24/7 availability column in the matrix ── */
+.matrix.m247{grid-template-columns:132px repeat(3,1fr) 96px 186px}
+.matrix.m247 .mx-note{overflow:hidden}
+.matrix.m247 .mx-note .t{font-size:10px}
+.matrix.m247 .mx-note .s{font-size:9px;line-height:1.3;margin-top:1px}
+.matrix.m247 .mx-c .lab{font-size:10.5px}
+.matrix.m247 .mx-c .sub{font-size:9px}
+.mx-c.focus{box-shadow:0 0 0 2px var(--purple)}
+.mx-h.h247{background:var(--purple)}
+.mx-247{border-radius:8px;border:1px solid var(--purple-border);background:var(--purple-soft);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px 6px;text-align:center}
+.mx-247 .v{font-family:var(--font-display);font-size:15px;font-weight:800;color:var(--purple);line-height:1;letter-spacing:-.02em}
+.mx-247 .k{font-size:8.5px;color:var(--muted);margin-top:3px;line-height:1.2}
+.mx-247.off{background:var(--surface2);border-color:var(--border);border-style:dashed}
+.mx-247.off .v{color:#aab2c0;font-size:13px}
+.mx-c.focus{box-shadow:0 0 0 2px var(--purple-border)}
+.mx-c .c247{position:absolute;top:5px;right:6px;font-size:7.5px;font-weight:800;letter-spacing:.04em;color:#fff;background:var(--purple);padding:1px 4px;border-radius:4px;line-height:1.35}
+.mx-c.focus .dot{display:none}
+
+/* ── two-sided gap map (product positioning) ── */
+.gap2{flex:1;display:grid;grid-template-columns:1fr 236px 1fr;gap:11px;min-height:0}
+.side{border:1px solid var(--border);border-radius:12px;padding:11px 12px;display:flex;flex-direction:column;min-height:0}
+.side.crypto{border-color:var(--blue-border);background:var(--blue-soft)}
+.side.tradfi{border-color:var(--green-border);background:var(--green-soft)}
+.side-head{display:flex;align-items:baseline;gap:8px}
+.side-head .st{font-size:14.5px;font-weight:800;letter-spacing:-.015em}
+.side.crypto .side-head .st{color:var(--blue)} .side.tradfi .side-head .st{color:var(--green)}
+.side-head .sw{font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-left:auto}
+.side-sub{font-size:10.5px;color:var(--muted);margin:3px 0 9px;line-height:1.35}
+.hasmiss{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.hm{background:#fff;border:1px solid var(--border);border-radius:8px;padding:7px 9px}
+.hm .hl{font-size:8.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;margin-bottom:4px;color:var(--muted)}
+.hm.miss{border-color:var(--red-border);border-style:dashed;background:var(--red-soft)}
+.hm.miss .hl{color:var(--red)}
+.hm ul{list-style:none;display:flex;flex-direction:column;gap:2px}
+.hm li{font-size:10px;line-height:1.3;color:var(--muted)}
+.hm.miss li{color:var(--ink);font-weight:600}
+.fill{background:#fff;border-radius:9px;padding:8px 10px;border:1px solid var(--border);margin-top:9px}
+.fill .fl{font-size:8.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;margin-bottom:5px}
+.side.crypto .fill{border-color:var(--blue-border)} .side.crypto .fill .fl{color:var(--blue)}
+.side.tradfi .fill{border-color:var(--green-border)} .side.tradfi .fill .fl{color:var(--green)}
+.fillrow{display:flex;align-items:center;gap:9px;padding:5px 0;border-bottom:1px solid var(--border)}
+.fillrow:last-child{border-bottom:none}
+.fillrow .fn{flex:1;min-width:0}
+.fillrow .fn b{font-size:11px;font-weight:700;display:block;line-height:1.25}
+.fillrow .fn span{font-size:9.5px;color:var(--muted);display:block;line-height:1.3;margin-top:1px}
+.fillrow .fp{flex:0 0 46px;text-align:right;font-family:var(--font-display);font-size:16px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.fillrow .fp small{display:block;font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.side.crypto .fillrow .fp{color:var(--blue)} .side.tradfi .fillrow .fp{color:var(--green)}
+.fillrow.dim .fp{color:var(--muted)!important}
+.fillrow.dim .fn b{color:var(--muted);font-weight:600}
+.engine{border-radius:12px;background:var(--petrol);color:#fff;padding:12px 13px;display:flex;flex-direction:column;min-height:0;position:relative}
+.engine .el{font-size:9.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--mint)}
+.engine .eh{font-size:15px;font-weight:800;letter-spacing:-.015em;margin-top:4px;line-height:1.15}
+.engine .ep{font-size:10.5px;color:rgba(255,255,255,.7);margin-top:6px;line-height:1.4}
+.ecell{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-radius:7px;padding:6px 9px;margin-top:6px}
+.ecell b{font-size:10.5px;display:block}
+.ecell span{font-size:9.5px;color:rgba(255,255,255,.62);display:block;line-height:1.25}
+.arrows{display:flex;justify-content:space-between;font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--mint);margin-top:auto;padding-top:9px;gap:6px}
+.mixbar{margin-top:10px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:9px 13px}
+.mixbar .mb-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.mixbar .mb-t{font-size:9.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--petrol)}
+.mixbar .mb-s{font-size:10px;color:var(--muted)}
+.mixtrack{height:24px;display:flex;border-radius:6px;overflow:hidden;border:1px solid var(--border)}
+.mixtrack div{display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;white-space:nowrap}
+.mixkey{display:flex;gap:15px;margin-top:6px;font-size:9.5px;color:var(--muted);flex-wrap:wrap}
+.mixkey i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px;font-style:normal}
+.figcap{font-size:9.5px;color:var(--muted);font-style:italic;margin-top:6px;text-align:center}
+.fig-legend{display:flex;gap:16px;justify-content:center;font-size:10px;color:var(--muted);margin-top:6px}
+.fig-legend .lgd{display:inline-flex;align-items:center;gap:6px}
+.fig-legend .dt{width:8px;height:8px;border-radius:50%;display:inline-block}
+
+
+.sidemid{background:#fff;border:1px solid var(--border);border-radius:9px;padding:8px 10px;margin-top:9px}
+.sidemid .sl{font-size:8.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.sidemid p{font-size:10.5px;line-height:1.45;color:var(--ink)}
+.sidemid p+p{margin-top:5px}
+.sidemid .tick{display:flex;gap:7px;align-items:flex-start;font-size:10.5px;line-height:1.4;padding:3px 0}
+.sidemid .tick i{flex:0 0 auto;font-style:normal;font-weight:800;font-size:10px}
+.side.crypto .sidemid .tick i{color:var(--blue)} .side.tradfi .sidemid .tick i{color:var(--green)}
+
+.tightp table.econ td{padding:4px 8px}
+.tightp table.econ th{padding:0 8px 5px}
+
+/* ── product ladder (axis 1) ── */
+.ladder{display:grid;grid-template-columns:1fr 30px 1fr 30px 1fr;align-items:stretch;flex:1;min-height:0;margin-top:6px}
+.lstep{border-radius:11px;padding:12px 14px;display:flex;flex-direction:column;border:1px solid var(--border);background:#fff;min-height:0}
+.lstep .lk{font-size:9px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.lstep .lt{font-family:var(--font-display);font-size:18px;font-weight:800;letter-spacing:-.025em;margin-top:3px;line-height:1.1}
+.lstep .ld{font-size:10.5px;color:var(--muted);margin-top:6px;line-height:1.4}
+.lstep .lm{margin-top:auto;padding-top:10px;display:flex;align-items:baseline;gap:8px}
+.lstep .lm .lv{font-family:var(--font-display);font-size:30px;font-weight:800;letter-spacing:-.035em;line-height:1}
+.lstep .lm .ll{font-size:9.5px;color:var(--muted);line-height:1.25}
+.lstep .lr{font-size:10px;color:var(--muted);margin-top:5px;padding-top:5px;border-top:1px solid var(--border)}
+.lstep.s1{background:var(--surface2)} .lstep.s1 .lt{color:#7c8698} .lstep.s1 .lm .lv{color:#8b95a8}
+.lstep.s2{background:var(--brand-soft);border-color:var(--brand-border)} .lstep.s2 .lt{color:var(--petrol)} .lstep.s2 .lm .lv{color:var(--petrol)}
+.lstep.s3{background:var(--purple-soft);border-color:var(--purple-border)} .lstep.s3 .lt{color:var(--purple)} .lstep.s3 .lm .lv{color:var(--purple)}
+.lchev{display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:var(--petrol)}
+
+/* ── matrix without the availability column ── */
+.matrix.m3{grid-template-columns:168px repeat(3,1fr)}
+
+.gap2 .hasmiss{flex:1;min-height:0}
+.gap2 .hm{display:flex;flex-direction:column}
+.gap2 .hm ul{flex:1;justify-content:space-evenly}
+
+/* ── integration arrow band (product positioning) ── */
+.xband{margin-top:10px;display:grid;grid-template-columns:1fr 250px 1fr;gap:11px;align-items:stretch}
+.xcol{display:flex;flex-direction:column;gap:6px}
+.xa{display:flex;align-items:center;gap:9px;border-radius:8px;padding:6px 11px;font-size:10.5px;line-height:1.32;border:1px solid var(--border);background:#fff}
+.xa .xi{font-size:15px;font-weight:800;flex:0 0 auto;line-height:1}
+.xa .xk{font-size:8.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;flex:0 0 auto}
+.xa.give{border-color:var(--border);background:var(--surface2)} .xa.give .xi,.xa.give .xk{color:var(--muted)}
+.xa.get.b{border-color:var(--blue-border);background:var(--blue-soft)} .xa.get.b .xi,.xa.get.b .xk{color:var(--blue)}
+.xa.get.g{border-color:var(--green-border);background:var(--green-soft)} .xa.get.g .xi,.xa.get.g .xk{color:var(--green)}
+.xhub{border-radius:9px;background:var(--petrol);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:7px 11px}
+.xhub b{font-size:11px;color:#fff;line-height:1.25}
+.xhub span{font-size:9.5px;color:rgba(255,255,255,.7);line-height:1.3;margin-top:3px}
+
+@media print{
+  body{background:#fff}
+  .deck{max-width:none;padding:0;gap:0}
+  .slide{border-radius:0;border:none;box-shadow:none;page-break-after:always;break-after:page}
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ADDITIONS FOR THE PRODUCT PRIMER — the repeating template
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── the four-box product template (identical on every product slide) ── */
+.p4{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:10px;min-height:0}
+.pbox{background:#fff;border:1px solid var(--border);border-radius:11px;padding:11px 13px;display:flex;flex-direction:column;min-height:0}
+.pbox-head{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.pbox-n{flex:0 0 auto;width:19px;height:19px;border-radius:5px;background:var(--petrol);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.pbox-t{font-size:10.5px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--petrol)}
+.pbox-cap{font-size:10px;color:var(--muted);margin-left:auto}
+.plead{font-size:14.5px;font-weight:700;line-height:1.38;letter-spacing:-.012em;color:var(--ink)}
+.plead .q{color:var(--petrol)}
+.pnote{font-size:10.5px;color:var(--muted);line-height:1.4;margin-top:7px}
+.pbox svg.mini{width:100%;margin-top:auto;max-height:104px}
+
+/* box 2 — why it's interesting */
+.pbox.why{background:var(--surface2)}
+.whytag{display:inline-flex;align-items:center;gap:6px;padding:3.5px 10px;border-radius:99px;font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+.whytag.need{background:var(--yellow-soft);color:var(--yellow);border:1px solid var(--yellow-border)}
+.whytag.ahead{background:var(--purple-soft);color:var(--purple);border:1px solid var(--purple-border)}
+.demand{margin-top:auto;padding-top:9px;border-top:1px solid var(--border)}
+.demand .dl{font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.demand .dr{display:flex;gap:6px;flex-wrap:wrap}
+.demand .dn{background:#fff;border:1px solid var(--border);border-radius:99px;padding:3px 10px;font-size:10.5px;font-weight:700}
+.demand .dn small{font-weight:400;color:var(--muted)}
+
+/* box 3 — the role track */
+.track{display:flex;margin-top:2px}
+.tstep{flex:1;border:1px solid var(--border);background:#fff;padding:8px 10px;display:flex;flex-direction:column;justify-content:center;position:relative}
+.tstep:first-child{border-radius:8px 0 0 8px}
+.tstep:last-child{border-radius:0 8px 8px 0}
+.tstep+.tstep{border-left:none}
+.tstep .tk{font-size:8.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+.tstep .tn{font-size:12px;font-weight:700;line-height:1.2;margin-top:2px}
+.tstep .ts{font-size:9.5px;color:var(--muted);line-height:1.3;margin-top:2px}
+.tstep.now{background:var(--petrol);border-color:var(--petrol);z-index:2}
+.tstep.now .tk{color:var(--mint)} .tstep.now .tn{color:#fff} .tstep.now .ts{color:rgba(255,255,255,.68)}
+.tstep.now::after{content:'YOU ARE HERE';position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:var(--mint);color:var(--petrol-deep);font-size:8px;font-weight:800;letter-spacing:.1em;padding:2px 7px;border-radius:99px;white-space:nowrap}
+.tstep.done{background:var(--surface2)}
+.tstep.done .tn{color:var(--muted)}
+.trackwrap{margin-top:12px}
+
+/* box 4 — money */
+.pbox.money{background:var(--petrol);border-color:var(--petrol);color:#fff}
+.pbox.money .pbox-n{background:var(--mint);color:var(--petrol-deep)}
+.pbox.money .pbox-t{color:var(--mint)}
+.pbox.money .pbox-cap{color:rgba(255,255,255,.5)}
+.fee{display:flex;flex-direction:column;gap:0}
+.feerow{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.14);font-size:11.5px}
+.feerow:last-child{border-bottom:none}
+.feerow .fk{color:rgba(255,255,255,.68)}
+.feerow .fv{font-weight:800;color:#fff}
+.feerow .fv.m{color:var(--mint)}
+.revbig{margin-top:auto;padding-top:10px;display:flex;align-items:baseline;gap:10px}
+.revbig .rv{font-family:var(--font-display);font-size:34px;font-weight:800;letter-spacing:-.035em;line-height:1;color:var(--mint)}
+.revbig .rl{font-size:10.5px;color:rgba(255,255,255,.66);line-height:1.3}
+
+/* ── the standing bottom bar, identical on all four product slides ── */
+.standbar{margin-top:10px;background:var(--brand-soft);border:1px solid var(--brand-border);border-radius:10px;padding:8px 16px;display:flex;align-items:center;gap:12px}
+.standbar .sbl{font-size:9px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--petrol);flex:0 0 auto}
+.standbar p{font-size:12px;line-height:1.4;color:var(--ink)}
+.standbar p b{color:var(--petrol)}
+
+/* ── the shelf (anchor slide) ── */
+.shelf{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:11px;min-height:0}
+.scard{border:1px solid var(--border);border-radius:12px;background:#fff;padding:13px 14px;display:flex;flex-direction:column;min-height:0}
+.scard.need{border-color:var(--yellow-border);background:var(--yellow-soft)}
+.scard.ahead{border-color:var(--purple-border);background:var(--purple-soft)}
+.scard .sk{font-size:9px;font-weight:800;letter-spacing:.15em;text-transform:uppercase}
+.scard.need .sk{color:var(--yellow)} .scard.ahead .sk{color:var(--purple)}
+.scard .sn{font-family:var(--font-display);font-size:21px;font-weight:800;letter-spacing:-.028em;margin-top:4px;line-height:1.08}
+.scard .sd{font-size:11.5px;color:var(--ink);line-height:1.45;margin-top:8px}
+.scard .srole{margin-top:auto;padding-top:10px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:4px}
+.scard .srole .rk{font-size:8.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+.scard .srole .rv{font-size:11.5px;font-weight:700;color:var(--petrol)}
+.scard .smoney{margin-top:8px;display:flex;align-items:baseline;gap:7px}
+.scard .smoney .mv{font-family:var(--font-display);font-size:25px;font-weight:800;letter-spacing:-.035em;color:var(--petrol);line-height:1}
+.scard .smoney .ml2{font-size:9.5px;color:var(--muted);line-height:1.25}
+.axis{margin-top:11px;display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.axbox{border-radius:10px;padding:9px 13px;border-left:3px solid}
+.axbox.need{border-left-color:var(--yellow);background:var(--yellow-soft)}
+.axbox.ahead{border-left-color:var(--purple);background:var(--purple-soft)}
+.axbox .at{font-size:9.5px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;margin-bottom:3px}
+.axbox.need .at{color:var(--yellow)} .axbox.ahead .at{color:var(--purple)}
+.axbox p{font-size:11.5px;line-height:1.45;color:var(--ink)}
+
+/* ── glossary ── */
+.gloss{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:minmax(0,1fr);gap:8px 14px;min-height:0}
+.gterm{display:flex;gap:11px;align-items:center;background:#fff;border:1px solid var(--border);border-radius:9px;padding:9px 12px}
+.gterm .gw{flex:0 0 118px;font-size:12.5px;font-weight:800;color:var(--petrol);line-height:1.25}
+.gterm .gw small{display:block;font-size:9px;font-weight:600;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-top:1px}
+.gterm .gd{font-size:11.5px;color:var(--ink);line-height:1.42}
+
+/* ── structured-product primer strip ── */
+.primer{background:var(--petrol);border-radius:11px;padding:12px 16px;color:#fff;display:grid;grid-template-columns:1.15fr 1fr;gap:16px;align-items:center}
+.primer .pt{font-size:9.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--mint);margin-bottom:5px}
+.primer p{font-size:12.5px;line-height:1.5;color:rgba(255,255,255,.9)}
+.primer p b{color:#fff}
+.pkg{display:flex;flex-direction:column;gap:5px}
+.pkgtrack{height:34px;display:flex;border-radius:7px;overflow:hidden;border:1px solid rgba(255,255,255,.22)}
+.pkgtrack div{display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;line-height:1.2;text-align:center}
+.pkgtrack div small{font-size:8.5px;font-weight:500;opacity:.72}
+.pkgkey{display:flex;justify-content:space-between;font-size:9.5px;color:rgba(255,255,255,.6)}
+
+/* ── scenario rows in plain language ── */
+.plainscen{display:flex;flex-direction:column;gap:0}
+.psrow{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--border)}
+.psrow:last-child{border-bottom:none}
+.psrow .pst{flex:0 0 auto;padding:2px 9px;border-radius:5px;font-size:9.5px;font-weight:800;letter-spacing:.06em}
+.psrow .pst.up{background:var(--green-soft);color:var(--green);border:1px solid var(--green-border)}
+.psrow .pst.flat{background:var(--surface2);color:var(--muted);border:1px solid var(--border)}
+.psrow .pst.out{background:var(--yellow-soft);color:var(--yellow);border:1px solid var(--yellow-border)}
+.psrow .psb b{font-size:11.5px;display:block;line-height:1.3}
+.psrow .psb span{font-size:10.5px;color:var(--muted);line-height:1.4;display:block;margin-top:1px}
+
+/* ── cover: four product nodes ── */
+.converge.four{grid-template-columns:repeat(4,1fr);gap:11px;max-width:980px}
+.cnode .cn-k{font-size:8.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--mint);margin-bottom:4px}
+
+/* ── assumption flag ── */
+.flagged{border-bottom:1.5px dotted var(--yellow);cursor:help}
+.assumnote{margin-top:8px;font-size:9.5px;color:var(--muted);font-style:italic;line-height:1.4}
+
+/* ── shelf card: supporting line ── */
+.scard .sd2{font-size:10.5px;color:var(--muted);line-height:1.45;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+.scard .sd2 b{color:var(--ink)}
+
+/* ── slide 12 recap strip ── */
+.recap{margin-top:14px;display:flex;flex-direction:column;gap:5px}
+.rcrow{display:grid;grid-template-columns:76px 88px 1fr 40px;align-items:center;gap:9px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 11px}
+.rcrow.hi{background:var(--brand-soft);border-color:var(--brand-border)}
+.rcn{font-size:12px;font-weight:800;color:var(--ink)}
+.rcr{font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.rcrow.hi .rcr{color:var(--petrol)}
+.rcd{font-size:10.5px;color:var(--muted);line-height:1.35}
+.rcp{font-family:var(--font-display);font-size:16px;font-weight:800;letter-spacing:-.03em;text-align:right;color:var(--petrol)}
+
+/* ── slide 9 only: the primer strip costs vertical room, so compact the four boxes ── */
+.slide.compact .primer{padding:9px 14px;gap:14px}
+.slide.compact .primer p{font-size:11.5px;line-height:1.45}
+.slide.compact .pkgtrack{height:28px}
+.slide.compact .p4{gap:8px}
+.slide.compact .pbox{padding:9px 12px}
+.slide.compact .plead{font-size:12.5px;line-height:1.35}
+.slide.compact .pbox.why .plead,.slide.compact .pbox .plead[style]{font-size:12px}
+.slide.compact .pnote{font-size:10px;line-height:1.35;margin-top:6px}
+.slide.compact .pbox-head{margin-bottom:5px}
+.slide.compact .whytag{margin-bottom:6px;padding:3px 9px}
+.slide.compact .feerow{font-size:11px;padding:4px 0}
+.slide.compact .revbig{padding-top:7px}
+.slide.compact .revbig .rv{font-size:29px}
+.slide.compact .revbig .rl{font-size:10px}
+.slide.compact .tstep{padding:6px 9px}
+.slide.compact .trackwrap{margin-top:9px}
+.slide.compact .demand{padding-top:7px}
+.slide.compact .psrow{padding:5px 0}
+</style>
+</head>
+<body>
+<div class="deck">
+
+<!-- ═══════════ SLIDE 1 — COVER ═══════════ -->
+<section class="slide cover">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <div></div>
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#7BD4C6" stroke-width="1.6" fill="rgba(123,212,198,.12)"/></svg>
+        <div class="name">DLT <span class="light">Finance</span></div>
+      </div>
+    </div>
+    <div class="cover-wrap">
+      <div class="cover-eyebrow">Product Primer · 2026</div>
+      <h1 class="cover-h1">Everyone understands spot.<br>Here is <span class="accent">everything one rung up.</span></h1>
+      <p class="cover-sub">Four products carry our growth. This deck explains each one in plain language — <b>what it does, why it is interesting, what our role is, and how we make money from it</b> — using the same four boxes every time. No prior knowledge assumed. If you already know these products, slides 6 to 9 will read fast.</p>
+      <div class="converge four">
+        <div class="cnode"><div class="cn-k">Necessity</div><div class="cn-t">Perps</div><div class="cn-s">Spot with leverage and no expiry date. Everyone has them — the price of entry.</div></div>
+        <div class="cnode"><div class="cn-k">Half a step ahead</div><div class="cn-t">ETPs</div><div class="cn-s">The same bet, wrapped as a security with an ISIN. We issue them; exchanges cannot.</div></div>
+        <div class="cnode"><div class="cn-k">Half a step ahead</div><div class="cn-t">RWA</div><div class="cn-s">Tesla, gold and oil — traded crypto-style, including weekends.</div></div>
+        <div class="cnode"><div class="cn-k">Half a step ahead</div><div class="cn-t">Structured</div><div class="cn-s">Packages that shape the payoff — your money back, plus a capped upside.</div></div>
+      </div>
+    </div>
+    <div class="slide-foot"><span>The Four Products, Explained Simply</span><span>2026 | Confidential</span></div>
+  </div>
+</section>
+
+<!-- ═══════════ SLIDE 2 — WHY WE ARE HAVING THIS CONVERSATION ═══════════ -->
+<section class="slide">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <div><div class="eyebrow">DLT Finance · Starting Point</div><h1 class="slide-title">Everyone already has spot. <span class="accent">The money is one rung up.</span></h1></div>
+      <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
+    </div>
+    <div class="body">
+      <div class="stats" style="grid-template-columns:repeat(3,1fr)">
+        <div class="stat"><div class="sv">&gt;200</div><div class="sl">Crypto licences granted in Europe in the last 12 months — having a licence is no longer a advantage</div></div>
+        <div class="stat"><div class="sv r">~10&nbsp;bps</div><div class="sl">What you earn on spot once every competitor holds the same licence. Ten cents on €100 traded.</div></div>
+        <div class="stat"><div class="sv y">↓</div><div class="sl">Crypto spot volumes are in a structural dip — speculative money is moving to AI</div></div>
+      </div>
+
+      <div class="split" style="grid-template-columns:1.6fr 1fr;flex:1">
+        <div class="panel">
+          <div class="panel-head"><span class="panel-t">The ladder — same client, same asset, three very different businesses</span></div>
+          <div class="ladder">
+            <div class="lstep s1">
+              <div class="lk">Rung 1</div>
+              <div class="lt">Spot</div>
+              <div class="ld">Buy the coin, own the coin. Everyone offers it and everyone charges roughly the same.</div>
+              <div class="lm"><span class="lv">8%</span><span class="ll">of revenue<br>from 100% of users</span></div>
+              <div class="lr">5–20 bps · this is the funnel</div>
+            </div>
+            <div class="lchev">→</div>
+            <div class="lstep s2">
+              <div class="lk">Rung 2 — the money</div>
+              <div class="lt">Leverage</div>
+              <div class="ld">Put down a little, control a lot. Perps if you have a derivatives set-up; ETPs if you do not.</div>
+              <div class="lm"><span class="lv">62%</span><span class="ll">of revenue<br>from ~7% of users</span></div>
+              <div class="lr">fees + financing + market-making</div>
+            </div>
+            <div class="lchev">→</div>
+            <div class="lstep s3">
+              <div class="lk">Rung 3 — the margin</div>
+              <div class="lt">Structured &amp; 24/7</div>
+              <div class="ld">Shaped payoffs and real-world assets traded around the clock. Low volume, fattest margin.</div>
+              <div class="lm"><span class="lv">28%</span><span class="ll">of revenue<br>and it locks the deposit</span></div>
+              <div class="lr">the half-step nobody else has taken</div>
+            </div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><span class="panel-t">What this deck answers</span></div>
+          <div class="read-order" style="border:none;padding:0;flex:1">
+            <div class="ro-item"><div class="n">1</div><div><b>What does the product do?</b><span>One sentence, in spot language, with a picture.</span></div></div>
+            <div class="ro-item"><div class="n">2</div><div><b>Why is it interesting?</b><span>What makes it differentiated — and which customers have actually asked us for it.</span></div></div>
+            <div class="ro-item"><div class="n">3</div><div><b>What is DLT's role?</b><span>Are we the distributor, the counterparty, or the one running the risk engine? Marked on a three-step track each time.</span></div></div>
+            <div class="ro-item"><div class="n">4</div><div><b>How do we make money?</b><span>The fee line, and the revenue it carries per 100,000 users.</span></div></div>
+          </div>
+          <div class="callout" style="margin-top:auto"><div class="ct">The shape of the deck</div><p>Slides 6–9 are <b>the same four boxes, four times</b>. Learn the layout once; after that you are only reading content.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot"><span>Slide 2 · Starting Point</span><span>2026 | Confidential</span></div>
+  </div>
+</section>
+
+<!-- ═══════════ SLIDE 3 — THE SHELF (ANCHOR) ═══════════ -->
+<section class="slide">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <div><div class="eyebrow">DLT Finance · The Anchor Slide</div><h1 class="slide-title">One is a necessity. <span class="accent">Three are half a step ahead.</span></h1></div>
+      <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
+    </div>
+    <div class="body">
+      <div class="shelf">
+        <div class="scard need">
+          <div class="sk">Necessity</div>
+          <div class="sn">Perps</div>
+          <div class="sd">Spot, but you put down €100 and control €5,000 — and there is no expiry date to manage.</div>
+          <div class="sd2"><b>Without it we lose the client</b>, not just the product line. It is the first ask in every crypto exchange conversation we have.</div>
+          <div class="srole"><span class="rk">Our role</span><span class="rv">Distributor today</span></div>
+          <div class="smoney"><span class="mv">12%</span><span class="ml2">of revenue<br>as agent</span></div>
+        </div>
+        <div class="scard ahead">
+          <div class="sk">Half a step ahead</div>
+          <div class="sn">ETPs</div>
+          <div class="sd">The same leveraged bet, packaged as a security with an ISIN — so it sits in a normal brokerage account, next to a share.</div>
+          <div class="sd2"><b>Crypto exchanges cannot issue securities. We can.</b> A distributor with no derivatives licence can list it like a share. Nexo Q4, Bitget live.</div>
+          <div class="srole"><span class="rk">Our role</span><span class="rv">Issuer — we own it</span></div>
+          <div class="smoney"><span class="mv">50%</span><span class="ml2">of revenue<br>as principal</span></div>
+        </div>
+        <div class="scard ahead">
+          <div class="sk">Half a step ahead</div>
+          <div class="sn">RWA</div>
+          <div class="sd">Tesla, gold and oil, traded the same way and the same hours as BTC — including Saturday and Sunday, when every stock exchange is shut.</div>
+          <div class="sd2"><b>The only product TradFi actively asks us for.</b> Their market is closed at the weekend and they have no appetite to build a price.</div>
+          <div class="srole"><span class="rk">Our role</span><span class="rv">Price &amp; hedge counterparty</span></div>
+          <div class="smoney"><span class="mv">20%</span><span class="ml2">of revenue<br>and 104 extra trading days</span></div>
+        </div>
+        <div class="scard ahead">
+          <div class="sk">Half a step ahead</div>
+          <div class="sn">Structured</div>
+          <div class="sd">A package that shapes the payoff: most of the money kept safe, a small slice buying upside. Your capital back, plus a capped bonus.</div>
+          <div class="sd2"><b>It locks the balance for one to three months.</b> Live today: Bitget ~$60M a week, Nexo ~$5M a week.</div>
+          <div class="srole"><span class="rk">Our role</span><span class="rv">Issuer &amp; pricing engine</span></div>
+          <div class="smoney"><span class="mv">8%</span><span class="ml2">of revenue<br>at the fattest margin</span></div>
+        </div>
+      </div>
+      <div class="axis">
+        <div class="axbox need">
+          <div class="at">Why perps are a necessity</div>
+          <p><b>Everyone has them.</b> Not offering perps does not lose us a product line — it loses us the client, who takes their spot business with them. Perps are the price of entry, not an edge. We offer them because we must.</p>
+        </div>
+        <div class="axbox ahead">
+          <div class="at">Why the other three are an edge</div>
+          <p><b>Each one needs a MiFID licence, a risk engine and the ability to issue a security</b> — three things almost nobody in crypto has. That combination is what a half step ahead actually means, and it is what we already own.</p>
+        </div>
+      </div>
+      <div class="standbar">
+        <span class="sbl">Standing point</span>
+        <p><b>DLT is the infrastructure that makes these products available to everyone — as the counterparty.</b> We do not compete with the exchanges for their users. We are what sits behind them.</p>
+      </div>
+    </div>
+    <div class="slide-foot"><span>Slide 3 · The Shelf</span><span>2026 | Confidential</span></div>
+  </div>
+</section>
+
+<!-- ═══════════ SLIDE 4 — GLOSSARY ═══════════ -->
+<section class="slide">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <div><div class="eyebrow">DLT Finance · Plain English</div><h1 class="slide-title">Eight words you will hear <span class="accent">in the next ten minutes</span></h1></div>
+      <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
+    </div>
+    <div class="body">
+      <div class="gloss">
+        <div class="gterm"><div class="gw">Wrapper</div><div class="gd">The legal packaging around a bet. The same economic exposure can be sold as a derivative contract, or wrapped as a security — the payoff is identical, but who can buy it and who must be licensed changes completely.</div></div>
+        <div class="gterm"><div class="gw">ISIN</div><div class="gd">The twelve-character identifier every tradable security carries. If a product has one, an ordinary broker can list it, settle it and report it using the plumbing they already run. No ISIN, no shelf space.</div></div>
+        <div class="gterm"><div class="gw">ETP<small>Exchange-traded product</small></div><div class="gd">A security that tracks something else — an index, a coin, a leveraged position. Turbos, knock-out certificates and mini futures are all ETPs. You buy it like a share; you can never lose more than you paid.</div></div>
+        <div class="gterm"><div class="gw">Perp<small>Perpetual future</small></div><div class="gd">A leveraged bet on a price with no expiry date. It stays anchored to the real price through a small payment passed between buyers and sellers, so nobody has to manage a settlement calendar.</div></div>
+        <div class="gterm"><div class="gw">Structured product</div><div class="gd">A package: most of the money goes somewhere safe that earns interest, a small slice buys an option. Change the mix and you change the payoff. That is the whole idea.</div></div>
+        <div class="gterm"><div class="gw">Delta-1</div><div class="gd">Anything that moves one-for-one with the underlying price — spot, a tracker, a tokenised share. No leverage, no optionality. The plain version of exposure.</div></div>
+        <div class="gterm"><div class="gw">B-book</div><div class="gd">Taking the other side of a client's trade rather than passing it to the market. Because most leveraged retail traders lose over time, being the counterparty is a revenue line — the reason issuing pays a multiple of distributing.</div></div>
+        <div class="gterm"><div class="gw">Counterparty</div><div class="gd">Whoever stands on the other side and owes the money. Distributing a product earns a commission; <b>being the counterparty</b> earns the economics. Everything in this deck turns on which of the two we are.</div></div>
+      </div>
+      <div class="standbar">
+        <span class="sbl">Standing point</span>
+        <p><b>DLT is the infrastructure that makes these products available to everyone — as the counterparty.</b> Every term above is a way of describing that same sentence more precisely.</p>
+      </div>
+    </div>
+    <div class="slide-foot"><span>Slide 4 · Plain English</span><span>2026 | Confidential</span></div>
+  </div>
+</section>
+
+<!-- ═══════════ SLIDE 5 — TWO CUSTOMERS, TWO GAPS, ONE ENGINE ═══════════ -->
+<section class="slide">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <div><div class="eyebrow">DLT Finance · Who Buys and Why</div><h1 class="slide-title">Two kinds of customer. <span class="accent">Both missing the same thing.</span></h1></div>
+      <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
+    </div>
+    <div class="body">
+      <div class="gap2">
+        <div class="side crypto">
+          <div class="side-head"><span class="st">Crypto exchanges &amp; brokers</span><span class="sw">Customer type 1</span></div>
+          <div class="side-sub">Millions of users, an app people already open daily — and a product shelf that stops at spot and perps.</div>
+          <div class="hasmiss">
+            <div class="hm">
+              <div class="hl">They have</div>
+              <ul>
+                <li>The users and the distribution</li>
+                <li>A crypto licence</li>
+                <li>Spot, and usually perps</li>
+                <li>Wallets and on-chain settlement</li>
+              </ul>
+            </div>
+            <div class="hm miss">
+              <div class="hl">They do not have</div>
+              <ul>
+                <li>A licence to issue securities</li>
+                <li>A risk engine to price and hedge</li>
+                <li>Any way to offer a capital-protected product</li>
+                <li>Access to real-world assets</li>
+              </ul>
+            </div>
+          </div>
+          <div class="sidemid">
+            <div class="sl">What they ask us for</div>
+            <div class="tick"><i>▸</i><span><b>Perps first, every time</b> — it is where their volume and their P&amp;L sit.</span></div>
+            <div class="tick"><i>▸</i><span><b>Then a wrapper</b> they can list without building a derivatives business.</span></div>
+          </div>
+        </div>
+
+        <div class="engine">
+          <div class="el">What sits in the middle</div>
+          <div class="eh">DLT is the counterparty</div>
+          <div class="ep">Not a competitor for their users. The infrastructure behind them — the licence, the risk engine and the balance sheet that turn a product idea into something they can actually list tomorrow.</div>
+          <div class="ecell"><b>MiFID licence</b><span>We can issue securities. They cannot.</span></div>
+          <div class="ecell"><b>Risk engine</b><span>Prices it, hedges it, stands behind it.</span></div>
+          <div class="ecell"><b>Issuance &amp; ISINs</b><span>Makes it listable on existing plumbing.</span></div>
+          <div class="ecell"><b>24/7 operation</b><span>Crypto hours applied to real-world assets.</span></div>
+          <div class="arrows"><span>← we supply</span><span>we supply →</span></div>
+        </div>
+
+        <div class="side tradfi">
+          <div class="side-head"><span class="st">Banks, brokers &amp; CFD houses</span><span class="sw">Customer type 2</span></div>
+          <div class="side-sub">Balance sheet, clients and every licence going — running on a market that shuts at Friday night and reopens Monday.</div>
+          <div class="hasmiss">
+            <div class="hm">
+              <div class="hl">They have</div>
+              <ul>
+                <li>Clients and balance sheet</li>
+                <li>Full securities licences</li>
+                <li>Decades of structuring experience</li>
+                <li>Deep access to real-world assets</li>
+              </ul>
+            </div>
+            <div class="hm miss">
+              <div class="hl">They do not have</div>
+              <ul>
+                <li>A price on Saturday and Sunday</li>
+                <li>Anywhere to hedge outside market hours</li>
+                <li>Crypto rails or on-chain settlement</li>
+                <li>Any appetite to build either</li>
+              </ul>
+            </div>
+          </div>
+          <div class="sidemid">
+            <div class="sl">What they ask us for</div>
+            <div class="tick"><i>▸</i><span><b>A weekend price</b> on equities, metals and commodities.</span></div>
+            <div class="tick"><i>▸</i><span><b>A counterparty who is open</b> when nobody else is.</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="standbar">
+        <span class="sbl">Standing point</span>
+        <p><b>DLT is the infrastructure that makes these products available to everyone — as the counterparty.</b> One engine, sold into two very different customer bases, for opposite reasons.</p>
+      </div>
+    </div>
+    <div class="slide-foot"><span>Slide 5 · Who Buys and Why</span><span>2026 | Confidential</span></div>
+  </div>
+</section>
+
+<!-- ═══════════ SLIDE 6 — PERPS ═══════════ -->
+<section class="slide">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <div><div class="eyebrow">DLT Finance · Product 1 of 4 · Necessity</div><h1 class="slide-title">Perps — <span class="accent">the price of entry</span></h1></div>
+      <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
+    </div>
+    <div class="body">
+      <div class="p4">
+
+        <div class="pbox">
+          <div class="pbox-head"><span class="pbox-n">1</span><span class="pbox-t">What does it do?</span></div>
+          <p class="plead">Spot, but you put down <span class="q">€100</span> and control <span class="q">€5,000</span> of exposure — and there is no expiry date to manage.</p>
+          <p class="pnote">A perp stays glued to the real price through a small payment passed between buyers and sellers. The user never has to roll a contract or understand a settlement calendar. That one simplification is why perps beat traditional futures for retail.</p>
+          <svg class="mini" viewBox="0 0 460 100" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+            <text x="0" y="12" font-size="10.5" fill="#5b6577">You put down</text>
+            <rect x="0" y="18" width="9" height="20" rx="3" fill="#d4922a"/>
+            <text x="17" y="34" font-size="13" font-weight="800" fill="#d4922a">€100</text>
+            <text x="0" y="58" font-size="10.5" fill="#5b6577">You control</text>
+            <rect x="0" y="64" width="440" height="20" rx="3" fill="#0E4A66"/>
+            <text x="430" y="79" font-size="13" font-weight="800" fill="#fff" text-anchor="end">€5,000</text>
+            <text x="0" y="97" font-size="9.5" fill="#5b6577">Up to 50× is what retail actually uses. Spot cannot compete for this flow.</text>
+          </svg>
+        </div>
+
+        <div class="pbox why">
+          <div class="pbox-head"><span class="pbox-n">2</span><span class="pbox-t">Why is it interesting?</span></div>
+          <span class="whytag need">Necessity — not a differentiator</span>
+          <p class="plead" style="font-size:13px">Everyone has them. Not offering perps does not cost us a product line — <span class="q">it costs us the client</span>, who takes their spot business with them.</p>
+          <p class="pnote">For every €1 of spot our clients trade, roughly <b>€5 of perp notional</b> trades on the same asset, at a higher take rate with financing on top. It is also the venue where we hedge everything else we sell — one liquidity relationship, three revenue lines.</p>
+          <div class="demand">
+            <div class="dl">Demand we have actually seen</div>
+            <div class="dr">
+              <span class="dn">Every crypto exchange conversation <small>— perps are the first ask, without exception</small></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pbox">
+          <div class="pbox-head"><span class="pbox-n">3</span><span class="pbox-t">What is DLT's role?</span><span class="pbox-cap">today → tomorrow</span></div>
+          <p class="plead" style="font-size:13px">Today we are the <span class="q">distributor</span>. We route and clear the client's order and take a commission — we do not issue the contract and we do not own the payoff.</p>
+          <div class="trackwrap">
+            <div class="track">
+              <div class="tstep now"><div class="tk">Today</div><div class="tn">Distributor</div><div class="ts">Agent. Commission only.</div></div>
+              <div class="tstep"><div class="tk">Next</div><div class="tn">Counterparty</div><div class="ts">We own the payoff.</div></div>
+              <div class="tstep"><div class="tk">Then</div><div class="tn">Own risk engine</div><div class="ts">We price and hedge it ourselves.</div></div>
+            </div>
+          </div>
+          <p class="assumnote">Steps 2 and 3 are a stated direction, not a board commitment. Flagged for confirmation before this is presented.</p>
+        </div>
+
+        <div class="pbox money">
+          <div class="pbox-head"><span class="pbox-n">4</span><span class="pbox-t">How do we make money?</span><span class="pbox-cap">per 100,000 users</span></div>
+          <div class="fee">
+            <div class="feerow"><span class="fk">Agency commission</span><span class="fv">2–6 bps of notional</span></div>
+            <div class="feerow"><span class="fk">Plus</span><span class="fv">funding spread &amp; financing</span></div>
+            <div class="feerow"><span class="fk">Do we own the payoff?</span><span class="fv">No — capped upside</span></div>
+            <div class="feerow"><span class="fk">Cost of a new market</span><span class="fv m">≈ zero</span></div>
+          </div>
+          <div class="revbig"><span class="rv">$2.1M</span><span class="rl">a year per 100,000 users<br><b>≈12% of total revenue</b> — the thinnest margin on the shelf, because we are only the agent</span></div>
+        </div>
+
+      </div>
+      <div class="standbar">
+        <span class="sbl">Standing point</span>
+        <p><b>DLT is the infrastructure that makes this product available to everyone — as the counterparty.</b> On perps we are not there yet, which is exactly why the next three products matter.</p>
+      </div>
+    </div>
+    <div class="slide-foot"><span>Slide 6 · Perps</span><span>2026 | Confidential</span></div>
+  </div>
+</section>
+
+<!-- ═══════════ SLIDE 7 — ETPs ═══════════ -->
+<section class="slide">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <div><div class="eyebrow">DLT Finance · Product 2 of 4 · Half a Step Ahead</div><h1 class="slide-title">ETPs — <span class="accent">the same bet, wrapped as a security</span></h1></div>
+      <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
+    </div>
+    <div class="body">
+      <div class="p4">
+
+        <div class="pbox">
+          <div class="pbox-head"><span class="pbox-n">1</span><span class="pbox-t">What does it do?</span></div>
+          <p class="plead">The same leveraged bet as a perp — but packaged as a <span class="q">security with an ISIN</span>, so it sits in a normal brokerage account next to a share. And the client can never lose more than they put in.</p>
+          <p class="pnote">Turbos, knock-out certificates, mini futures and securitised perps all live here. Same machinery, different barriers. Up to 30× leverage, no margin calls, no negative balances.</p>
+          <svg class="mini" viewBox="0 0 460 100" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="4" width="205" height="58" rx="7" fill="#f4f6f9" stroke="#e3e7ee"/>
+            <text x="12" y="24" font-size="11.5" font-weight="700" fill="#0E1A22">An ordinary share</text>
+            <text x="12" y="40" font-size="9.5" fill="#5b6577">has an ISIN</text>
+            <text x="12" y="53" font-size="9.5" fill="#5b6577">sits in the brokerage account</text>
+            <text x="230" y="38" font-size="15" font-weight="800" fill="#5b6577" text-anchor="middle">=</text>
+            <rect x="255" y="4" width="205" height="58" rx="7" fill="rgba(14,74,102,.08)" stroke="#0E4A66"/>
+            <text x="267" y="24" font-size="11.5" font-weight="700" fill="#0E4A66">Our 30× certificate</text>
+            <text x="267" y="40" font-size="9.5" fill="#5b6577">has an ISIN</text>
+            <text x="267" y="53" font-size="9.5" fill="#5b6577">sits in the same account</text>
+            <text x="0" y="82" font-size="10.5" fill="#1f9f6c" font-weight="700">Same plumbing. No derivatives licence needed to distribute it.</text>
+            <text x="0" y="96" font-size="9.5" fill="#5b6577">Worst case is the premium paid — loss is bounded by construction.</text>
+          </svg>
+        </div>
+
+        <div class="pbox why">
+          <div class="pbox-head"><span class="pbox-n">2</span><span class="pbox-t">Why is it interesting?</span></div>
+          <span class="whytag ahead">Half a step ahead — and the furthest ahead we are</span>
+          <p class="plead" style="font-size:13px"><span class="q">Crypto exchanges cannot issue securities. We can.</span> That single fact is the whole business — it is what turns a distribution relationship into an issuance one.</p>
+          <p class="pnote">It also removes every blocker on their side: a distributor with no derivatives licence, no margin engine and no liquidation policy can list it like any other security. High leverage is the strongest retail demand signal in this market, and this is the only compliant way most venues can reach it.</p>
+          <div class="demand">
+            <div class="dl">Demand we have actually seen</div>
+            <div class="dr">
+              <span class="dn">Nexo <small>— launch partner, Q4 2026</small></span>
+              <span class="dn">Bitget <small>— live on the structured shelf</small></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pbox">
+          <div class="pbox-head"><span class="pbox-n">3</span><span class="pbox-t">What is DLT's role?</span><span class="pbox-cap">today → tomorrow</span></div>
+          <p class="plead" style="font-size:13px">We are the <span class="q">issuer</span>. We create the security, we own the payoff, we price it and we hedge it. This is the one product where we already hold the full position.</p>
+          <div class="trackwrap">
+            <div class="track">
+              <div class="tstep done"><div class="tk">Passed</div><div class="tn">Distributor</div><div class="ts">Not where the money is.</div></div>
+              <div class="tstep now"><div class="tk">Today</div><div class="tn">Issuer &amp; counterparty</div><div class="ts">Our licence, our risk engine, our payoff.</div></div>
+              <div class="tstep"><div class="tk">Then</div><div class="tn">Issuance platform</div><div class="ts">Issuing on behalf of other venues.</div></div>
+            </div>
+          </div>
+          <p class="pnote" style="margin-top:10px">The difference between box 3 here and box 3 on the previous slide is the difference between <b>2–6 bps</b> and <b>the whole economics of the trade</b>.</p>
+        </div>
+
+        <div class="pbox money">
+          <div class="pbox-head"><span class="pbox-n">4</span><span class="pbox-t">How do we make money?</span><span class="pbox-cap">per 100,000 users</span></div>
+          <div class="fee">
+            <div class="feerow"><span class="fk">Trading fees</span><span class="fv">~35% of the line</span></div>
+            <div class="feerow"><span class="fk">Being the counterparty</span><span class="fv m">~65% of the line</span></div>
+            <div class="feerow"><span class="fk">Do we own the payoff?</span><span class="fv m">Yes — this is the point</span></div>
+            <div class="feerow"><span class="fk">Who trades it</span><span class="fv">~7% of users</span></div>
+          </div>
+          <div class="revbig"><span class="rv">$8.75M</span><span class="rl">a year per 100,000 users<br><b>≈50% of total revenue</b> — from 7% of the user base. Issuing earns a multiple of distributing</span></div>
+        </div>
+
+      </div>
+      <div class="standbar">
+        <span class="sbl">Standing point</span>
+        <p><b>DLT is the infrastructure that makes this product available to everyone — as the counterparty.</b> On ETPs that sentence is already literally true today.</p>
+      </div>
+    </div>
+    <div class="slide-foot"><span>Slide 7 · ETPs</span><span>2026 | Confidential</span></div>
+  </div>
+</section>
+
+<!-- ═══════════ SLIDE 8 — RWA ═══════════ -->
+<section class="slide">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <div><div class="eyebrow">DLT Finance · Product 3 of 4 · Half a Step Ahead</div><h1 class="slide-title">RWA — <span class="accent">real-world assets on crypto hours</span></h1></div>
+      <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
+    </div>
+    <div class="body">
+      <div class="p4">
+
+        <div class="pbox">
+          <div class="pbox-head"><span class="pbox-n">1</span><span class="pbox-t">What does it do?</span></div>
+          <p class="plead">Tesla, gold and oil — traded the same way and the same hours as BTC. <span class="q">Including Saturday and Sunday</span>, when every stock exchange on earth is shut.</p>
+          <p class="pnote">Two versions of the same shelf: plain exposure that moves one-for-one with the price, and a leveraged version. Same underlyings a TradFi broker already offers — just without the five-day week.</p>
+          <svg class="mini" viewBox="0 0 460 100" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+            <g text-anchor="middle">
+              <rect x="0" y="4" width="60" height="40" rx="6" fill="#f4f6f9" stroke="#e3e7ee"/><text x="30" y="22" font-size="10.5" font-weight="700" fill="#0E1A22">Mon</text><text x="30" y="36" font-size="9" fill="#5b6577">open</text>
+              <rect x="66" y="4" width="60" height="40" rx="6" fill="#f4f6f9" stroke="#e3e7ee"/><text x="96" y="22" font-size="10.5" font-weight="700" fill="#0E1A22">Tue</text><text x="96" y="36" font-size="9" fill="#5b6577">open</text>
+              <rect x="132" y="4" width="60" height="40" rx="6" fill="#f4f6f9" stroke="#e3e7ee"/><text x="162" y="22" font-size="10.5" font-weight="700" fill="#0E1A22">Wed</text><text x="162" y="36" font-size="9" fill="#5b6577">open</text>
+              <rect x="198" y="4" width="60" height="40" rx="6" fill="#f4f6f9" stroke="#e3e7ee"/><text x="228" y="22" font-size="10.5" font-weight="700" fill="#0E1A22">Thu</text><text x="228" y="36" font-size="9" fill="#5b6577">open</text>
+              <rect x="264" y="4" width="60" height="40" rx="6" fill="#f4f6f9" stroke="#e3e7ee"/><text x="294" y="22" font-size="10.5" font-weight="700" fill="#0E1A22">Fri</text><text x="294" y="36" font-size="9" fill="#5b6577">open</text>
+              <rect x="330" y="4" width="60" height="40" rx="6" fill="rgba(31,159,108,.15)" stroke="#1f9f6c"/><text x="360" y="22" font-size="10.5" font-weight="700" fill="#1f9f6c">Sat</text><text x="360" y="36" font-size="9" font-weight="700" fill="#1f9f6c">only us</text>
+              <rect x="396" y="4" width="60" height="40" rx="6" fill="rgba(31,159,108,.15)" stroke="#1f9f6c"/><text x="426" y="22" font-size="10.5" font-weight="700" fill="#1f9f6c">Sun</text><text x="426" y="36" font-size="9" font-weight="700" fill="#1f9f6c">only us</text>
+            </g>
+            <text x="0" y="68" font-size="12.5" font-weight="800" fill="#1f9f6c">+104 trading days a year</text>
+            <text x="0" y="86" font-size="9.5" fill="#5b6577">Not more users. More days. It is the only growth line that works that way —</text>
+            <text x="0" y="98" font-size="9.5" fill="#5b6577">and spreads on those days are 2–5× the weekday level.</text>
+          </svg>
+        </div>
+
+        <div class="pbox why">
+          <div class="pbox-head"><span class="pbox-n">2</span><span class="pbox-t">Why is it interesting?</span></div>
+          <span class="whytag ahead">Half a step ahead — and the only one TradFi asks us for</span>
+          <p class="plead" style="font-size:13px">It is the one thing a bank <span class="q">cannot build itself</span>. Their market is closed at the weekend, so they have no price and nowhere to hedge — and no appetite to build either.</p>
+          <p class="pnote">On the crypto side the pull is the mirror image: their users want to trade Tesla and gold without leaving the app, and they have no route to real-world assets. The same capability is differentiated to both customer bases, for opposite reasons.</p>
+          <div class="demand">
+            <div class="dl">Demand we have actually seen</div>
+            <div class="dr">
+              <span class="dn">TradFi brokers &amp; CFD houses <small>— inbound, weekend pricing</small></span>
+              <span class="dn">Crypto venues <small>— equities &amp; metals in-app</small></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pbox">
+          <div class="pbox-head"><span class="pbox-n">3</span><span class="pbox-t">What is DLT's role?</span><span class="pbox-cap">today → tomorrow</span></div>
+          <p class="plead" style="font-size:13px">We supply the <span class="q">weekend price</span> and act as the <span class="q">hedge counterparty</span>. When nobody else is open, the price is whatever we are willing to quote — and the client is facing us.</p>
+          <div class="trackwrap">
+            <div class="track">
+              <div class="tstep done"><div class="tk">Passed</div><div class="tn">Distributor</div><div class="ts">Tokenised delta-1, live.</div></div>
+              <div class="tstep now"><div class="tk">Today — building</div><div class="tn">Price &amp; hedge counterparty</div><div class="ts">Commodities and metals first.</div></div>
+              <div class="tstep"><div class="tk">Then</div><div class="tn">Full 24/7 risk engine</div><div class="ts">The whole real-world shelf.</div></div>
+            </div>
+          </div>
+          <p class="pnote" style="margin-top:10px">This is the position with the <b>deepest moat</b> — being open on Sunday is an operational capability, not a licence you can buy.</p>
+        </div>
+
+        <div class="pbox money">
+          <div class="pbox-head"><span class="pbox-n">4</span><span class="pbox-t">How do we make money?</span><span class="pbox-cap">per 100,000 users</span></div>
+          <div class="fee">
+            <div class="feerow"><span class="fk">Weekend spread</span><span class="fv m">2–5× the weekday spread</span></div>
+            <div class="feerow"><span class="fk">Plus</span><span class="fv">turnover on plain exposure</span></div>
+            <div class="feerow"><span class="fk">Do we own the payoff?</span><span class="fv m">Yes — we are the quote</span></div>
+            <div class="feerow"><span class="fk">Cost base</span><span class="fv">fixed — same engine, more days</span></div>
+          </div>
+          <div class="revbig"><span class="rv">$3.5M</span><span class="rl">a year per 100,000 users<br><b>≈20% of total revenue</b> — the growth line, on a cost base that does not move</span></div>
+        </div>
+
+      </div>
+      <div class="standbar">
+        <span class="sbl">Standing point</span>
+        <p><b>DLT is the infrastructure that makes this product available to everyone — as the counterparty.</b> On RWA we are literally the only counterparty open when the market is shut.</p>
+      </div>
+    </div>
+    <div class="slide-foot"><span>Slide 8 · RWA</span><span>2026 | Confidential</span></div>
+  </div>
+</section>
+
+<!-- ═══════════ SLIDE 9 — STRUCTURED PRODUCTS ═══════════ -->
+<section class="slide compact">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <div><div class="eyebrow">DLT Finance · Product 4 of 4 · Half a Step Ahead</div><h1 class="slide-title">Structured products — <span class="accent">first, what they actually are</span></h1></div>
+      <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
+    </div>
+    <div class="body">
+      <div class="primer">
+        <div>
+          <div class="pt">The whole category in four sentences</div>
+          <p>A structured product is a <b>package</b>. Most of the money goes somewhere safe that earns interest. A small slice buys an option. <b>The safe part guarantees you get your money back; the option part is the upside.</b> Change the mix and you change the payoff — that is the entire idea.</p>
+        </div>
+        <div class="pkg">
+          <div class="pkgtrack">
+            <div style="width:89%;background:linear-gradient(90deg,#0E4A66,#11617E)">~90% kept safe, earning interest<small>this is what guarantees the capital comes back</small></div>
+            <div style="width:11%;background:var(--mint);color:#062536">~10%<small>buys upside</small></div>
+          </div>
+          <div class="pkgkey"><span>Capital protection</span><span>The bonus</span></div>
+        </div>
+      </div>
+
+      <div class="p4" style="margin-top:10px">
+
+        <div class="pbox">
+          <div class="pbox-head"><span class="pbox-n">1</span><span class="pbox-t">What does it do?</span><span class="pbox-cap">example: shark fin</span></div>
+          <p class="plead"><span class="q">Your money back, guaranteed.</span> Plus up to 8% if BTC stays inside a range. If it breaks out you still get your money back — you just lose the bonus.</p>
+          <p class="pnote">One recipe among many — covered calls, protected notes and dual-currency are the same machinery with a different mix. The client never sees an option; they see a term, a range and two outcomes.</p>
+          <div class="plainscen" style="margin-top:auto;padding-top:8px;border-top:1px solid var(--border)">
+            <div class="psrow"><span class="pst up">In range</span><div class="psb"><b>You get your money back + the bonus</b><span>the best case, and the one most clients get</span></div></div>
+            <div class="psrow"><span class="pst out">Breaks out</span><div class="psb"><b>You get your money back + base interest</b><span>you lose the bonus, never the capital</span></div></div>
+          </div>
+        </div>
+
+        <div class="pbox why">
+          <div class="pbox-head"><span class="pbox-n">2</span><span class="pbox-t">Why is it interesting?</span></div>
+          <span class="whytag ahead">Half a step ahead — and it holds the deposit</span>
+          <p class="plead" style="font-size:13px">It is the only product on the shelf that <span class="q">locks a balance in place</span> for one to three months. That money cannot leave for a competitor mid-term.</p>
+          <p class="pnote">It also reaches a different customer entirely — the one who will never touch 30× leverage but will accept "capital back, plus maybe 8%". It turns a passive spot balance into a fee-earning one at zero extra acquisition cost.</p>
+          <div class="demand">
+            <div class="dl">Demand we have actually seen</div>
+            <div class="dr">
+              <span class="dn">Bitget <small>— live, ~$60M / week</small></span>
+              <span class="dn">Nexo <small>— live, ~$5M / week</small></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pbox">
+          <div class="pbox-head"><span class="pbox-n">3</span><span class="pbox-t">What is DLT's role?</span><span class="pbox-cap">today → tomorrow</span></div>
+          <p class="plead" style="font-size:13px">We are the <span class="q">issuer and the pricing engine</span>. We build the package, price the option, hedge the position and stand behind the capital guarantee. The venue simply puts it in front of their users.</p>
+          <div class="trackwrap">
+            <div class="track">
+              <div class="tstep done"><div class="tk">Passed</div><div class="tn">Distributor</div><div class="ts">Never the position here.</div></div>
+              <div class="tstep now"><div class="tk">Today — live</div><div class="tn">Issuer &amp; pricing engine</div><div class="ts">Two venues in production.</div></div>
+              <div class="tstep"><div class="tk">Then</div><div class="tn">Full shelf</div><div class="ts">More recipes, new underlyings.</div></div>
+            </div>
+          </div>
+          <p class="pnote" style="margin-top:8px">Same risk engine as the ETPs. <b>A new recipe costs pricing work, not infrastructure</b> — which is why the shelf compounds.</p>
+        </div>
+
+        <div class="pbox money">
+          <div class="pbox-head"><span class="pbox-n">4</span><span class="pbox-t">How do we make money?</span><span class="pbox-cap">per 100,000 users</span></div>
+          <div class="fee">
+            <div class="feerow"><span class="fk">Revenue share on the yield</span><span class="fv m">50%</span></div>
+            <div class="feerow"><span class="fk">Ticket size</span><span class="fv">= the client's spot ticket</span></div>
+            <div class="feerow"><span class="fk">Do we own the payoff?</span><span class="fv m">Yes — we issue it</span></div>
+            <div class="feerow"><span class="fk">Who takes it up</span><span class="fv">~5% of users</span></div>
+          </div>
+          <div class="revbig"><span class="rv">$1.4M</span><span class="rl">a year per 100,000 users<br><b>≈8% of total revenue</b> from 5% of users — at the fattest margin on the shelf</span></div>
+        </div>
+
+      </div>
+      <div class="standbar">
+        <span class="sbl">Standing point</span>
+        <p><b>DLT is the infrastructure that makes this product available to everyone — as the counterparty.</b> Nobody distributing a shark fin wants to price or hedge one. That is the job we take.</p>
+      </div>
+    </div>
+    <div class="slide-foot"><span>Slide 9 · Structured Products</span><span>2026 | Confidential</span></div>
+  </div>
+</section>
+
+<!-- ═══════════ SLIDE 10 — SHARK FIN WORKED EXAMPLE ═══════════ -->
+<section class="slide">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <div><div class="eyebrow">DLT Finance · Worked Example</div><h1 class="slide-title">Shark fin — <span class="accent">what the client actually sees</span></h1></div>
+      <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
+    </div>
+    <div class="body">
+      <div class="spot-grid">
+        <div class="panel">
+          <div class="panel-head"><span class="panel-t">The payoff, drawn</span><span class="panel-cap">what you earn vs. where BTC ends up</span></div>
+          <svg viewBox="0 0 600 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+            <line x1="55" y1="255" x2="580" y2="255" stroke="#cbd2dc" stroke-width="1"/>
+            <line x1="55" y1="30" x2="55" y2="255" stroke="#cbd2dc" stroke-width="1"/>
+            <text x="24" y="145" fill="#5b6577" font-size="11" transform="rotate(-90,24,145)" text-anchor="middle">What you earn</text>
+            <text x="317" y="288" fill="#5b6577" font-size="11" text-anchor="middle">Where BTC ends up</text>
+
+            <line x1="55" y1="215" x2="580" y2="215" stroke-dasharray="3,3" stroke="#d6dbe3"/>
+            <line x1="55" y1="70" x2="580" y2="70" stroke-dasharray="3,3" stroke="#d6dbe3"/>
+            <text x="576" y="66" fill="#5b6577" font-size="10" text-anchor="end">Best case (~8%)</text>
+            <text x="576" y="228" fill="#5b6577" font-size="10" text-anchor="end">Base interest (~2%)</text>
+
+            <line x1="215" y1="48" x2="215" y2="255" stroke-dasharray="4,4" stroke="#d4922a" stroke-width="1.2"/>
+            <text x="215" y="40" fill="#d4922a" font-size="11" font-weight="700" text-anchor="middle">Where BTC is today</text>
+            <line x1="440" y1="48" x2="440" y2="255" stroke-dasharray="4,4" stroke="#d04444" stroke-width="1.2"/>
+            <text x="440" y="40" fill="#d04444" font-size="11" font-weight="700" text-anchor="middle">Top of the range</text>
+
+            <polygon points="215,215 440,70 440,215" fill="rgba(31,159,108,.14)"/>
+            <polyline points="62,215 215,215 440,70 440,215 578,215" stroke="#1f9f6c" stroke-width="2.6" fill="none"/>
+
+            <text x="327" y="152" fill="#0E1A22" font-size="12" font-weight="700" text-anchor="middle">Inside the range: the more it rises,</text>
+            <text x="327" y="168" fill="#0E1A22" font-size="12" font-weight="700" text-anchor="middle">the more you earn</text>
+            <text x="135" y="205" fill="#0E1A22" font-size="10" text-anchor="middle">Below today: base interest</text>
+            <text x="512" y="158" fill="#d04444" font-size="10.5" font-weight="700" text-anchor="middle">Above the range:</text>
+            <text x="512" y="173" fill="#d04444" font-size="10.5" font-weight="700" text-anchor="middle">base interest only</text>
+            <line x1="512" y1="182" x2="512" y2="207" stroke="#d04444" stroke-width="1" stroke-dasharray="2,2"/>
+            <text x="317" y="20" fill="#1f9f6c" font-size="11.5" font-weight="800" text-anchor="middle">The line never goes below zero — the capital always comes back</text>
+          </svg>
+          <div class="panel-note">The only thing that varies is the yield. The capital is returned at maturity in every single case.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;min-height:0">
+          <div class="panel" style="flex:0 0 auto">
+            <div class="panel-t" style="margin-bottom:6px">The three things a client is told</div>
+            <div class="terms">
+              <div class="trow"><span class="k">How long is my money tied up?</span><span class="v">1–3 months</span></div>
+              <div class="trow"><span class="k">Can I lose my money?</span><span class="v g">No — 100% returned at maturity</span></div>
+              <div class="trow"><span class="k">What do I earn?</span><span class="v b">~2% floor, up to ~8% best case</span></div>
+            </div>
+          </div>
+          <div class="panel" style="flex:1;min-height:0">
+            <div class="panel-t" style="margin-bottom:6px">Three outcomes, in plain language</div>
+            <div class="plainscen">
+              <div class="psrow"><span class="pst up">Best</span><div class="psb"><b>BTC drifts up and stays inside the range</b><span>Capital back, plus the full bonus. This is the scenario the product is designed for.</span></div></div>
+              <div class="psrow"><span class="pst flat">Flat / down</span><div class="psb"><b>BTC goes nowhere, or falls</b><span>Capital back, plus base interest. The client is no worse off than holding cash — and better off than holding BTC.</span></div></div>
+              <div class="psrow"><span class="pst out">Breakout</span><div class="psb"><b>BTC rips through the top of the range</b><span>Capital back, plus base interest. The client gives up the bonus — the one real cost, and it is an opportunity cost, not a loss.</span></div></div>
+            </div>
+            <div class="callout g" style="margin-top:auto"><div class="ct">Why this is the example we use</div><p>It is the easiest structured product to explain to someone who has only ever held spot: <b>you cannot lose your money, and here is what you give up in exchange.</b> Every other recipe on the shelf is a variation on that trade-off.</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="comm">
+        <span class="cl">And for us</span>
+        <span class="cm">
+          <span class="cf"><em>50%</em> revenue share on the yield</span><span class="csep">·</span>
+          <span class="cf">deposit locked <em>1–3 months</em></span><span class="csep">·</span>
+          <span class="cf">live today: <em>~$60M</em>/wk Bitget · <em>~$5M</em>/wk Nexo</span><span class="csep">·</span>
+          <span class="cf">new recipes cost <em>pricing work, not infrastructure</em></span>
+        </span>
+      </div>
+    </div>
+    <div class="slide-foot"><span>Slide 10 · Worked Example — Shark Fin</span><span>2026 | Confidential</span></div>
+  </div>
+</section>
+
+<!-- ═══════════ SLIDE 11 — WHERE THE MONEY IS ═══════════ -->
+<section class="slide">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <div><div class="eyebrow">DLT Finance · The Four Products, Side by Side</div><h1 class="slide-title">Distributing earns bps. <span class="accent">Issuing earns the trade.</span></h1></div>
+      <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
+    </div>
+    <div class="body">
+      <div class="split" style="flex:1;grid-template-columns:1.35fr 1fr">
+        <div class="panel tightp">
+          <div class="panel-head"><span class="panel-t">Illustrative model</span><span class="panel-cap">per 100,000 active users, annual</span></div>
+          <table class="econ">
+            <thead><tr><th>Product</th><th>Our role</th><th class="r">Users</th><th class="r">Rev / user</th><th class="r">Revenue</th><th class="r">% of total</th></tr></thead>
+            <tbody>
+              <tr><td><b>Perps</b><br><span style="font-size:9.5px;color:var(--muted)">necessity · agency commission + financing</span></td><td><span class="pill" style="font-size:9.5px">Distributor</span></td><td class="r mono">7,000</td><td class="r mono">$300</td><td class="r mono">$2.10M</td><td class="r mono">12%</td></tr>
+              <tr><td><b>ETPs</b><br><span style="font-size:9.5px;color:var(--muted)">securitised leverage · fees + being the counterparty</span></td><td><span class="pill" style="font-size:9.5px;border-color:var(--brand-border);color:var(--petrol)"><b>Issuer</b></span></td><td class="r mono">7,000</td><td class="r mono">$1,250</td><td class="r mono">$8.75M</td><td class="r mono pos">50%</td></tr>
+              <tr><td><b>RWA — 24/7</b><br><span style="font-size:9.5px;color:var(--muted)">equities, metals, commodities · weekend spread + turnover</span></td><td><span class="pill" style="font-size:9.5px;border-color:var(--brand-border);color:var(--petrol)"><b>Counterparty</b></span></td><td class="r mono">9,000</td><td class="r mono">$389</td><td class="r mono">$3.50M</td><td class="r mono pos">20%</td></tr>
+              <tr><td><b>Structured</b><br><span style="font-size:9.5px;color:var(--muted)">shark fin, covered calls, protected notes · yield share</span></td><td><span class="pill" style="font-size:9.5px;border-color:var(--brand-border);color:var(--petrol)"><b>Issuer</b></span></td><td class="r mono">5,000</td><td class="r mono">$280</td><td class="r mono">$1.40M</td><td class="r mono">8%</td></tr>
+              <tr><td><b>Spot</b><br><span style="font-size:9.5px;color:var(--muted)">everyone touches it, nobody pays for it</span></td><td><span class="pill" style="font-size:9.5px">Venue</span></td><td class="r mono">100,000</td><td class="r mono">$14</td><td class="r mono">$1.40M</td><td class="r mono">8%</td></tr>
+              <tr><td><b>Lending / financing / other</b></td><td>—</td><td class="r mono">—</td><td class="r mono">—</td><td class="r mono">$0.35M</td><td class="r mono">2%</td></tr>
+              <tr class="total"><td><b>Total</b></td><td></td><td class="r mono">100,000</td><td class="r mono">$175 blended</td><td class="r mono">$17.50M</td><td class="r mono">100%</td></tr>
+            </tbody>
+          </table>
+          <div class="meter" style="margin-top:10px;padding-top:0">
+            <div class="ml">Revenue mix · $17.5M per 100,000 active users</div>
+            <div class="mt" style="height:22px;display:flex">
+              <div style="width:12%;background:linear-gradient(90deg,#8b95a8,#a4adbd);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700">Perps 12%</div>
+              <div style="width:50%;background:linear-gradient(90deg,#0E4A66,#11617E);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10.5px;font-weight:700">ETPs · $8.75M</div>
+              <div style="width:20%;background:linear-gradient(90deg,#1f9f6c,#3b6cd9);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700">RWA · $3.5M</div>
+              <div style="width:8%;background:#6b50d9"></div>
+              <div style="width:8%;background:#8b95a8"></div>
+              <div style="width:2%;background:#c3cad6"></div>
+            </div>
+            <div style="display:flex;gap:12px;margin-top:6px;font-size:9.5px;color:var(--muted);flex-wrap:wrap">
+              <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#8b95a8;margin-right:4px"></span>Perps 12%</span>
+              <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#0E4A66;margin-right:4px"></span>ETPs 50%</span>
+              <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#1f9f6c;margin-right:4px"></span>RWA 24/7 20%</span>
+              <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#6b50d9;margin-right:4px"></span>Structured 8%</span>
+              <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#8b95a8;margin-right:4px"></span>Spot 8%</span>
+              <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#c3cad6;margin-right:4px"></span>Other 2%</span>
+            </div>
+          </div>
+          <div class="assum" style="margin-top:auto;font-size:9px">Driver-based and illustrative. Perps and ETPs are the <b>same ~7,000-user cohort</b> — the difference in revenue per user is the difference between taking a commission and owning the payoff, not a difference in how much they trade. RWA: weekend leverage at 2–5× spread plus plain-exposure turnover. Structured: $5,000 ticket × 2 p.a. × ~2.8% retained. Spot: ~$7,000 at 20 bps. <b>The 12 / 50 split between perps and ETPs is an assumption to be replaced with our own book before this is presented.</b></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;min-height:0">
+          <div class="panel" style="flex:0 0 auto">
+            <div class="panel-t" style="margin-bottom:8px">Same client, same trade, four times the revenue</div>
+            <div class="bars">
+              <div class="barrow"><div class="barlab">Perps — as distributor</div><div class="bartrack" style="height:22px"><div class="barfill" style="width:24%;background:linear-gradient(90deg,#8b95a8,#c3cad6)"></div></div><div class="barval">$300</div></div>
+              <div class="barrow"><div class="barlab">ETPs — as issuer</div><div class="bartrack" style="height:22px"><div class="barfill" style="width:100%;background:linear-gradient(90deg,#0E4A66,#11617E)"></div></div><div class="barval pos">$1,250</div></div>
+            </div>
+            <p style="font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.45">Revenue per user, same cohort. The only thing that changes between these two bars is <b>which side of the trade we are on</b>. That is the single most important economic fact in this deck.</p>
+          </div>
+          <div class="panel" style="flex:1;min-height:0">
+            <div class="panel-t" style="margin-bottom:6px">What the four products add up to</div>
+            <ul class="plain">
+              <li><b>Perps are the entry ticket.</b> 12% of revenue, and we run them at agency margin — but without them we do not get the conversation. Offer them, do not fund them as a growth line.</li>
+              <li><b>ETPs are the business.</b> 50% of revenue from 7% of users, because we issue rather than distribute. Everything about the licence and the risk engine exists to serve this line.</li>
+              <li><b>RWA is the growth.</b> 20% of revenue, and the only line that grows by adding <b>104 trading days</b> rather than more users — on a fixed cost base, against competitors who are closed.</li>
+              <li><b>Structured is the margin and the stickiness.</b> 8% of revenue at the fattest margin, and the only product that locks the client's balance in place for months at a time.</li>
+              <li><b>Spot is acquisition.</b> 100% of users, 8% of revenue, 200+ competitors. Defend it; do not invest to win it.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot"><span>Slide 11 · Where the Money Is</span><span>2026 | Confidential</span></div>
+  </div>
+</section>
+
+<!-- ═══════════ SLIDE 12 — THE ASK ═══════════ -->
+<section class="slide">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <div><div class="eyebrow">DLT Finance · The Ask</div><h1 class="slide-title">One necessity, three edges — <span class="accent">funded in that order</span></h1></div>
+      <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
+    </div>
+    <div class="body">
+      <div class="split3" style="flex:0 0 auto">
+        <div class="card" style="padding:14px 16px">
+          <div class="num">1</div>
+          <h4 style="font-size:15px">Ship the ETPs</h4>
+          <p style="font-size:12px">Securitised leverage with Nexo in Q4 is the single highest-value item on the roadmap. It is the line where we already hold the issuer position, and it carries half the revenue.</p>
+        </div>
+        <div class="card" style="padding:14px 16px">
+          <div class="num">2</div>
+          <h4 style="font-size:15px">Open the weekend</h4>
+          <p style="font-size:12px">24/7 real-world assets, commodities and metals first. The only growth line that adds trading days instead of users — and the one capability TradFi genuinely cannot copy.</p>
+        </div>
+        <div class="card" style="padding:14px 16px">
+          <div class="num">3</div>
+          <h4 style="font-size:15px">Widen the structured shelf</h4>
+          <p style="font-size:12px">More recipes on the same pricing engine, on new underlyings. Each one is pricing work, not new infrastructure — the shelf compounds on a cost base we have already paid for.</p>
+        </div>
+      </div>
+
+      <div class="split" style="flex:1;margin-top:12px">
+        <div class="panel">
+          <div class="panel-t" style="margin-bottom:8px">The one sentence to take away</div>
+          <p style="font-size:19px;font-weight:700;line-height:1.4;letter-spacing:-.015em;color:var(--ink)">Perps get us in the room. <span style="color:var(--petrol)">Being the counterparty on everything above them is what we actually sell.</span></p>
+          <div class="recap">
+            <div class="rcrow"><span class="rcn">Perps</span><span class="rcr">Distributor</span><span class="rcd">The entry ticket. Offer it; do not fund it as a growth line.</span><span class="rcp">12%</span></div>
+            <div class="rcrow hi"><span class="rcn">ETPs</span><span class="rcr">Issuer</span><span class="rcd">The business. Half the revenue, because we own the payoff.</span><span class="rcp">50%</span></div>
+            <div class="rcrow"><span class="rcn">RWA</span><span class="rcr">Counterparty</span><span class="rcd">The growth. 104 extra trading days on a fixed cost base.</span><span class="rcp">20%</span></div>
+            <div class="rcrow"><span class="rcn">Structured</span><span class="rcr">Issuer</span><span class="rcd">The margin, and the only product that locks the deposit.</span><span class="rcp">8%</span></div>
+          </div>
+          <div class="callout g" style="margin-top:auto"><div class="ct">What we are asking the board to endorse</div><p>The sequencing above — <b>ETPs → 24/7 RWA → structured shelf</b> — and the principle underneath it: we fund the products where we are the <b>issuer or the counterparty</b>, and we run the rest at agency margin because the client expects them.</p></div>
+        </div>
+        <div class="panel">
+          <div class="panel-t" style="margin-bottom:8px">Open items before this is presented</div>
+          <ul class="plain">
+            <li><b>The perps / ETPs revenue split.</b> The 12% / 50% split on slide 11 is an assumption. It needs replacing with our own book — the story only lands if those two numbers are real, because the whole argument is the gap between them.</li>
+            <li><b>Client names on the slide.</b> Nexo and Bitget appear in boxes 2 of slides 7 and 9. Confirm both are fine for this audience, and whether there are others to add under demand.</li>
+            <li><b>The perps roadmap.</b> Box 3 on slide 6 currently reads as a direction, not a commitment. If becoming the counterparty on perps is a real plan, that box gets stronger wording.</li>
+          </ul>
+          <div class="callout y" style="margin-top:auto"><div class="ct">Note on the appendix</div><p>The expansion matrix, the liquidity-transmission diagram and the weekend-volume detail have been moved out of the main flow. They are supporting evidence, not the argument — pull them only if asked.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot"><span>Slide 12 · The Ask</span><span>2026 | Confidential</span></div>
+  </div>
+</section>
+
+</div>
+</body>
+</html>
