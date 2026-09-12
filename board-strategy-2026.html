@@ -345,6 +345,24 @@ ul.plain li b{font-weight:700}
   .deck{max-width:none;padding:0;gap:0}
   .slide{border-radius:0;border:none;box-shadow:none;page-break-after:always;break-after:page}
 }
+
+/* ── 4-rung ladder (spot · leverage · structured · 24/7 RWA) ── */
+.ladder.l4{grid-template-columns:1fr 22px 1fr 22px 1fr 22px 1fr}
+.ladder.l4 .lstep{padding:11px 12px}
+.ladder.l4 .lstep .lt{font-size:16px}
+.ladder.l4 .lstep .ld{font-size:10px;margin-top:5px}
+.ladder.l4 .lstep .lm .lv{font-size:26px}
+.ladder.l4 .lstep .lm .ll{font-size:9px}
+.ladder.l4 .lstep .lr{font-size:9.5px}
+.ladder.l4 .lchev{font-size:17px}
+.lstep.s4{background:var(--green-soft);border-color:var(--green-border)}
+.lstep.s4 .lt{color:var(--green)} .lstep.s4 .lm .lv{color:var(--green)}
+table.econ td{padding:5px 8px}
+.tightp .assum{font-size:8.5px;line-height:1.35}
+.tightp table.econ td{padding:2.5px 8px}
+.tightp table.econ th{padding:0 8px 4px}
+.tightp .meter{margin-top:6px!important}
+.tightp .assum{font-size:8px;line-height:1.32}
 </style>
 </head>
 <body>
@@ -394,7 +412,7 @@ ul.plain li b{font-weight:700}
 
         <div class="panel">
           <div class="panel-head"><span class="panel-t">Axis 1 · The product ladder</span><span class="panel-cap">same client, same underlying, same licence spend</span></div>
-          <div class="ladder">
+          <div class="ladder l4">
             <div class="lstep s1">
               <div class="lk">Rung 1</div>
               <div class="lt">Spot</div>
@@ -406,17 +424,25 @@ ul.plain li b{font-weight:700}
             <div class="lstep s2">
               <div class="lk">Rung 2 — the money</div>
               <div class="lt">Leverage</div>
-              <div class="ld">Classic perps and CFDs, or tokenised ETPs — turbos, KO certs, mini futures.</div>
-              <div class="lm"><span class="lv">82%</span><span class="ll">of revenue<br>from ~16% of users</span></div>
+              <div class="ld">Perps and CFDs, or securitised leverage — turbos, KO certs, mini futures.</div>
+              <div class="lm"><span class="lv">58%</span><span class="ll">of revenue<br>from ~7% of users</span></div>
               <div class="lr">Fees + financing + b-book</div>
             </div>
             <div class="lchev">→</div>
             <div class="lstep s3">
               <div class="lk">Rung 3</div>
-              <div class="lt">Yield &amp; downside protection</div>
+              <div class="lt">Structured products</div>
               <div class="ld">Shark fin, covered calls, BRCs, principal-protected notes.</div>
-              <div class="lm"><span class="lv">8%</span><span class="ll">of revenue<br>from ~5% of users</span></div>
+              <div class="lm"><span class="lv">12%</span><span class="ll">of revenue<br>from ~7% of users</span></div>
               <div class="lr">Thinnest volume, fattest margin</div>
+            </div>
+            <div class="lchev">→</div>
+            <div class="lstep s4">
+              <div class="lk">Rung 4 — the growth</div>
+              <div class="lt">24/7 RWA &amp; RWA derivatives</div>
+              <div class="ld">Equities, metals and commodities, traded around the clock — including weekends.</div>
+              <div class="lm"><span class="lv">20%</span><span class="ll">of revenue<br>from ~9% of users</span></div>
+              <div class="lr">Weekend spread 2–5× + turnover</div>
             </div>
           </div>
           <p style="font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.45"><b style="color:var(--ink)">Axis 2 runs the same ladder across new asset classes</b> — equities, metals, commodities, debt. Same engine, new shelves.</p>
@@ -536,7 +562,7 @@ ul.plain li b{font-weight:700}
             <li><b>DeFi now supplies both missing legs.</b> RWA perps are a real hedge venue — continuously funded and marked. Tokenised equity spot gives the reference price when the primary exchange is dark. Stablecoins let margin move on a Sunday.</li>
             <li><b>But a bank cannot hold a perp on an offshore DEX.</b> It needs the exposure to arrive as an ISIN-bearing, MiFID-eligible instrument. <b>That transformation is the product we sell.</b></li>
           </ul>
-          <div class="callout" style="margin-top:auto"><div class="ct">Our position in this trade</div><p>Liquidity sits in crypto venues. Demand sits in regulated distribution. Neither can touch the other directly. DLT sits in the middle and performs four transformations — <b>venue, format, currency and legal wrapper</b> — and charges for all four.</p></div>
+          <div class="callout" style="margin-top:auto"><div class="ct">Our position in this trade</div><p>Liquidity sits in crypto venues. Demand sits in regulated distribution. Neither can touch the other directly. DLT sits in the middle and performs four transformations — <b>venue, format, currency and legal wrapper</b> — and charges for all four. <b>The wrapper itself is issued by a partner; we arrange and broker it.</b></p></div>
         </div>
       </div>
     </div>
@@ -556,24 +582,24 @@ ul.plain li b{font-weight:700}
 
         <div class="side crypto">
           <div class="side-head"><span class="st">Crypto companies</span><span class="sw">Exchanges · CeFi · neobanks</span></div>
-          <div class="side-sub">They own the crypto client and already trade around the clock. What they cannot build is a regulated payoff — no MiFID licence, no risk engine, no issuance.</div>
+          <div class="side-sub">They own the crypto client and already trade around the clock. What they cannot reach is a regulated payoff — no MiFID licence, no risk engine, and no route to the issuers who make these products.</div>
           <div class="hasmiss">
             <div class="hm has"><div class="hl">They already have</div><ul><li>Spot crypto · MiCAR</li><li>24/7 operations</li><li>Users &amp; deposits</li><li>Margin &amp; lending</li></ul></div>
-            <div class="hm miss"><div class="hl">They are missing</div><ul><li>Leverage in a wrapper</li><li>Downside protection</li><li>Structured yield</li><li>MiFID issuance</li></ul></div>
+            <div class="hm miss"><div class="hl">They are missing</div><ul><li>Leverage in a wrapper</li><li>Downside protection</li><li>Structured yield</li><li>A MiFID broker to reach them</li></ul></div>
           </div>
           <div class="fill" style="margin-top:auto">
             <div class="fl">We fill it with — new products, new asset classes</div>
-            <div class="fillrow"><div class="fn"><b>Securitised perps &amp; leverage</b><span>KO certs, perps, turbos, mini futures — 30× inside an ISIN</span></div><div class="fp">62%<small>of rev</small></div></div>
-            <div class="fillrow"><div class="fn"><b>Yield &amp; downside protection</b><span>Shark fin, covered calls, PPNs, BRCs — low volume, <b>fat margin</b></span></div><div class="fp">8%<small>of rev</small></div></div>
+            <div class="fillrow"><div class="fn"><b>Securitised perps &amp; leverage</b><span>KO certs, perps, turbos, mini futures — 30× inside an ISIN</span></div><div class="fp">58%<small>of rev</small></div></div>
+            <div class="fillrow"><div class="fn"><b>Structured products</b><span>Shark fin, covered calls, PPNs, BRCs — low volume, <b>fat margin</b></span></div><div class="fp">12%<small>of rev</small></div></div>
           </div>
         </div>
 
         <div class="engine">
           <div class="el">The asset in the middle</div>
-          <div class="eh">MiFID licence + risk engine + issuance</div>
-          <div class="ep">One engine prices, hedges and wraps any payoff on any underlying, at any hour. Built once, sold into both directions.</div>
+          <div class="eh">MiFID licence + risk engine + issuer network</div>
+          <div class="ep">One engine prices, hedges and brokers any payoff on any underlying, at any hour. Built once, sold into both directions. <b>We never issue — partner issuers supply the wrapper.</b></div>
           <div class="ecell"><b>Risk Engine</b><span>Margining · limits · liquidation · 24/7 mark</span></div>
-          <div class="ecell"><b>Issuance &amp; Wrapper</b><span>ISIN · prospectus · MiFID-eligible</span></div>
+          <div class="ecell"><b>Issuer network</b><span>Partners supply the ISIN and prospectus — we broker it</span></div>
           <div class="ecell"><b>Post-Trade / Reporting</b><span>Derivatives · securities · MiCAR spot</span></div>
           <div class="ecell"><b>KYC / AML</b><span>Onboarding · monitoring</span></div>
           <div class="ecell" style="margin-top:10px;background:rgba(123,212,198,.14);border-color:rgba(123,212,198,.4)"><b style="color:#7BD4C6">Build once, sell twice</b><span style="color:rgba(255,255,255,.75)">Each new product and each new asset class is incremental margin on a cost base we have already paid for.</span></div>
@@ -599,7 +625,7 @@ ul.plain li b{font-weight:700}
       <div class="xband">
         <div class="xcol">
           <div class="xa give"><span class="xk">Crypto gives</span><span>24/7 rails · crypto users &amp; deposits · always-on liquidity</span><span class="xi" style="margin-left:auto">→</span></div>
-          <div class="xa get b"><span class="xi">←</span><span class="xk">and gets</span><span>Leverage in an ISIN, structured yield and downside protection it cannot issue</span></div>
+          <div class="xa get b"><span class="xi">←</span><span class="xk">and gets</span><span>Leverage in an ISIN, structured yield and downside protection it cannot otherwise reach</span></div>
         </div>
         <div class="xhub"><b>DLT wires both integrations once</b><span>Each side's strength becomes the other side's product — and we take a cut on every leg</span></div>
         <div class="xcol">
@@ -711,7 +737,7 @@ ul.plain li b{font-weight:700}
     <text x="350" y="386" fill="#6b50d9" font-family="Inter Tight, system-ui, sans-serif" font-size="9.5" font-weight="700">04 · WRAPPER</text>
     <text x="350" y="405" fill="#0E1A22" font-family="Inter Tight, system-ui, sans-serif" font-size="12.5" font-weight="700">Regulated instrument</text>
     <text x="350" y="423" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10.5">Securitised certificate / CFD reference feed —</text>
-    <text x="350" y="437" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10.5">ISIN, prospectus, MiFID-eligible, custody-ready</text>
+    <text x="350" y="437" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10.5">ISIN from a partner issuer; we broker and distribute it</text>
   </g>
 
   <rect x="332" y="450" width="336" height="42" rx="10" fill="#0E4A66" stroke="#6b50d9" stroke-opacity=".3"/>
@@ -764,7 +790,7 @@ ul.plain li b{font-weight:700}
   <text x="140" y="450" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10" text-anchor="middle">liquidity in</text>
   <text x="862" y="410" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10" text-anchor="middle">exposure out</text>
 
-  <text x="500" y="586" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10.5" text-anchor="middle">DeFi supplies the price and the hedge · DLT the transformation and the wrapper · TradFi the client.</text>
+  <text x="500" y="586" fill="#5b6577" font-family="Inter Tight, system-ui, sans-serif" font-size="10.5" text-anchor="middle">DeFi supplies the price and the hedge · a partner issuer the wrapper · DLT the transformation and the distribution · TradFi the client.</text>
 </svg>
         </div>
         <div class="panel">
@@ -810,7 +836,7 @@ ul.plain li b{font-weight:700}
         <div class="stat"><div class="sv g">~5×</div><div class="sl">Perp volume vs. spot volume, same underlyings, same venues</div></div>
         <div class="stat"><div class="sv">Up to 50×</div><div class="sl">Leverage retail actually uses — spot cannot compete for this flow</div></div>
         <div class="stat"><div class="sv p">Only ask</div><div class="sl">Every crypto exchange asks us for the same product — perps, not spot, not structured</div></div>
-        <div class="stat"><div class="sv y">Agent</div><div class="sl">The role we take on a perp — we route and clear, we do not issue it</div></div>
+        <div class="stat"><div class="sv y">Agent</div><div class="sl">The role we take on a perp — we route and clear, and the flow passes straight through</div></div>
       </div>
       <div class="split" style="flex:1">
         <div class="panel">
@@ -831,7 +857,7 @@ ul.plain li b{font-weight:700}
             <div class="barrow"><div class="barlab">Options</div><div class="bartrack" style="height:24px"><div class="barfill" style="width:8%;background:linear-gradient(90deg,#6b50d9,#a99bf0)"></div></div><div class="barval">0.4×</div></div>
           </div>
           <p style="font-size:11px;color:var(--muted);margin-top:9px;line-height:1.45">For every €1 of spot our clients trade, roughly <b>€5 of perp notional</b> is available on the same underlying — at a higher take rate, with financing on top. Perps do not cannibalise spot; they sit five times on top of it.</p>
-          <div class="callout y" style="margin-top:auto"><div class="ct">How we have to offer it — and the open question</div><p><b>We act as agent.</b> On a plain perp we route and clear the client order against the venue and take a commission; we do not issue the contract and we do not own the payoff. That keeps the perp off our issuance — and it also caps what we can earn on it.</p><p style="margin-top:6px"><b>The regulatory future is genuinely uncertain.</b> A perp sold to an EU retail client can be re-characterised as a <b>CFD</b>, which would pull in MiFID leverage caps, negative-balance protection and marketing restrictions. No regulator has settled this.</p><p style="margin-top:6px"><b>Which is exactly why the securitised version exists.</b> Same economics, inside a wrapper whose treatment is <i>not</i> in question — and where we are the issuer, not the agent.</p></div>
+          <div class="callout y" style="margin-top:auto"><div class="ct">How we have to offer it — and the open question</div><p><b>We act as agent.</b> On a plain perp we route and clear the client order against the venue and take a commission. The client faces the venue, not us, and the flow passes straight through — which caps what we can earn on it.</p><p style="margin-top:6px"><b>The regulatory future is genuinely uncertain.</b> A perp sold to an EU retail client can be re-characterised as a <b>CFD</b>, which would pull in MiFID leverage caps, negative-balance protection and marketing restrictions. No regulator has settled this.</p><p style="margin-top:6px"><b>Which is exactly why the securitised version exists.</b> Same economics, inside a wrapper whose treatment is <i>not</i> in question — issued by a partner, and brokered by us as the client’s counterparty rather than as a pass-through agent.</p></div>
         </div>
       </div>
       <div class="comm">
@@ -898,6 +924,8 @@ ul.plain li b{font-weight:700}
               <div class="trow"><span class="k">Leverage</span><span class="v">up to 30×</span></div>
               <div class="trow"><span class="k">Max loss</span><span class="v g">100% of premium — capped</span></div>
               <div class="trow"><span class="k">Margin calls</span><span class="v g">None — settlement in cash / USDC</span></div>
+              <div class="trow"><span class="k">Wrapper issued by</span><span class="v b">Partner issuer — never DLT</span></div>
+              <div class="trow"><span class="k">Our role</span><span class="v b">Broker of record + risk book</span></div>
               <div class="trow"><span class="k">Launch partner</span><span class="v b">Nexo — end of year</span></div>
             </div>
           </div>
@@ -905,7 +933,7 @@ ul.plain li b{font-weight:700}
             <div class="panel-t" style="margin-bottom:6px">Why demand is structurally large</div>
             <ul class="plain">
               <li><b>High leverage is the single strongest retail demand signal in this market.</b> It is why perp volume is ~5× spot.</li>
-              <li><b>The wrapper removes every blocker.</b> A distributor with no derivatives licence, no margin engine and no liquidation policy can list it like any other security.</li>
+              <li><b>The wrapper removes every blocker.</b> A distributor with no derivatives licence, no margin engine and no liquidation policy can list it like any other security. <b>The wrapper comes from a partner issuer; we broker it and run the book.</b></li>
               <li><b>Bounded loss makes it distributable.</b> No negative balances, no margin-call support load, cleaner suitability story than a raw perp account.</li>
               <li><b>It stands for the whole leverage shelf.</b> Turbos, mini futures and knock-outs are the same machinery, different barriers.</li>
             </ul>
@@ -1033,9 +1061,9 @@ ul.plain li b{font-weight:700}
           <table class="econ">
             <thead><tr><th>Product line</th><th class="r">Users</th><th class="r">Rev / user</th><th class="r">Revenue</th><th class="r">% of total</th></tr></thead>
             <tbody>
-              <tr><td><b>Leverage — crypto</b><br><span style="font-size:9.5px;color:var(--muted)">securitised perps · fees + financing + b-book</span></td><td class="r mono">7,000</td><td class="r mono">$1,550</td><td class="r mono">$10.85M</td><td class="r mono pos">62%</td></tr>
+              <tr><td><b>Leverage — crypto</b><br><span style="font-size:9.5px;color:var(--muted)">perps + securitised leverage · fees + financing + b-book</span></td><td class="r mono">7,000</td><td class="r mono">$1,450</td><td class="r mono">$10.15M</td><td class="r mono pos">58%</td></tr>
               <tr><td><b>24/7 RWA markets</b><br><span style="font-size:9.5px;color:var(--muted)">CFD leverage ~15pp + delta-1 ~5pp · equities, metals, commodities</span></td><td class="r mono">9,000</td><td class="r mono">$389</td><td class="r mono">$3.50M</td><td class="r mono pos">20%</td></tr>
-              <tr><td><b>Yield &amp; downside protection</b><br><span style="font-size:9.5px;color:var(--muted)">shark fin, covered calls, PPNs · low volume, fattest margin</span></td><td class="r mono">5,000</td><td class="r mono">$280</td><td class="r mono">$1.40M</td><td class="r mono">8%</td></tr>
+              <tr><td><b>Structured products</b><br><span style="font-size:9.5px;color:var(--muted)">shark fin, covered calls, PPNs · low volume, fattest margin</span></td><td class="r mono">7,000</td><td class="r mono">$300</td><td class="r mono">$2.10M</td><td class="r mono pos">12%</td></tr>
               <tr><td><b>Crypto spot &amp; tokenised delta-1</b><br><span style="font-size:9.5px;color:var(--muted)">commodity — everyone touches it, nobody pays for it</span></td><td class="r mono">100,000</td><td class="r mono">$14</td><td class="r mono">$1.40M</td><td class="r mono">8%</td></tr>
               <tr><td><b>Lending / financing / other</b></td><td class="r mono">—</td><td class="r mono">—</td><td class="r mono">$0.35M</td><td class="r mono">2%</td></tr>
               <tr class="total"><td><b>Total</b></td><td class="r mono">100,000</td><td class="r mono">$175 blended</td><td class="r mono">$17.50M</td><td class="r mono">100%</td></tr>
@@ -1044,16 +1072,16 @@ ul.plain li b{font-weight:700}
           <div class="meter" style="margin-top:10px;padding-top:0">
             <div class="ml">Revenue mix · $17.5M per 100,000 active users</div>
             <div class="mt" style="height:22px;display:flex">
-              <div style="width:62%;background:linear-gradient(90deg,#0E4A66,#11617E);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10.5px;font-weight:700">Leverage — crypto · $10.85M</div>
+              <div style="width:58%;background:linear-gradient(90deg,#0E4A66,#11617E);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10.5px;font-weight:700">Leverage — crypto · $10.15M</div>
               <div style="width:20%;background:linear-gradient(90deg,#1f9f6c,#3b6cd9);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700">24/7 · $3.5M</div>
-              <div style="width:8%;background:#6b50d9"></div>
+              <div style="width:12%;background:#6b50d9;display:flex;align-items:center;justify-content:center;color:#fff;font-size:9.5px;font-weight:700">Struct. 12%</div>
               <div style="width:8%;background:#8b95a8"></div>
               <div style="width:2%;background:#c3cad6"></div>
             </div>
             <div style="display:flex;gap:12px;margin-top:6px;font-size:9.5px;color:var(--muted);flex-wrap:wrap">
-              <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#0E4A66;margin-right:4px"></span>Leverage — crypto 62%</span>
+              <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#0E4A66;margin-right:4px"></span>Leverage — crypto 58%</span>
               <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#1f9f6c;margin-right:4px"></span>24/7 RWA 20%</span>
-              <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#6b50d9;margin-right:4px"></span>Yield &amp; protection 8%</span>
+              <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#6b50d9;margin-right:4px"></span>Structured products 12%</span>
               <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#8b95a8;margin-right:4px"></span>Crypto spot 8%</span>
               <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#c3cad6;margin-right:4px"></span>Other 2%</span>
             </div>
@@ -1063,21 +1091,21 @@ ul.plain li b{font-weight:700}
             <table class="econ">
               <thead><tr><th>Leverage uptake</th><th class="r">Leverage rev</th><th class="r">Total rev</th><th class="r">Blended / user</th><th class="r">vs. base</th></tr></thead>
               <tbody>
-                <tr><td>4% of users</td><td class="r mono">$6.2M</td><td class="r mono">$12.85M</td><td class="r mono">$129</td><td class="r mono neg">&minus;27%</td></tr>
-                <tr><td><b>7% of users — base case</b></td><td class="r mono">$10.85M</td><td class="r mono">$17.50M</td><td class="r mono">$175</td><td class="r mono">—</td></tr>
-                <tr><td>10% of users</td><td class="r mono">$15.5M</td><td class="r mono">$22.15M</td><td class="r mono">$222</td><td class="r mono pos">+27%</td></tr>
+                <tr><td>4% of users</td><td class="r mono">$5.80M</td><td class="r mono">$13.15M</td><td class="r mono">$132</td><td class="r mono neg">&minus;25%</td></tr>
+                <tr><td><b>7% of users — base case</b></td><td class="r mono">$10.15M</td><td class="r mono">$17.50M</td><td class="r mono">$175</td><td class="r mono">—</td></tr>
+                <tr><td>10% of users</td><td class="r mono">$14.50M</td><td class="r mono">$21.85M</td><td class="r mono">$219</td><td class="r mono pos">+25%</td></tr>
               </tbody>
             </table>
-            <p style="font-size:10px;color:var(--muted);margin-top:5px;line-height:1.35">Three points of leverage adoption is worth <b>±$4.7M a year per 100,000 users</b>. 24/7 has the same gearing on a bigger base — and is the only line that adds <b>104 trading days</b>, not more users.</p>
+            <p style="font-size:10px;color:var(--muted);margin-top:5px;line-height:1.35">Three points of leverage adoption is worth <b>±$4.35M a year per 100,000 users</b>. 24/7 has the same gearing on a bigger base — and is the only line that adds <b>104 trading days</b>, not more users.</p>
           </div>
-          <div class="assum" style="margin-top:auto;font-size:9px">Driver-based and illustrative. Leverage: ~$1.1M notional at ~5 bps + ~$1,000 net b-book on a ~$2,500 account. 24/7 RWA: weekend CFD at 2–5× spread + RWA delta-1 turnover. Yield: $5,000 × 2 p.a. × ~2.8%. Spot: ~$7,000 at 20 bps. Swap in our own book before this leaves the room.</div>
+          <div class="assum" style="margin-top:auto;font-size:9px">Driver-based and illustrative. Leverage: ~$1.1M notional at ~5 bps + ~$1,000 net b-book on a ~$2,500 account. 24/7: weekend CFD at 2–5× spread + delta-1 turnover. Structured: $5,000 × 2 p.a. × ~3%. Spot: ~$7,000 at 20 bps. Swap in our own book before this leaves the room.</div>
         </div>
         <div style="display:flex;flex-direction:column;gap:10px;min-height:0">
           <div class="panel" style="flex:0 0 auto">
             <div class="panel-t" style="margin-bottom:8px">The inversion</div>
             <div class="bars">
               <div class="barrow"><div class="barlab">Leverage — share of users</div><div class="bartrack" style="height:20px"><div class="barfill" style="width:7%;background:linear-gradient(90deg,#0E4A66,#11617E)"></div></div><div class="barval">7%</div></div>
-              <div class="barrow"><div class="barlab">Leverage — share of rev</div><div class="bartrack" style="height:20px"><div class="barfill" style="width:62%;background:linear-gradient(90deg,#1f9f6c,#11617E)"></div></div><div class="barval pos">62%</div></div>
+              <div class="barrow"><div class="barlab">Leverage — share of rev</div><div class="bartrack" style="height:20px"><div class="barfill" style="width:58%;background:linear-gradient(90deg,#1f9f6c,#11617E)"></div></div><div class="barval pos">58%</div></div>
               <div class="barrow"><div class="barlab">Spot — share of users</div><div class="bartrack" style="height:20px"><div class="barfill" style="width:100%;background:linear-gradient(90deg,#8b95a8,#c3cad6)"></div></div><div class="barval">100%</div></div>
               <div class="barrow"><div class="barlab">Spot — share of rev</div><div class="bartrack" style="height:20px"><div class="barfill" style="width:8%;background:linear-gradient(90deg,#8b95a8,#c3cad6)"></div></div><div class="barval">8%</div></div>
             </div>
@@ -1088,10 +1116,10 @@ ul.plain li b{font-weight:700}
             <ul class="plain">
               <li><b>Leverage is the P&amp;L. Fund it first.</b> Securitised perps with Nexo in Q4 is still the single highest-value item on the roadmap.</li>
               <li><b>24/7 RWA markets are the growth line.</b> CFD leverage plus delta-1 on equities, metals and commodities — 20% of revenue on a fixed cost base, and the only thing TradFi cannot copy.</li>
-              <li><b>Yield &amp; downside protection punches above its volume.</b> 8% of revenue from 5% of users, at the fattest margin on the shelf — and it locks the deposit for 1–3 months.</li>
+              <li><b>Structured products punch above their volume.</b> 12% of revenue from ~7% of users, at the fattest margin on the shelf — and they lock the deposit for 1–3 months.</li>
               <li><b>Stop investing to win Delta-1.</b> 100% of users, 8% of revenue, 200+ competitors. Defend it as acquisition; do not fund it as a product line.</li>
             </ul>
-            <div class="callout g" style="margin-top:auto"><div class="ct">The ask</div><p>Endorse the sequencing: <b>securitised perps → 24/7 RWA markets (commodities &amp; metals first) → structured shelf on new underlyings.</b> Everything else is downstream of the MiFID risk engine we already have.</p></div>
+            <div class="callout g" style="margin-top:auto"><div class="ct">The ask</div><p>Endorse the sequencing: <b>securitised perps → 24/7 RWA markets (commodities &amp; metals first) → structured shelf on new underlyings.</b> Everything else is downstream of the MiFID licence and risk engine we already have — <b>we broker and distribute; partner issuers supply the wrapper.</b></p></div>
           </div>
         </div>
       </div>
