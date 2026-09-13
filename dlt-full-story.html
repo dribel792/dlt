@@ -966,8 +966,7 @@ table.econ td{padding:5px 8px}
 
         <div class="pbox">
           <div class="pbox-head"><span class="pbox-n">3</span><span class="pbox-t">What is DLT's role?</span><span class="pbox-cap">today → tomorrow</span></div>
-          <p class="plead" style="font-size:13px">Today we are a <span class="q">pure agency broker</span> — we route and clear the order and take a commission, and the client faces the venue. That is not a preference: it is the only structure that lets us pass the venue's leverage through. Any other role would force us to <b>limit leverage even further</b>.</p>
-          <p class="pnote">What DLT supplies is the infrastructure underneath it — the <b>margining of the user accounts</b>.</p>
+          <p class="plead" style="font-size:13px">Today we are a <span class="q">pure agency broker</span> — we route and clear, and the client faces the venue. That is not a preference: it is the only structure that passes the venue's leverage through. Any other role means <b>capping leverage further</b>. What we supply underneath is the <b>margining of the user accounts</b>.</p>
           <div class="trackwrap">
             <div class="track">
               <div class="tstep now"><div class="tk">Today</div><div class="tn">Agency broker</div><div class="ts">Commission only. Flow passes through.</div></div>
@@ -1343,7 +1342,233 @@ table.econ td{padding:5px 8px}
   </div>
 </section>
 
-<!-- ═══════════ SLIDE 12 — THE ASK ═══════════ -->
+<!-- ═══════════ SLIDE 12 — WHAT IT IS WORTH TO A CLIENT ═══════════ -->
+<section class="slide">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <div><div class="eyebrow">DLT Finance · Two Signed Clients, Worked</div><h1 class="slide-title">One integration, four revenue lines — <span class="accent">and the upsell is a config change</span></h1></div>
+      <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
+    </div>
+    <div class="body">
+      <div class="split" style="flex:1">
+
+        <div class="panel tightp">
+          <div class="panel-head"><span class="panel-t">Nexo — signed</span><span class="panel-cap">600,000 EU clients · $100M revenue planned 2027</span></div>
+          <table class="econ">
+            <thead><tr><th>Revenue line</th><th class="r">2027 plan</th><th class="r">Share</th><th>DLT status</th></tr></thead>
+            <tbody>
+              <tr><td><b>Spot</b></td><td class="r mono">$8M</td><td class="r mono">8%</td><td><span class="pill" style="font-size:9.5px">Not ours</span></td></tr>
+              <tr><td><b>Perps</b></td><td class="r mono">$16M</td><td class="r mono">16%</td><td><span class="pill" style="font-size:9.5px;border-color:var(--green-border);color:var(--green)"><b>Live today</b></span></td></tr>
+              <tr><td><b>ETPs</b> <span style="font-size:9.5px;color:var(--muted)">securitised leverage</span></td><td class="r mono">$60M</td><td class="r mono">60%</td><td><span class="pill" style="font-size:9.5px;border-color:var(--brand-border);color:var(--petrol)"><b>Q4 2026</b></span></td></tr>
+              <tr><td><b>Structured</b> <span style="font-size:9.5px;color:var(--muted)">covered calls + ZIC</span></td><td class="r mono">$16M</td><td class="r mono">16%</td><td><span class="pill" style="font-size:9.5px;border-color:var(--brand-border);color:var(--petrol)"><b>Q4 2026</b></span></td></tr>
+              <tr class="total"><td><b>Total</b></td><td class="r mono">$100M</td><td class="r mono">100%</td><td><b>92% on DLT products</b></td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:10px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+            <div class="stat" style="padding:7px 9px"><div class="sv" style="font-size:17px;color:var(--muted)">$13.8M</div><div class="sl" style="font-size:9.5px">DLT at a 15% share of the $92M pool</div></div>
+            <div class="stat" style="padding:7px 9px"><div class="sv" style="font-size:17px">$23.0M</div><div class="sl" style="font-size:9.5px">at 25% — base case</div></div>
+            <div class="stat" style="padding:7px 9px"><div class="sv g" style="font-size:17px">$32.2M</div><div class="sl" style="font-size:9.5px">at 35% — upside</div></div>
+          </div>
+          <div class="assum" style="margin-top:auto;font-size:9px">Nexo's own 2027 plan, split across the non-spot lines using the mix in this deck. <b>24/7 RWA is not in their plan at all</b> — pure upside on top. Share bands illustrative, to be replaced with signed commercials.</div>
+        </div>
+
+        <div class="panel tightp">
+          <div class="panel-head"><span class="panel-t">Bit2Me — signed</span><span class="panel-cap">1.2M registered clients · $500M spot volume / month</span></div>
+          <table class="econ">
+            <thead><tr><th>Stage</th><th>What is live</th><th class="r">Revenue</th><th class="r">vs. today</th></tr></thead>
+            <tbody>
+              <tr><td><b>Today</b></td><td>Spot only — $6.0B/yr at ~20 bps</td><td class="r mono">$12.0M</td><td class="r mono">baseline</td></tr>
+              <tr><td><b>Q4 2026</b></td><td>Perps go live — DLT agency &amp; clearing</td><td class="r mono">—</td><td class="r mono">—</td></tr>
+              <tr><td><b>Month 12</b></td><td>Perps $6.0B notional + ETPs $1.8B turnover</td><td class="r mono pos">+$5.8M</td><td class="r mono pos"><b>+48%</b></td></tr>
+              <tr><td><b>Month 24</b></td><td>Perps $18B + ETPs $6B + equities, precious metals &amp; commodities $2B</td><td class="r mono pos">+$24.8M</td><td class="r mono pos"><b>+207%</b></td></tr>
+              <tr class="total"><td><b>Month 24 total</b></td><td>Five lines on one DLT integration</td><td class="r mono">$36.8M</td><td class="r mono pos">3.1×</td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:10px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+            <div class="stat" style="padding:7px 9px"><div class="sv" style="font-size:17px;color:var(--muted)">$12.0M</div><div class="sl" style="font-size:9.5px">today — spot only</div></div>
+            <div class="stat" style="padding:7px 9px"><div class="sv" style="font-size:17px">$17.8M</div><div class="sl" style="font-size:9.5px">month 12 — <b>+48%</b></div></div>
+            <div class="stat" style="padding:7px 9px"><div class="sv g" style="font-size:17px">$36.8M</div><div class="sl" style="font-size:9.5px">month 24 — <b>+207%</b></div></div>
+          </div>
+          <div class="assum" style="margin-top:auto;font-size:9px">Perp notional ramps to 1× spot in year one, 3× in year two, against a ~5× market norm. ETPs at 12–15 bps blended. DLT at 25–40% of the incremental is <b>$6–10M a year from this client by month 24</b>.</div>
+        </div>
+
+      </div>
+
+      <div class="split3" style="flex:0 0 auto;margin-top:12px">
+        <div class="panel" style="padding:11px 13px">
+          <div class="panel-t" style="margin-bottom:7px">24/7 — worked on Axi</div>
+          <div class="terms">
+            <div class="trow"><span class="k">CFD volume today</span><span class="v">$300B / mo · $3.6T a year, Mon–Fri</span></div>
+            <div class="trow"><span class="k">Weekend notional we add</span><span class="v b">~$178B <small style="font-weight:400;color:var(--muted)">104 days at 12% of the weekday run-rate</small></span></div>
+            <div class="trow"><span class="k">Spread in that window</span><span class="v b">3× — sole quoting venue</span></div>
+            <div class="trow"><span class="k">New revenue for Axi</span><span class="v g">~$27M / yr · <b>+15%</b></span></div>
+            <div class="trow"><span class="k">DLT share at 25–40%</span><span class="v g"><b>$7–11M a year</b></span></div>
+          </div>
+          <p class="assum" style="margin-top:8px;font-size:9px">Zero acquisition cost — same users, same cost base, 104 days nobody else is open. DLT supplies the price and is the hedge counterparty.</p>
+        </div>
+
+        <div class="panel" style="padding:11px 13px">
+          <div class="panel-t" style="margin-bottom:7px">Why the upsell is easy</div>
+          <ul class="plain">
+            <li><b>All four products are MiFID instruments on one licence.</b> Once a client is onboarded for perps, adding ETPs or a structured shelf is a <b>config change, not a new integration</b> — same contract, same API, same risk engine, same reporting.</li>
+            <li><b>The pressure to look innovative is enormous.</b> Every venue needs a new product line each quarter, and we are the shortest path to one. <b>Perps open the door; the rest is where the money is.</b></li>
+          </ul>
+        </div>
+
+        <div class="panel" style="padding:11px 13px">
+          <div class="panel-t" style="margin-bottom:7px">Same shelf, same integration</div>
+          <div class="demand" style="margin-top:0;padding-top:0;border-top:none">
+            <div class="dl">Signed &amp; launching</div>
+            <div class="dr">
+              <span class="dn">Nexo</span><span class="dn">Bit2Me</span><span class="dn">1inch</span><span class="dn">Vancelian</span><span class="dn">Coinmotion</span><span class="dn">KuCoin</span><span class="dn">BingX</span><span class="dn">CoinW</span><span class="dn">Bitget</span>
+            </div>
+          </div>
+          <div class="demand" style="margin-top:10px">
+            <div class="dl">24/7 RWA — in discussion</div>
+            <div class="dr">
+              <span class="dn">Axi</span><span class="dn">Scalable Capital</span><span class="dn">TradFi brokers &amp; CFD houses</span>
+            </div>
+          </div>
+          <p style="margin-top:auto;padding-top:9px;font-size:11.5px;line-height:1.45;color:var(--ink)"><b style="color:var(--petrol)">The pattern:</b> every one of these clients arrives asking for <b>one</b> product. None of them stops at one.</p>
+        </div>
+      </div>
+
+    </div>
+    <div class="slide-foot"><span>Slide 13 · What It Is Worth to a Client</span><span>2026 | Confidential</span></div>
+  </div>
+</section>
+
+<!-- ═══════════ SLIDE 13 — REVENUE UPLIFT PER LINE ═══════════ -->
+<section class="slide">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <div><div class="eyebrow">DLT Finance · The Uplift, Line by Line</div><h1 class="slide-title">What each line actually pays — <span class="accent">and where the money comes from</span></h1></div>
+      <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
+    </div>
+    <div class="body">
+      <div class="split" style="flex:1;grid-template-columns:1.3fr 1fr">
+
+        <div class="panel tightp">
+          <div class="panel-head"><span class="panel-t">Revenue per user, by line</span><span class="panel-cap">per 100,000 active users, annual</span></div>
+          <table class="econ">
+            <thead><tr><th>Line</th><th>Our role</th><th class="r">Rev / user</th><th class="r">vs. spot</th><th class="r">vs. perps</th></tr></thead>
+            <tbody>
+              <tr><td><b>Spot</b><br><span style="font-size:9.5px;color:var(--muted)">~$7,000 turnover at ~20 bps</span></td><td><span class="pill" style="font-size:9.5px">Venue</span></td><td class="r mono">$14</td><td class="r mono">1×</td><td class="r mono">0.05×</td></tr>
+              <tr><td><b>Perps</b><br><span style="font-size:9.5px;color:var(--muted)">2–6 bps agency commission + funding spread</span></td><td><span class="pill" style="font-size:9.5px">Agency broker</span></td><td class="r mono">$300</td><td class="r mono">21×</td><td class="r mono">1.0×</td></tr>
+              <tr><td><b>ETPs</b><br><span style="font-size:9.5px;color:var(--muted)">35% trading fees + 65% b-book / internalisation</span></td><td><span class="pill" style="font-size:9.5px;border-color:var(--brand-border);color:var(--petrol)"><b>Broker + book</b></span></td><td class="r mono">$1,150</td><td class="r mono pos"><b>82×</b></td><td class="r mono pos"><b>3.8×</b></td></tr>
+              <tr><td><b>RWA — 24/7</b><br><span style="font-size:9.5px;color:var(--muted)">weekend spread at 2–5× + delta-1 turnover</span></td><td><span class="pill" style="font-size:9.5px;border-color:var(--brand-border);color:var(--petrol)"><b>Broker + book</b></span></td><td class="r mono">$389</td><td class="r mono pos">28×</td><td class="r mono pos">1.3×</td></tr>
+              <tr><td><b>Structured</b><br><span style="font-size:9.5px;color:var(--muted)">50% revenue share on the yield generated</span></td><td><span class="pill" style="font-size:9.5px;border-color:var(--brand-border);color:var(--petrol)"><b>Broker + book</b></span></td><td class="r mono">$300</td><td class="r mono pos">21×</td><td class="r mono pos">1.0×</td></tr>
+            </tbody>
+          </table>
+          <div class="meter" style="margin-top:12px;padding-top:0">
+            <div class="ml">The uplift, drawn — revenue per user against spot</div>
+            <div class="bars" style="margin-top:7px">
+              <div class="barrow"><div class="barlab">Spot</div><div class="bartrack" style="height:20px"><div class="barfill" style="width:1.2%;background:linear-gradient(90deg,#8b95a8,#c3cad6)"></div></div><div class="barval">$14</div></div>
+              <div class="barrow"><div class="barlab">Perps</div><div class="bartrack" style="height:20px"><div class="barfill" style="width:26%;background:linear-gradient(90deg,#8b95a8,#a4adbd)"></div></div><div class="barval">$300</div></div>
+              <div class="barrow"><div class="barlab">Structured</div><div class="bartrack" style="height:20px"><div class="barfill" style="width:26%;background:#6b50d9"></div></div><div class="barval">$300</div></div>
+              <div class="barrow"><div class="barlab">RWA — 24/7</div><div class="bartrack" style="height:20px"><div class="barfill" style="width:34%;background:linear-gradient(90deg,#1f9f6c,#3b6cd9)"></div></div><div class="barval pos">$389</div></div>
+              <div class="barrow"><div class="barlab">ETPs</div><div class="bartrack" style="height:20px"><div class="barfill" style="width:100%;background:linear-gradient(90deg,#0E4A66,#11617E)"></div></div><div class="barval pos">$1,150</div></div>
+            </div>
+          </div>
+          <div style="margin-top:14px;display:grid;grid-template-columns:repeat(3,1fr);gap:9px">
+            <div class="stat"><div class="sv">21×</div><div class="sl">the floor — every product above spot earns at least this much more per user</div></div>
+            <div class="stat"><div class="sv g">82×</div><div class="sl">ETPs against spot — the widest gap on the shelf</div></div>
+            <div class="stat"><div class="sv">3.8×</div><div class="sl">ETPs against perps — same cohort, same trade, different role</div></div>
+          </div>
+          <div class="assum" style="margin-top:auto;font-size:9px">Perps and ETPs are the <b>same ~7,000-user cohort</b> trading the same size — the 3.8× is purely the change in our role. To be replaced with our own book before this is presented.</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px;min-height:0">
+          <div class="panel" style="flex:0 0 auto">
+            <div class="panel-t" style="margin-bottom:8px">Where the uplift comes from, per line</div>
+            <div class="terms">
+              <div class="trow"><span class="k"><b>Perps</b> — commission + funding spread</span><span class="v">2–6 bps of notional</span></div>
+              <div class="trow"><span class="k"><b>ETPs</b> — trading fees</span><span class="v">~35% of the line</span></div>
+              <div class="trow"><span class="k"><b>ETPs</b> — b-book / internalisation</span><span class="v b">~65% of the line</span></div>
+              <div class="trow"><span class="k"><b>RWA</b> — weekend spread</span><span class="v b">2–5× the weekday spread</span></div>
+              <div class="trow"><span class="k"><b>RWA</b> — financing carry</span><span class="v">+40% carry days</span></div>
+              <div class="trow"><span class="k"><b>Structured</b> — share of the yield</span><span class="v b">50%</span></div>
+              <div class="trow"><span class="k"><b>Spot</b> — turnover</span><span class="v">~20 bps, fully competed away</span></div>
+            </div>
+          </div>
+          <div class="panel" style="flex:1;min-height:0">
+            <div class="panel-t" style="margin-bottom:6px">The one thing that moves the number</div>
+            <ul class="plain">
+              <li><b>It is the role, not the product.</b> A perp and a securitised perp are the same economic bet on the same underlying. The 3.8× between them is entirely the difference between <b>routing the flow</b> and <b>running the book against it</b>.</li>
+              <li><b>Running the book needs a risk engine.</b> Every line marked "broker + book" above is gated on the same piece of infrastructure — which is why it is the one thing we are asking to fund.</li>
+              <li><b>24/7 is the only line that scales without users.</b> 104 extra trading days at 2–5× the spread, on a cost base that does not move.</li>
+            </ul>
+            <div class="callout" style="margin-top:auto"><div class="ct">In one line</div><p>Every product above spot earns <b>21× to 82×</b> what spot earns per user — and the gap between the lowest and the highest is <b>which side of the trade we are on</b>.</p></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="slide-foot"><span>Slide 14 · The Uplift, Line by Line</span><span>2026 | Confidential</span></div>
+  </div>
+</section>
+
+<!-- ═══════════ SLIDE 14 — PRODUCT STATE ═══════════ -->
+<section class="slide">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <div><div class="eyebrow">DLT Finance · Where the Product Actually Is</div><h1 class="slide-title">The foundation is built. <span class="accent">The risk engine is what turns it into a shelf.</span></h1></div>
+      <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
+    </div>
+    <div class="body">
+      <div class="split3" style="flex:0 0 auto">
+        <div class="panel" style="padding:13px 15px">
+          <span class="whytag" style="align-self:flex-start;background:var(--green-soft);color:var(--green);border:1px solid var(--green-border)">Live — in use today</span>
+          <h4 style="font-family:var(--font-display);font-size:19px;font-weight:800;letter-spacing:-.025em;margin-top:6px">Perps</h4>
+          <p style="font-size:12px;line-height:1.5;color:var(--ink);margin-top:7px">An <b>MVP is live and in production use</b>. Clients are routing and clearing real flow through it today. This is the product that opened every conversation in this deck.</p>
+          <div class="trow" style="margin-top:auto;padding-top:9px;border-top:1px solid var(--border);border-bottom:none"><span class="k">Status</span><span class="v g">Shipped · running</span></div>
+        </div>
+        <div class="panel" style="padding:13px 15px">
+          <span class="whytag" style="align-self:flex-start;background:var(--brand-soft);color:var(--petrol);border:1px solid var(--brand-border)">In the making</span>
+          <h4 style="font-family:var(--font-display);font-size:19px;font-weight:800;letter-spacing:-.025em;margin-top:6px">ZIC &amp; Covered Calls</h4>
+          <p style="font-size:12px;line-height:1.5;color:var(--ink);margin-top:7px">An <b>MVP with Nexo</b> is being built now for Q4. It proves the structured shelf end to end with one client — pricing, booking, settlement and reporting.</p>
+          <div class="trow" style="margin-top:auto;padding-top:9px;border-top:1px solid var(--border);border-bottom:none"><span class="k">Status</span><span class="v b">MVP · Q4 2026</span></div>
+        </div>
+        <div class="panel" style="padding:13px 15px;border-color:var(--yellow-border);background:var(--yellow-soft)">
+          <span class="whytag need" style="align-self:flex-start">Gated on the engine</span>
+          <h4 style="font-family:var(--font-display);font-size:19px;font-weight:800;letter-spacing:-.025em;margin-top:6px">ETPs &amp; the wider shelf</h4>
+          <p style="font-size:12px;line-height:1.5;color:var(--ink);margin-top:7px">Shipping beyond a single client — and pricing anything complex — needs a <b>real risk engine</b>. That work has just started. It is the one dependency between the MVPs and a product we can sell repeatedly.</p>
+          <div class="trow" style="margin-top:auto;padding-top:9px;border-top:1px solid var(--border);border-bottom:none"><span class="k">Status</span><span class="v" style="color:var(--yellow)">Build started</span></div>
+        </div>
+      </div>
+
+      <div class="split" style="flex:1;margin-top:12px">
+        <div class="panel">
+          <div class="panel-t" style="margin-bottom:8px">Already in place — this is not a green field</div>
+          <div class="terms">
+            <div class="trow"><span class="k">MiFID licence &amp; regulatory perimeter</span><span class="v g">In place</span></div>
+            <div class="trow"><span class="k">Client onboarding &amp; account structure</span><span class="v g">In place</span></div>
+            <div class="trow"><span class="k">Order routing &amp; clearing</span><span class="v g">In place · live on perps</span></div>
+            <div class="trow"><span class="k">Post-trade processing &amp; settlement</span><span class="v g">In place</span></div>
+            <div class="trow"><span class="k">Reporting — regulatory &amp; client</span><span class="v g">In place</span></div>
+            <div class="trow"><span class="k">Issuer &amp; venue integrations</span><span class="v g">In place</span></div>
+            <div class="trow"><span class="k">Risk engine &amp; pricing library</span><span class="v" style="color:var(--yellow)">Build started</span></div>
+          </div>
+          <div class="callout g" style="margin-top:auto"><div class="ct">What this means</div><p>The expensive, slow, regulated parts of this business are done. What is missing is a <b>single piece of software</b> — not a licence, not a market, not a client.</p></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-t" style="margin-bottom:8px">The risk engine is the backbone</div>
+          <ul class="plain">
+            <li><b>It prices the complex products.</b> ETPs, structured products and new underlyings all need the same thing: a model that can price and revalue a position continuously. Today we can do that for one product with one client; the engine makes it general.</li>
+            <li><b>It is what lets us run the book.</b> Every line in this deck marked "broker + book" — the 46% and the 20% and the 12% — depends on it. Without it we stay the agent, at agency margin.</li>
+            <li><b>It margins the user accounts.</b> The same engine does the margining that lets us offer leverage without capping it defensively.</li>
+            <li><b>It is what makes the shelf repeatable.</b> One client per product is a project. The engine is what turns each product into something we ship to the next ten clients without rebuilding it.</li>
+          </ul>
+          <div class="callout y" style="margin-top:auto"><div class="ct">The honest read</div><p>We can already demonstrate every product in this deck. <b>We cannot yet scale any of them beyond the client we built it with.</b> That gap is the risk engine, and closing it is the ask.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot"><span>Slide 15 · Where the Product Actually Is</span><span>2026 | Confidential</span></div>
+  </div>
+</section>
+
+<!-- ═══════════ SLIDE 15 — THE ASK ═══════════ -->
 <section class="slide">
   <div class="slide-inner">
     <div class="slide-header">
@@ -1392,7 +1617,7 @@ table.econ td{padding:5px 8px}
         </div>
       </div>
     </div>
-    <div class="slide-foot"><span>Slide 13 · The Ask</span><span>2026 | Confidential</span></div>
+    <div class="slide-foot"><span>Slide 16 · The Ask</span><span>2026 | Confidential</span></div>
   </div>
 </section>
 
@@ -1438,7 +1663,7 @@ table.econ td{padding:5px 8px}
         </div>
       </div>
     </div>
-    <div class="slide-foot"><span>Slide 14 · TradFi × DeFi</span><span>2026 | Confidential</span></div>
+    <div class="slide-foot"><span>Slide 17 · TradFi × DeFi</span><span>2026 | Confidential</span></div>
   </div>
 </section>
 
@@ -1624,7 +1849,7 @@ table.econ td{padding:5px 8px}
         </span>
       </div>
     </div>
-    <div class="slide-foot"><span>Slide 15 · Liquidity Transmission & the Broker Math</span><span>2026 | Confidential</span></div>
+    <div class="slide-foot"><span>Slide 18 · Liquidity Transmission & the Broker Math</span><span>2026 | Confidential</span></div>
   </div>
 </section>
 
