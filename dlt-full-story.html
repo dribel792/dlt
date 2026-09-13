@@ -934,8 +934,8 @@ table.econ td{padding:5px 8px}
 
         <div class="pbox">
           <div class="pbox-head"><span class="pbox-n">1</span><span class="pbox-t">What does it do?</span></div>
-          <p class="plead">Spot, but you put down <span class="q">€100</span> and control <span class="q">€5,000</span> of exposure — and there is no expiry date to manage.</p>
-          <p class="pnote">A perp stays glued to the real price through a small payment passed between buyers and sellers. The user never has to roll a contract or understand a settlement calendar. That one simplification is why perps beat traditional futures for retail.</p>
+          <p class="plead">Not spot with leverage — a <span class="q">futures contract without an expiry date</span>. You put down €100 and control €5,000 of exposure, and there is never a contract to roll.</p>
+          <p class="pnote">A small payment passed between buyers and sellers keeps it glued to the real price. No settlement calendar, no rolls — that one simplification is why perps beat traditional futures for retail.</p>
           <svg class="mini" viewBox="0 0 460 100" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
             <text x="0" y="12" font-size="10.5" fill="#5b6577">You put down</text>
             <rect x="0" y="18" width="9" height="20" rx="3" fill="#d4922a"/>
@@ -950,19 +950,24 @@ table.econ td{padding:5px 8px}
         <div class="pbox why">
           <div class="pbox-head"><span class="pbox-n">2</span><span class="pbox-t">Why is it interesting?</span></div>
           <span class="whytag need">Necessity — not a differentiator</span>
-          <p class="plead" style="font-size:13px">Everyone has them. Not offering perps does not cost us a product line — <span class="q">it costs us the client</span>, who takes their spot business with them.</p>
-          <p class="pnote">For every €1 of spot our clients trade, roughly <b>€5 of perp notional</b> trades on the same asset, at a higher take rate with financing on top. It is also the venue where we hedge everything else we sell — one liquidity relationship, three revenue lines.</p>
+          <p class="plead" style="font-size:13px">Perps are <span class="q">the entry point for our sales</span>. They are the first ask in every crypto exchange conversation — not offering them does not cost us a product line, it costs us the client and the spot business they bring.</p>
+          <p class="pnote">It is also the venue where we hedge everything else we sell — one liquidity relationship, several revenue lines.</p>
           <div class="demand">
-            <div class="dl">Demand we have actually seen</div>
+            <div class="dl">Clients launching this</div>
             <div class="dr">
-              <span class="dn">Every crypto exchange conversation <small>— perps are the first ask, without exception</small></span>
+              <span class="dn">Bit2Me</span>
+              <span class="dn">Nexo</span>
+              <span class="dn">Vancelian</span>
+              <span class="dn">Coinmotion</span>
+              <span class="dn">KuCoin</span>
             </div>
           </div>
         </div>
 
         <div class="pbox">
           <div class="pbox-head"><span class="pbox-n">3</span><span class="pbox-t">What is DLT's role?</span><span class="pbox-cap">today → tomorrow</span></div>
-          <p class="plead" style="font-size:13px">Today we are a <span class="q">pure agency broker</span>. We route and clear the client's order and take a commission — the client faces the venue, not us, and the flow passes straight through.</p>
+          <p class="plead" style="font-size:13px">Today we are a <span class="q">pure agency broker</span> — we route and clear the order and take a commission, and the client faces the venue. That is not a preference: it is the only structure that lets us pass the venue's leverage through. Any other role would force us to <b>limit leverage even further</b>.</p>
+          <p class="pnote">What DLT supplies is the infrastructure underneath it — the <b>margining of the user accounts</b>.</p>
           <div class="trackwrap">
             <div class="track">
               <div class="tstep now"><div class="tk">Today</div><div class="tn">Agency broker</div><div class="ts">Commission only. Flow passes through.</div></div>
@@ -979,16 +984,12 @@ table.econ td{padding:5px 8px}
           <div class="fee">
             <div class="feerow"><span class="fk">Agency commission</span><span class="fv">2–6 bps of notional</span></div>
             <div class="feerow"><span class="fk">Plus</span><span class="fv">funding spread &amp; financing</span></div>
-            <div class="feerow"><span class="fk">Do we run the book?</span><span class="fv">No — pass-through</span></div>
+            <div class="feerow"><span class="fk">Volume vs. spot</span><span class="fv m">~5× the notional</span></div>
             <div class="feerow"><span class="fk">Cost of a new market</span><span class="fv m">≈ zero</span></div>
           </div>
-          <div class="revbig"><span class="rv">$2.1M</span><span class="rl">a year per 100,000 users<br><b>≈12% of total revenue</b> — the thinnest margin on the shelf, because the flow passes straight through us</span></div>
+          <div class="revbig"><span class="rv">$2.1M</span><span class="rl">a year per 100,000 users<br><b>≈12% of total revenue</b> — thin margin on ~5× the volume, because the flow passes straight through us</span></div>
         </div>
 
-      </div>
-      <div class="standbar">
-        <span class="sbl">Standing point</span>
-        <p><b>DLT is the infrastructure that makes this product available to everyone — as the broker and the counterparty.</b> On perps we are still only the agent, which is exactly why the next three products matter.</p>
       </div>
     </div>
     <div class="slide-foot"><span>Slide 7 · Perps</span><span>2026 | Confidential</span></div>
@@ -999,7 +1000,7 @@ table.econ td{padding:5px 8px}
 <section class="slide">
   <div class="slide-inner">
     <div class="slide-header">
-      <div><div class="eyebrow">DLT Finance · Product 2 of 4 · Half a Step Ahead</div><h1 class="slide-title">ETPs — <span class="accent">the same bet, wrapped as a security</span></h1></div>
+      <div><div class="eyebrow">DLT Finance · Product 2 of 4 · Half a Step Ahead</div><h1 class="slide-title">ETPs — <span class="accent">the same bet, with an ISIN or as a tokenized security</span></h1></div>
       <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
     </div>
     <div class="body">
@@ -1007,33 +1008,22 @@ table.econ td{padding:5px 8px}
 
         <div class="pbox">
           <div class="pbox-head"><span class="pbox-n">1</span><span class="pbox-t">What does it do?</span></div>
-          <p class="plead">The same leveraged bet as a perp — but packaged as a <span class="q">security with an ISIN</span>, so it sits in a normal brokerage account next to a share. And the client can never lose more than they put in.</p>
+          <p class="plead">The same leveraged bet as a perp — packaged <span class="q">with an ISIN or as a tokenized security</span>, so it sits in a normal brokerage account or in the client's own wallet. The client can never lose more than they put in.</p>
           <p class="pnote">Turbos, knock-out certificates, mini futures and securitised perps all live here. Same machinery, different barriers. Up to 30× leverage, no margin calls, no negative balances.</p>
-          <svg class="mini" viewBox="0 0 460 100" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
-            <rect x="0" y="4" width="205" height="58" rx="7" fill="#f4f6f9" stroke="#e3e7ee"/>
-            <text x="12" y="24" font-size="11.5" font-weight="700" fill="#0E1A22">An ordinary share</text>
-            <text x="12" y="40" font-size="9.5" fill="#5b6577">has an ISIN</text>
-            <text x="12" y="53" font-size="9.5" fill="#5b6577">sits in the brokerage account</text>
-            <text x="230" y="38" font-size="15" font-weight="800" fill="#5b6577" text-anchor="middle">=</text>
-            <rect x="255" y="4" width="205" height="58" rx="7" fill="rgba(14,74,102,.08)" stroke="#0E4A66"/>
-            <text x="267" y="24" font-size="11.5" font-weight="700" fill="#0E4A66">Our 30× certificate</text>
-            <text x="267" y="40" font-size="9.5" fill="#5b6577">has an ISIN</text>
-            <text x="267" y="53" font-size="9.5" fill="#5b6577">sits in the same account</text>
-            <text x="0" y="82" font-size="10.5" fill="#1f9f6c" font-weight="700">Same plumbing. No derivatives licence needed to distribute it.</text>
-            <text x="0" y="96" font-size="9.5" fill="#5b6577">Worst case is the premium paid — loss is bounded by construction.</text>
-          </svg>
         </div>
 
         <div class="pbox why">
           <div class="pbox-head"><span class="pbox-n">2</span><span class="pbox-t">Why is it interesting?</span></div>
           <span class="whytag ahead">Half a step ahead — and the furthest ahead we are</span>
-          <p class="plead" style="font-size:13px"><span class="q">Crypto exchanges cannot touch a security at all. We can broker one.</span> That single fact is the whole business — it is what turns a pass-through relationship into one where we own the client and the flow.</p>
-          <p class="pnote">It also removes every blocker on their side: a distributor with no derivatives licence, no margin engine and no liquidation policy can list it like any other security. High leverage is the strongest retail demand signal in this market, and this is the only compliant way most venues can reach it.</p>
+          <p class="plead" style="font-size:13px">Four things at once: <span class="q">we can offer higher leverage — and so can our clients</span>; we and our partners can <span class="q">b-book the flow</span>; our partners can still give the user a <span class="q">perp trading UX</span>; and the user can <span class="q">transfer a position into his own wallet</span>.</p>
           <div class="demand">
-            <div class="dl">Demand we have actually seen</div>
+            <div class="dl">Clients launching this</div>
             <div class="dr">
-              <span class="dn">Nexo <small>— launch partner, Q4 2026</small></span>
-              <span class="dn">Bitget <small>— live on the structured shelf</small></span>
+              <span class="dn">1inch</span>
+              <span class="dn">Nexo</span>
+              <span class="dn">Coinmotion</span>
+              <span class="dn">BingX</span>
+              <span class="dn">CoinW</span>
             </div>
           </div>
         </div>
@@ -1057,16 +1047,11 @@ table.econ td{padding:5px 8px}
           <div class="fee">
             <div class="feerow"><span class="fk">Trading fees</span><span class="fv">~35% of the line</span></div>
             <div class="feerow"><span class="fk">Being the counterparty</span><span class="fv m">~65% of the line</span></div>
-            <div class="feerow"><span class="fk">Do we run the book?</span><span class="fv m">Yes — this is the point</span></div>
             <div class="feerow"><span class="fk">Who trades it</span><span class="fv">~7% of users</span></div>
           </div>
           <div class="revbig"><span class="rv">$8.05M</span><span class="rl">a year per 100,000 users<br><b>≈46% of total revenue</b> — from 7% of the user base. Running the book earns a multiple of routing the trade</span></div>
         </div>
 
-      </div>
-      <div class="standbar">
-        <span class="sbl">Standing point</span>
-        <p><b>DLT is the infrastructure that makes this product available to everyone — as the broker and the counterparty.</b> On ETPs that sentence is already literally true — the issuer is a partner, the client is ours.</p>
       </div>
     </div>
     <div class="slide-foot"><span>Slide 8 · ETPs</span><span>2026 | Confidential</span></div>
@@ -1077,7 +1062,7 @@ table.econ td{padding:5px 8px}
 <section class="slide">
   <div class="slide-inner">
     <div class="slide-header">
-      <div><div class="eyebrow">DLT Finance · Product 3 of 4 · Half a Step Ahead</div><h1 class="slide-title">RWA — <span class="accent">real-world assets on crypto hours</span></h1></div>
+      <div><div class="eyebrow">DLT Finance · Product 3 of 4 · Half a Step Ahead</div><h1 class="slide-title">RWA — <span class="accent">24/7 pricing on real-world assets, spot and leveraged</span></h1></div>
       <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z" stroke="#fff" stroke-width="1.6" fill="rgba(255,255,255,.12)"/></svg><div class="name">DLT <span class="light">Finance</span></div></div>
     </div>
     <div class="body">
@@ -1085,8 +1070,7 @@ table.econ td{padding:5px 8px}
 
         <div class="pbox">
           <div class="pbox-head"><span class="pbox-n">1</span><span class="pbox-t">What does it do?</span></div>
-          <p class="plead">Tesla, gold and oil — traded the same way and the same hours as BTC. <span class="q">Including Saturday and Sunday</span>, when every stock exchange on earth is shut.</p>
-          <p class="pnote">Two versions of the same shelf: plain exposure that moves one-for-one with the price, and a leveraged version. Same underlyings a TradFi broker already offers — just without the five-day week.</p>
+          <p class="plead">Tesla, gold and oil — priced and traded the same hours as BTC, <span class="q">spot and leveraged</span>. Including Saturday and Sunday, when every stock exchange on earth is shut.</p>
           <svg class="mini" viewBox="0 0 460 100" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
             <g text-anchor="middle">
               <rect x="0" y="4" width="60" height="40" rx="6" fill="#f4f6f9" stroke="#e3e7ee"/><text x="30" y="22" font-size="10.5" font-weight="700" fill="#0E1A22">Mon</text><text x="30" y="36" font-size="9" fill="#5b6577">open</text>
@@ -1097,22 +1081,20 @@ table.econ td{padding:5px 8px}
               <rect x="330" y="4" width="60" height="40" rx="6" fill="rgba(31,159,108,.15)" stroke="#1f9f6c"/><text x="360" y="22" font-size="10.5" font-weight="700" fill="#1f9f6c">Sat</text><text x="360" y="36" font-size="9" font-weight="700" fill="#1f9f6c">only us</text>
               <rect x="396" y="4" width="60" height="40" rx="6" fill="rgba(31,159,108,.15)" stroke="#1f9f6c"/><text x="426" y="22" font-size="10.5" font-weight="700" fill="#1f9f6c">Sun</text><text x="426" y="36" font-size="9" font-weight="700" fill="#1f9f6c">only us</text>
             </g>
-            <text x="0" y="68" font-size="12.5" font-weight="800" fill="#1f9f6c">+104 trading days a year</text>
-            <text x="0" y="86" font-size="9.5" fill="#5b6577">Not more users. More days. It is the only growth line that works that way —</text>
-            <text x="0" y="98" font-size="9.5" fill="#5b6577">and spreads on those days are 2–5× the weekday level.</text>
+            <text x="0" y="72" font-size="12.5" font-weight="800" fill="#1f9f6c">+104 trading days a year</text>
           </svg>
         </div>
 
         <div class="pbox why">
           <div class="pbox-head"><span class="pbox-n">2</span><span class="pbox-t">Why is it interesting?</span></div>
           <span class="whytag ahead">Half a step ahead — and the only one TradFi asks us for</span>
-          <p class="plead" style="font-size:13px">It is the one thing a bank <span class="q">cannot build itself</span>. Their market is closed at the weekend, so they have no price and nowhere to hedge — and no appetite to build either.</p>
-          <p class="pnote">On the crypto side the pull is the mirror image: their users want to trade Tesla and gold without leaving the app, and they have no route to real-world assets. The same capability is differentiated to both customer bases, for opposite reasons.</p>
+          <p class="plead" style="font-size:13px">It is the one thing a bank <span class="q">cannot build itself</span>. Their market is closed at the weekend, so they have no price and nowhere to hedge. On the crypto side the pull is the mirror image — their users want Tesla and gold without leaving the app.</p>
           <div class="demand">
-            <div class="dl">Demand we have actually seen</div>
+            <div class="dl">Clients with interest</div>
             <div class="dr">
-              <span class="dn">TradFi brokers &amp; CFD houses <small>— inbound, weekend pricing</small></span>
-              <span class="dn">Crypto venues <small>— equities &amp; metals in-app</small></span>
+              <span class="dn">Scalable Capital</span>
+              <span class="dn">Axi</span>
+              <span class="dn">TradFi brokers &amp; CFD houses</span>
             </div>
           </div>
         </div>
@@ -1127,8 +1109,6 @@ table.econ td{padding:5px 8px}
               <div class="tstep now"><div class="tk">Today — building</div><div class="tn">Broker + risk book</div><div class="ts">Commodities and metals first.</div></div>
             </div>
           </div>
-          <div class="neverissue"><b>We never issue.</b> The wrapper always comes from a partner issuer who can meet our requirements. Our position is broker and distributor — on every product, without exception.</div>
-          <p class="pnote" style="margin-top:8px">This is the position with the <b>deepest moat</b> — being open on Sunday is an operational capability, not a licence you can buy.</p>
         </div>
 
         <div class="pbox money">
@@ -1136,16 +1116,11 @@ table.econ td{padding:5px 8px}
           <div class="fee">
             <div class="feerow"><span class="fk">Weekend spread</span><span class="fv m">2–5× the weekday spread</span></div>
             <div class="feerow"><span class="fk">Plus</span><span class="fv">turnover on plain exposure</span></div>
-            <div class="feerow"><span class="fk">Do we run the book?</span><span class="fv m">Yes — we are the quote</span></div>
             <div class="feerow"><span class="fk">Cost base</span><span class="fv">fixed — same engine, more days</span></div>
           </div>
           <div class="revbig"><span class="rv">$3.5M</span><span class="rl">a year per 100,000 users<br><b>≈20% of total revenue</b> — the growth line, on a cost base that does not move</span></div>
         </div>
 
-      </div>
-      <div class="standbar">
-        <span class="sbl">Standing point</span>
-        <p><b>DLT is the infrastructure that makes this product available to everyone — as the broker and the counterparty.</b> On RWA we are literally the only counterparty open when the market is shut.</p>
       </div>
     </div>
     <div class="slide-foot"><span>Slide 9 · RWA</span><span>2026 | Confidential</span></div>
@@ -1179,7 +1154,6 @@ table.econ td{padding:5px 8px}
         <div class="pbox">
           <div class="pbox-head"><span class="pbox-n">1</span><span class="pbox-t">What does it do?</span><span class="pbox-cap">example: shark fin</span></div>
           <p class="plead"><span class="q">Your money back, guaranteed.</span> Plus up to 8% if BTC stays inside a range. If it breaks out you still get your money back — you just lose the bonus.</p>
-          <p class="pnote">One recipe among many — covered calls, protected notes and dual-currency are the same machinery with a different mix.</p>
           <div class="plainscen" style="margin-top:auto;padding-top:8px;border-top:1px solid var(--border)">
             <div class="psrow"><span class="pst up">In range</span><div class="psb"><b>You get your money back + the bonus</b><span>the best case, and the one most clients get</span></div></div>
             <div class="psrow"><span class="pst out">Breaks out</span><div class="psb"><b>You get your money back + base interest</b><span>you lose the bonus, never the capital</span></div></div>
@@ -1189,13 +1163,12 @@ table.econ td{padding:5px 8px}
         <div class="pbox why">
           <div class="pbox-head"><span class="pbox-n">2</span><span class="pbox-t">Why is it interesting?</span></div>
           <span class="whytag ahead">Half a step ahead — and it holds the deposit</span>
-          <p class="plead" style="font-size:13px">It is the only product on the shelf that <span class="q">locks a balance in place</span> for one to three months. That money cannot leave for a competitor mid-term.</p>
-          <p class="pnote">It also reaches a different customer entirely — the one who will never touch 30× leverage but will accept "capital back, plus maybe 8%". It turns a passive spot balance into a fee-earning one at zero extra acquisition cost.</p>
+          <p class="plead" style="font-size:13px">It is the only product on the shelf that <span class="q">locks a balance in place</span> for one to three months — and it reaches the customer who will never touch 30× leverage but will accept "capital back, plus maybe 8%".</p>
           <div class="demand">
-            <div class="dl">Demand we have actually seen</div>
+            <div class="dl">Clients live today</div>
             <div class="dr">
-              <span class="dn">Bitget <small>— live, ~$60M / week</small></span>
-              <span class="dn">Nexo <small>— live, ~$5M / week</small></span>
+              <span class="dn">Bitget <small>— ~$60M / week</small></span>
+              <span class="dn">Nexo <small>— ~$5M / week</small></span>
             </div>
           </div>
         </div>
@@ -1210,23 +1183,17 @@ table.econ td{padding:5px 8px}
               <div class="tstep now"><div class="tk">Today — live</div><div class="tn">Broker + pricing engine</div><div class="ts">Two venues in production.</div></div>
             </div>
           </div>
-          <p class="pnote" style="margin-top:7px">Same risk engine as the ETPs. <b>A new recipe costs pricing work, not infrastructure.</b> The wrapper always comes from a <b>partner issuer</b>.</p>
         </div>
 
         <div class="pbox money">
           <div class="pbox-head"><span class="pbox-n">4</span><span class="pbox-t">How do we make money?</span><span class="pbox-cap">per 100,000 users</span></div>
           <div class="fee">
             <div class="feerow"><span class="fk">Revenue share on the yield</span><span class="fv m">50%</span></div>
-                        <div class="feerow"><span class="fk">Do we run the book?</span><span class="fv m">Yes — we price and hedge it</span></div>
             <div class="feerow"><span class="fk">Who takes it up</span><span class="fv">~7% of users</span></div>
           </div>
           <div class="revbig"><span class="rv">$2.1M</span><span class="rl">a year per 100,000 users<br><b>≈12% of total revenue</b> from ~7% of users</span></div>
         </div>
 
-      </div>
-      <div class="standbar">
-        <span class="sbl">Standing point</span>
-        <p><b>DLT is the infrastructure that makes this product available to everyone — as the broker and the counterparty.</b> Nobody distributing a shark fin wants to price or hedge one. That is the job we take.</p>
       </div>
     </div>
     <div class="slide-foot"><span>Slide 10 · Structured Products</span><span>2026 | Confidential</span></div>
@@ -1271,7 +1238,7 @@ table.econ td{padding:5px 8px}
             <line x1="512" y1="182" x2="512" y2="207" stroke="#d04444" stroke-width="1" stroke-dasharray="2,2"/>
             <text x="317" y="20" fill="#1f9f6c" font-size="11.5" font-weight="800" text-anchor="middle">The line never goes below zero — the capital always comes back</text>
           </svg>
-          <div class="panel-note">The only thing that varies is the yield. The capital is returned at maturity in every single case.</div>
+          <div class="panel-note">The only thing that varies is the yield. The capital is returned at maturity in every case.</div>
         </div>
         <div style="display:flex;flex-direction:column;gap:10px;min-height:0">
           <div class="panel" style="flex:0 0 auto">
@@ -1289,7 +1256,6 @@ table.econ td{padding:5px 8px}
               <div class="psrow"><span class="pst flat">Flat / down</span><div class="psb"><b>BTC goes nowhere, or falls</b><span>Capital back, plus base interest. The client is no worse off than holding cash — and better off than holding BTC.</span></div></div>
               <div class="psrow"><span class="pst out">Breakout</span><div class="psb"><b>BTC rips through the top of the range</b><span>Capital back, plus base interest. The client gives up the bonus — the one real cost, and it is an opportunity cost, not a loss.</span></div></div>
             </div>
-            <div class="callout g" style="margin-top:auto"><div class="ct">Why this is the example we use</div><p>It is the easiest structured product to explain to someone who has only ever held spot: <b>you cannot lose your money, and here is what you give up in exchange.</b> Every other recipe on the shelf is a variation on that trade-off.</p></div>
           </div>
         </div>
       </div>
@@ -1349,7 +1315,7 @@ table.econ td{padding:5px 8px}
               <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#c3cad6;margin-right:4px"></span>Other 2%</span>
             </div>
           </div>
-          <div class="assum" style="margin-top:auto;font-size:9px">Driver-based and illustrative. Perps and ETPs are the <b>same ~7,000-user cohort</b> — the difference in revenue per user is the difference between routing the trade for a commission and running the book against it, not a difference in how much they trade. RWA: weekend leverage at 2–5× spread plus plain-exposure turnover. Spot: ~$7,000 at 20 bps. Structured: $5,000 ticket × 2 p.a. × ~3% retained. <b>The 12 / 46 split between perps and ETPs is an assumption to be replaced with our own book before this is presented.</b> We are broker and distributor throughout — no line in this table assumes issuance.</div>
+          <div class="assum" style="margin-top:auto;font-size:9px">Driver-based and illustrative. Perps and ETPs are the <b>same ~7,000-user cohort</b> — the gap in revenue per user is routing vs. running the book, not trade size. <b>The 12 / 46 split is an assumption to be replaced with our own book before this is presented.</b></div>
         </div>
         <div style="display:flex;flex-direction:column;gap:10px;min-height:0">
           <div class="panel" style="flex:0 0 auto">
@@ -1358,15 +1324,15 @@ table.econ td{padding:5px 8px}
               <div class="barrow"><div class="barlab">Perps — agency broker</div><div class="bartrack" style="height:22px"><div class="barfill" style="width:26%;background:linear-gradient(90deg,#8b95a8,#c3cad6)"></div></div><div class="barval">$300</div></div>
               <div class="barrow"><div class="barlab">ETPs — broker + book</div><div class="bartrack" style="height:22px"><div class="barfill" style="width:100%;background:linear-gradient(90deg,#0E4A66,#11617E)"></div></div><div class="barval pos">$1,150</div></div>
             </div>
-            <p style="font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.45">Revenue per user, same cohort, same trade size. The only thing that changes between these two bars is <b>whether the flow passes through us or we run the book against it</b>. Neither bar requires us to issue anything.</p>
+            <p style="font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.45">Same cohort, same trade size. The only thing that changes is <b>whether the flow passes through us or we run the book against it</b>.</p>
           </div>
           <div class="panel" style="flex:1;min-height:0">
             <div class="panel-t" style="margin-bottom:6px">What the four products add up to</div>
             <ul class="plain">
-              <li><b>Perps are the entry ticket.</b> 12% of revenue, and we run them at agency margin — but without them we do not get the conversation. Offer them, do not fund them as a growth line.</li>
-              <li><b>ETPs are the business.</b> 46% of revenue from 7% of users, because the client faces us and we run the book. A partner issuer supplies the wrapper — the licence and the risk engine exist to serve this line.</li>
-              <li><b>RWA is the growth.</b> 20% of revenue, and the only line that grows by adding <b>104 trading days</b> rather than more users — on a fixed cost base, against competitors who are closed.</li>
-              <li><b>Structured is the margin and the stickiness.</b> 12% of revenue at the fattest margin, and the only product that locks the client's balance in place for months at a time.</li>
+              <li><b>Perps are the entry ticket.</b> 12% of revenue at agency margin — but ~5× the volume of spot, and without them we do not get the conversation.</li>
+              <li><b>ETPs are the business.</b> 46% of revenue from 7% of users, because the client faces us and we run the book.</li>
+              <li><b>RWA is the growth.</b> 20% of revenue, and the only line that grows by adding <b>104 trading days</b> rather than more users.</li>
+              <li><b>Structured is the margin and the stickiness.</b> 12% at the fattest margin, and the only product that locks the balance for months.</li>
               <li><b>Spot is acquisition.</b> 100% of users, 8% of revenue, 200+ competitors. Defend it; do not invest to win it.</li>
             </ul>
           </div>
@@ -1389,17 +1355,17 @@ table.econ td{padding:5px 8px}
         <div class="card" style="padding:14px 16px">
           <div class="num">1</div>
           <h4 style="font-size:15px">Ship the ETPs</h4>
-          <p style="font-size:12px">Securitised leverage with Nexo in Q4 is the single highest-value item on the roadmap. It is the line where the client faces us and we run the book — and it carries nearly half the revenue.</p>
+          <p style="font-size:12px">Securitised leverage with Nexo in Q4. The line where the client faces us and we run the book — nearly half the revenue.</p>
         </div>
         <div class="card" style="padding:14px 16px">
           <div class="num">2</div>
           <h4 style="font-size:15px">Open the weekend</h4>
-          <p style="font-size:12px">24/7 real-world assets, commodities and metals first. The only growth line that adds trading days instead of users — and the one capability TradFi genuinely cannot copy.</p>
+          <p style="font-size:12px">24/7 real-world assets, commodities and metals first. The only line that adds trading days instead of users — and the one capability TradFi cannot copy.</p>
         </div>
         <div class="card" style="padding:14px 16px">
           <div class="num">3</div>
           <h4 style="font-size:15px">Widen the structured shelf</h4>
-          <p style="font-size:12px">More recipes on the same pricing engine, on new underlyings. Each one is pricing work, not new infrastructure — the shelf compounds on a cost base we have already paid for.</p>
+          <p style="font-size:12px">More recipes on the same pricing engine. Each one is pricing work, not new infrastructure — the shelf compounds on a cost base already paid for.</p>
         </div>
       </div>
 
@@ -1418,9 +1384,9 @@ table.econ td{padding:5px 8px}
         <div class="panel">
           <div class="panel-t" style="margin-bottom:8px">Open items before this is presented</div>
           <ul class="plain">
-            <li><b>The perps / ETPs revenue split.</b> The 12% / 46% split is an assumption. It needs replacing with our own book — the story only lands if those two numbers are real, because the whole argument is the gap between them.</li>
-            <li><b>Which issuers we name.</b> The deck says "partner issuer" throughout without naming anyone. Confirm whether the issuing partners can be named, or whether it stays generic.</li>
-            <li><b>The perps roadmap.</b> Box 3 on the perps slide reads as a direction, not a commitment. If becoming the broker of record on perps is a real plan, that box gets stronger wording.</li>
+            <li><b>The perps / ETPs revenue split.</b> 12% / 46% is an assumption. It needs replacing with our own book — the whole argument is the gap between those two numbers.</li>
+            <li><b>Which issuers and clients we name.</b> Confirm the named launch clients and whether the issuing partners can be named.</li>
+            <li><b>The perps roadmap.</b> Box 3 on the perps slide reads as a direction, not a commitment.</li>
           </ul>
           <div class="callout y" style="margin-top:auto"><div class="ct">Note on the appendix</div><p>The expansion matrix, the liquidity-transmission diagram and the weekend-volume detail have been moved out of the main flow. They are supporting evidence, not the argument — pull them only if asked.</p></div>
         </div>
