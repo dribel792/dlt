@@ -341,6 +341,7 @@ ul.plain li b{font-weight:700}
 .xhub span{font-size:9.5px;color:rgba(255,255,255,.7);line-height:1.3;margin-top:3px}
 
 @media print{
+  @page{size:13.333in 7.5in;margin:0}
   body{background:#fff}
   .deck{max-width:none;padding:0;gap:0}
   .slide{border-radius:0;border:none;box-shadow:none;page-break-after:always;break-after:page}
@@ -702,7 +703,7 @@ table.cmp td.b em{font-style:normal;color:var(--green);font-weight:800}
 .usefor p{font-size:11px;line-height:1.45;color:var(--ink)}
 
 /* deliver band */
-.deliver{margin-top:11px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}
+.deliver{margin-top:11px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .dv{background:#fff;border:1px solid var(--border);border-radius:9px;padding:9px 12px}
 .dv b{font-size:11.5px;display:block;line-height:1.25;color:var(--petrol)}
 .dv span{font-size:10px;color:var(--muted);display:block;line-height:1.35;margin-top:3px}
@@ -756,12 +757,12 @@ table.cmp td.b em{font-style:normal;color:var(--green);font-weight:800}
           <div class="eh">A finished product, not a building project</div>
           <div class="role3">
             <div class="rb">
-              <b>Licence and broker of record</b>
-              <span>MiFID investment firm. We face your end client on every leveraged and structured position, so you list the product without holding the risk or the permission.</span>
+              <b>Licence and broker of record — if you need it</b>
+              <span>We are a MiFID investment firm. If you already hold the permission, you face your own client and we sit behind you. If you do not operate under MiFID yourself, we can face your end client on every leveraged and structured position — so you list the product without holding the risk or the permission. Your choice, product by product.</span>
             </div>
             <div class="rb">
-              <b>Issuer network and wrappers</b>
-              <span>Partner issuers create the ISIN or the token. We arrange it, list it and keep it alive — you never touch issuance.</span>
+              <b>One API that quotes and prices everything</b>
+              <span>A single interface that returns a live, tradable price on any asset class we cover — crypto, equities, pre-IPO names, indices, metals, commodities and FX — and on any instrument shape built on them: perps, certificates, turbos, options and structured notes. One integration, one price source, the whole shelf.</span>
             </div>
             <div class="rb key">
               <b>Pricing, risk and hedging engine</b>
@@ -781,10 +782,8 @@ table.cmp td.b em{font-style:normal;color:var(--green);font-weight:800}
         </div>
       </div>
       <div class="deliver">
-        <div class="dv"><b>One API</b><span>REST + FIX. Quote, trade, position, settle. Same contract for every product family.</span></div>
+        <div class="dv"><b>One integration</b><span>REST + FIX. Quote, trade, position, settle. Same contract for every product family.</span></div>
         <div class="dv"><b>Settlement in USDC or fiat</b><span>No new rails. We settle into the account you already use.</span></div>
-        <div class="dv"><b>White label end to end</b><span>Your name on the screen. We never appear to your user unless you want us to.</span></div>
-        <div class="dv"><b>4–8 weeks to first product</b><span>Perps first, then the shelf. Each additional product is configuration, not a new build.</span></div>
       </div>
     </div>
     <div class="slide-foot"><span>Slide 2 · How We Work With You</span><span>2026 | Confidential</span></div>
@@ -819,12 +818,13 @@ table.cmp td.b em{font-style:normal;color:var(--green);font-weight:800}
         <div class="scard ahead">
           <div class="sk">Leapfrog</div>
           <div class="sn">Securitised perps &amp; ETPs</div>
-          <div class="sd">The same leveraged bet, wrapped as a security — ISIN or token. Turbos, minis, knock-outs and factor certificates all live here.</div>
+          <div class="sd"><b>It trades exactly like a perp.</b> Same screen, same long/short, same leverage slider, no expiry — structured deliberately to replicate the perp experience your users already know, only with <b>more leverage</b>.</div>
+          <div class="sd2"><b>Any underlying, not just crypto:</b> BTC and altcoins, <b>pre-IPO names</b> (OpenAI, SpaceX, Anthropic), single equities, indices, gold and silver, oil and commodities, FX. If we can price it, we can wrap it.</div>
           <div class="sd2"><b>Why it beats a perp account:</b> up to 30× instead of 20×, no margin calls, no negative balances, and no derivatives permission needed to list it.</div>
           <div class="sd2"><b>Up to 30×</b> · loss capped at the premium · ISIN or token · <b>live today</b></div>
           <div class="eg">
-            <div class="egl">Example</div>
-            <div class="egv">BTC turbo long, 30× <i>— loss capped at the premium</i></div>
+            <div class="egl">Examples</div>
+            <div class="egv">BTC turbo long, 30× <i>— loss capped at the premium</i><br>Pre-IPO long, 10× <i>— an underlying no perp venue lists</i></div>
           </div>
         </div>
         <div class="scard ahead">
