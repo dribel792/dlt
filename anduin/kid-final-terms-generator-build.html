@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PRIIPs KID &amp; Final Terms Generator — Build Outline</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Georgia', serif; background: #fafaf8; color: #1a1a1a; line-height: 1.75; font-size: 16px; }
+    .page { max-width: 860px; margin: 0 auto; padding: 60px 48px 100px; }
+    .cover { border-bottom: 2px solid #1a1a1a; padding-bottom: 40px; margin-bottom: 48px; }
+    .cover .label { font-family: 'Arial', sans-serif; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #666; margin-bottom: 16px; }
+    .cover h1 { font-size: 30px; font-weight: normal; line-height: 1.3; margin-bottom: 12px; }
+    .cover .sub { font-size: 16px; color: #444; font-style: italic; margin-bottom: 28px; }
+    .cover .meta { font-family: 'Arial', sans-serif; font-size: 13px; color: #555; display: grid; grid-template-columns: 160px 1fr; gap: 6px 0; }
+    .cover .meta span:nth-child(odd) { color: #888; }
+    .notice { background: #f5f0e8; border-left: 3px solid #c8a96e; padding: 16px 20px; margin-bottom: 48px; font-family: 'Arial', sans-serif; font-size: 13px; color: #555; line-height: 1.6; }
+    h2 { font-size: 20px; font-weight: normal; letter-spacing: 0.01em; margin: 52px 0 18px; padding-bottom: 8px; border-bottom: 1px solid #ddd; }
+    h3 { font-size: 16px; font-weight: bold; margin: 32px 0 12px; color: #1a1a1a; font-family: 'Arial', sans-serif; }
+    p { margin-bottom: 16px; color: #2a2a2a; }
+    ul, ol { margin: 0 0 16px 24px; color: #2a2a2a; }
+    li { margin-bottom: 8px; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0 28px; font-family: 'Arial', sans-serif; font-size: 14px; }
+    th { background: #1a1a1a; color: #fff; padding: 10px 14px; text-align: left; font-weight: normal; letter-spacing: 0.03em; }
+    td { padding: 10px 14px; border-bottom: 1px solid #e8e8e8; vertical-align: top; }
+    tr:nth-child(even) td { background: #f7f7f5; }
+    .highlight-box { background: #f0f4ff; border-left: 3px solid #3a5fc8; padding: 18px 22px; margin: 24px 0; font-family: 'Arial', sans-serif; font-size: 14px; line-height: 1.65; }
+    .highlight-box strong { display: block; margin-bottom: 6px; font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; color: #3a5fc8; }
+    .formula { background: #1a1a1a; color: #f0e8d0; font-family: 'Courier New', monospace; font-size: 14px; padding: 16px 20px; margin: 16px 0; border-radius: 2px; letter-spacing: 0.03em; }
+    .section-num { font-family: 'Arial', sans-serif; font-size: 12px; color: #999; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .flow { font-family: 'Arial', sans-serif; display: grid; grid-template-columns: 1fr; gap: 10px; margin: 24px 0 32px; }
+    .flow .step { background: #fff; border: 1px solid #ddd; border-left: 4px solid #1a1a1a; padding: 14px 18px; font-size: 14px; line-height: 1.55; }
+    .flow .step b { display: block; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #3a5fc8; margin-bottom: 4px; }
+    .lift-s { color: #2e7d32; font-weight: bold; }
+    .lift-m { color: #b07a1e; font-weight: bold; }
+    .lift-l { color: #c8383a; font-weight: bold; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <div class="cover">
+    <div class="label">Anduin — Internal Engineering &amp; Product Brief</div>
+    <h1>PRIIPs KID &amp; Final Terms Generator<br/>Technical Build Outline</h1>
+    <div class="sub">What we have to build to issue perpetual knock-out certificates at scale: document generation, the risk &amp; cost calculation engine behind it, and the filing connection into the FMA.</div>
+    <div class="meta">
+      <span>Date</span><span>23 October 2026</span>
+      <span>Audience</span><span>Engineering &amp; Product — for effort/duration assessment</span>
+      <span>Programme context</span><span>Perpetual KO Certificate Programme (see Programme Term Sheet)</span>
+      <span>Status</span><span>Draft for sizing — not a spec</span>
+    </div>
+  </div>
+
+  <div class="notice">
+    <strong>Why this exists.</strong> Every certificate Series we issue needs two legal documents at the moment of issuance: the <strong>Final Terms</strong> (Prospectus Regulation) and the <strong>PRIIPs KID</strong> (Key Information Document). Competitors issue thousands of Series per day, fully automated, in minutes. Manual document production caps us at a handful of products. This generator <em>is</em> the issuance factory — without it there is no scalable product shelf. The purpose of this doc is to let eng/product size the lift and put a timeline on it.
+  </div>
+
+  <h2><span class="section-num">1</span>What the system produces, per Series</h2>
+  <table>
+    <thead><tr><th>Artifact</th><th>Governing rule</th><th>What's in it</th><th>When</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Final Terms</strong> (PDF + structured data)</td><td>Prospectus Regulation 2017/1129, Art. 8(5) — completes the approved base prospectus</td><td>All per-Series parameters: underlying, reference venue, ratio, financing level, KO barrier, MMB, ISIN, issue date/price, calibration choice</td><td>Before issuance; filed with the NCA no later than listing/offer</td></tr>
+      <tr><td><strong>PRIIPs KID</strong> (3-page PDF, per language)</td><td>PRIIPs Reg. 1286/2014 + RTS (Del. Reg. 2017/653 as amended)</td><td>SRI, performance scenarios, cost tables, plain-language product description, risk warnings</td><td>Published on issuer website <em>before</em> any retail sale; kept current thereafter</td></tr>
+      <tr><td><strong>ISIN + classification</strong></td><td>Numbering agency; EUSIPA product code</td><td>Per-Series identifier, EUSIPA category (knock-out products), reference data for distributors/vendors</td><td>At Series creation</td></tr>
+    </tbody>
+  </table>
+  <p>Classification per the Programme Term Sheet: <strong>PRIIPs Category 3</strong>, expected SRI 6–7 depending on leverage. Category 3 matters for sizing: it means the SRI and performance scenarios come from <strong>simulation</strong>, not lookup tables — that's the bulk of the quant build (Section 3).</p>
+
+  <h2><span class="section-num">2</span>System overview</h2>
+  <div class="flow">
+    <div class="step"><b>1 — Product Master (golden source)</b>Series parameters entered/created via API or issuance UI → validated against base prospectus constraints → ISIN requested → Series record becomes the single source of truth for every downstream artifact.</div>
+    <div class="step"><b>2 — Market Data Layer</b>Price history, perp funding rates, FX and rates curves ingested from reference venues + market data vendor; quality-checked and stored as the input set for all calculations.</div>
+    <div class="step"><b>3 — Risk &amp; Cost Calculation Engine</b>Computes SRI (market + credit risk), four performance scenarios at the required holding periods, and the full PRIIPs cost tables — per Series, reproducibly, with audit trail.</div>
+    <div class="step"><b>4 — Document Generation</b>Templating engine merges Series data + calc results into the Final Terms form (annexed to the base prospectus) and the fixed 3-page KID layout; renders PDF per language; four-eyes approval where required.</div>
+    <div class="step"><b>5 — Filing &amp; Publication</b>Final Terms filed with the FMA; KID published on issuer website; both pushed to distribution partners and reference-data vendors; passporting notifications where we sell cross-border.</div>
+    <div class="step"><b>6 — Ongoing Monitoring</b>Daily/monthly jobs re-check every live Series: has the SRI moved? Scenarios stale? Costs changed? KO event? → regenerate and republish the KID, or terminate the Series record.</div>
+  </div>
+
+  <h2><span class="section-num">3</span>The calculation engine (the real quant lift)</h2>
+
+  <h3>3.1 Summary Risk Indicator (SRI)</h3>
+  <p>SRI = the 1–7 risk number on page 1 of the KID. It combines a Market Risk Measure (MRM) and a Credit Risk Measure (CRM):</p>
+  <ul>
+    <li><strong>MRM (Category 3):</strong> bootstrap-simulate the product's value distribution over the recommended holding period from at least 2 years of daily observed returns (5 years preferred per RTS) — minimum 10,000 paths. Compute VaR at 97.5%, convert to VaR-equivalent volatility (VEV), map VEV to MRM class 1–7. For 10–30× KO certs this will land at 7 almost always, but we must <em>compute</em> it, not assert it.</li>
+    <li><strong>KO handling:</strong> simulated paths must respect the knock-out — a path that touches the barrier terminates at residual value (incl. MMB). This is bespoke logic; off-the-shelf PRIIPs calculators generally don't model our zero-equity barrier + MMB payout.</li>
+    <li><strong>CRM:</strong> derived from the issuer SPV's credit standing (unrated → CRM per RTS fallback rules; collateralisation structure may be relevant). Mostly a static mapping, low lift.</li>
+  </ul>
+
+  <h3>3.2 Performance scenarios</h3>
+  <p>Four scenarios (stress / unfavourable / moderate / favourable) at the recommended holding period, from the same simulated distribution (prescribed percentiles). Open-end product → RHP definition needs a product/legal decision (likely 1 year intermediate-style treatment). Scenario values must show what a retail investor gets back on €10,000, net of costs, with KO paths flowing through to the stress/unfavourable numbers.</p>
+
+  <h3>3.3 Cost calculations</h3>
+  <p>Full PRIIPs cost tables: entry/exit (bid-offer, issue premium), ongoing (financing spread on the financing level, management fee if any), expressed both as total costs and as annual cost impact on return. Two product-specific wrinkles flagged in the lawyer workshop that the engine must support:</p>
+  <ul>
+    <li><strong>Negative carry/costs:</strong> when the funding rate flows <em>to</em> the holder, the "cost" can be negative — methodology for disclosing this is a pending counsel question; the engine should be parameterised either way.</li>
+    <li><strong>Variable funding rate:</strong> the barrier adjustment depends on the reference venue's funding rate → ongoing cost figures are estimates that must be refreshed, not constants.</li>
+  </ul>
+
+  <div class="formula">SRI = max( MRM(VEV from 10k bootstrapped KO-aware paths), CRM(issuer) )<br/>scenario(p) = percentile_p( net payoff distribution over RHP, after costs )</div>
+
+  <h3>3.4 Ongoing review (this is a system, not a one-shot)</h3>
+  <p>The RTS requires KID review whenever a change would materially affect the information, and at minimum on a defined schedule: in practice a <strong>monthly MRM recheck</strong> across every live Series plus event triggers (reference venue change, funding regime change, cost change, corporate-action equivalents). With a shelf of thousands of Series this is a scheduled pipeline with diffing, regeneration and republication — budget it as a standing subsystem, not a cron afterthought.</p>
+
+  <h2><span class="section-num">4</span>Final Terms generator</h2>
+  <ul>
+    <li><strong>Template is fixed by the base prospectus:</strong> the "form of Final Terms" is an annex of the approved base prospectus — the generator fills blanks, it may not add or alter disclosure. Tight coupling to the legal drafting: template changes require prospectus supplement awareness.</li>
+    <li><strong>Inputs:</strong> entirely from the Product Master (Section 2, step 1) — no free text at generation time. Per-Series venue election, calibration choice, MMB amount, carry mechanism per asset class all flow from validated fields.</li>
+    <li><strong>Validation layer:</strong> parameter bounds from the prospectus (max leverage, eligible underlyings, eligible reference venues, min issue size) enforced at Series creation so an invalid Series cannot reach document generation.</li>
+    <li><strong>Output:</strong> PDF for filing/publication + structured version (XML/JSON) for distributors and vendors. Immutable versioning + audit trail (who created, who approved, what was filed when).</li>
+  </ul>
+
+  <h2><span class="section-num">5</span>Connection into the FMA</h2>
+  <div class="highlight-box">
+    <strong>Setting expectations</strong>
+    There is no real-time "FMA API" in the sense of a trading integration. The connection is a <em>filing workflow</em>: Final Terms must be filed with the approving NCA (FMA Liechtenstein — or CSSF Luxembourg; the election is still open per the Programme Term Sheet, so build this as a pluggable adapter) each time a Series is issued. The KID itself is <em>not</em> approved by the regulator — our obligation is publication and maintenance.
+  </div>
+  <ul>
+    <li><strong>Final Terms filing:</strong> submission via the NCA's e-service/portal channel (FMA e-Service; CSSF uses its own filing portal). Expect semi-automated at best: a filing adapter that packages the PDF + metadata and either submits via the portal's supported upload mechanism or queues for a one-click human submission. Clarify with the NCA during the pre-submission meetings what machine-friendly channels exist — this determines whether this component is days or weeks.</li>
+    <li><strong>Base prospectus + supplements:</strong> separate, lawyer-driven approval track — out of scope for the generator, but the generator must know which prospectus version each Series completes.</li>
+    <li><strong>Passporting:</strong> NCA notifies host-state regulators for cross-border offers; our side is tracking which Series/documents are passported where, and producing host-language KIDs where required.</li>
+    <li><strong>Publication duties:</strong> Final Terms and KID published on the issuer website (versioned, retrievable historical versions); KID available before any retail transaction. Distributors will also demand a document feed (API/SFTP) — brokers won't screen-scrape our website.</li>
+  </ul>
+
+  <h2><span class="section-num">6</span>Build inventory for sizing</h2>
+  <p>Lift ratings are my prior — the point of this doc is for you to challenge them and put durations on it.</p>
+  <table>
+    <thead><tr><th>#</th><th>Component</th><th>Core work</th><th>Lift</th><th>Depends on</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Product Master + Series API/UI</td><td>Data model for all Final Terms parameters, validation against prospectus constraints, ISIN request integration, audit/versioning</td><td class="lift-m">M</td><td>Near-final term sheet; numbering agency account</td></tr>
+      <tr><td>2</td><td>Market data layer</td><td>5y daily history per underlying, funding rate feeds per reference venue, FX/rates; QA + storage</td><td class="lift-m">M</td><td>Vendor selection; venue API access</td></tr>
+      <tr><td>3</td><td>Calc engine — SRI + scenarios</td><td>Cat-3 bootstrap simulation with KO-aware paths, VEV→MRM, CRM, 4 scenarios; reproducible + auditable</td><td class="lift-l">L</td><td>2; RHP decision; counsel sign-off on methodology</td></tr>
+      <tr><td>4</td><td>Calc engine — costs</td><td>PRIIPs cost tables incl. negative-carry handling and variable funding refresh</td><td class="lift-m">M</td><td>3; counsel answer on negative-cost disclosure</td></tr>
+      <tr><td>5</td><td>KID generator</td><td>Fixed 3-page layout, prescribed wording, PDF render, multi-language (EN/DE minimum)</td><td class="lift-m">M</td><td>1, 3, 4; legal wording sign-off</td></tr>
+      <tr><td>6</td><td>Final Terms generator</td><td>Template merge against base prospectus annex form, PDF + structured output, four-eyes workflow</td><td class="lift-s">S–M</td><td>1; approved base prospectus form</td></tr>
+      <tr><td>7</td><td>FMA filing adapter</td><td>Package + submit Final Terms to NCA portal (pluggable FMA/CSSF); filing status tracking</td><td class="lift-s">S–M</td><td>6; NCA pre-submission meeting outcome</td></tr>
+      <tr><td>8</td><td>Publication &amp; distribution</td><td>Issuer website doc hub (versioned), distributor document feed (API/SFTP), vendor reference data</td><td class="lift-m">M</td><td>5, 6</td></tr>
+      <tr><td>9</td><td>Monitoring &amp; republication pipeline</td><td>Scheduled SRI/scenario/cost rechecks across all live Series, trigger rules, regenerate + republish, KO lifecycle handling</td><td class="lift-l">L</td><td>3, 4, 5, 8</td></tr>
+    </tbody>
+  </table>
+
+  <h2><span class="section-num">7</span>Build vs. buy</h2>
+  <p>PRIIPs calc + KID production vendors exist and most mid-size issuers use them. Honest assessment of the trade:</p>
+  <ul>
+    <li><strong>Buy/hybrid:</strong> fastest route to compliant KIDs; but our KO-barrier-with-MMB payoff, perp funding reference and possible negative costs are non-standard — vendor onboarding will involve custom payoff work either way, and per-document pricing hurts at thousands of Series.</li>
+    <li><strong>Build:</strong> the calc engine (rows 3–4) is the only genuinely hard part, and it overlaps heavily with pricing/hedging analytics we need in-house anyway. Everything else is standard data + document plumbing.</li>
+    <li><strong>Recommendation to assess:</strong> build the engine and generators, consider buying only the regulatory-template maintenance (RTS wording updates per language) as a content subscription.</li>
+  </ul>
+
+  <h2><span class="section-num">8</span>Open questions blocking final sizing</h2>
+  <ol>
+    <li>NCA election (FMA vs. CSSF) and what their portals actually support for automated Final Terms filing — ask in the pre-submission meetings.</li>
+    <li>RHP treatment for an open-end product — product/legal decision, drives scenario methodology.</li>
+    <li>Counsel answers on negative-cost disclosure and scenario validity under variable funding (lawyer workshop Qs) — parameterise the engine, don't wait, but these gate go-live.</li>
+    <li>Launch languages beyond EN/DE (depends on passporting targets).</li>
+    <li>Expected issuance volume at launch (10s vs. 1000s of Series/day) — changes infra sizing for rows 1, 8, 9, not the architecture.</li>
+  </ol>
+
+  <p style="margin-top:48px; font-family:Arial, sans-serif; font-size:12px; color:#888; border-top:1px solid #ddd; padding-top:16px;">Internal draft — for engineering/product sizing only. Not legal advice; regulatory references to be confirmed by counsel. Companion docs: Programme Term Sheet, Lawyer Workshop agenda (same repo).</p>
+
+</div>
+</body>
+</html>
