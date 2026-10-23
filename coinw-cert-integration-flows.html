@@ -57,7 +57,8 @@
  code { font-family: 'JetBrains Mono', monospace; font-size: 0.92em; background: var(--bg-soft); padding: 1px 6px; border-radius: 3px; }
  .tag { display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 8px; border-radius: 3px; margin-left: 6px; vertical-align: middle; }
  .tag-open { background: var(--warn-soft); color: var(--warn); }
- .tag-instant { background: var(--accent-soft); color: var(--accent); }
+ .tag-flow1 { background: var(--accent-soft); color: var(--accent); }
+ .tag-flow2 { background: #f0ecf8; color: #6b4c9a; }
  footer.doc-footer { border-top: 1px solid var(--border); margin-top: 56px; padding-top: 16px; font-size: 12px; color: var(--text-muted); text-align: center; }
  @media print { html, body { font-size: 10.5pt; } .page { max-width: none; padding: 12mm 10mm; } }
  @page { size: A4 landscape; margin: 10mm; }
@@ -69,467 +70,461 @@
  <header class="doc-header">
  <div class="eyebrow">CoinW × Black Manta × DLT × Anduin — Integration Proposal</div>
  <h1>Securitized Perps on CoinW: Technical Integration Flow &amp; Flow of Funds</h1>
- <div class="meta">Prepared by Anduin · October 2026 · Working draft v0.1 — companion to the CoinW Listing Primer; adapts the KO Certificate Trading Flow (Nexo model, July 2026) to the CoinW relationship</div>
+ <div class="meta">Prepared by Anduin · October 2026 · Working draft v0.2 — companion to the CoinW Listing Primer; adapts the KO Certificate Trading Flow (Nexo model, July 2026) to the CoinW relationship</div>
  </header>
 
  <p class="lead">
- This document answers the two questions from the kick-off: <strong>what does the flow of funds look
- like</strong>, and <strong>what does the integration look like on a technical level — who does what
- in this relationship</strong>. It adapts the proven Nexo-model flow architecture to the CoinW chain.
+ This document answers the two questions from the kick-off: <strong>what does the integration look
+ like on a technical level — who does what in this relationship</strong> — and <strong>what does the
+ flow of funds look like</strong>. Part A presents the two options for pricing-data provision and
+ execution (Flow 1: perp books in, Anduin builds the cert book · Flow 2: cert books in, full STP).
+ Part B presents the flow of funds with <strong>ZBX</strong> (CoinW's EU MiCAR partner) as custodian.
  Names and payload shapes are indicative; the goal is to agree the shape.
  </p>
 
  <div class="info-box">
  <h4>The chain in one line</h4>
  <p style="margin:0">
- <strong>User → CoinW UI</strong> (tied agent of Black Manta) <strong>→ RTO → DLT</strong> (broker)
- <strong>→ STP → Anduin</strong> (issuer) <strong>→ STP → MM</strong> (CoinW MM or an Anduin MM).
- Anduin consumes executable books on the certificates directly from the MM and fills every client
- order straight-through against them — no order is ever worked, warehoused or discretionarily priced
- anywhere in the chain.
+ <strong>User → CoinW UI / API</strong> (frontend under a tied-agent relationship with Black Manta)
+ <strong>→ RTO/STP → DLT</strong> (broker, collects the fee) <strong>→ STP/prop → Anduin</strong>
+ (issuer) <strong>→ hedge or STP → MM</strong> (CoinW MM or an Anduin MM). There is no OCS in this
+ setup — the order chain is three direct hops, no order is worked or warehoused anywhere, and every
+ hop runs on that party's own servers (co-location in one datacenter possible for latency).
  </p>
  </div>
 
- <h2>1 · Operating model — who does what</h2>
-
- <p class="lead">
- One structural difference vs the Nexo setup is worth stating up front: in the Nexo model the
- distributor ran the technical lift (quoting, lifecycle, KO monitoring) and the issuer was a data
- consumer. <strong>In the CoinW setup this flips: Anduin runs the issuer systems</strong> — quoting
- off the MM's books, funding sync, KO monitoring, document generation — while
- <strong>CoinW runs only the frontend</strong> and <strong>DLT routes and reports</strong>. The MM is
- the liquidity source and risk taker.
- </p>
+ <h2>A1 · Actors — who does what</h2>
 
  <table class="legend">
  <thead>
- <tr><th style="width:16%">Party</th><th style="width:46%">Role &amp; responsibility</th><th>What they run technically</th></tr>
+ <tr><th style="width:17%">Party</th><th style="width:46%">Role &amp; responsibility</th><th>What they run technically</th></tr>
  </thead>
  <tbody>
  <tr>
- <td><strong>CoinW EU</strong> (frontend / distribution)</td>
- <td>Operates the client-facing UI as <strong>tied agent of Black Manta</strong> (under its
- Haftungsdach). Owns the user relationship: KYC/AML, jurisdiction gating, point-of-sale KID
- disclosure. <strong>Receives and transmits orders (RTO) to DLT</strong> — no execution, no
- pricing, no risk.</td>
- <td>UI (perp-style trading surface per the Listing Primer), order entry + RTO connection to DLT,
- rendering of Anduin's quote/levels/doc feeds.</td>
+ <td><strong>CoinW</strong> (frontend)</td>
+ <td>Operates the client-facing UI / API under a <strong>tied-agent relationship with Black
+ Manta</strong>. Owns the user relationship and order entry; <strong>RTOs / STPs orders to
+ DLT</strong>. No execution, no pricing, no risk.</td>
+ <td>UI/API (perp-style surface per the Listing Primer), order transmission to DLT, rendering of
+ the quote / levels / docs feeds.</td>
+ </tr>
+ <tr>
+ <td><strong>CoinW Tied Agent Entity</strong></td>
+ <td>The CoinW entity registered as tied agent of Black Manta — the legal face of the distribution.
+ Holds an account at ZBX and <strong>receives its share of the trading fee from DLT</strong>.</td>
+ <td>No real-time systems in the flow.</td>
  </tr>
  <tr>
  <td><strong>Black Manta</strong> (Haftungsdach)</td>
- <td>The MiFID-licensed securities house whose tied-agent umbrella makes CoinW EU's retail order
- transmission in a security lawful. Securities-side appropriateness framework where required.
- Always named together with DLT — the two come as one unit.</td>
- <td>No real-time systems in the flow. Receives compliance reporting from DLT as agreed
- bilaterally.</td>
+ <td>The MiFID-licensed securities house whose tied-agent umbrella makes CoinW's retail order
+ transmission in a security lawful. Always named together with DLT — the two come as one unit.</td>
+ <td>No real-time systems; compliance reporting from DLT as agreed bilaterally.</td>
  </tr>
  <tr>
  <td><strong>DLT</strong> (broker)</td>
- <td>Executing broker. Receives the RTO'd orders from CoinW EU and <strong>passes them
- straight-through (STP) to Anduin</strong>, executing back-to-back against Anduin's firm quotes
- (riskless principal). Records every cert purchase / sale / KO redemption at <strong>T+0</strong>;
- regulatory reporting counterparty; collects the trading fee and shares it with CoinW. Since no
- other venue lists these tokens, back-to-back execution against the issuer's quotes satisfies
- best execution.</td>
- <td>Order routing (CoinW in, Anduin out), T+0 securities trade book, reporting rail
- (SQS-style event consumer), fee accounting.</td>
+ <td>Executing broker. Consumes Anduin's quote stream and serves it to the CoinW UI; receives the
+ RTO'd orders and passes them to Anduin <strong>as STP / prop (back-to-back, riskless
+ principal), adding its spread or fee at this hop</strong>. Records every cert trade at
+ <strong>T+0</strong>; regulatory reporting counterparty; <strong>collects the trading fee and
+ credits the agreed share to the CoinW Tied Agent Entity</strong>. Since no other venue lists
+ these tokens, back-to-back execution against the issuer satisfies best execution.</td>
+ <td>Market-data redistribution (WS/FIX in from Anduin, stream out to CoinW), order routing, T+0
+ securities trade book, reporting rail, fee accounting.</td>
  </tr>
  <tr>
- <td><strong>Anduin</strong> (issuer + technical operator)</td>
+ <td><strong>Anduin</strong> (issuer)</td>
  <td>Issuer of record. Owns the golden record per series, generates and publishes Final Terms +
- PRIIPs KID, mints the tokens, is the counterparty of every client cert trade. <strong>Runs the
- quoting</strong>: consumes the MM's cert books, validates them against its own formula/levels,
- adds the issuer spread and streams firm quotes down the chain. Runs the <strong>8h funding
- sync</strong> (strike/barrier adjustment), <strong>monitors the KO barrier and declares
- knock-outs</strong>, computes residual values and runs payouts. <strong>STPs every fill to the
- MM</strong> so it is flat at all times.</td>
- <td>Registry + doc-gen, token contracts, golden record DB, quoting engine (MM book in → firm
- quotes out), lifecycle daemon (funding + KO), public levels/docs endpoints, append-only
- archive.</td>
+ PRIIPs KID, mints the tokens, is the counterparty of every client cert trade, runs the 8h
+ funding sync (strike/barrier), monitors and declares knock-outs, computes residual values.
+ <strong>Flow 1:</strong> consumes perp books from the MM and constructs the cert books itself;
+ hedges every fill with a perp trade on the MM. <strong>Flow 2:</strong> consumes cert books
+ from the MM and STPs every order to the MM. Flat market risk in both.</td>
+ <td>Registry + doc-gen, token contracts, golden record DB, pricing/booking engine (Flow 1) or
+ STP router (Flow 2), lifecycle daemon (funding + KO), WS/FIX market-data service to DLT,
+ public levels/docs endpoints, append-only archive.</td>
  </tr>
  <tr>
  <td><strong>MM</strong> (CoinW MM <em>or</em> an Anduin MM)</td>
- <td>Liquidity provider to Anduin. <strong>Streams executable two-way books on the certificate
- series directly to Anduin</strong>; takes the offsetting side of every client fill that Anduin
- STPs to it; manages the resulting market risk at its own discretion (warehouse / hedge in perps
- at CoinW Global or elsewhere). When the MM is <strong>CoinW MM</strong>, the flow economics stay
- inside CoinW — the internalization story from the Listing Primer. When it is an
- <strong>Anduin MM</strong>, the same interface applies with an external LP.</td>
- <td>Cert pricing engine (books per live series keyed to Anduin's published levels), execution API
- for Anduin's STP flow, own hedging infrastructure.</td>
+ <td>Liquidity provider to Anduin. <strong>Flow 1:</strong> streams perp books (WS/FIX) and takes
+ Anduin's perp hedge trades. <strong>Flow 2:</strong> streams cert books incl. the underlying
+ markets and takes the STP'd cert orders directly. Manages the resulting market risk at its own
+ discretion. When the MM is CoinW MM, the flow economics stay inside CoinW — the
+ internalization story from the Listing Primer.</td>
+ <td>Pricing engine (perps or certs), WS/FIX market-data + execution API towards Anduin, own
+ hedging infrastructure, margin account management (see Part B).</td>
  </tr>
  <tr>
- <td><strong>Custodian</strong> (EU, MiCAR-regulated — entity TBC)</td>
- <td>Qualified custodian holding all four accounts: User, CoinW, DLT, Anduin. Physical settlement
- layer — T+0 book entries, T+1 physical net. Nothing leaves its perimeter.</td>
- <td>Account/booking API, statements, T+1 net files.</td>
+ <td><strong>ZBX</strong> (= CoinW EU, MiCAR partner · custodian)</td>
+ <td>CoinW's EU MiCAR partner and the <strong>custodian of the assets</strong>. User, DLT, Anduin
+ and the CoinW Tied Agent Entity all hold accounts at ZBX. All client-side money and token
+ movements are book entries between ZBX accounts; assets never leave the custody perimeter.</td>
+ <td>Account/booking API, "leverage trading" assignment flags, statements, rebalancing files.</td>
  </tr>
  </tbody>
  </table>
 
- <div class="info-box ok">
- <h4>Why this split is clean</h4>
- <ul>
- <li><strong>CoinW</strong> never touches a security's pricing or risk — it transmits orders as tied agent and renders feeds. Minimal lift, minimal regulatory surface.</li>
- <li><strong>DLT</strong> never holds risk — every execution is back-to-back, booked T+0, reported.</li>
- <li><strong>Anduin</strong> never holds market risk — every fill is STP'd to the MM the moment it happens; the issuer's residual exposure is counterparty exposure to the MM, not market exposure.</li>
- <li><strong>The MM</strong> is the single point where market risk lives — which is exactly where it belongs, and (if CoinW MM) exactly where CoinW wants it.</li>
- </ul>
- </div>
-
- <h2>2 · The quote chain and the order chain</h2>
-
- <h3>2.1 Quoting — continuous, MM-driven</h3>
- <p>
- The MM streams executable two-way books on each live certificate series directly to Anduin. Anduin's
- quoting engine validates each book against its own reference calculation (the Final Terms formula on
- the current strike/barrier levels — the issuer must never quote off stale or deviating levels), adds
- the issuer spread, and streams <strong>firm quotes</strong> to DLT; DLT forwards them to the CoinW
- UI, where the trading fee is displayed per the fee schedule. Every quote Anduin publishes lands in
- its insert-only quote archive (regulatory record + price-pinning evidence).
- </p>
-
- <div class="diagram-wrap">
- <div class="mermaid">
-sequenceDiagram
- autonumber
- participant MM as MM<br/>(CoinW MM or Anduin MM)
- participant ADN as Anduin<br/>(quoting engine)
- participant DLT as DLT<br/>(broker)
- participant CW as CoinW UI<br/>(tied agent of Black Manta)
- actor U as User
-
- Note over MM,U: Quoting flow — continuous per live series
- MM-->>ADN: Executable two-way cert books<br/>(per series, keyed to published levels)
- ADN->>ADN: Validate vs own formula + levels<br/>add issuer spread
- Note over ADN: Every published quote → insert-only archive
- ADN-->>DLT: Firm quotes (quote_id, series, bid/ask, tiers, TTL)
- DLT-->>CW: Forward quote stream (+ fee display)
- CW->>U: Perp-style screen renders price,<br/>liq. level, funding — per Listing Primer
- </div>
- </div>
-
- <h3>2.2 Execution — RTO → STP → STP, no discretion anywhere</h3>
- <p>
- The order chain is fully straight-through: CoinW EU receives the user's order and transmits it (RTO)
- to DLT; DLT executes back-to-back against Anduin's firm quote (STP); Anduin fills from its inventory
- and simultaneously STPs the offsetting transaction to the MM. Three hops, zero discretion, seconds
- end-to-end.
- </p>
-
- <div class="diagram-wrap">
- <div class="mermaid">
-sequenceDiagram
- autonumber
- actor U as User
- participant CW as CoinW EU<br/>(UI + RTO)
- participant DLT as DLT<br/>(broker)
- participant ADN as Anduin<br/>(issuer)
- participant MM as MM<br/>(CoinW MM or Anduin MM)
-
- U->>CW: Buy 10 certs BTC-LONG (delta 1 BTC)
- CW->>DLT: RTO — transmit order<br/>(tied agent under Black Manta)
- DLT->>ADN: STP — execute vs firm quote<br/>(back-to-back, riskless principal)
- Note over ADN: Fill 10 certs from inventory<br/>at the pinned quote (quote_id referenced)
- ADN->>MM: STP — offsetting fill vs the MM's book<br/>(same size, same instant)
- MM-->>ADN: Fill confirmed
- Note over MM: MM warehouses or hedges in perps<br/>at its own discretion (e.g. CoinW Global)
- ADN-->>DLT: Execution confirmation
- DLT-->>CW: Fill report (T+0 booked)
- CW-->>U: Position open — perp-style card
- Note over ADN: Issuer records token ledger movement +<br/>MM fill · DLT records the securities trade T+0
- </div>
- </div>
-
- <h2>3 · Lifecycle flows</h2>
-
- <h3>3.1 Flow A — Series creation, documents &amp; quoting start</h3>
- <div class="scenario">
- <strong>Trigger.</strong> A new series is needed (new underlying, direction or leverage band) —
- requested by CoinW via DLT, or created proactively by Anduin (e.g. the replacement series after a
- knock-out). Anduin runs issuance end-to-end.
- </div>
- <div class="recipe">
- <h4>Sequence</h4>
- <ol>
- <li><strong>Series request.</strong> Parameter set: underlying + identifiers, direction,
- KO/liquidation price (initial strike &amp; barrier), token count, maintenance buffer, ratio,
- funding spread, reference price source. <span class="tag tag-open">MVP note</span> may be
- manual (structurer form) initially; API is target state.</li>
- <li><strong>Anduin issuance.</strong> Validate → golden record → generate Final Terms + PRIIPs
- KID → publish (publication legally opens the offer) → mint to treasury → series live.</li>
- <li><strong>Links down the chain.</strong> Anduin returns <code>series_id</code>,
- <code>token_address</code> and the public Final Terms / KID URLs; CoinW renders the doc links
- in the UI (KID one click from the order ticket — hard regulatory requirement).</li>
- <li><strong>Quoting commences.</strong> The MM starts streaming books on the new series to
- Anduin; Anduin starts publishing firm quotes (§2.1).</li>
- </ol>
- </div>
-
- <h3>3.2 Flow B — Funding sync &amp; re-marking <span class="tag tag-instant">Anduin computes</span></h3>
- <div class="scenario">
- <strong>Trigger.</strong> Every 8h at the reference venue's published funding timestamp. Financing
- is funding pass-through into the strike (<code>K' = K × (1 + f ± s)</code>), barrier follows
- (<code>B' = K' × (1 ± buffer)</code>). No client cash flows, no doc amendments — the Final Terms
- define the formula; current levels are published via Anduin's levels endpoint.
- </div>
- <div class="recipe">
- <h4>Sequence</h4>
- <ol>
- <li><strong>Anduin's lifecycle daemon</strong> detects the venue's published funding rate,
- computes the new strike and barrier per live series, appends <code>level_history</code>
- (idempotent on <code>series_id + funding_ts</code>) and serves the authoritative
- <strong>levels endpoint</strong> the Final Terms reference.</li>
- <li><strong>Push to the MM</strong> — the MM re-marks its books on the new levels before its next
- quote. A deviation between the MM's quoted strike and Anduin's published levels trips an
- automated discrepancy alert and pulls the quote stream.</li>
- <li><strong>Push to DLT / CoinW</strong> — the UI updates the liq. price line on the chart and the
- position cards from the same levels feed.</li>
- </ol>
- </div>
-
- <div class="diagram-wrap">
- <div class="mermaid">
-sequenceDiagram
- autonumber
- participant V as Reference venue<br/>(funding rate)
- participant ADN as Anduin<br/>(lifecycle + levels endpoint)
- participant MM as MM<br/>(books)
- participant CW as CoinW UI<br/>(via DLT feed)
-
- V-->>ADN: Published 8h funding rate f
- ADN->>ADN: Per live series:<br/>K' = K × (1 + f ± s) · B' = K' × (1 ± buffer)
- ADN->>ADN: Append level_history —<br/>levels endpoint serves new row
- ADN-->>MM: Level row push — MM re-marks books
- ADN-->>CW: Level row push — UI updates liq. line + cards
- Note over ADN,MM: Quoted strike vs published levels<br/>must never diverge — deviation pulls quotes
- </div>
- </div>
-
- <h3>3.3 Flow C — Trade, settlement &amp; MM leg</h3>
- <p>
- Execution per §2.2. Settlement is DvP across the custodian accounts (§4). For every client fill the
- offsetting MM fill exists as a linked record (triggering trade ID ↔ MM fill ID) in Anduin's ledger —
- this is what proves the issuer is flat and what any profit-share arrangement with the MM is audited
- against. DLT receives the trade event on its reporting rail at T+0.
- </p>
-
- <h3>3.4 Flow D — Knock-out</h3>
- <div class="scenario">
- <strong>Trigger.</strong> The reference price touches the barrier. <strong>Anduin monitors every
- reference tick, declares the KO and halts quoting immediately</strong> — this is the flow where the
- issuer's legal risk concentrates, so the evidence trail is the binding requirement.
- </div>
- <div class="recipe">
- <h4>Sequence</h4>
- <ol>
- <li><strong>Detection &amp; declaration (Anduin).</strong> On touch: KO declared, quotes pulled,
- orders blocked for the series. The trigger tick + ±60s of the reference stream + the level row
- in force are archived first — the KO defence file.</li>
- <li><strong>Unwind vs the MM.</strong> Anduin closes the series' offsetting position against the
- MM; the unwind VWAP feeds the residual value.</li>
- <li><strong>Residual value &amp; payout.</strong> RV per Final Terms
- (<code>RV = max(0, (unwind_VWAP − K) × ratio − costs)</code>, long; short mirrored). USDC paid
- to holders of record via the custodian (§4); certs debited, returned and cancelled. RV = 0
- produces the identical artifact set minus the cash leg.</li>
- <li><strong>Notices.</strong> KO event to DLT (reporting) and to CoinW (UI shows the
- liquidation screen from the Listing Primer — no liquidation fee, no negative balance, residual
- paid automatically); replacement series issued immediately so the UI can offer the new 30×.</li>
- </ol>
- </div>
-
- <div class="diagram-wrap">
- <div class="mermaid">
-sequenceDiagram
- autonumber
- participant V as Reference venue<br/>(mark price)
- participant ADN as Anduin<br/>(KO monitor + issuer)
- participant MM as MM
- participant CUST as Custodian<br/>(accounts)
- participant DLT as DLT<br/>(reporting)
- participant CW as CoinW UI
- actor U as User
-
- V-->>ADN: Mark price touches barrier
- ADN->>ADN: KO DECLARED — quotes pulled, orders blocked<br/>evidence archived first (tick + ±60s + level row)
- ADN->>MM: Unwind offsetting position
- MM-->>ADN: Unwind fills (VWAP)
- ADN->>ADN: RV = max(0, (VWAP − K) × ratio − costs)
- ADN->>CUST: Payout instruction — RV in USDC per holder<br/>certs returned to Anduin account + cancelled
- ADN-->>DLT: KO event (T+0 reporting rail)
- ADN-->>CW: KO notice + replacement series live
- CW-->>U: Liquidation screen — residual paid,<br/>no fee, no negative balance
- </div>
- </div>
-
- <h2>4 · Flow of funds</h2>
+ <h2>A2 · Pricing &amp; execution — two options</h2>
 
  <p class="lead">
- Everything sits at <strong>one EU custodian (MiCAR-regulated; entity to be confirmed with CoinW)</strong>.
- Each party has an account at that same custodian: <strong>User Account · CoinW Account · DLT Account ·
- Anduin Account</strong>. Trading moves book entries between those accounts; physical assets never leave
- the custodian's perimeter. The MM relationship (Anduin ↔ MM) settles outside the custodian under the
- bilateral MM agreement — it never touches client accounts.
+ Both options use the same order chain (CoinW → DLT → Anduin) and the same fee logic (DLT adds and
+ collects). They differ in <strong>what the MM streams</strong> and therefore in <strong>who prices
+ the certificate and who carries which risk</strong>.
  </p>
+
+ <table class="legend">
+ <thead>
+ <tr><th style="width:22%"></th><th>Flow 1 — MM streams perp books <span class="tag tag-flow1">Anduin prices</span></th><th>Flow 2 — MM streams cert books <span class="tag tag-flow2">MM prices</span></th></tr>
+ </thead>
+ <tbody>
+ <tr><td><strong>Market data in</strong></td>
+ <td>Perp books of the reference markets, WS/FIX from the MM to Anduin.</td>
+ <td>Cert books (incl. underlying markets), WS/FIX from the MM to Anduin.</td></tr>
+ <tr><td><strong>Cert book construction</strong></td>
+ <td><strong>Anduin</strong> derives the cert book from the perp book via the Final Terms formula on current levels.</td>
+ <td><strong>MM</strong> constructs the cert book, keyed to Anduin's published levels; Anduin validates and passes through.</td></tr>
+ <tr><td><strong>Execution leg to the MM</strong></td>
+ <td>Perp <strong>hedge trade</strong> per client fill; MM confirms the perp execution price; Anduin derives and confirms the cert execution price to DLT.</td>
+ <td>Cert order <strong>STP'd</strong> to the MM; MM confirms the cert execution price directly.</td></tr>
+ <tr><td><strong>Anduin's residual risk</strong></td>
+ <td>Flat post-hedge; carries the quote-to-hedge latency/slippage gap (see A5).</td>
+ <td>Fully riskless — instrument-level back-to-back per fill.</td></tr>
+ <tr><td><strong>MM requirements</strong></td>
+ <td>Any perp MM works — no securities knowledge needed.</td>
+ <td>MM must price and deal the security itself (bilateral professional-counterparty dealing under the MM agreement).</td></tr>
+ <tr><td><strong>Who can be the MM</strong></td>
+ <td colspan="2">CoinW MM or an Anduin MM — the interfaces are identical either way.</td></tr>
+ </tbody>
+ </table>
+
+ <h3>A2.1 Flow 1 — Anduin builds the cert book from the MM's perp books</h3>
+ <div class="diagram-wrap">
+ <div class="mermaid">
+sequenceDiagram
+ autonumber
+ participant MM as MM<br/>(CoinW MM or Anduin MM)
+ participant ADN as Anduin<br/>(issuer · cert pricing)
+ participant DLT as DLT<br/>(broker)
+ participant CW as CoinW UI / API<br/>(tied agent of Black Manta)
+ actor U as User
+
+ Note over MM,U: Pricing flow — continuous
+ MM-->>ADN: Perp books of the reference markets (WS/FIX)
+ ADN->>ADN: Construct cert book per series<br/>(Final Terms formula on current levels)
+ ADN-->>DLT: Cert book stream (WS/FIX)
+ DLT->>DLT: Add DLT spread / fee
+ DLT-->>CW: Stream to the UI
+ CW->>U: Perp-style screen renders price,<br/>liq. level, funding
+
+ Note over MM,U: Execution flow — per order
+ U->>CW: Buy 10 certs BTC-LONG (delta 1 BTC)
+ CW->>DLT: RTO / STP — transmit order
+ DLT->>ADN: STP / prop — back-to-back vs Anduin<br/>(+ DLT spread or fee at this hop)
+ ADN->>MM: Hedge trade — 1 BTC perp long
+ MM-->>ADN: Perp execution price confirmed
+ ADN->>ADN: Derive cert execution price<br/>from the perp fill + formula
+ ADN-->>DLT: Cert execution price confirmed
+ DLT-->>CW: Execution information (T+0 booked, fee collected)
+ CW-->>U: Position open — perp-style card
+ Note over ADN: Issuer records token ledger movement + hedge trade<br/>DLT records the securities trade T+0
+ </div>
+ </div>
+
+ <h3>A2.2 Flow 2 — MM streams cert books, full STP</h3>
+ <div class="diagram-wrap">
+ <div class="mermaid">
+sequenceDiagram
+ autonumber
+ participant MM as MM<br/>(CoinW MM or Anduin MM)
+ participant ADN as Anduin<br/>(issuer · STP router)
+ participant DLT as DLT<br/>(broker)
+ participant CW as CoinW UI / API<br/>(tied agent of Black Manta)
+ actor U as User
+
+ Note over MM,U: Pricing flow — continuous
+ MM-->>ADN: Cert books incl. underlying markets (WS/FIX)<br/>keyed to Anduin's published levels
+ ADN->>ADN: Validate vs own formula + levels
+ ADN-->>DLT: Cert book stream (WS/FIX)
+ DLT->>DLT: Add DLT spread / fee
+ DLT-->>CW: Stream to the UI
+ CW->>U: Perp-style screen
+
+ Note over MM,U: Execution flow — per order
+ U->>CW: Buy 10 certs BTC-LONG (delta 1 BTC)
+ CW->>DLT: RTO / STP — transmit order
+ DLT->>ADN: STP / prop — back-to-back vs Anduin<br/>(+ DLT spread or fee at this hop)
+ ADN->>MM: STP order to the MM
+ MM-->>ADN: Cert execution price confirmed
+ ADN-->>DLT: Execution confirmed (back-to-back)
+ DLT-->>CW: Execution information (T+0 booked, fee collected)
+ CW-->>U: Position open — perp-style card
+ Note over MM: MM warehouses or hedges the resulting delta<br/>at its own discretion
+ </div>
+ </div>
+
+ <h3>A2.3 Flow ownership, fees &amp; infrastructure</h3>
+ <table class="legend">
+ <thead>
+ <tr><th>Flow</th><th>Owned / operated by</th><th>Notes</th></tr>
+ </thead>
+ <tbody>
+ <tr><td>Perp / cert book feed (MM → Anduin)</td><td>MM</td><td>WS or FIX; bilateral under the MM agreement.</td></tr>
+ <tr><td>Cert quote stream (Anduin → DLT)</td><td>Anduin</td><td>WS or FIX; every published quote lands in Anduin's insert-only archive (regulatory record, price-pinning evidence).</td></tr>
+ <tr><td>UI price stream (DLT → CoinW)</td><td>DLT</td><td>DLT's spread / fee applied before the user sees the price.</td></tr>
+ <tr><td>Order flow (CoinW → DLT → Anduin → MM)</td><td>Each party owns its hop</td><td>CoinW: RTO/STP · DLT: STP/prop back-to-back · Anduin: hedge (Flow 1) or STP (Flow 2). No OCS in this setup.</td></tr>
+ <tr><td><strong>Trading fees</strong></td><td><strong>Collected by DLT</strong></td><td>Added at the DLT hop; <strong>a share is credited onward to the CoinW Tied Agent Entity</strong> (split: commercial term). Anduin's economics sit in the issuer spread, not the fee.</td></tr>
+ <tr><td>Levels / docs endpoints</td><td>Anduin</td><td>Authoritative strike/barrier per funding sync; Final Terms + KID URLs rendered in the CoinW UI (KID one click from the ticket).</td></tr>
+ </tbody>
+ </table>
+
+ <div class="info-box">
+ <h4>Hosting</h4>
+ <p style="margin:0">
+ All of this activity can be hosted in the <strong>same datacenter for latency optimization</strong> —
+ but every hop must run through the <strong>respective party's own servers</strong> (CoinW's order
+ gateway, DLT's broker stack, Anduin's issuer stack, the MM's engine). Co-location compresses
+ latency; it does not collapse the chain into one operator — each entity demonstrably operates its
+ own system.
+ </p>
+ </div>
+
+ <h2>B · Flow of funds — ZBX as custodian</h2>
+
+ <p class="lead">
+ CoinW works with <strong>ZBX as their MiCAR partner (ZBX = CoinW EU)</strong>, which is the
+ <strong>custodian of the assets</strong>. <strong>User, DLT, Anduin and the CoinW Tied Agent Entity
+ each hold an account at ZBX.</strong> Client-side cash and token movements are book entries between
+ these accounts. The margin relationship towards the MM (CoinW MM) runs alongside it and is trued up
+ by a periodic rebalancing (T+1 as the working example).
+ </p>
+
+ <h3>B1 · The full picture</h3>
+ <div class="diagram-wrap">
+ <div class="mermaid">
+flowchart TB
+ U["User"]
+ subgraph ZBX["ZBX — CoinW's EU MiCAR partner · custodian of the assets"]
+ UA["User Account"]
+ DA["DLT Account"]
+ AA["Anduin Account"]
+ TA["CoinW Tied Agent<br/>Entity Account"]
+ end
+ CWMM["CoinW MM<br/>(margin / hedge venue)"]
+
+ U -->|"1 · deposit"| UA
+ UA -->|"2 · assign funds to<br/>'leverage trading'"| UA
+ UA -.->|"3 · assignment info shared with DLT<br/>(POSOF checks where needed)"| DA
+ UA -.->|"4 · CoinW mirrors the assigned amount<br/>on CoinW MM as available margin /<br/>collateral capacity for Anduin"| CWMM
+ UA -->|"5 · on purchase: funds incl. FEE<br/>signed over to DLT"| DA
+ DA -->|"6 · funds excl. fee<br/>credited to Anduin"| AA
+ DA -->|"7 · fee share credited to<br/>CoinW Tied Agent Entity"| TA
+ AA -->|"8 · certs to the user (DvP)"| UA
+ AA -->|"9 · Anduin pledges funds<br/>to CoinW"| CWMM
+ CWMM <-->|"10 · T+1 rebalance: realized PnL —<br/>positive PnL moved back to ZBX,<br/>negative PnL topped up to CoinW MM"| AA
+ </div>
+ </div>
+
+ <h3>B2 · Phase 1 — Setup &amp; pre-trade (before any order)</h3>
+ <div class="recipe">
+ <h4>Sequence</h4>
+ <ol>
+ <li><strong>Deposit.</strong> The user funds their account at ZBX (User Account).</li>
+ <li><strong>Assignment to "leverage trading".</strong> The user assigns part of their ZBX balance
+ to leverage trading — a book-only earmark inside custody, like funding the futures wallet
+ today.</li>
+ <li><strong>Assignment info → DLT.</strong> The assignment (amount, client reference, timestamps)
+ is shared with DLT, so DLT can perform <strong>POSOF checks</strong> (proof of source of funds)
+ where needed before accepting order flow against that balance.</li>
+ <li><strong>Mirroring on CoinW MM.</strong> All funds the user credits to leverage trading are
+ <strong>mirrored by CoinW on CoinW MM as available margin / collateral for Anduin</strong> —
+ i.e. CoinW makes equivalent margin capacity available on the MM so Anduin's hedge/STP leg can
+ execute instantly when the user trades, without waiting for settlement. The user's actual
+ assets stay in ZBX custody throughout (see B5 — this mirror is capacity, not a movement of
+ client assets).</li>
+ </ol>
+ </div>
+
+ <div class="diagram-wrap">
+ <div class="mermaid">
+sequenceDiagram
+ autonumber
+ actor U as User
+ participant UA as User Account<br/>@ ZBX
+ participant DLT as DLT<br/>(broker)
+ participant CW as CoinW
+ participant CWMM as CoinW MM
+
+ U->>UA: Deposit funds
+ U->>UA: Assign amount X to "leverage trading"<br/>(book-only earmark in custody)
+ UA-->>DLT: Assignment info shared<br/>(POSOF checks where needed)
+ UA-->>CW: Leverage-trading balance visible
+ CW->>CWMM: Mirror X as available margin /<br/>collateral capacity for Anduin
+ Note over CWMM: Anduin can now execute hedges / STP<br/>up to X without pre-funding delay
+ </div>
+ </div>
+
+ <h3>B3 · Phase 2 — Purchase (worked example: 10 certs à 700 USDC, fee 0.06%)</h3>
+ <div class="recipe">
+ <h4>Sequence</h4>
+ <ol>
+ <li>User buys 10 certs via the CoinW UI; the order runs the chain of Part A (CoinW RTO → DLT
+ STP/prop → Anduin → MM).</li>
+ <li><strong>Cash leg:</strong> at the time of purchase the user's funds are <strong>credited to
+ DLT including the fee</strong> (7,000 + 4.20 USDC), then <strong>credited onward to Anduin
+ without the fee</strong> (7,000 USDC). T+0 book entries at ZBX.</li>
+ <li><strong>Fee split:</strong> DLT retains its share and <strong>credits the agreed part of the
+ fee to the CoinW Tied Agent Entity's ZBX account</strong>.</li>
+ <li><strong>Security leg (DvP):</strong> 10 certs move Anduin Account → User Account.</li>
+ <li><strong>Pledge:</strong> Anduin <strong>pledges the received funds to CoinW</strong> — this is
+ the collateral backing the margin capacity CoinW mirrored on CoinW MM in Phase 1 (utilized
+ portion).</li>
+ <li><strong>MM leg:</strong> Anduin's hedge (Flow 1) or STP'd cert order (Flow 2) executes on
+ CoinW MM against that margin.</li>
+ </ol>
+ </div>
+
+ <div class="diagram-wrap">
+ <div class="mermaid">
+sequenceDiagram
+ autonumber
+ actor U as User
+ participant CW as CoinW UI
+ participant DLTb as DLT (broker)
+ participant ADN as Anduin (issuer)
+ participant UA as User Acct @ ZBX
+ participant DA as DLT Acct @ ZBX
+ participant TA as CoinW TA Acct @ ZBX
+ participant AA as Anduin Acct @ ZBX
+ participant CWMM as CoinW MM
+
+ U->>CW: Buy 10 certs BTC-LONG
+ CW->>DLTb: RTO / STP
+ DLTb->>ADN: STP / prop (+ spread or fee)
+ UA->>DA: T+0 book — 7,004.20 USDC<br/>(price incl. FEE signed over to DLT)
+ DA->>AA: T+0 book — 7,000 USDC<br/>(price excl. fee credited to Anduin)
+ DA->>TA: T+0 book — fee share to<br/>CoinW Tied Agent Entity
+ AA->>UA: T+0 book — 10 certs to the user (DvP)
+ AA->>CWMM: Anduin pledges funds to CoinW<br/>(backs the mirrored margin, utilized portion)
+ ADN->>CWMM: Hedge trade (Flow 1) or STP'd cert order (Flow 2)
+ CWMM-->>ADN: Execution confirmed
+ DLTb-->>CW: Execution information
+ CW-->>U: Position open — perp-style card
+ Note over DLTb: Securities trade booked T+0 — reporting feed
+ </div>
+ </div>
+
+ <h3>B4 · Phase 3 — T+1 rebalancing of realized PnL</h3>
+ <div class="recipe">
+ <h4>Sequence (T+1 as the working example — cadence is a parameter)</h4>
+ <ol>
+ <li>Over the day, client sells / knock-outs realize PnL on Anduin's positions at CoinW MM.</li>
+ <li><strong>Positive realized PnL on CoinW MM is moved back to ZBX</strong> (CoinW MM → Anduin
+ Account @ ZBX) — from there it funds client sale proceeds / KO residual payouts.</li>
+ <li><strong>Negative realized PnL is topped up in the other direction</strong> (Anduin Account @
+ ZBX → CoinW MM), keeping the margin account whole.</li>
+ <li>The mirrored margin capacity is re-trued to the current sum of user leverage-trading
+ assignments; Anduin's pledge is re-trued to utilized positions.</li>
+ </ol>
+ </div>
 
  <div class="diagram-wrap">
  <div class="mermaid">
 flowchart LR
- U["User"]
- CW["CoinW EU<br/>(UI · tied agent of Black Manta)"]
- DLT["DLT<br/>(broker)"]
- ADN["Anduin<br/>(issuer)"]
- MM["MM<br/>(CoinW MM or Anduin MM)"]
- subgraph CUST["EU custodian — nothing leaves this box"]
- UA["User Account"]
- DA["DLT Account"]
- AA["Anduin Account"]
- CA["CoinW Account"]
+ subgraph DAY["During the day"]
+ T1["Client trades settle T+0<br/>as book entries @ ZBX"]
+ T2["Hedge / STP legs execute<br/>on CoinW MM vs margin"]
  end
- U -->|"1 · deposit — 2 · assign to securitized-perp trading"| UA
- U -->|"3 · order"| CW
- CW -->|"4 · RTO"| DLT
- DLT -->|"5 · STP"| ADN
- ADN -->|"6 · STP offsetting fill"| MM
- UA <-->|"cash vs certs (DvP, T+0 book)"| AA
- UA -->|"trading fee"| DA
- DA -->|"fee share"| CA
+ subgraph REB["T+1 rebalance"]
+ P["Positive realized PnL<br/>CoinW MM → Anduin Acct @ ZBX"]
+ N["Negative realized PnL<br/>Anduin Acct @ ZBX → CoinW MM"]
+ R["Mirror + pledge re-trued to<br/>assignments / utilized positions"]
+ end
+ DAY --> REB
  </div>
  </div>
 
- <h3>4.1 Buy — worked example (10 certs à 700 USDC)</h3>
- <div class="diagram-wrap">
- <div class="mermaid">
-sequenceDiagram
- autonumber
- actor U as User
- participant CW as CoinW EU<br/>(UI + RTO)
- participant DLT as DLT<br/>(broker)
- participant ADN as Anduin<br/>(issuer)
- participant UA as User Account<br/>@ Custodian
- participant DA as DLT Account<br/>@ Custodian
- participant AA as Anduin Account<br/>@ Custodian
- participant MM as MM
-
- U->>CW: Buy 10 certs BTC-LONG (delta 1 BTC)
- CW->>DLT: RTO — transmit order
- DLT->>ADN: STP — execute vs firm quote
- Note over ADN: Fill 10 certs at 700 USDC from inventory
- UA->>AA: T+0 book — debit 7,000 USDC
- AA->>UA: T+0 book — 10 certs to the user (DvP)
- UA->>DA: T+0 book — 4.20 USDC fee (0.06% of notional)
- Note over DA: Fee shared DLT ↔ CoinW per agreement
- ADN->>MM: STP — offsetting fill (10 certs / 1 BTC delta)
- MM-->>ADN: Fill confirmed — Anduin flat
- Note over MM: MM warehouses or hedges externally<br/>at its own discretion
- Note over DLT: Securities trade booked T+0 — reporting feed
- CW-->>U: Position open — perp-style card
- </div>
- </div>
-
- <h3>4.2 Sell / knock-out — the same rails in reverse</h3>
- <ul>
- <li><strong>Sell:</strong> certs move User Account → Anduin Account (returned and cancelled), cash
- moves Anduin Account → User Account, fee User Account → DLT Account — all T+0 book entries at the
- same custodian; Anduin closes the matching position vs the MM.</li>
- <li><strong>Knock-out:</strong> identical to a sell with proceeds = residual value (possibly zero),
- per Flow D. No liquidation fee, no negative balance.</li>
- <li><strong>Physical settlement:</strong> the T+0 entries are the legal record; physical movements
- between custodian accounts net out on a <strong>T+1 bulk basis</strong> (net delta vs prior
- state), as in the running Nexo setup.</li>
- </ul>
-
- <h3>4.3 Who books what</h3>
+ <h3>B5 · Who books what</h3>
  <table class="legend">
  <thead>
  <tr><th>Ledger</th><th>Kept by</th><th>Content / cadence</th></tr>
  </thead>
  <tbody>
- <tr><td>Client positions &amp; balances (display)</td><td>CoinW EU (UI layer)</td>
- <td>Real-time rendering over custodian records; authoritative balances are the custodian's.</td></tr>
- <tr><td>Securities trade book</td><td>DLT (broker)</td>
- <td>Every cert purchase / sale / KO redemption as an individual book entry at <strong>T+0</strong>;
- regulatory reporting feed.</td></tr>
- <tr><td>Golden record · token register · quote archive · MM fill ledger</td><td>Anduin (issuer)</td>
- <td>Series parameters and docs, every token ledger movement (issue, transfer, cancel, KO), every
- published quote (insert-only), every offsetting MM fill linked to its triggering trade; drives the
- prospectus Register and the levels endpoint.</td></tr>
- <tr><td>Physical settlement</td><td>Custodian</td>
- <td>T+0 book entries across the four accounts; <strong>T+1 net</strong> physical settlement;
- statements to each account holder.</td></tr>
+ <tr><td>Client positions &amp; balances (display)</td><td>CoinW (UI layer)</td>
+ <td>Real-time rendering; authoritative balances are ZBX's.</td></tr>
+ <tr><td>Securities trade book + fee ledger</td><td>DLT (broker)</td>
+ <td>Every cert purchase / sale / KO redemption at <strong>T+0</strong>; fee collection and the
+ share credited to the CoinW Tied Agent Entity; regulatory reporting feed; POSOF records.</td></tr>
+ <tr><td>Golden record · token register · quote archive · hedge/STP ledger · pledge register</td><td>Anduin (issuer)</td>
+ <td>Series parameters and docs, every token ledger movement, every published quote (insert-only),
+ every MM execution linked to its triggering trade, pledge amounts outstanding to CoinW.</td></tr>
+ <tr><td>Custody book + leverage-trading assignments</td><td>ZBX</td>
+ <td>T+0 book entries across the four accounts; assignment earmarks; statements; T+1 rebalancing
+ files.</td></tr>
+ <tr><td>Margin account (Anduin)</td><td>CoinW MM</td>
+ <td>Mirrored capacity, pledged collateral, open positions, realized PnL pending rebalance.</td></tr>
  </tbody>
  </table>
 
- <h2>5 · Integration interfaces — the build list per party</h2>
+ <h2>C · Design notes &amp; points to pin down</h2>
 
  <table class="legend">
  <thead>
- <tr><th>#</th><th>Interface</th><th>Between</th><th>Direction / cadence</th><th>Content</th></tr>
- </thead>
- <tbody>
- <tr><td>1</td><td>Order RTO</td><td>CoinW EU → DLT</td><td>Per order, real-time</td>
- <td>Order (series, side, size, client ref, pinned quote_id); fill reports back.</td></tr>
- <tr><td>2</td><td>Order STP</td><td>DLT → Anduin</td><td>Per order, real-time</td>
- <td>Same order envelope; execution confirmations back; back-to-back booking both sides.</td></tr>
- <tr><td>3</td><td>MM book feed</td><td>MM → Anduin</td><td>Streaming</td>
- <td>Executable two-way books per live series, keyed to Anduin's published levels.</td></tr>
- <tr><td>4</td><td>MM execution API</td><td>Anduin → MM</td><td>Per fill, instant</td>
- <td>Offsetting fills (STP), unwind orders at KO; fill confirmations back.</td></tr>
- <tr><td>5</td><td>Quote feed</td><td>Anduin → DLT → CoinW</td><td>Streaming</td>
- <td>Firm quotes (quote_id, bid/ask, tiers, TTL) — the UI's price source.</td></tr>
- <tr><td>6</td><td>Levels feed + endpoint</td><td>Anduin → MM / DLT / CoinW</td><td>Per funding sync (8h) + on correction</td>
- <td>Level rows (series_id, funding_ts, f, s, K', B') — authoritative, referenced by Final Terms.</td></tr>
- <tr><td>7</td><td>Docs endpoint</td><td>Anduin → CoinW</td><td>Per series issuance</td>
- <td>series_id, token_address, Final Terms + KID URLs — KID one click from the ticket.</td></tr>
- <tr><td>8</td><td>Trade / KO reporting rail</td><td>Anduin → DLT</td><td>T+0, per event</td>
- <td>Trade events, KO events (SQS-style, as in the running setup).</td></tr>
- <tr><td>9</td><td>Custody booking API + statements</td><td>All ↔ Custodian</td><td>T+0 entries / T+1 net / daily statements</td>
- <td>DvP instructions, payout instructions, reconciliation files.</td></tr>
- </tbody>
- </table>
-
- <h2>6 · Open points for the next call</h2>
- <table class="legend">
- <thead>
- <tr><th style="width:34%">Question</th><th>Current proposal / note</th></tr>
+ <tr><th style="width:30%">Point</th><th>Note / proposal</th></tr>
  </thead>
  <tbody>
  <tr>
- <td>MM leg — instrument &amp; agreement shape</td>
- <td>The offsetting transaction Anduin STPs to the MM can be (a) a mirror trade in the cert itself
- against the MM's book, or (b) a delta-equivalent perp under an ISDA-style bilateral — economics
- identical, documentation differs. To be fixed in the MM agreement; interface (#3/#4) is the same
- either way.</td>
+ <td><strong>One rule for Anduin's margin at CoinW MM</strong></td>
+ <td>Two things point at the same margin account: the mirror (sized by user leverage-trading
+ assignments) and Anduin's pledge of received trade funds. Proposal: the <strong>mirror is
+ unfunded capacity</strong> (a limit, sized by assignments) and the <strong>pledge is the
+ funding of the utilized portion</strong>; the T+1 rebalance trues both up. Written this way
+ there is no double-counting and no unsecured gap — but it must be fixed in the MM/margin
+ agreement, not left implicit.</td>
  </tr>
  <tr>
- <td>Which MM at launch</td>
- <td>CoinW MM (internalization economics stay with CoinW) or an Anduin MM — CoinW's call per the
- Listing Primer; the integration is MM-agnostic by design.</td>
+ <td><strong>Client-asset segregation at the mirror</strong></td>
+ <td>The user's assigned funds remain client assets in ZBX custody. The mirror on CoinW MM is
+ CoinW-side capacity, <em>not</em> a movement or re-use of client assets — the wording in all
+ client-facing and regulatory material must keep this clean (MiCAR segregation).</td>
  </tr>
  <tr>
- <td>Custodian entity</td>
- <td>CoinW's EU partner custodian (MiCAR) assumed per the Listing Primer — entity and account
- onboarding sequence to be confirmed.</td>
+ <td><strong>Firm quotes vs hedge-derived pricing (Flow 1)</strong></td>
+ <td>In Flow 1 the cert execution price is confirmed <em>after</em> the perp hedge fills — i.e.
+ hedge slippage passes to the client (market-order semantics). Alternative: Anduin quotes firm
+ with a TTL and carries the quote-to-hedge gap itself. Decision needed — it drives best-execution
+ wording and the UI's order types. Flow 2 avoids the question (the MM's cert fill <em>is</em>
+ the price).</td>
  </tr>
  <tr>
- <td>Fee schedule &amp; share</td>
- <td>0.06% of notional used as the working number (as in the running setup); DLT ↔ CoinW split is a
- commercial term, TBD.</td>
+ <td><strong>Intraday exposure window</strong></td>
+ <td>T+1 rebalancing means up to a day of realized PnL sits as bilateral exposure between Anduin
+ and CoinW MM (both directions). Propose an intraday top-up trigger above a threshold move, and
+ the cadence itself as a parameter (T+1 is the working example).</td>
  </tr>
  <tr>
- <td>Series creation at launch: API vs manual</td>
- <td>Manual structurer flow acceptable for MVP; API is target state. Parameter set identical.</td>
+ <td><strong>Flow 1 vs Flow 2 — MM capability</strong></td>
+ <td>Flow 1 works with any perp MM (no securities involvement). Flow 2 requires the MM to price and
+ deal the security itself bilaterally — cleaner risk transfer for Anduin, higher bar for the MM.
+ This is effectively the selection criterion between the two flows and between CoinW MM vs an
+ Anduin MM.</td>
  </tr>
  <tr>
- <td>SLAs: quote staleness, level push ack, KO halt latency</td>
- <td>Propose: quote TTL enforced at DLT; level pushes acked by MM within seconds or quotes pull
- automatically; KO halt is quote-pull-first, evidence-archived-first.</td>
+ <td><strong>Payout funding at KO / sale</strong></td>
+ <td>Sale proceeds and KO residuals are paid from Anduin's ZBX account, but the offsetting value
+ sits at CoinW MM until rebalance. Anduin's ZBX account therefore needs a working-capital buffer
+ sized to one rebalance period of expected outflows (or the rebalance runs intraday on large KO
+ events).</td>
+ </tr>
+ <tr>
+ <td><strong>Fee split &amp; spread placement</strong></td>
+ <td>Fee collected by DLT, share to the CoinW Tied Agent Entity — split % is a commercial term.
+ DLT's spread-or-fee at its hop and Anduin's issuer spread must be set jointly so the all-in
+ client price stays competitive with the perp it mirrors.</td>
  </tr>
  </tbody>
  </table>
 
  <footer class="doc-footer">
- Working draft v0.1 · CoinW × Black Manta × DLT × Anduin — technical integration &amp; flow of funds ·
+ Working draft v0.2 · CoinW × Black Manta × DLT × Anduin — technical integration &amp; flow of funds ·
  October 2026 · Companion to: CoinW Securitized Perps Listing Primer (October 2026), KO Certificate
  Trading Flow (July 2026). All names, numbers and endpoint shapes indicative; finalized during onboarding.
  </footer>
