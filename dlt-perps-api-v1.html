@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DLT Perps API v1 — Partner Integration Specification</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--text:#17213a;--text-muted:#5b6478;--accent:#2d5f7f;--accent-soft:#eaf1f6;--border:#dfe2ea;
+--bg:#ffffff;--bg-soft:#f6f7fa;--green:#0f8a5f;--green-soft:#e6f5ee;--blue:#2457c5;--blue-soft:#e9effb;
+--red:#c23b4e;--red-soft:#fbecee;--purple:#6b46c1;--purple-soft:#f1ecfb;--warn:#a86a00;--warn-soft:#fdf4e3;
+--mono:'JetBrains Mono',monospace;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:15px;scroll-behavior:smooth;}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased;}
+.banner{background:var(--accent);color:#fff;padding:9px 16px;font-size:.72rem;font-family:var(--mono);letter-spacing:.03em;text-align:center;}
+.banner strong{letter-spacing:.1em;}
+.wrap{max-width:980px;margin:0 auto;padding:48px 28px 96px;}
+h1{font-size:2.1rem;font-weight:700;letter-spacing:-.02em;line-height:1.2;margin:8px 0 4px;color:var(--accent);}
+h2{font-size:1.45rem;font-weight:600;letter-spacing:-.01em;margin:48px 0 14px;padding-top:22px;border-top:1px solid var(--border);}
+h3{font-size:1.08rem;font-weight:600;margin:28px 0 10px;}
+h4{font-size:.95rem;font-weight:600;margin:20px 0 8px;}
+p{margin:12px 0;}
+a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(45,95,127,.3);}
+strong{font-weight:600;}
+ul,ol{margin:12px 0 12px 24px;}
+li{margin:6px 0;}
+code{font-family:var(--mono);background:var(--bg-soft);color:var(--accent);padding:1px 6px;border-radius:4px;font-size:.85em;border:1px solid var(--border);}
+pre{background:#0f1726;border-radius:8px;padding:16px 18px;overflow-x:auto;margin:14px 0;}
+pre code{background:none;border:none;color:#d6deeb;padding:0;font-size:.8rem;line-height:1.6;}
+.note{border-left:3px solid var(--accent);background:var(--accent-soft);padding:12px 18px;margin:18px 0;border-radius:0 8px 8px 0;font-size:.93rem;}
+.warn{border-left:3px solid var(--warn);background:var(--warn-soft);padding:12px 18px;margin:18px 0;border-radius:0 8px 8px 0;font-size:.93rem;}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.86rem;border:1px solid var(--border);}
+th{text-align:left;padding:9px 12px;background:var(--bg-soft);color:var(--text-muted);font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);}
+td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top;}
+td code{font-size:.8em;}
+.method{display:inline-block;font-family:var(--mono);font-size:.68rem;font-weight:600;padding:2px 8px;border-radius:4px;margin-right:8px;vertical-align:middle;letter-spacing:.05em;}
+.get{background:var(--green-soft);color:var(--green);}
+.post{background:var(--blue-soft);color:var(--blue);}
+.del{background:var(--red-soft);color:var(--red);}
+.patch{background:var(--warn-soft);color:var(--warn);}
+.ws{background:var(--purple-soft);color:var(--purple);}
+.hook{background:#eef0f3;color:#374151;}
+.tag{display:inline-block;font-family:var(--mono);font-size:.64rem;padding:1px 7px;border-radius:10px;margin-left:8px;vertical-align:middle;border:1px solid var(--border);color:var(--text-muted);}
+.tag-acct{background:var(--warn-soft);color:var(--warn);border-color:#efd9a8;}
+.tag-partner{background:var(--purple-soft);color:var(--purple);border-color:#dccff5;}
+.toc{background:var(--bg-soft);border:1px solid var(--border);border-radius:8px;padding:18px 24px;margin:24px 0;columns:2;column-gap:36px;}
+.toc strong{display:block;column-span:all;margin-bottom:6px;}
+.toc ol{margin:0 0 0 18px;}
+.toc li{margin:3px 0;font-size:.9rem;break-inside:avoid;}
+.meta{font-family:var(--mono);font-size:.78rem;color:var(--text-muted);margin-bottom:24px;}
+.ep{font-family:var(--mono);font-size:.82rem;white-space:nowrap;}
+@media print{.banner{display:none}pre{white-space:pre-wrap}}
+</style>
+</head>
+<body>
+<div class="banner"><strong>DLT PERPS API</strong> · v1 · Partner integration specification · Draft for partner review</div>
+<div class="wrap">
+
+<h1>DLT Perps API v1</h1>
+<p class="meta">Partner integration specification · REST + WebSocket (FIX on request) · Draft v1.0 · 2026-10-26</p>
+
+<p>The DLT Perps API gives exchanges, brokers and fintech apps everything needed to offer their users a <strong>complete perpetual-futures trading experience</strong> — markets, leverage, long/short, live liquidation price, funding, TP/SL, positions, PnL, equity — on EU-regulated securitized perps. Every position is 1:1 covered by a perp position held by the issuer's market maker; the liquidation mechanics, funding and risk management run inside the instrument. You build the UI; DLT runs execution, record-keeping, regulatory reporting and the issuer connection.</p>
+
+<p>The API is designed so that a team that has built a perps UI before will find nothing unfamiliar: same objects, same field names, same screen-to-endpoint mapping. Where the regulated wrapper requires something a crypto perps API does not have (client onboarding, appropriateness, KID disclosure, trade confirmations), it is a separate, clearly marked module.</p>
+
+<div class="toc">
+<strong>Contents</strong>
+<ol>
+<li><a href="#roles">Roles &amp; integration model</a></li>
+<li><a href="#concepts">Perp concepts in this API</a></li>
+<li><a href="#conventions">Conventions: auth, formats, limits</a></li>
+<li><a href="#onboarding">Accounts &amp; onboarding</a></li>
+<li><a href="#marketdata">Market data — REST</a></li>
+<li><a href="#ws-public">Market data — WebSocket</a></li>
+<li><a href="#trading">Trading</a></li>
+<li><a href="#portfolio">Positions, balance &amp; history</a></li>
+<li><a href="#ws-private">Account streams — WebSocket</a></li>
+<li><a href="#liquidation">Liquidation lifecycle</a></li>
+<li><a href="#funds">Funds: deposits, withdrawals, transfers</a></li>
+<li><a href="#compliance">Documents, confirmations &amp; reporting</a></li>
+<li><a href="#fees">Fees &amp; partner revenue</a></li>
+<li><a href="#webhooks">Webhooks</a></li>
+<li><a href="#ops">Partner operations: recon, status, sandbox</a></li>
+<li><a href="#errors">Errors</a></li>
+<li><a href="#ui-map">UI build map</a></li>
+<li><a href="#glossary">Appendix — field glossary</a></li>
+</ol>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="roles">1. Roles &amp; integration model</h2>
+
+<table>
+<thead><tr><th>Party</th><th>Role</th><th>What it runs</th></tr></thead>
+<tbody>
+<tr><td><strong>Partner</strong> (you)</td><td>Exchange / broker / app operating the user-facing frontend — as tied agent under the Black Manta umbrella, or under its own licence.</td><td>UI and app, user login, KYC collection, order entry, rendering of DLT data feeds. Calls this API.</td></tr>
+<tr><td><strong>DLT</strong></td><td>Broker. Receives and executes your users' orders (back-to-back against the issuer), keeps the per-user books and records, regulatory reporting, confirmations and statements.</td><td>This API: market-data redistribution, order routing, sub-ledger, reporting.</td></tr>
+<tr><td><strong>Black Manta</strong></td><td>MiFID-licensed securities house; regulatory umbrella (Haftungsdach) for tied-agent partners.</td><td>No integration work for partners.</td></tr>
+<tr><td><strong>Issuer</strong></td><td>Issues the securitized perps, quotes continuously, runs funding and liquidation, publishes Final Terms and KIDs.</td><td>Reached only through DLT — partners never integrate the issuer directly.</td></tr>
+<tr><td><strong>Custodian</strong></td><td>Holds client cash and tokens (per partner agreement — partner's EU custodian or DLT's).</td><td>See <a href="#funds">§11</a> for the two custody models.</td></tr>
+</tbody>
+</table>
+
+<h3>Account model</h3>
+<p>The partner has one <strong>partner key</strong>. Each of the partner's end users is a <strong>DLT account</strong> (<code>acc_…</code>), opened through the API (<a href="#onboarding">§4</a>) — the end user is a client of record of DLT, so balances, positions and records are held per account, never only in an omnibus. All trading and account calls act on one account, selected by header:</p>
+<pre><code>DLT-ACCOUNT: acc_7Q2M9KX1         # end-user account the call acts on</code></pre>
+<p>Endpoints are marked <span class="tag">public</span> (no auth), <span class="tag tag-acct">account</span> (partner key + <code>DLT-ACCOUNT</code>), or <span class="tag tag-partner">partner</span> (partner key, partner-level data across accounts).</p>
+
+<!-- ============================================================ -->
+<h2 id="concepts">2. Perp concepts in this API</h2>
+
+<p>Every perp concept your UI already knows exists here, with the same name:</p>
+
+<table>
+<thead><tr><th>Perp concept</th><th>In this API</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>Market / symbol</td><td><code>BTC-USDC</code>, <code>ETH-USDC</code>, <code>XAU-USDC</code> …</td><td>One market per underlying. Long and short are both traded in the same market.</td></tr>
+<tr><td>Mark price</td><td><code>mark_price</code></td><td>The reference market price of the underlying (designated reference venue, e.g. Bybit BTCUSDT perp). Drives PnL, liquidation and charts.</td></tr>
+<tr><td>Leverage</td><td><code>leverage</code></td><td>Chosen per order from the market's <strong>leverage tiers</strong> (§5). Like on any perp venue, effective leverage moves with the mark price and is always served live.</td></tr>
+<tr><td>Margin mode</td><td><code>isolated</code></td><td>Every position is isolated: margin = what the user paid for the position; max loss = margin. (Cross margin: see §8 note.)</td></tr>
+<tr><td>Initial margin</td><td><code>margin</code></td><td>The cost of the position. No separate margin account, no margin calls.</td></tr>
+<tr><td>Liquidation price</td><td><code>liq_price</code></td><td>Fixed at entry, moves only with funding (8h). When mark touches it, the position is liquidated (§10).</td></tr>
+<tr><td>Funding</td><td><code>funding_rate</code>, <code>funding_paid</code></td><td>Same 8h cadence and direction as perp funding. Settled <em>inside</em> the position (it adjusts the position's entry basis and liq price) rather than as a cash transfer — the API reports it as a USDC amount per position, exactly like perp funding history.</td></tr>
+<tr><td>Position mode</td><td>Hedge mode</td><td>Long and short positions in the same market are independent (<code>position_side</code>). There is no netting.</td></tr>
+<tr><td>Orderbook</td><td>Reference book + executable quotes</td><td>The displayed book is the reference market. Executable prices for every tier come from the <code>quotes</code> channel, already converted into perp entry/exit prices (§6).</td></tr>
+</tbody>
+</table>
+
+<div class="note"><strong>One position per leverage tier.</strong> A position is identified by market + side + tier. Adding size at the same tier adds to that position (same liq price, averaged entry). Opening at a different leverage opens a second position in the same market; <code>GET /positions?group=market</code> returns the aggregated, single-row-per-side view most perp UIs show, with the legs underneath.</div>
+
+<!-- ============================================================ -->
+<h2 id="conventions">3. Conventions</h2>
+
+<h3>Environments</h3>
+<pre><code>Production   REST  https://api.dlt-perps.eu/v1          WS  wss://stream.dlt-perps.eu/v1
+Sandbox      REST  https://api.sandbox.dlt-perps.eu/v1  WS  wss://stream.sandbox.dlt-perps.eu/v1
+FIX 4.4      on request (order entry + market data), same semantics as REST/WS</code></pre>
+<p><em>Hostnames are placeholders until production DNS is assigned.</em></p>
+
+<h3>Authentication</h3>
+<p>Partner API keys are issued per environment, scoped (<code>read</code>, <code>trade</code>, <code>accounts</code>, <code>funds</code>) and IP-allowlisted. Requests are signed with HMAC-SHA256:</p>
+<pre><code>DLT-API-KEY:     pk_live_3f9a…
+DLT-TIMESTAMP:   1793007600000                       # ms since epoch, ±5 s of server time
+DLT-SIGNATURE:   hex(hmac_sha256(secret, timestamp + method + path + query + body))
+DLT-ACCOUNT:     acc_7Q2M9KX1                        # required on account endpoints</code></pre>
+<p>WebSocket: authenticate with <code>{"op":"auth","key":…,"ts":…,"sig":…}</code> after connect; then subscribe to account channels with an explicit account list (<code>"accounts":["acc_7Q2M9KX1", …]</code>) or <code>"accounts":"*"</code> for a partner-wide firehose.</p>
+
+<h3>Formats</h3>
+<ul>
+<li>Prices, sizes and amounts are <strong>decimal strings</strong>. Timestamps are <strong>ms since epoch, UTC</strong>.</li>
+<li>Size can be given in any of three units, everywhere: <code>qty</code> (underlying units, e.g. BTC), <code>margin</code> (USDC the user commits), <code>notional</code> (USDC exposure = qty × price). Responses return all three.</li>
+<li>All mutating calls accept <code>Idempotency-Key</code>; replays within 24 h return the original result.</li>
+<li>Lists paginate with <code>limit</code> (default 100, max 500) + <code>cursor</code>; time filters <code>start</code>/<code>end</code>.</li>
+<li>Versioning in the path (<code>/v1</code>). Additive changes ship without notice; breaking changes get a new version and ≥ 6 months parallel run.</li>
+</ul>
+
+<h3>Rate limits</h3>
+<table>
+<thead><tr><th>Scope</th><th>Limit</th></tr></thead>
+<tbody>
+<tr><td>Public REST</td><td>1,200 req/min per partner key (proxy and cache public data for your users — do not fan out 1:1)</td></tr>
+<tr><td>Account REST</td><td>60 req/s per partner, 10 orders/s per account</td></tr>
+<tr><td>WebSocket</td><td>20 connections per partner, 500 subscriptions per connection; ping every 15 s</td></tr>
+</tbody>
+</table>
+<p><code>X-RateLimit-Remaining</code> on every response; <code>429</code> with <code>Retry-After</code> when exceeded.</p>
+
+<!-- ============================================================ -->
+<h2 id="onboarding">4. Accounts &amp; onboarding</h2>
+
+<p>A user must have an <code>active</code> account with a passed appropriateness assessment before the first order. The partner collects KYC as part of its own onboarding and hands it over; DLT does not re-contact the user.</p>
+
+<h3><span class="method post">POST</span>/accounts<span class="tag tag-partner">partner</span></h3>
+<p>Open an account for an end user.</p>
+<pre><code>POST /accounts
+{"external_ref":"cw-user-558120",                  // your user id — echoed on every event
+ "person":{"first_name":"Lena","last_name":"Brandt","birth_date":"1991-04-17",
+           "nationality":["DE"],"residence":"DE","tax_residence":[{"country":"DE","tin":"…"}]},
+ "contact":{"email":"…","phone":"+49…"},
+ "kyc":{"provider":"sumsub","reference":"kyc_8812","level":"full","completed_ts":1792990000000,
+        "pep":false,"sanctions_screened_ts":1792990000000},
+ "classification":"retail",                         // retail | professional (on request)
+ "language":"de","base_currency":"USDC"}
+
+201 {"account_id":"acc_7Q2M9KX1","status":"pending_review",
+     "required":["appropriateness","terms_acceptance"]}</code></pre>
+
+<h3><span class="method get">GET</span>/accounts/{id} · <span class="method patch">PATCH</span>/accounts/{id}<span class="tag tag-partner">partner</span></h3>
+<p>Account status, permissions and limits; update contact / residence / tax data (changes to identity data trigger a re-review).</p>
+<pre><code>{"account_id":"acc_7Q2M9KX1","external_ref":"cw-user-558120",
+ "status":"active",                                 // pending_review | active | restricted | close_only | closed
+ "permissions":{"trade":true,"withdraw":true,"max_leverage":"50"},
+ "appropriateness":{"result":"passed","valid_until":null},
+ "limits":{"max_open_notional":"250000.00"}}</code></pre>
+<p><code>close_only</code> is used for regulatory or KYC refresh holds — the user can reduce and close but not open.</p>
+
+<h3><span class="method get">GET</span>/appropriateness/questionnaire<span class="tag">public</span></h3>
+<p>Current questionnaire (versioned, per language) — render it in your onboarding flow. Questions cover knowledge of and experience with leveraged derivatives, as required for complex products under MiFID II.</p>
+
+<h3><span class="method post">POST</span>/accounts/{id}/appropriateness<span class="tag tag-partner">partner</span></h3>
+<pre><code>{"questionnaire_version":"2026-09","answers":[{"q":"q1","a":"b"}, …]}
+
+{"result":"passed"}                                // passed | warning | failed
+// warning: user may proceed after explicit acknowledgement of the risk warning (POST …/appropriateness/ack)
+// failed:  account stays non-trading; retest allowed after cool-off (retest_after_ts)</code></pre>
+
+<h3><span class="method get">GET</span>/legal/terms · <span class="method post">POST</span>/accounts/{id}/terms<span class="tag tag-partner">partner</span></h3>
+<p>Current client terms, costs information and risk disclosures (versioned); record the user's acceptance with version + timestamp + IP.</p>
+
+<h3><span class="method post">POST</span>/accounts/{id}/close<span class="tag tag-partner">partner</span></h3>
+<p>Close the account. Requires no open positions/orders and zero balance (or a payout instruction).</p>
+
+<!-- ============================================================ -->
+<h2 id="marketdata">5. Market data — REST</h2>
+
+<h3><span class="method get">GET</span>/markets<span class="tag">public</span></h3>
+<p>All markets with their trading parameters.</p>
+<pre><code>[{"symbol":"BTC-USDC","underlying":"BTC","quote":"USDC",
+  "ref_venue":"BYBIT","ref_symbol":"BTCUSDT",
+  "status":"open",                                   // open | halted | close_only
+  "max_leverage":"50","funding_interval_h":8,
+  "qty_step":"0.001","min_qty":"0.001","price_tick":"0.10",
+  "trading_hours":"24/7"}]</code></pre>
+
+<h3><span class="method get">GET</span>/markets/{symbol}/leverage<span class="tag">public</span></h3>
+<p>Available leverage tiers per side — the data behind the leverage slider. Each tier is one listed instrument with a fixed liquidation level.</p>
+<pre><code>GET /markets/BTC-USDC/leverage?side=long
+
+{"symbol":"BTC-USDC","side":"long","mark_price":"89941.20",
+ "tiers":[{"tier":"BTC-LONG-86900","leverage":"29.57","liq_price":"87986.25","status":"open"},
+          {"tier":"BTC-LONG-87400","leverage":"34.92","liq_price":"88492.50","status":"open"},
+          {"tier":"BTC-LONG-86200","leverage":"24.31","liq_price":"87277.50","status":"open"}, …]}</code></pre>
+<p><code>GET /markets/{symbol}/leverage/match?side=long&amp;leverage=30</code> returns the nearest tier plus neighbours — use it to snap the slider so every partner shows the same result. Leverage values move with the mark price; never cache them longer than a quote TTL.</p>
+
+<h3><span class="method get">GET</span>/markets/{symbol}/ticker<span class="tag">public</span></h3>
+<pre><code>{"symbol":"BTC-USDC","mark_price":"89941.20","index_price":"89941.20",
+ "change_24h_pct":"1.84","high_24h":"90620.00","low_24h":"88012.40",
+ "volume_24h":"412.551","volume_24h_usdc":"37102944.10","open_interest":"86.214",
+ "funding_rate":"0.000115","next_funding_ts":1793016000000}</code></pre>
+<p><code>volume_24h</code> and <code>open_interest</code> are DLT-platform figures (all partners), in underlying units.</p>
+
+<h3><span class="method get">GET</span>/markets/{symbol}/orderbook<span class="tag">public</span></h3>
+<p>Reference-market depth for display (<code>depth</code> 1–50). Snapshot of the <code>orderbook</code> WS channel.</p>
+
+<h3><span class="method get">GET</span>/markets/{symbol}/quote<span class="tag">public</span></h3>
+<p>Executable prices for one tier (snapshot of the <code>quotes</code> channel, §6). Use for low-frequency clients; trading UIs should stream.</p>
+
+<h3><span class="method get">GET</span>/markets/{symbol}/trades<span class="tag">public</span></h3>
+<p>Recent platform trades (price as entry/exit price, qty, side) for the trade tape.</p>
+
+<h3><span class="method get">GET</span>/markets/{symbol}/candles<span class="tag">public</span></h3>
+<p>OHLCV on the mark price; <code>interval</code> = <code>1m 5m 15m 1h 4h 1d 1w</code>; full history since market launch. A TradingView UDF adapter is a thin wrapper over this endpoint.</p>
+
+<h3><span class="method get">GET</span>/markets/{symbol}/funding<span class="tag">public</span></h3>
+<p>Funding-rate history (rate, timestamp) per 8h period, plus the current predicted rate.</p>
+
+<h3><span class="method get">GET</span>/tiers/{tier}<span class="tag">public</span></h3>
+<p>Full instrument detail for a tier — the legal layer behind a position, for the product info screen and for compliance.</p>
+<pre><code>{"tier":"BTC-LONG-86900","symbol":"BTC-USDC","side":"long","status":"open",
+ "liq_price":"87986.25","liq_history_url":"/tiers/BTC-LONG-86900/levels",
+ "instrument":{"type":"securitized_perp","issuer":"Anduin","securities_id":"ANDN-BTC-L-0412",
+               "token_address":"0x5f2a…","chain":"base","ratio":"0.001",
+               "strike":"86900.00","issue_size":"5000000","outstanding":"1240310"},
+ "documents":{"kid":{"en":"…/kid/BTC-LONG-86900.en.pdf","de":"…/kid/BTC-LONG-86900.de.pdf"},
+              "final_terms":{"en":"…/ft/BTC-LONG-86900.pdf"},"prospectus":"…/base-prospectus.pdf",
+              "version":"3","updated_ts":1792987300000},
+ "successor":null}</code></pre>
+<p><code>GET /tiers/{tier}/levels</code> — history of every liq-price adjustment (funding), timestamped: draws the liquidation line back in time on the chart.</p>
+
+<h3><span class="method get">GET</span>/time · /status<span class="tag">public</span></h3>
+<p>Server time; platform and per-market status incl. scheduled maintenance (§15).</p>
+
+<!-- ============================================================ -->
+<h2 id="ws-public">6. Market data — WebSocket</h2>
+
+<p><code>{"op":"subscribe","channels":["ticker:BTC-USDC","quotes:BTC-USDC"]}</code>. Every message carries <code>channel</code>, <code>ts</code> and a per-channel monotonic <code>seq</code>; on a gap, re-snapshot via REST. Book channels send a snapshot on subscribe, then deltas.</p>
+
+<table>
+<thead><tr><th>Channel</th><th>Content</th><th>Typical update</th></tr></thead>
+<tbody>
+<tr><td><code>ticker:{symbol}</code></td><td>Mark price, 24h stats, funding rate, next funding</td><td>~250 ms</td></tr>
+<tr><td><code>mark:{symbol}</code></td><td>Mark price only, every tick — drives live PnL and liq distance</td><td>tick</td></tr>
+<tr><td><code>orderbook:{symbol}</code></td><td>Reference-market depth (display)</td><td>100 ms</td></tr>
+<tr><td><code>quotes:{symbol}</code></td><td>Executable open/close prices for every tier, with <code>quote_id</code></td><td>tick</td></tr>
+<tr><td><code>trades:{symbol}</code></td><td>Platform trades</td><td>event</td></tr>
+<tr><td><code>candles:{symbol}:{interval}</code></td><td>Live candle updates</td><td>tick</td></tr>
+<tr><td><code>funding:{symbol}</code></td><td>Predicted rate, countdown; settlement event every 8h with new liq prices</td><td>1 s / event</td></tr>
+<tr><td><code>market_status</code></td><td>Halts, resumes, new tiers, tier liquidated, maintenance</td><td>event</td></tr>
+</tbody>
+</table>
+
+<h3><span class="method ws">WS</span>quotes:{symbol}</h3>
+<p>The executable price feed. Prices are already expressed as <strong>perp entry / exit prices</strong> of the underlying; the instrument price is included for completeness. A trade ticket shows <code>open.entry_price</code> for a new position and <code>close.exit_price</code> for closing.</p>
+<pre><code>{"channel":"quotes:BTC-USDC","ts":1793007600150,"seq":55102,
+ "mark_price":"89941.20","ref_ts":1793007600123,
+ "tiers":[{"tier":"BTC-LONG-86900","side":"long","leverage":"29.57","liq_price":"87986.25",
+           "quote_id":"q_01JD3X8ZK4","ttl_ms":750,
+           "open":{"entry_price":"89942.40","max_qty":"5.000","instrument_price":"3.0424"},
+           "close":{"exit_price":"89939.90","max_qty":"5.000","instrument_price":"3.0399"}},
+          …]}</code></pre>
+<p>The gap between <code>entry_price</code>/<code>exit_price</code> and <code>mark_price</code> is the spread, as on any perp book. <code>quote_id</code> can be pinned on the order (§7).</p>
+
+<h3><span class="method ws">WS</span>funding:{symbol}</h3>
+<pre><code>{"channel":"funding:BTC-USDC","ts":1793016000050,"event":"settled",
+ "funding_ts":1793016000000,"rate":"0.000115","next_funding_ts":1793044800000,
+ "liq_prices":[{"tier":"BTC-LONG-86900","before":"87975.78","after":"87986.25"}, …]}</code></pre>
+<p>Between settlements the channel sends <code>{"event":"predicted","rate":…,"next_funding_ts":…}</code> once per second for the countdown row.</p>
+
+<h3><span class="method ws">WS</span>market_status</h3>
+<pre><code>{"channel":"market_status","ts":1793007700000,"event":"tier_liquidated",
+ "symbol":"BTC-USDC","tier":"BTC-LONG-86900","trigger_price":"87986.25",
+ "trigger_ts":1793007699850,"successor":"BTC-LONG-85400"}</code></pre>
+<p>Events: <code>market_halted</code> · <code>market_resumed</code> · <code>tier_listed</code> · <code>tier_liquidated</code> · <code>tier_settled</code> · <code>maintenance_scheduled</code>.</p>
+
+<!-- ============================================================ -->
+<h2 id="trading">7. Trading</h2>
+
+<h3><span class="method post">POST</span>/orders/preview<span class="tag tag-acct">account</span></h3>
+<p>The order-confirmation screen in one call: resolved tier, price, size in all units, margin, fees, liq price, max loss, and the ex-ante costs disclosure. Nothing is reserved.</p>
+<pre><code>POST /orders/preview
+{"symbol":"BTC-USDC","position_side":"long","action":"open",
+ "leverage":"30","size":{"margin":"3500.00"},"type":"market"}
+
+{"tier":"BTC-LONG-86900","leverage":"29.57","quote_id":"q_01JD3X8ZK4","expires_ts":1793007600900,
+ "entry_price":"89942.40","mark_price":"89941.20","liq_price":"87986.25",
+ "qty":"1.150","notional":"103433.76","margin":"3498.76",
+ "fee":{"trading":"62.06","rate":"0.0006"},
+ "max_loss":"3498.76",
+ "costs_ex_ante":{"entry_fee":"62.06","spread":"1.38","exit_fee_est":"62.06",
+                  "funding_est_24h":"35.68","total_est":"161.18","total_est_pct_of_margin":"4.61"},
+ "documents":{"kid":"…/kid/BTC-LONG-86900.en.pdf","kid_ack_required":true}}</code></pre>
+
+<h3><span class="method post">POST</span>/orders<span class="tag tag-acct">account</span></h3>
+<pre><code>POST /orders
+{"symbol":"BTC-USDC","position_side":"long","action":"open",
+ "leverage":"30",                      // snaps to nearest tier — or pass "tier":"BTC-LONG-86900"
+ "type":"market",                      // market | limit | stop_market
+ "size":{"margin":"3500.00"},          // or {"qty":"1.150"} or {"notional":"103433.76"}
+ "quote_id":"q_01JD3X8ZK4",            // optional: execute at this quote or reject
+ "slippage_bps":"10",                  // market protection vs. mark
+ "take_profit":{"trigger_price":"92500.00"},          // optional, attached TP/SL
+ "stop_loss":{"trigger_price":"88600.00"},
+ "kid_ack":true,                       // user was shown the KID for this tier
+ "client_order_id":"cw-7781"}
+
+201 {"order_id":"o_8812","status":"accepted","tier":"BTC-LONG-86900"}</code></pre>
+
+<table>
+<thead><tr><th>Field</th><th>Values / meaning</th></tr></thead>
+<tbody>
+<tr><td><code>position_side</code></td><td><code>long</code> | <code>short</code> (hedge mode)</td></tr>
+<tr><td><code>action</code></td><td><code>open</code> (increase) | <code>close</code> (reduce-only; needs <code>position_id</code> or <code>tier</code>). <code>size.qty:"all"</code> closes fully.</td></tr>
+<tr><td><code>type</code></td><td><code>market</code>; <code>limit</code> — <code>limit_price</code> is an entry/exit price of the underlying, executes when the executable quote reaches it; <code>stop_market</code> — <code>trigger_price</code> on mark price</td></tr>
+<tr><td><code>time_in_force</code></td><td><code>GTC</code> (default for limit) · <code>IOC</code> · <code>FOK</code> · <code>GTD</code> + <code>expires_ts</code></td></tr>
+<tr><td><code>leverage</code> / <code>tier</code></td><td>Target leverage (nearest tier, response tells which) or exact tier. <code>leverage_tolerance</code> (e.g. <code>"2"</code>) rejects if the nearest tier is further away.</td></tr>
+<tr><td><code>kid_ack</code></td><td>Required <code>true</code> on the first opening order per tier per account; otherwise <code>kid_ack_required</code>.</td></tr>
+</tbody>
+</table>
+
+<h3><span class="method get">GET</span>/orders · /orders/{id} · <span class="method del">DELETE</span>/orders/{id} · <span class="method del">DELETE</span>/orders<span class="tag tag-acct">account</span></h3>
+<p>Open orders, single order with its fills, cancel one, cancel all (optionally per symbol). <code>GET /orders/history</code> for closed orders.</p>
+
+<h3><span class="method post">POST</span>/positions/{id}/close<span class="tag tag-acct">account</span></h3>
+<p>Convenience: market-close full or partial (<code>{"qty":"0.500"}</code>). Equivalent to an <code>action:"close"</code> order.</p>
+
+<h3><span class="method post">POST</span>/positions/{id}/tpsl<span class="tag tag-acct">account</span></h3>
+<p>Set / modify / remove TP and SL on a position (full or partial size). Both trigger on mark price and execute as market close with <code>slippage_bps</code>. Removed automatically when the position closes or is liquidated.</p>
+<pre><code>{"take_profit":{"trigger_price":"92500.00","qty":"all"},
+ "stop_loss":{"trigger_price":"88600.00","qty":"all"}}</code></pre>
+
+<h3><span class="method post">POST</span>/positions/{id}/leverage<span class="tag tag-acct">account</span></h3>
+<p>Change leverage on an open position. Executed as one atomic operation — the position is moved to the target tier at pinned quotes: realized PnL, fees and the new liq price are returned in one response (two fills). Lowering leverage this way is also the equivalent of "add margin".</p>
+<pre><code>{"leverage":"20","mode":"keep_qty"}     // keep_qty (adds/frees margin) | keep_margin (changes qty)</code></pre>
+
+<h3><span class="method post">POST</span>/accounts/{id}/kill<span class="tag tag-partner">partner</span></h3>
+<p>Emergency: cancel all orders and optionally close all positions of an account (<code>{"close_positions":true}</code>).</p>
+
+<!-- ============================================================ -->
+<h2 id="portfolio">8. Positions, balance &amp; history</h2>
+
+<h3><span class="method get">GET</span>/positions<span class="tag tag-acct">account</span></h3>
+<p>Open positions, perp-style. <code>?group=market</code> for one aggregated row per market and side.</p>
+<pre><code>[{"position_id":"pos_4KD1","symbol":"BTC-USDC","position_side":"long","tier":"BTC-LONG-86900",
+  "margin_mode":"isolated",
+  "qty":"1.150","entry_price":"89942.40","mark_price":"90410.00","liq_price":"87986.25",
+  "leverage":"25.76","notional":"103971.50",
+  "margin":"3498.76","position_value":"4036.50",
+  "unrealized_pnl":"537.74","roe_pct":"15.37",
+  "realized_pnl":"0.00","funding_paid":"11.89","fees_paid":"62.06",
+  "take_profit":{"trigger_price":"92500.00"},"stop_loss":{"trigger_price":"88600.00"},
+  "pnl_basis":"dlt","opened_ts":1793007600810,"updated_ts":1793016000100}]</code></pre>
+
+<table>
+<thead><tr><th>Field</th><th>Definition</th></tr></thead>
+<tbody>
+<tr><td><code>margin</code></td><td>What was paid for the open size (average-cost, excl. fees)</td></tr>
+<tr><td><code>position_value</code></td><td>Current value at mark: what the position is worth right now</td></tr>
+<tr><td><code>unrealized_pnl</code></td><td><code>position_value − margin</code>; <code>roe_pct</code> = uPnL / margin</td></tr>
+<tr><td><code>leverage</code></td><td>Live effective leverage = <code>notional / position_value</code></td></tr>
+<tr><td><code>funding_paid</code></td><td>Cumulative funding of this position in USDC (negative = received). Already reflected in <code>position_value</code> and <code>liq_price</code> — not deducted from balance separately.</td></tr>
+<tr><td><code>pnl_basis</code></td><td><code>dlt</code> (all size traded via DLT) · <code>client_provided</code> · <code>unknown</code> — see below</td></tr>
+</tbody>
+</table>
+<p><strong>Tokens transferred in from outside:</strong> DLT only knows the entry price of fills it executed. For transferred-in size the partner may register a cost basis (<code>POST /positions/{id}/basis {"entry_price":…,"qty":…}</code> → <code>pnl_basis:"client_provided"</code>); without it, <code>entry_price</code>/<code>unrealized_pnl</code>/<code>roe_pct</code> are <code>null</code> and the UI shows position value only. In the normal partner flow everything is traded via DLT and this never arises.</p>
+
+<h3><span class="method get">GET</span>/balance<span class="tag tag-acct">account</span></h3>
+<pre><code>{"currency":"USDC",
+ "wallet_balance":"1439.18",           // cash
+ "available":"1439.18",                // cash minus open-order reservations
+ "position_margin":"3498.76",          // Σ margin of open positions
+ "unrealized_pnl":"537.74",
+ "equity":"5475.68",                   // wallet_balance + Σ position_value
+ "withdrawable":"1439.18"}</code></pre>
+<p>Same arithmetic as a perp account in isolated mode: <code>equity = wallet + margin + uPnL</code>. Other cash currencies (EUR) appear as separate rows if enabled for the partner.</p>
+<div class="note"><strong>Cross margin.</strong> v1 is isolated-only. A cross-margin mode — open positions counted as collateral for new ones via a DLT margin account, with the same margin-ratio display perp users know — is planned as an optional module; it will add <code>margin_mode:"cross"</code>, <code>maintenance_margin</code> and <code>margin_ratio</code> fields without changing anything above.</div>
+
+<h3>History</h3>
+<table>
+<thead><tr><th>Endpoint</th><th>Content</th></tr></thead>
+<tbody>
+<tr><td class="ep"><span class="method get">GET</span>/positions/history</td><td>Closed positions: entry, exit, qty, realized PnL, fees, funding, close reason (<code>user</code> · <code>tp</code> · <code>sl</code> · <code>liquidation</code> · <code>leverage_change</code>)</td></tr>
+<tr><td class="ep"><span class="method get">GET</span>/fills</td><td>Every execution (format §9)</td></tr>
+<tr><td class="ep"><span class="method get">GET</span>/funding-history</td><td>Funding per position per 8h period: rate, amount, liq price before/after</td></tr>
+<tr><td class="ep"><span class="method get">GET</span>/liquidations</td><td>Liquidation events with trigger, close price and remaining margin returned (§10)</td></tr>
+<tr><td class="ep"><span class="method get">GET</span>/ledger</td><td>All cash movements: deposit, withdrawal, transfer, trade, fee, liquidation_payout, conversion — with running balance</td></tr>
+<tr><td class="ep"><span class="method get">GET</span>/equity-history</td><td>Daily (or hourly) equity snapshots for the portfolio chart</td></tr>
+</tbody>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="ws-private">9. Account streams — WebSocket</h2>
+
+<table>
+<thead><tr><th>Channel</th><th>Content</th></tr></thead>
+<tbody>
+<tr><td><code>orders</code></td><td>Order lifecycle: <code>accepted → partially_filled → filled</code> | <code>cancelled</code> | <code>rejected(reason)</code></td></tr>
+<tr><td><code>fills</code></td><td>Each execution, incl. reference price at match time</td></tr>
+<tr><td><code>positions</code></td><td>Position snapshots on change and on every mark move &gt; 1 bp (throttled to 4/s): PnL, leverage, liq price</td></tr>
+<tr><td><code>balance</code></td><td>Balance object on every change</td></tr>
+<tr><td><code>liquidations</code></td><td>Liquidation notice → close price determined → remaining margin credited</td></tr>
+<tr><td><code>account</code></td><td>Status / permission changes, document updates for held tiers, TP/SL triggered</td></tr>
+</tbody>
+</table>
+<p>All frames carry <code>account_id</code> and <code>external_ref</code>.</p>
+
+<h3>Fill format</h3>
+<pre><code>{"channel":"fills","account_id":"acc_7Q2M9KX1","external_ref":"cw-user-558120","ts":1793007600810,
+ "fill_id":"f_22918","order_id":"o_8812","client_order_id":"cw-7781",
+ "symbol":"BTC-USDC","position_side":"long","action":"open","tier":"BTC-LONG-86900",
+ "price":"89942.40","qty":"1.150","notional":"103433.76","margin":"3498.76",
+ "fee":"62.06","fee_currency":"USDC","liquidity":"taker",
+ "mark_price":"89941.20","ref_venue":"BYBIT","ref_ts":1793007600123,
+ "quote_id":"q_01JD3X8ZK4","spread_to_mark_bps":"0.13",
+ "instrument":{"securities_id":"ANDN-BTC-L-0412","units":"1150","unit_price":"3.0424"},
+ "venue":"DLT","execution_ts":1793007600805}</code></pre>
+<p>The <code>mark_price</code>/<code>ref_ts</code> captured at match time and the pinned <code>quote_id</code> form the best-execution evidence for each fill; the <code>instrument</code> block is the securities-level record used on the trade confirmation.</p>
+
+<!-- ============================================================ -->
+<h2 id="liquidation">10. Liquidation lifecycle</h2>
+
+<ol>
+<li><strong>Trigger.</strong> Mark price touches <code>liq_price</code> of a tier. All positions at that tier are liquidated at once; open orders and TP/SL on them are cancelled. Public: <code>market_status → tier_liquidated</code>. Account: <code>liquidations → triggered</code>.</li>
+<li><strong>Close price.</strong> The covering perp position is unwound; the close price is determined from the unwind (typically within minutes). <code>liquidations → price_determined</code>.</li>
+<li><strong>Remaining margin returned.</strong> The remaining value is credited to the wallet — no liquidation fee, no insurance-fund contribution, never a negative balance: max loss is the margin.</li>
+<li><strong>Re-entry.</strong> <code>successor</code> names the new tier at the same leverage, so the UI can offer one-tap re-open.</li>
+</ol>
+<pre><code>{"channel":"liquidations","account_id":"acc_7Q2M9KX1","ts":1793011300000,
+ "event":"margin_returned","position_id":"pos_4KD1","tier":"BTC-LONG-86900",
+ "qty":"1.150","trigger_price":"87986.25","trigger_ts":1793007699850,
+ "close_price":"87980.10","margin":"3498.76","returned":"1242.12","realized_pnl":"-2256.64",
+ "determination_doc":"…/rv/BTC-LONG-86900-20261026.pdf","successor":"BTC-LONG-85400"}</code></pre>
+
+<!-- ============================================================ -->
+<h2 id="funds">11. Funds: deposits, withdrawals, transfers</h2>
+
+<p>Which endpoints apply depends on the custody model agreed with the partner:</p>
+<table>
+<thead><tr><th></th><th>A — Partner custody</th><th>B — DLT custody</th></tr></thead>
+<tbody>
+<tr><td>Where user cash sits</td><td>Segregated client account at the partner's EU custodian</td><td>DLT client-money account / custodian</td></tr>
+<tr><td>How the trading wallet is funded</td><td><code>POST /transfers</code> — partner assigns funds from the user's custody balance to the trading wallet and back</td><td>Deposits to user-specific address / IBAN, withdrawals via API</td></tr>
+<tr><td>Physical settlement</td><td>Net at T+1 between custody accounts; per-user books update at T+0</td><td>Within DLT</td></tr>
+</tbody>
+</table>
+
+<h3><span class="method post">POST</span>/transfers<span class="tag tag-acct">account</span></h3>
+<pre><code>{"direction":"in","amount":"5000.00","currency":"USDC","reference":"cw-tx-9912"}
+201 {"transfer_id":"tr_1182","status":"completed","wallet_balance":"5000.00"}</code></pre>
+<p><code>direction:"out"</code> is limited to <code>withdrawable</code>.</p>
+
+<h3><span class="method get">GET</span>/deposit-address · <span class="method get">GET</span>/deposit-iban<span class="tag tag-acct">account</span> <em>(model B)</em></h3>
+<p>Per-user USDC address (supported networks listed) or virtual IBAN for EUR via SEPA.</p>
+
+<h3><span class="method post">POST</span>/withdrawals<span class="tag tag-acct">account</span> <em>(model B)</em></h3>
+<p>To whitelisted destinations only (<code>POST /withdrawal-addresses</code>, 24 h cool-down for new entries). Travel-rule data for crypto withdrawals is part of the request; self-hosted wallets require an ownership proof reference.</p>
+
+<h3><span class="method post">POST</span>/convert/quote · <span class="method post">POST</span>/convert<span class="tag tag-acct">account</span></h3>
+<p>EUR ⇄ USDC conversion at a firm quote (TTL 10 s), for partners whose users fund in EUR.</p>
+
+<h3><span class="method get">GET</span>/transfers · /deposits · /withdrawals<span class="tag tag-acct">account</span></h3>
+<p>History and status per movement.</p>
+
+<!-- ============================================================ -->
+<h2 id="compliance">12. Documents, confirmations &amp; reporting</h2>
+
+<p>DLT produces all regulated client documents. The partner surfaces them in its UI or forwards them; DLT can also deliver directly by e-mail if agreed.</p>
+
+<table>
+<thead><tr><th>Endpoint</th><th>Content</th><th>When</th></tr></thead>
+<tbody>
+<tr><td class="ep"><span class="method get">GET</span>/tiers/{tier}/documents</td><td>KID (per language), Final Terms, base prospectus. Show before the first trade per tier; evidence via <code>kid_ack</code>.</td><td>Pre-trade</td></tr>
+<tr><td class="ep"><span class="method post">POST</span>/orders/preview → <code>costs_ex_ante</code></td><td>Ex-ante costs &amp; charges per order (product + service costs, in USDC and %)</td><td>Pre-trade</td></tr>
+<tr><td class="ep"><span class="method get">GET</span>/confirmations/{fill_id}</td><td>Trade confirmation, JSON + PDF</td><td>Same day as execution</td></tr>
+<tr><td class="ep"><span class="method get">GET</span>/statements?period=2026-10</td><td>Periodic statement: holdings, movements, PnL</td><td>Monthly / quarterly</td></tr>
+<tr><td class="ep"><span class="method get">GET</span>/costs-report?year=2026</td><td>Ex-post annual costs &amp; charges report, incl. effect on return</td><td>Annual</td></tr>
+<tr><td class="ep"><span class="method get">GET</span>/tax-report?year=2026</td><td>Realized gains/losses per position, funding, fees; country formats where available</td><td>Annual</td></tr>
+<tr><td class="ep"><span class="method get">GET</span>/accounts/{id}/documents</td><td>Index of all documents issued to the account</td><td>Any time</td></tr>
+</tbody>
+</table>
+<p>Transaction reporting to the regulator is done by DLT — no partner integration needed. Complaints received by the partner are forwarded via <code>POST /accounts/{id}/complaints</code>.</p>
+
+<!-- ============================================================ -->
+<h2 id="fees">13. Fees &amp; partner revenue</h2>
+
+<h3><span class="method get">GET</span>/fees<span class="tag tag-acct">account</span></h3>
+<pre><code>{"trading_fee_rate":"0.0006",            // on notional, open and close
+ "partner_markup_rate":"0.0000",         // optional partner add-on, configured per partner/tier
+ "funding":"per market, see funding channel",
+ "liquidation_fee":"0", "deposit_fee":"0", "withdrawal_fee":{"USDC-base":"1.00"}}</code></pre>
+<p>Fees are charged on every fill and shown on it. The partner's share of trading fees (and any markup) accrues daily:</p>
+
+<h3><span class="method get">GET</span>/partner/revenue<span class="tag tag-partner">partner</span></h3>
+<p>Fee share per day / account / market, with the fill-level breakdown downloadable as CSV; settlement cadence per agreement.</p>
+
+<!-- ============================================================ -->
+<h2 id="webhooks">14. Webhooks</h2>
+
+<p>For partners who prefer push to a server endpoint over a WebSocket firehose (notifications, back-office). Register with <code>POST /webhooks {"url":…,"events":[…]}</code>. Deliveries are signed (<code>DLT-SIGNATURE</code> over body + timestamp), retried with backoff for 24 h, and replayable via <code>POST /webhooks/{id}/replay</code>.</p>
+<table>
+<thead><tr><th>Event</th><th>Typical partner use</th></tr></thead>
+<tbody>
+<tr><td><code>account.status_changed</code></td><td>Unlock trading in the app after review</td></tr>
+<tr><td><code>order.filled</code> · <code>order.rejected</code></td><td>Push notification</td></tr>
+<tr><td><code>position.tpsl_triggered</code></td><td>Push notification</td></tr>
+<tr><td><code>position.liq_warning</code></td><td>"Approaching liquidation" alert — threshold configurable per partner (e.g. mark within 0.5% of liq price)</td></tr>
+<tr><td><code>position.liquidated</code> · <code>liquidation.margin_returned</code></td><td>Push + e-mail</td></tr>
+<tr><td><code>funding.settled</code></td><td>Update funding history</td></tr>
+<tr><td><code>transfer.completed</code> · <code>deposit.credited</code> · <code>withdrawal.sent</code></td><td>Wallet notifications</td></tr>
+<tr><td><code>document.issued</code></td><td>Confirmation / statement available</td></tr>
+<tr><td><code>tier.document_updated</code></td><td>New KID version for a held tier — show to user</td></tr>
+</tbody>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="ops">15. Partner operations: reconciliation, status, sandbox</h2>
+
+<h3><span class="method get">GET</span>/partner/accounts<span class="tag tag-partner">partner</span></h3>
+<p>All accounts with status, equity, open positions count — for the partner's admin console.</p>
+
+<h3><span class="method get">GET</span>/partner/reports/eod?date=2026-10-26<span class="tag tag-partner">partner</span></h3>
+<p>End-of-day reconciliation file (JSON / CSV, available 01:00 UTC): per account — positions per tier, cash balance, movements and fills of the day; partner totals per tier and per custody account. Matches the partner's own books line by line.</p>
+
+<h3><span class="method get">GET</span>/status · <span class="method ws">WS</span>market_status<span class="tag">public</span></h3>
+<p>Machine-readable platform status (<code>operational | degraded | maintenance</code>) per component (trading, market data, funds) with incident messages — drive your "trading temporarily unavailable" banner from this. Maintenance is announced ≥ 48 h ahead.</p>
+
+<h3>Sandbox</h3>
+<p>Full mirror of the production API with test funds. Additional sandbox-only controls make every edge case testable on demand:</p>
+<pre><code>POST /sandbox/accounts/{id}/fund          {"amount":"10000.00"}
+POST /sandbox/markets/{symbol}/mark       {"price":"87990.00"}           // move the mark → TP/SL, liq warnings
+POST /sandbox/tiers/{tier}/liquidate                                       // full liquidation lifecycle
+POST /sandbox/markets/{symbol}/funding    {"rate":"0.0005"}                // force a funding settlement
+POST /sandbox/markets/{symbol}/halt</code></pre>
+<p>Sandbox can also back demo accounts for your end users.</p>
+
+<!-- ============================================================ -->
+<h2 id="errors">16. Errors</h2>
+
+<pre><code>{"error":{"code":"quote_expired","message":"Quote q_01JD3X8ZK4 no longer firm","request_id":"req_…"}}</code></pre>
+<table>
+<thead><tr><th>HTTP</th><th>Code</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td>400</td><td><code>invalid_request</code></td><td>Malformed body, unknown field, bad enum</td></tr>
+<tr><td>401</td><td><code>auth_failed</code></td><td>Key, signature or timestamp invalid</td></tr>
+<tr><td>403</td><td><code>scope_missing</code> · <code>account_not_active</code> · <code>close_only</code></td><td>Not permitted for this key or account</td></tr>
+<tr><td>403</td><td><code>appropriateness_required</code> · <code>terms_required</code></td><td>Onboarding incomplete</td></tr>
+<tr><td>404</td><td><code>not_found</code></td><td>Unknown market, tier, order, position, account</td></tr>
+<tr><td>409</td><td><code>quote_expired</code></td><td>Pinned quote no longer firm — re-preview</td></tr>
+<tr><td>409</td><td><code>market_halted</code> · <code>tier_liquidated</code></td><td>Not tradable right now</td></tr>
+<tr><td>409</td><td><code>kid_ack_required</code></td><td>First trade in this tier needs <code>kid_ack:true</code></td></tr>
+<tr><td>422</td><td><code>insufficient_balance</code> · <code>size_below_min</code> · <code>size_above_max</code> · <code>slippage_exceeded</code> · <code>leverage_out_of_tolerance</code> · <code>leverage_above_account_max</code></td><td>Order not executable as specified</td></tr>
+<tr><td>429</td><td><code>rate_limited</code></td><td>Honor <code>Retry-After</code></td></tr>
+<tr><td>503</td><td><code>maintenance</code></td><td>Scheduled window</td></tr>
+</tbody>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="ui-map">17. UI build map</h2>
+
+<p>Every element of a standard perps trading UI and where it comes from:</p>
+<table>
+<thead><tr><th>Screen / element</th><th>Source</th></tr></thead>
+<tbody>
+<tr><td>Market list, 24h change, volume, funding</td><td><code>GET /markets</code> + WS <code>ticker</code></td></tr>
+<tr><td>Price chart</td><td><code>GET /markets/{s}/candles</code> + WS <code>candles</code></td></tr>
+<tr><td>Liquidation line &amp; entry line on chart</td><td>WS <code>positions</code> (+ <code>GET /tiers/{t}/levels</code> for history)</td></tr>
+<tr><td>Orderbook &amp; trade tape</td><td>WS <code>orderbook</code>, <code>trades</code></td></tr>
+<tr><td>Long / Short buttons with live entry price</td><td>WS <code>quotes</code></td></tr>
+<tr><td>Leverage slider</td><td><code>GET /markets/{s}/leverage</code> + <code>/leverage/match</code></td></tr>
+<tr><td>Size input (BTC / USDC / % of balance)</td><td><code>size.qty | notional | margin</code>; balance from <code>GET /balance</code></td></tr>
+<tr><td>Order types: market, limit, stop</td><td><code>POST /orders</code> <code>type</code></td></tr>
+<tr><td>TP / SL on the ticket and on the position</td><td><code>take_profit/stop_loss</code> on order · <code>POST /positions/{id}/tpsl</code></td></tr>
+<tr><td>Confirmation: cost, liq price, fees, max loss, costs</td><td><code>POST /orders/preview</code></td></tr>
+<tr><td>KID link and acknowledgement</td><td><code>GET /tiers/{t}/documents</code> + <code>kid_ack</code></td></tr>
+<tr><td>Funding rate + countdown</td><td>WS <code>funding</code></td></tr>
+<tr><td>Positions tab: size, entry, mark, liq, PnL, ROE, leverage, margin</td><td>WS <code>positions</code> / <code>GET /positions?group=market</code></td></tr>
+<tr><td>Close / partial close / close all</td><td><code>POST /positions/{id}/close</code> · <code>action:"close"</code></td></tr>
+<tr><td>Adjust leverage / add margin</td><td><code>POST /positions/{id}/leverage</code></td></tr>
+<tr><td>Open orders / order history / trade history</td><td><code>GET /orders</code> · <code>/orders/history</code> · <code>/fills</code></td></tr>
+<tr><td>Funding history / liquidation history</td><td><code>GET /funding-history</code> · <code>/liquidations</code></td></tr>
+<tr><td>Assets: equity, available, uPnL, wallet</td><td>WS <code>balance</code> / <code>GET /balance</code></td></tr>
+<tr><td>Portfolio chart</td><td><code>GET /equity-history</code></td></tr>
+<tr><td>Deposit / withdraw / transfer / convert</td><td>§11</td></tr>
+<tr><td>Notifications (fills, TP/SL, liq warning, liquidation)</td><td>Webhooks §14 or WS account channels</td></tr>
+<tr><td>Onboarding: KYC hand-over, quiz, terms</td><td>§4</td></tr>
+<tr><td>Documents centre: confirmations, statements, tax</td><td>§12</td></tr>
+<tr><td>Maintenance / halt banner</td><td><code>GET /status</code> + WS <code>market_status</code></td></tr>
+</tbody>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="glossary">Appendix — field glossary (perp field → instrument level)</h2>
+
+<p>For partner compliance and back-office teams: how each perp-style field relates to the underlying securitized instrument. UIs do not need this.</p>
+<table>
+<thead><tr><th>API field</th><th>Instrument level</th></tr></thead>
+<tbody>
+<tr><td><code>tier</code></td><td>One series of the securitized perp (one token, identified by <code>securities_id</code> / <code>token_address</code>)</td></tr>
+<tr><td><code>qty</code></td><td><code>units × ratio</code></td></tr>
+<tr><td><code>entry_price</code> / <code>exit_price</code></td><td><code>strike + unit_price / ratio</code> (long) · <code>strike − unit_price / ratio</code> (short)</td></tr>
+<tr><td><code>margin</code> / <code>position_value</code></td><td>Purchase price / current value of the units held</td></tr>
+<tr><td><code>liq_price</code></td><td>Knock-out barrier per Final Terms</td></tr>
+<tr><td><code>funding_paid</code></td><td>Strike adjustment per funding period × ratio × units</td></tr>
+<tr><td>Liquidation / <code>returned</code></td><td>Knock-out event / residual value per Final Terms</td></tr>
+<tr><td>Open / close</td><td>Buy / sell of the units (DLT executes back-to-back with the issuer)</td></tr>
+</tbody>
+</table>
+
+<hr>
+<p style="color:var(--text-muted);font-size:.85rem"><em>DLT Perps API · Draft v1.0 · 2026-10-26. Endpoint names, hostnames and example values are indicative and subject to change before general availability. Example values use one consistent scenario (BTC-USDC long, 29.57x, 3,500 USDC margin).</em></p>
+
+</div>
+</body>
+</html>
