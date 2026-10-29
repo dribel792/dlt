@@ -70,7 +70,7 @@
  <header class="doc-header">
  <div class="eyebrow">BingX × DLT × Anduin — Integration Proposal</div>
  <h1>Fast-Path Execution: Latency-Optimized Flow for Securitized Perps on BingX</h1>
- <div class="meta">October 2026 · Working draft v0.1 — supplements the Technical Integration &amp; Flow of Funds doc (v0.3); addresses the BingX MM latency concern</div>
+ <div class="meta">October 2026 · Working draft v0.2 — supplements the Technical Integration &amp; Flow of Funds doc (v0.3); addresses the BingX MM latency concern</div>
  </header>
 
  <p class="lead">
@@ -83,6 +83,9 @@
  (2) on order entry, BingX fires a parallel <strong>hedge trigger</strong> straight to Anduin so the
  MM has already executed by the time the client order arrives through the regulatory chain — the
  chain then plays back execution details instead of waiting for a fresh price.
+ The model is <strong>not RFQ</strong> — there is no per-order quote request and response.
+ Anduin <strong>STPs / proxies everything straight into the MM</strong>; the MM's only job is to
+ make sure the order executes, and <strong>all execution information is passed on to DLT</strong>.
  </p>
 
  <h2>1 · The principle — two tracks per order</h2>
@@ -162,10 +165,11 @@ sequenceDiagram
  <p class="lead">
  On order entry BingX does two things <strong>simultaneously</strong>: it fires the hedge trigger to
  Anduin (fast path) and transmits the client order to DLT (regulatory path). Both carry the same
- <code>client_order_ref</code>. Anduin forwards the hedge order to the MM immediately — by the time
- the RTO'd client order arrives via DLT, the MM fill already exists, and Anduin matches it by
- reference to fix the cert execution price. The regulatory chain then plays the execution details
- back: Anduin → DLT (books T+0, collects fee) → BingX → user.
+ <code>client_order_ref</code>. There is <strong>no RFQ step</strong> — Anduin STPs / proxies the
+ order straight into the MM, whose only job is to execute. By the time the RTO'd client order
+ arrives via DLT, the MM fill already exists, and Anduin matches it by reference to fix the cert
+ execution price. All execution information is then passed on to DLT: Anduin → DLT (books T+0,
+ collects fee) → BingX → user.
  </p>
 
  <div class="diagram-wrap">
@@ -215,97 +219,7 @@ sequenceDiagram
  </ol>
  </div>
 
- <h2>4 · Exception handling — when the two tracks disagree</h2>
-
- <p class="lead">
- The fast path executes a hedge before the client order is legally confirmed. The window is short
- (one RTO hop + one STP hop) but must be handled deterministically:
- </p>
-
- <table class="legend">
- <thead>
- <tr><th style="width:30%">Case</th><th>Handling</th></tr>
- </thead>
- <tbody>
- <tr>
- <td><strong>Client order never arrives</strong> (timeout T<sub>match</sub>, e.g. 2–5 s)</td>
- <td>Anduin unwinds the hedge at the MM. Unwind cost allocation per the MM agreement
- (expected ≈ 0 in a co-located setup; the MM is both fill and unwind counterparty).
- Event archived with both legs.</td>
- </tr>
- <tr>
- <td><strong>Order rejected by DLT</strong> (balance, POSOF, KYC, sanctions)</td>
- <td>Same as above — DLT's reject reaches Anduin via the STP leg or the mirror channel;
- Anduin unwinds and archives reject reason + unwind fill.</td>
- </tr>
- <tr>
- <td><strong>Quantity mismatch</strong> (partial user balance → DLT trims the order)</td>
- <td>Anduin trims the hedge to the confirmed quantity; excess unwound as above. Cert execution
- price derived from the retained portion of the fill (FIFO on the fill slices).</td>
- </tr>
- <tr>
- <td><strong>KO fires between fill and match</strong></td>
- <td>The locked fill timestamp decides: trade timestamped before the KO observation → trade is
- valid and settles; after → order rejected, hedge unwound. Single authoritative clock:
- Anduin's lifecycle daemon.</td>
- </tr>
- </tbody>
- </table>
-
- <div class="info-box warn">
- <h4>Residual risk sits with Anduin, bounded and auditable</h4>
- <p style="margin:0">
- Between MM fill and DLT confirmation Anduin holds a hedge without a confirmed client trade — the
- same exposure class as Flow 1's quote-to-hedge gap in the baseline doc, but shorter and fully
- referenced (<code>client_order_ref</code> on both legs). Every trigger, fill, match, trim and
- unwind lands in the insert-only archive, so the full lifecycle of every order is reconstructible
- per reference — that is also the audit answer to "did any client trade execute without its
- regulatory leg": the match table is complete by construction.
- </p>
- </div>
-
- <h2>5 · Fees — economics unchanged, applied without a latency hop</h2>
-
- <p class="lead">
- In the baseline, DLT adds its spread/fee while relaying the stream. With DLT out of the streaming
- path, the fee stays DLT's but is applied without a hop: the DLT fee is a <strong>static parameter</strong>
- (bps schedule agreed with DLT), rendered by BingX in the displayed price or shown as an explicit
- fee line on the ticket. Collection is unchanged: <strong>DLT collects at the T+0 booking</strong>
- and credits the agreed share to the BingX Tied Agent Entity. Anduin's economics remain in the
- issuer spread inside the MM quote. No party's economics move; only the point of application does.
- </p>
-
- <h2>6 · What stays regulatorily identical</h2>
-
- <div class="info-box ok">
- <h4>The legal chain is untouched</h4>
- <ul>
- <li><strong>Order chain:</strong> every client order runs BingX (tied agent of DLT, RTO) → DLT
- (executing broker, STP/back-to-back) → Anduin (issuer, counterparty). The fast path carries no
- client order — it is Anduin's own hedging, triggered early.</li>
- <li><strong>Booking &amp; reporting:</strong> DLT books every securities trade T+0 and remains the
- regulatory reporting counterparty; POSOF/KYC gates sit where they sat.</li>
- <li><strong>Best execution:</strong> unchanged — no other venue lists the tokens; back-to-back
- against the issuer at the formula price satisfies best ex. The locked MM fill <em>is</em> the
- formula input, identically to the baseline.</li>
- <li><strong>Reference price label:</strong> the streamed price is pre-trade indicative; the binding
- price is the one confirmed through the regulatory chain — which equals the locked fill.
- No user is dealt a price outside the published quote + disclosed fees.</li>
- <li><strong>Flow of funds:</strong> Part B of the baseline doc applies 1:1 — BingX EU custody
- accounts, mirror-margin at the MM, pledge, T+1 rebalance.</li>
- </ul>
- </div>
-
- <div class="info-box">
- <h4>Hosting</h4>
- <p style="margin:0">
- Fast path assumes co-location of BingX's order gateway, Anduin's issuer stack and the MM engine in
- the same datacenter. As in the baseline doc: shared datacenter, but every hop through the
- respective party's own servers — latency is compressed, the chain of distinct operators is not.
- </p>
- </div>
-
- <h2>7 · Latency budget — baseline vs fast path</h2>
+ <h2>4 · How fast this is</h2>
 
  <table class="legend">
  <thead>
@@ -314,21 +228,28 @@ sequenceDiagram
  <tbody>
  <tr><td>Quote: MM tick → user screen</td>
  <td>MM → Anduin → DLT → BingX → user (3 server hops)</td>
- <td>MM → Anduin → BingX → user (2 server hops, co-located)</td></tr>
+ <td><strong>MM → Anduin → BingX → user</strong> (2 hops, co-located)</td></tr>
  <tr><td>Order: user click → MM execution</td>
  <td>BingX → DLT → Anduin → MM (3 hops, sequential)</td>
- <td>BingX → Anduin → MM (2 hops, parallel to the order chain)</td></tr>
+ <td><strong>BingX → Anduin → MM</strong> (2 hops, co-located) — single-digit milliseconds</td></tr>
  <tr><td>MM pricing risk window</td>
  <td>Full order-chain round trip</td>
  <td>Co-located round trip (ms) → tighter spreads, smaller slippage reserve</td></tr>
- <tr><td>Confirmation to user</td>
- <td>Same chain back</td>
- <td>Unchanged chain back — but now price-irrelevant</td></tr>
  </tbody>
  </table>
 
+ <div class="info-box fast">
+ <h4>Bottom line</h4>
+ <p style="margin:0">
+ With co-location and Anduin as a pure pass-through proxy, click-to-fill is <strong>two
+ intra-datacenter hops — single-digit milliseconds</strong>, the same order of magnitude as the MM
+ filling against its own book natively. The regulatory chain (DLT booking, confirmation back to the
+ user) runs after the fill and never touches pricing: the user's price is locked at t+ms.
+ </p>
+ </div>
+
  <footer class="doc-footer">
- Working draft v0.1 · BingX × DLT × Anduin — fast-path execution flow · October 2026 ·
+ Working draft v0.2 · BingX × DLT × Anduin — fast-path execution flow · October 2026 ·
  Supplements: Technical Integration &amp; Flow of Funds (v0.3, Oct 2026) · BingX Securitized Perps
  Listing Primer (Oct 2026). All names, parameters and endpoint shapes indicative; finalized during onboarding.
  </footer>
