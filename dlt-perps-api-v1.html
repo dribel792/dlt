@@ -61,14 +61,13 @@ td code{font-size:.8em;}
 <h1>DLT Perps API v1</h1>
 <p class="meta">Partner integration specification · REST + WebSocket (FIX on request) · Draft v1.0 · 2026-10-26</p>
 
-<p>The DLT Perps API gives exchanges, brokers and fintech apps everything needed to offer their users a <strong>complete perpetual-futures trading experience</strong> — markets, leverage, long/short, live liquidation price, funding, TP/SL, positions, PnL, equity — on EU-regulated securitized perps. Every position is 1:1 covered by a perp position held by the issuer's market maker; the liquidation mechanics, funding and risk management run inside the instrument. You build the UI; DLT runs execution, record-keeping, regulatory reporting and the issuer connection.</p>
+<p>The DLT Perps API gives exchanges, brokers and fintech apps everything needed to offer their users a <strong>complete perpetual-futures trading experience</strong> — markets, leverage, long/short, live liquidation price, funding, TP/SL, positions, PnL, equity — on EU-regulated securitized perps.</p>
 
 <p>The API is designed so that a team that has built a perps UI before will find nothing unfamiliar: same objects, same field names, same screen-to-endpoint mapping. Where the regulated wrapper requires something a crypto perps API does not have (client onboarding, appropriateness, KID disclosure, trade confirmations), it is a separate, clearly marked module.</p>
 
 <div class="toc">
 <strong>Contents</strong>
 <ol>
-<li><a href="#roles">Roles &amp; integration model</a></li>
 <li><a href="#concepts">Perp concepts in this API</a></li>
 <li><a href="#conventions">Conventions: auth, formats, limits</a></li>
 <li><a href="#onboarding">Accounts &amp; onboarding</a></li>
@@ -90,26 +89,7 @@ td code{font-size:.8em;}
 </div>
 
 <!-- ============================================================ -->
-<h2 id="roles">1. Roles &amp; integration model</h2>
-
-<table>
-<thead><tr><th>Party</th><th>Role</th><th>What it runs</th></tr></thead>
-<tbody>
-<tr><td><strong>Partner</strong> (you)</td><td>Exchange / broker / app operating the user-facing frontend — as tied agent under the Black Manta umbrella, or under its own licence.</td><td>UI and app, user login, KYC collection, order entry, rendering of DLT data feeds. Calls this API.</td></tr>
-<tr><td><strong>DLT</strong></td><td>Broker. Receives and executes your users' orders (back-to-back against the issuer), keeps the per-user books and records, regulatory reporting, confirmations and statements.</td><td>This API: market-data redistribution, order routing, sub-ledger, reporting.</td></tr>
-<tr><td><strong>Black Manta</strong></td><td>MiFID-licensed securities house; regulatory umbrella (Haftungsdach) for tied-agent partners.</td><td>No integration work for partners.</td></tr>
-<tr><td><strong>Issuer</strong></td><td>Issues the securitized perps, quotes continuously, runs funding and liquidation, publishes Final Terms and KIDs.</td><td>Reached only through DLT — partners never integrate the issuer directly.</td></tr>
-<tr><td><strong>Custodian</strong></td><td>Holds client cash and tokens (per partner agreement — partner's EU custodian or DLT's).</td><td>See <a href="#funds">§11</a> for the two custody models.</td></tr>
-</tbody>
-</table>
-
-<h3>Account model</h3>
-<p>The partner has one <strong>partner key</strong>. Each of the partner's end users is a <strong>DLT account</strong> (<code>acc_…</code>), opened through the API (<a href="#onboarding">§4</a>) — the end user is a client of record of DLT, so balances, positions and records are held per account, never only in an omnibus. All trading and account calls act on one account, selected by header:</p>
-<pre><code>DLT-ACCOUNT: acc_7Q2M9KX1         # end-user account the call acts on</code></pre>
-<p>Endpoints are marked <span class="tag">public</span> (no auth), <span class="tag tag-acct">account</span> (partner key + <code>DLT-ACCOUNT</code>), or <span class="tag tag-partner">partner</span> (partner key, partner-level data across accounts).</p>
-
-<!-- ============================================================ -->
-<h2 id="concepts">2. Perp concepts in this API</h2>
+<h2 id="concepts">1. Perp concepts in this API</h2>
 
 <p>Every perp concept your UI already knows exists here, with the same name:</p>
 
@@ -118,20 +98,20 @@ td code{font-size:.8em;}
 <tbody>
 <tr><td>Market / symbol</td><td><code>BTC-USDC</code>, <code>ETH-USDC</code>, <code>XAU-USDC</code> …</td><td>One market per underlying. Long and short are both traded in the same market.</td></tr>
 <tr><td>Mark price</td><td><code>mark_price</code></td><td>The reference market price of the underlying (designated reference venue, e.g. Bybit BTCUSDT perp). Drives PnL, liquidation and charts.</td></tr>
-<tr><td>Leverage</td><td><code>leverage</code></td><td>Chosen per order from the market's <strong>leverage tiers</strong> (§5). Like on any perp venue, effective leverage moves with the mark price and is always served live.</td></tr>
-<tr><td>Margin mode</td><td><code>isolated</code></td><td>Every position is isolated: margin = what the user paid for the position; max loss = margin. (Cross margin: see §8 note.)</td></tr>
+<tr><td>Leverage</td><td><code>leverage</code></td><td>Chosen per order from the market's <strong>leverage tiers</strong> (§4). Like on any perp venue, effective leverage moves with the mark price and is always served live.</td></tr>
+<tr><td>Margin mode</td><td><code>isolated</code></td><td>Every position is isolated: margin = what the user paid for the position; max loss = margin. (Cross margin: see §7 note.)</td></tr>
 <tr><td>Initial margin</td><td><code>margin</code></td><td>The cost of the position. No separate margin account, no margin calls.</td></tr>
-<tr><td>Liquidation price</td><td><code>liq_price</code></td><td>Fixed at entry, moves only with funding (8h). When mark touches it, the position is liquidated (§10).</td></tr>
+<tr><td>Liquidation price</td><td><code>liq_price</code></td><td>Fixed at entry, moves only with funding (8h). When mark touches it, the position is liquidated (§9).</td></tr>
 <tr><td>Funding</td><td><code>funding_rate</code>, <code>funding_paid</code></td><td>Same 8h cadence and direction as perp funding. Settled <em>inside</em> the position (it adjusts the position's entry basis and liq price) rather than as a cash transfer — the API reports it as a USDC amount per position, exactly like perp funding history.</td></tr>
 <tr><td>Position mode</td><td>Hedge mode</td><td>Long and short positions in the same market are independent (<code>position_side</code>). There is no netting.</td></tr>
-<tr><td>Orderbook</td><td>Reference book + executable quotes</td><td>The displayed book is the reference market. Executable prices for every tier come from the <code>quotes</code> channel, already converted into perp entry/exit prices (§6).</td></tr>
+<tr><td>Orderbook</td><td>Reference book + executable quotes</td><td>The displayed book is the reference market. Executable prices for every tier come from the <code>quotes</code> channel, already converted into perp entry/exit prices (§5).</td></tr>
 </tbody>
 </table>
 
 <div class="note"><strong>One position per leverage tier.</strong> A position is identified by market + side + tier. Adding size at the same tier adds to that position (same liq price, averaged entry). Opening at a different leverage opens a second position in the same market; <code>GET /positions?group=market</code> returns the aggregated, single-row-per-side view most perp UIs show, with the legs underneath.</div>
 
 <!-- ============================================================ -->
-<h2 id="conventions">3. Conventions</h2>
+<h2 id="conventions">2. Conventions</h2>
 
 <h3>Environments</h3>
 <pre><code>Production   REST  https://api.dlt-perps.eu/v1          WS  wss://stream.dlt-perps.eu/v1
@@ -146,6 +126,11 @@ DLT-TIMESTAMP:   1793007600000                       # ms since epoch, ±5 s of 
 DLT-SIGNATURE:   hex(hmac_sha256(secret, timestamp + method + path + query + body))
 DLT-ACCOUNT:     acc_7Q2M9KX1                        # required on account endpoints</code></pre>
 <p>WebSocket: authenticate with <code>{"op":"auth","key":…,"ts":…,"sig":…}</code> after connect; then subscribe to account channels with an explicit account list (<code>"accounts":["acc_7Q2M9KX1", …]</code>) or <code>"accounts":"*"</code> for a partner-wide firehose.</p>
+
+<h3>Account model</h3>
+<p>The partner has one <strong>partner key</strong>. Each of the partner's end users is a <strong>DLT account</strong> (<code>acc_…</code>), opened through the API (<a href="#onboarding">§3</a>) — the end user is a client of record of DLT, so balances, positions and records are held per account, never only in an omnibus. All trading and account calls act on one account, selected by header:</p>
+<pre><code>DLT-ACCOUNT: acc_7Q2M9KX1         # end-user account the call acts on</code></pre>
+<p>Endpoints are marked <span class="tag">public</span> (no auth), <span class="tag tag-acct">account</span> (partner key + <code>DLT-ACCOUNT</code>), or <span class="tag tag-partner">partner</span> (partner key, partner-level data across accounts).</p>
 
 <h3>Formats</h3>
 <ul>
@@ -168,7 +153,7 @@ DLT-ACCOUNT:     acc_7Q2M9KX1                        # required on account endpo
 <p><code>X-RateLimit-Remaining</code> on every response; <code>429</code> with <code>Retry-After</code> when exceeded.</p>
 
 <!-- ============================================================ -->
-<h2 id="onboarding">4. Accounts &amp; onboarding</h2>
+<h2 id="onboarding">3. Accounts &amp; onboarding</h2>
 
 <p>A user must have an <code>active</code> account with a passed appropriateness assessment before the first order. The partner collects KYC as part of its own onboarding and hands it over; DLT does not re-contact the user.</p>
 
@@ -213,7 +198,7 @@ DLT-ACCOUNT:     acc_7Q2M9KX1                        # required on account endpo
 <p>Close the account. Requires no open positions/orders and zero balance (or a payout instruction).</p>
 
 <!-- ============================================================ -->
-<h2 id="marketdata">5. Market data — REST</h2>
+<h2 id="marketdata">4. Market data — REST</h2>
 
 <h3><span class="method get">GET</span>/markets<span class="tag">public</span></h3>
 <p>All markets with their trading parameters.</p>
@@ -245,7 +230,7 @@ DLT-ACCOUNT:     acc_7Q2M9KX1                        # required on account endpo
 <p>Reference-market depth for display (<code>depth</code> 1–50). Snapshot of the <code>orderbook</code> WS channel.</p>
 
 <h3><span class="method get">GET</span>/markets/{symbol}/quote<span class="tag">public</span></h3>
-<p>Executable prices for one tier (snapshot of the <code>quotes</code> channel, §6). Use for low-frequency clients; trading UIs should stream.</p>
+<p>Executable prices for one tier (snapshot of the <code>quotes</code> channel, §5). Use for low-frequency clients; trading UIs should stream.</p>
 
 <h3><span class="method get">GET</span>/markets/{symbol}/trades<span class="tag">public</span></h3>
 <p>Recent platform trades (price as entry/exit price, qty, side) for the trade tape.</p>
@@ -270,10 +255,10 @@ DLT-ACCOUNT:     acc_7Q2M9KX1                        # required on account endpo
 <p><code>GET /tiers/{tier}/levels</code> — history of every liq-price adjustment (funding), timestamped: draws the liquidation line back in time on the chart.</p>
 
 <h3><span class="method get">GET</span>/time · /status<span class="tag">public</span></h3>
-<p>Server time; platform and per-market status incl. scheduled maintenance (§15).</p>
+<p>Server time; platform and per-market status incl. scheduled maintenance (§14).</p>
 
 <!-- ============================================================ -->
-<h2 id="ws-public">6. Market data — WebSocket</h2>
+<h2 id="ws-public">5. Market data — WebSocket</h2>
 
 <p><code>{"op":"subscribe","channels":["ticker:BTC-USDC","quotes:BTC-USDC"]}</code>. Every message carries <code>channel</code>, <code>ts</code> and a per-channel monotonic <code>seq</code>; on a gap, re-snapshot via REST. Book channels send a snapshot on subscribe, then deltas.</p>
 
@@ -300,7 +285,7 @@ DLT-ACCOUNT:     acc_7Q2M9KX1                        # required on account endpo
            "open":{"entry_price":"89942.40","max_qty":"5.000","instrument_price":"3.0424"},
            "close":{"exit_price":"89939.90","max_qty":"5.000","instrument_price":"3.0399"}},
           …]}</code></pre>
-<p>The gap between <code>entry_price</code>/<code>exit_price</code> and <code>mark_price</code> is the spread, as on any perp book. <code>quote_id</code> can be pinned on the order (§7).</p>
+<p>The gap between <code>entry_price</code>/<code>exit_price</code> and <code>mark_price</code> is the spread, as on any perp book. <code>quote_id</code> can be pinned on the order (§6).</p>
 
 <h3><span class="method ws">WS</span>funding:{symbol}</h3>
 <pre><code>{"channel":"funding:BTC-USDC","ts":1793016000050,"event":"settled",
@@ -315,7 +300,7 @@ DLT-ACCOUNT:     acc_7Q2M9KX1                        # required on account endpo
 <p>Events: <code>market_halted</code> · <code>market_resumed</code> · <code>tier_listed</code> · <code>tier_liquidated</code> · <code>tier_settled</code> · <code>maintenance_scheduled</code>.</p>
 
 <!-- ============================================================ -->
-<h2 id="trading">7. Trading</h2>
+<h2 id="trading">6. Trading</h2>
 
 <h3><span class="method post">POST</span>/orders/preview<span class="tag tag-acct">account</span></h3>
 <p>The order-confirmation screen in one call: resolved tier, price, size in all units, margin, fees, liq price, max loss, and the ex-ante costs disclosure. Nothing is reserved.</p>
@@ -378,7 +363,7 @@ DLT-ACCOUNT:     acc_7Q2M9KX1                        # required on account endpo
 <p>Emergency: cancel all orders and optionally close all positions of an account (<code>{"close_positions":true}</code>).</p>
 
 <!-- ============================================================ -->
-<h2 id="portfolio">8. Positions, balance &amp; history</h2>
+<h2 id="portfolio">7. Positions, balance &amp; history</h2>
 
 <h3><span class="method get">GET</span>/positions<span class="tag tag-acct">account</span></h3>
 <p>Open positions, perp-style. <code>?group=market</code> for one aggregated row per market and side.</p>
@@ -421,16 +406,16 @@ DLT-ACCOUNT:     acc_7Q2M9KX1                        # required on account endpo
 <thead><tr><th>Endpoint</th><th>Content</th></tr></thead>
 <tbody>
 <tr><td class="ep"><span class="method get">GET</span>/positions/history</td><td>Closed positions: entry, exit, qty, realized PnL, fees, funding, close reason (<code>user</code> · <code>tp</code> · <code>sl</code> · <code>liquidation</code> · <code>leverage_change</code>)</td></tr>
-<tr><td class="ep"><span class="method get">GET</span>/fills</td><td>Every execution (format §9)</td></tr>
+<tr><td class="ep"><span class="method get">GET</span>/fills</td><td>Every execution (format §8)</td></tr>
 <tr><td class="ep"><span class="method get">GET</span>/funding-history</td><td>Funding per position per 8h period: rate, amount, liq price before/after</td></tr>
-<tr><td class="ep"><span class="method get">GET</span>/liquidations</td><td>Liquidation events with trigger, close price and remaining margin returned (§10)</td></tr>
+<tr><td class="ep"><span class="method get">GET</span>/liquidations</td><td>Liquidation events with trigger, close price and remaining margin returned (§9)</td></tr>
 <tr><td class="ep"><span class="method get">GET</span>/ledger</td><td>All cash movements: deposit, withdrawal, transfer, trade, fee, liquidation_payout, conversion — with running balance</td></tr>
 <tr><td class="ep"><span class="method get">GET</span>/equity-history</td><td>Daily (or hourly) equity snapshots for the portfolio chart</td></tr>
 </tbody>
 </table>
 
 <!-- ============================================================ -->
-<h2 id="ws-private">9. Account streams — WebSocket</h2>
+<h2 id="ws-private">8. Account streams — WebSocket</h2>
 
 <table>
 <thead><tr><th>Channel</th><th>Content</th></tr></thead>
@@ -458,7 +443,7 @@ DLT-ACCOUNT:     acc_7Q2M9KX1                        # required on account endpo
 <p>The <code>mark_price</code>/<code>ref_ts</code> captured at match time and the pinned <code>quote_id</code> form the best-execution evidence for each fill; the <code>instrument</code> block is the securities-level record used on the trade confirmation.</p>
 
 <!-- ============================================================ -->
-<h2 id="liquidation">10. Liquidation lifecycle</h2>
+<h2 id="liquidation">9. Liquidation lifecycle</h2>
 
 <ol>
 <li><strong>Trigger.</strong> Mark price touches <code>liq_price</code> of a tier. All positions at that tier are liquidated at once; open orders and TP/SL on them are cancelled. Public: <code>market_status → tier_liquidated</code>. Account: <code>liquidations → triggered</code>.</li>
@@ -473,7 +458,7 @@ DLT-ACCOUNT:     acc_7Q2M9KX1                        # required on account endpo
  "determination_doc":"…/rv/BTC-LONG-86900-20261026.pdf","successor":"BTC-LONG-85400"}</code></pre>
 
 <!-- ============================================================ -->
-<h2 id="funds">11. Funds: deposits, withdrawals, transfers</h2>
+<h2 id="funds">10. Funds: deposits, withdrawals, transfers</h2>
 
 <p>Which endpoints apply depends on the custody model agreed with the partner:</p>
 <table>
@@ -503,7 +488,7 @@ DLT-ACCOUNT:     acc_7Q2M9KX1                        # required on account endpo
 <p>History and status per movement.</p>
 
 <!-- ============================================================ -->
-<h2 id="compliance">12. Documents, confirmations &amp; reporting</h2>
+<h2 id="compliance">11. Documents, confirmations &amp; reporting</h2>
 
 <p>DLT produces all regulated client documents. The partner surfaces them in its UI or forwards them; DLT can also deliver directly by e-mail if agreed.</p>
 
@@ -522,7 +507,7 @@ DLT-ACCOUNT:     acc_7Q2M9KX1                        # required on account endpo
 <p>Transaction reporting to the regulator is done by DLT — no partner integration needed. Complaints received by the partner are forwarded via <code>POST /accounts/{id}/complaints</code>.</p>
 
 <!-- ============================================================ -->
-<h2 id="fees">13. Fees &amp; partner revenue</h2>
+<h2 id="fees">12. Fees &amp; partner revenue</h2>
 
 <h3><span class="method get">GET</span>/fees<span class="tag tag-acct">account</span></h3>
 <pre><code>{"trading_fee_rate":"0.0006",            // on notional, open and close
@@ -535,7 +520,7 @@ DLT-ACCOUNT:     acc_7Q2M9KX1                        # required on account endpo
 <p>Fee share per day / account / market, with the fill-level breakdown downloadable as CSV; settlement cadence per agreement.</p>
 
 <!-- ============================================================ -->
-<h2 id="webhooks">14. Webhooks</h2>
+<h2 id="webhooks">13. Webhooks</h2>
 
 <p>For partners who prefer push to a server endpoint over a WebSocket firehose (notifications, back-office). Register with <code>POST /webhooks {"url":…,"events":[…]}</code>. Deliveries are signed (<code>DLT-SIGNATURE</code> over body + timestamp), retried with backoff for 24 h, and replayable via <code>POST /webhooks/{id}/replay</code>.</p>
 <table>
@@ -554,7 +539,7 @@ DLT-ACCOUNT:     acc_7Q2M9KX1                        # required on account endpo
 </table>
 
 <!-- ============================================================ -->
-<h2 id="ops">15. Partner operations: reconciliation, status, sandbox</h2>
+<h2 id="ops">14. Partner operations: reconciliation, status, sandbox</h2>
 
 <h3><span class="method get">GET</span>/partner/accounts<span class="tag tag-partner">partner</span></h3>
 <p>All accounts with status, equity, open positions count — for the partner's admin console.</p>
@@ -575,7 +560,7 @@ POST /sandbox/markets/{symbol}/halt</code></pre>
 <p>Sandbox can also back demo accounts for your end users.</p>
 
 <!-- ============================================================ -->
-<h2 id="errors">16. Errors</h2>
+<h2 id="errors">15. Errors</h2>
 
 <pre><code>{"error":{"code":"quote_expired","message":"Quote q_01JD3X8ZK4 no longer firm","request_id":"req_…"}}</code></pre>
 <table>
@@ -596,7 +581,7 @@ POST /sandbox/markets/{symbol}/halt</code></pre>
 </table>
 
 <!-- ============================================================ -->
-<h2 id="ui-map">17. UI build map</h2>
+<h2 id="ui-map">16. UI build map</h2>
 
 <p>Every element of a standard perps trading UI and where it comes from:</p>
 <table>
@@ -621,10 +606,10 @@ POST /sandbox/markets/{symbol}/halt</code></pre>
 <tr><td>Funding history / liquidation history</td><td><code>GET /funding-history</code> · <code>/liquidations</code></td></tr>
 <tr><td>Assets: equity, available, uPnL, wallet</td><td>WS <code>balance</code> / <code>GET /balance</code></td></tr>
 <tr><td>Portfolio chart</td><td><code>GET /equity-history</code></td></tr>
-<tr><td>Deposit / withdraw / transfer / convert</td><td>§11</td></tr>
-<tr><td>Notifications (fills, TP/SL, liq warning, liquidation)</td><td>Webhooks §14 or WS account channels</td></tr>
-<tr><td>Onboarding: KYC hand-over, quiz, terms</td><td>§4</td></tr>
-<tr><td>Documents centre: confirmations, statements, tax</td><td>§12</td></tr>
+<tr><td>Deposit / withdraw / transfer / convert</td><td>§10</td></tr>
+<tr><td>Notifications (fills, TP/SL, liq warning, liquidation)</td><td>Webhooks §13 or WS account channels</td></tr>
+<tr><td>Onboarding: KYC hand-over, quiz, terms</td><td>§3</td></tr>
+<tr><td>Documents centre: confirmations, statements, tax</td><td>§11</td></tr>
 <tr><td>Maintenance / halt banner</td><td><code>GET /status</code> + WS <code>market_status</code></td></tr>
 </tbody>
 </table>
