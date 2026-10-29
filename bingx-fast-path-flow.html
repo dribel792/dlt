@@ -126,11 +126,13 @@
  <h2>2 · Quoting flow — DLT out of the streaming path</h2>
 
  <p class="lead">
- The MM streams the cert books (or perp books, per Flow 1/Flow 2 of the baseline doc) to Anduin.
- Anduin validates against its published levels, writes every tick to its insert-only quote archive,
- and <strong>proxies the stream directly to BingX</strong> — which renders it to the user as the
- <strong>reference price</strong>. DLT receives a non-latency-critical mirror of the same stream for
- surveillance and reconciliation; it is no longer a hop in the display chain.
+ The MM streams the cert books (or perp books, per Flow 1/Flow 2 of the baseline doc) to Anduin,
+ which <strong>proxies the stream directly to BingX</strong> — rendered to the user as the
+ <strong>reference price</strong>. Inline validation of the stream against Anduin's published levels
+ is <strong>optional — Anduin is willing to skip it</strong> and run the checks asynchronously on
+ the archived stream instead, keeping the proxy a pure pass-through; every tick lands in the
+ insert-only quote archive either way. DLT receives a non-latency-critical mirror of the same
+ stream for surveillance and reconciliation; it is no longer a hop in the display chain.
  </p>
 
  <div class="diagram-wrap">
@@ -145,7 +147,10 @@ sequenceDiagram
 
  Note over MM,U: Quoting flow — continuous, co-located
  MM-->>ADN: Cert books keyed to Anduin's published levels (WS/FIX)
- ADN->>ADN: Validate vs Final Terms formula + levels ·<br/>write tick to insert-only quote archive
+ opt Inline validation — Anduin is willing to skip this step
+ ADN->>ADN: Validate vs Final Terms formula + levels
+ end
+ ADN->>ADN: Write tick to insert-only quote archive (async, off the hot path)
  ADN-->>CW: Proxied book stream — direct, no DLT hop
  CW->>U: Perp-style screen renders reference price,<br/>liq. level, funding (fees shown per §5)
  ADN--)DLT: Mirror of the quote stream (async)<br/>surveillance + reconciliation only
@@ -192,7 +197,7 @@ sequenceDiagram
  DLT->>DLT: Book securities trade T+0 · collect fee ·<br/>credit tied-agent share · reporting feed
  DLT-->>CW: Execution information
  CW-->>U: Position open — perp-style card
- Note over ADN: Token ledger movement + hedge trade recorded —<br/>book records; physical settlement runs via<br/>BingX EU custody accounts (baseline doc, Part B)
+ Note over ADN: Token ledger movement + hedge trade recorded —<br/>book records only · physical settlement runs via<br/>BingX EU custody accounts (baseline doc, Part B)
  </div>
  </div>
 
