@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>BingX × DLT × Anduin — Fast-Path Execution Flow (Latency-Optimized)</title>
+ <link rel="preconnect" href="https://fonts.googleapis.com" />
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+ <style>
+ :root {
+ --text: #17213a;
+ --text-muted: #5b6478;
+ --accent: #2d5f7f;
+ --accent-soft: #eaf1f6;
+ --border: #dfe2ea;
+ --bg: #ffffff;
+ --bg-soft: #f6f7fa;
+ --warn: #8a4a1e;
+ --warn-soft: #faf1e7;
+ --ok: #2f5d3e;
+ --ok-soft: #ecf4ee;
+ --fast: #6b4c9a;
+ --fast-soft: #f0ecf8;
+ }
+ * { box-sizing: border-box; }
+ html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+ .page { max-width: 1100px; margin: 0 auto; padding: 48px 56px; }
+ header.doc-header { border-bottom: 2px solid var(--text); padding-bottom: 20px; margin-bottom: 36px; }
+ header.doc-header .eyebrow { text-transform: uppercase; letter-spacing: 0.12em; font-size: 11px; color: var(--accent); font-weight: 600; margin-bottom: 8px; }
+ header.doc-header h1 { font-size: 28px; line-height: 1.25; margin: 0 0 8px 0; font-weight: 700; letter-spacing: -0.01em; }
+ header.doc-header .meta { font-size: 13px; color: var(--text-muted); }
+ h2 { font-size: 20px; font-weight: 700; margin: 48px 0 14px 0; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+ h3 { font-size: 16px; font-weight: 600; margin: 28px 0 10px 0; }
+ h4 { font-size: 14px; font-weight: 600; margin: 20px 0 8px 0; color: var(--accent); }
+ p { margin: 0 0 12px 0; }
+ strong { font-weight: 600; }
+ .lead { font-size: 15px; color: var(--text-muted); margin-bottom: 24px; }
+ table.legend { width: 100%; border-collapse: collapse; margin: 12px 0 24px 0; font-size: 13px; }
+ table.legend thead th { text-align: left; background: var(--accent-soft); font-weight: 600; padding: 10px 12px; border: 1px solid var(--border); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+ table.legend td { padding: 10px 12px; border: 1px solid var(--border); vertical-align: top; }
+ .info-box { background: var(--accent-soft); border-left: 3px solid var(--accent); padding: 14px 18px; margin: 16px 0 24px 0; border-radius: 2px; font-size: 13.5px; }
+ .info-box.warn { background: var(--warn-soft); border-left-color: var(--warn); }
+ .info-box.ok { background: var(--ok-soft); border-left-color: var(--ok); }
+ .info-box.fast { background: var(--fast-soft); border-left-color: var(--fast); }
+ .info-box h4 { margin: 0 0 8px 0; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+ .info-box.warn h4 { color: var(--warn); }
+ .info-box.ok h4 { color: var(--ok); }
+ .info-box.fast h4 { color: var(--fast); }
+ .info-box ul { margin: 8px 0 0 0; padding-left: 20px; }
+ .info-box li { margin-bottom: 4px; }
+ .diagram-wrap { background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 20px; margin: 8px 0 28px 0; overflow-x: auto; }
+ .mermaid { text-align: center; }
+ .recipe { border: 1px solid var(--border); border-radius: 4px; padding: 16px 18px; margin-bottom: 20px; background: var(--bg-soft); }
+ .recipe h4 { margin-top: 0; color: var(--text); text-transform: none; letter-spacing: 0; }
+ .recipe ol { margin: 8px 0 0 0; padding-left: 22px; font-size: 13px; }
+ .recipe li { margin-bottom: 6px; }
+ code { font-family: 'JetBrains Mono', monospace; font-size: 0.92em; background: var(--bg-soft); padding: 1px 6px; border-radius: 3px; }
+ .tag { display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 8px; border-radius: 3px; margin-left: 6px; vertical-align: middle; }
+ .tag-fast { background: var(--fast-soft); color: var(--fast); }
+ .tag-reg { background: var(--accent-soft); color: var(--accent); }
+ footer.doc-footer { border-top: 1px solid var(--border); margin-top: 56px; padding-top: 16px; font-size: 12px; color: var(--text-muted); text-align: center; }
+ @media print { html, body { font-size: 10.5pt; } .page { max-width: none; padding: 12mm 10mm; } }
+ @page { size: A4 landscape; margin: 10mm; }
+ </style>
+</head>
+<body>
+ <div class="page">
+
+ <header class="doc-header">
+ <div class="eyebrow">BingX × DLT × Anduin — Integration Proposal</div>
+ <h1>Fast-Path Execution: Latency-Optimized Flow for Securitized Perps on BingX</h1>
+ <div class="meta">October 2026 · Working draft v0.1 — supplements the Technical Integration &amp; Flow of Funds doc (v0.3); addresses the BingX MM latency concern</div>
+ </header>
+
+ <p class="lead">
+ The BingX MM's concern with the baseline chain (<strong>User → BingX → DLT → Anduin → MM</strong>,
+ and the same hops back for quotes) is that round-trip latency in both directions forces either
+ <strong>wider spreads, larger slippage buffers, or worse MM PnL</strong>. This document restructures
+ the flow so that <strong>no latency-critical hop runs through DLT</strong>, while the
+ <strong>regulatory order chain remains exactly the baseline chain</strong>. Two changes:
+ (1) the quote stream goes MM → Anduin → BingX directly, with Anduin as a thin validating proxy;
+ (2) on order entry, BingX fires a parallel <strong>hedge trigger</strong> straight to Anduin so the
+ MM has already executed by the time the client order arrives through the regulatory chain — the
+ chain then plays back execution details instead of waiting for a fresh price.
+ </p>
+
+ <h2>1 · The principle — two tracks per order</h2>
+
+ <table class="legend">
+ <thead>
+ <tr><th style="width:18%">Track</th><th style="width:44%">What runs on it</th><th>Latency requirement</th></tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td><strong>Fast path</strong> <span class="tag tag-fast">operational</span></td>
+ <td>Quote streaming (MM → Anduin → BingX) and the hedge trigger on order entry
+ (BingX → Anduin → MM). Carries <strong>no client order and no securities trade</strong> —
+ it is the issuer's own hedging machinery, fed by an early signal from the distribution
+ frontend.</td>
+ <td>Milliseconds — co-located, WS/FIX, no intermediate consumer.</td>
+ </tr>
+ <tr>
+ <td><strong>Regulatory path</strong> <span class="tag tag-reg">legal</span></td>
+ <td>The client order and the securities trade: BingX (tied agent) <strong>RTO → DLT</strong>
+ (executing broker) <strong>STP/back-to-back → Anduin</strong> (issuer, counterparty of the
+ cert trade). Booking, fee collection, T+0 reporting — unchanged from the baseline doc.</td>
+ <td>Not latency-critical anymore — the price is already locked by the fast path when the
+ order arrives; this track confirms and books.</td>
+ </tr>
+ </tbody>
+ </table>
+
+ <div class="info-box fast">
+ <h4>Why this kills the latency problem</h4>
+ <p style="margin:0">
+ In the baseline, the MM quotes a price at T<sub>0</sub> and fills the hedge at
+ T<sub>0</sub> + (4 order hops) — the gap is MM risk, priced into the spread. In the fast path, the
+ time between the user clicking and the MM filling is <strong>two co-located hops</strong>
+ (BingX → Anduin → MM, with Anduin proxying the MM's own execution API). The MM prices against a
+ gap of milliseconds, not of a full multi-party round trip — so it can quote tighter spreads with
+ less slippage reserve. The regulatory chain stops being a pricing constraint entirely.
+ </p>
+ </div>
+
+ <h2>2 · Quoting flow — DLT out of the streaming path</h2>
+
+ <p class="lead">
+ The MM streams the cert books (or perp books, per Flow 1/Flow 2 of the baseline doc) to Anduin.
+ Anduin validates against its published levels, writes every tick to its insert-only quote archive,
+ and <strong>proxies the stream directly to BingX</strong> — which renders it to the user as the
+ <strong>reference price</strong>. DLT receives a non-latency-critical mirror of the same stream for
+ surveillance and reconciliation; it is no longer a hop in the display chain.
+ </p>
+
+ <div class="diagram-wrap">
+ <div class="mermaid">
+sequenceDiagram
+ autonumber
+ participant MM as BingX MM
+ participant ADN as Anduin<br/>(issuer · validating proxy)
+ participant CW as BingX UI / API<br/>(tied agent of DLT)
+ participant DLT as DLT<br/>(broker)
+ actor U as User
+
+ Note over MM,U: Quoting flow — continuous, co-located
+ MM-->>ADN: Cert books keyed to Anduin's published levels (WS/FIX)
+ ADN->>ADN: Validate vs Final Terms formula + levels ·<br/>write tick to insert-only quote archive
+ ADN-->>CW: Proxied book stream — direct, no DLT hop
+ CW->>U: Perp-style screen renders reference price,<br/>liq. level, funding (fees shown per §5)
+ ADN--)DLT: Mirror of the quote stream (async)<br/>surveillance + reconciliation only
+ </div>
+ </div>
+
+ <h2>3 · Execution flow — hedge trigger first, order chain plays back</h2>
+
+ <p class="lead">
+ On order entry BingX does two things <strong>simultaneously</strong>: it fires the hedge trigger to
+ Anduin (fast path) and transmits the client order to DLT (regulatory path). Both carry the same
+ <code>client_order_ref</code>. Anduin forwards the hedge order to the MM immediately — by the time
+ the RTO'd client order arrives via DLT, the MM fill already exists, and Anduin matches it by
+ reference to fix the cert execution price. The regulatory chain then plays the execution details
+ back: Anduin → DLT (books T+0, collects fee) → BingX → user.
+ </p>
+
+ <div class="diagram-wrap">
+ <div class="mermaid">
+sequenceDiagram
+ autonumber
+ participant MM as BingX MM
+ participant ADN as Anduin<br/>(issuer)
+ participant CW as BingX UI / API<br/>(tied agent of DLT)
+ participant DLT as DLT<br/>(broker)
+ actor U as User
+
+ U->>CW: Buy 10 certs BTC-LONG (delta 1 BTC)
+ CW->>CW: Assign client_order_ref
+
+ par Fast path — hedge trigger (ms)
+ CW->>ADN: Hedge trigger: client_order_ref,<br/>series_id, qty, side, limit tolerance
+ ADN->>MM: Hedge order (Anduin proxies the<br/>MM execution API — thin pass-through)
+ MM->>MM: Execute vs own book / underlying venue
+ MM-->>ADN: Fill: execution price, qty, timestamp
+ ADN->>ADN: Price locked for client_order_ref —<br/>pending regulatory confirmation
+ and Regulatory path — client order (async)
+ CW->>DLT: RTO / STP — transmit client order<br/>(client_order_ref)
+ DLT->>ADN: STP / prop — back-to-back vs Anduin<br/>(+ DLT fee at this hop)
+ end
+
+ ADN->>ADN: Match client_order_ref to locked MM fill →<br/>cert execution price per Final Terms formula
+ ADN-->>DLT: Cert execution confirmed (price, fills, hedge ref)
+ DLT->>DLT: Book securities trade T+0 · collect fee ·<br/>credit tied-agent share · reporting feed
+ DLT-->>CW: Execution information
+ CW-->>U: Position open — perp-style card
+ Note over ADN: Token ledger movement + hedge trade recorded —<br/>book records; physical settlement runs via<br/>BingX EU custody accounts (baseline doc, Part B)
+ </div>
+ </div>
+
+ <div class="recipe">
+ <h4>Timing summary</h4>
+ <ol>
+ <li><strong>t=0</strong> — user clicks. BingX stamps <code>client_order_ref</code>.</li>
+ <li><strong>t+ms</strong> — hedge trigger reaches the MM via Anduin's proxy; MM executes against
+ the price it is itself streaming. Slippage window ≈ co-located round trip.</li>
+ <li><strong>t+X</strong> — client order arrives at Anduin via DLT. X is irrelevant to pricing:
+ the fill is locked, X only delays the booking confirmation.</li>
+ <li><strong>t+X+ε</strong> — trade booked T+0 at DLT, execution details back to the user.
+ The user-visible confirmation latency is the regulatory chain; the <strong>price</strong> the
+ user gets is from t+ms.</li>
+ </ol>
+ </div>
+
+ <h2>4 · Exception handling — when the two tracks disagree</h2>
+
+ <p class="lead">
+ The fast path executes a hedge before the client order is legally confirmed. The window is short
+ (one RTO hop + one STP hop) but must be handled deterministically:
+ </p>
+
+ <table class="legend">
+ <thead>
+ <tr><th style="width:30%">Case</th><th>Handling</th></tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td><strong>Client order never arrives</strong> (timeout T<sub>match</sub>, e.g. 2–5 s)</td>
+ <td>Anduin unwinds the hedge at the MM. Unwind cost allocation per the MM agreement
+ (expected ≈ 0 in a co-located setup; the MM is both fill and unwind counterparty).
+ Event archived with both legs.</td>
+ </tr>
+ <tr>
+ <td><strong>Order rejected by DLT</strong> (balance, POSOF, KYC, sanctions)</td>
+ <td>Same as above — DLT's reject reaches Anduin via the STP leg or the mirror channel;
+ Anduin unwinds and archives reject reason + unwind fill.</td>
+ </tr>
+ <tr>
+ <td><strong>Quantity mismatch</strong> (partial user balance → DLT trims the order)</td>
+ <td>Anduin trims the hedge to the confirmed quantity; excess unwound as above. Cert execution
+ price derived from the retained portion of the fill (FIFO on the fill slices).</td>
+ </tr>
+ <tr>
+ <td><strong>KO fires between fill and match</strong></td>
+ <td>The locked fill timestamp decides: trade timestamped before the KO observation → trade is
+ valid and settles; after → order rejected, hedge unwound. Single authoritative clock:
+ Anduin's lifecycle daemon.</td>
+ </tr>
+ </tbody>
+ </table>
+
+ <div class="info-box warn">
+ <h4>Residual risk sits with Anduin, bounded and auditable</h4>
+ <p style="margin:0">
+ Between MM fill and DLT confirmation Anduin holds a hedge without a confirmed client trade — the
+ same exposure class as Flow 1's quote-to-hedge gap in the baseline doc, but shorter and fully
+ referenced (<code>client_order_ref</code> on both legs). Every trigger, fill, match, trim and
+ unwind lands in the insert-only archive, so the full lifecycle of every order is reconstructible
+ per reference — that is also the audit answer to "did any client trade execute without its
+ regulatory leg": the match table is complete by construction.
+ </p>
+ </div>
+
+ <h2>5 · Fees — economics unchanged, applied without a latency hop</h2>
+
+ <p class="lead">
+ In the baseline, DLT adds its spread/fee while relaying the stream. With DLT out of the streaming
+ path, the fee stays DLT's but is applied without a hop: the DLT fee is a <strong>static parameter</strong>
+ (bps schedule agreed with DLT), rendered by BingX in the displayed price or shown as an explicit
+ fee line on the ticket. Collection is unchanged: <strong>DLT collects at the T+0 booking</strong>
+ and credits the agreed share to the BingX Tied Agent Entity. Anduin's economics remain in the
+ issuer spread inside the MM quote. No party's economics move; only the point of application does.
+ </p>
+
+ <h2>6 · What stays regulatorily identical</h2>
+
+ <div class="info-box ok">
+ <h4>The legal chain is untouched</h4>
+ <ul>
+ <li><strong>Order chain:</strong> every client order runs BingX (tied agent of DLT, RTO) → DLT
+ (executing broker, STP/back-to-back) → Anduin (issuer, counterparty). The fast path carries no
+ client order — it is Anduin's own hedging, triggered early.</li>
+ <li><strong>Booking &amp; reporting:</strong> DLT books every securities trade T+0 and remains the
+ regulatory reporting counterparty; POSOF/KYC gates sit where they sat.</li>
+ <li><strong>Best execution:</strong> unchanged — no other venue lists the tokens; back-to-back
+ against the issuer at the formula price satisfies best ex. The locked MM fill <em>is</em> the
+ formula input, identically to the baseline.</li>
+ <li><strong>Reference price label:</strong> the streamed price is pre-trade indicative; the binding
+ price is the one confirmed through the regulatory chain — which equals the locked fill.
+ No user is dealt a price outside the published quote + disclosed fees.</li>
+ <li><strong>Flow of funds:</strong> Part B of the baseline doc applies 1:1 — BingX EU custody
+ accounts, mirror-margin at the MM, pledge, T+1 rebalance.</li>
+ </ul>
+ </div>
+
+ <div class="info-box">
+ <h4>Hosting</h4>
+ <p style="margin:0">
+ Fast path assumes co-location of BingX's order gateway, Anduin's issuer stack and the MM engine in
+ the same datacenter. As in the baseline doc: shared datacenter, but every hop through the
+ respective party's own servers — latency is compressed, the chain of distinct operators is not.
+ </p>
+ </div>
+
+ <h2>7 · Latency budget — baseline vs fast path</h2>
+
+ <table class="legend">
+ <thead>
+ <tr><th style="width:34%">Leg</th><th>Baseline chain</th><th>Fast path</th></tr>
+ </thead>
+ <tbody>
+ <tr><td>Quote: MM tick → user screen</td>
+ <td>MM → Anduin → DLT → BingX → user (3 server hops)</td>
+ <td>MM → Anduin → BingX → user (2 server hops, co-located)</td></tr>
+ <tr><td>Order: user click → MM execution</td>
+ <td>BingX → DLT → Anduin → MM (3 hops, sequential)</td>
+ <td>BingX → Anduin → MM (2 hops, parallel to the order chain)</td></tr>
+ <tr><td>MM pricing risk window</td>
+ <td>Full order-chain round trip</td>
+ <td>Co-located round trip (ms) → tighter spreads, smaller slippage reserve</td></tr>
+ <tr><td>Confirmation to user</td>
+ <td>Same chain back</td>
+ <td>Unchanged chain back — but now price-irrelevant</td></tr>
+ </tbody>
+ </table>
+
+ <footer class="doc-footer">
+ Working draft v0.1 · BingX × DLT × Anduin — fast-path execution flow · October 2026 ·
+ Supplements: Technical Integration &amp; Flow of Funds (v0.3, Oct 2026) · BingX Securitized Perps
+ Listing Primer (Oct 2026). All names, parameters and endpoint shapes indicative; finalized during onboarding.
+ </footer>
+
+ </div>
+
+ <script type="module">
+ import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+ mermaid.initialize({
+ startOnLoad: false,
+ theme: 'neutral',
+ securityLevel: 'loose',
+ themeVariables: {
+ fontFamily: 'Inter, sans-serif',
+ fontSize: '12px',
+ primaryColor: '#eaf1f6',
+ primaryTextColor: '#17213a',
+ primaryBorderColor: '#2d5f7f',
+ lineColor: '#5b6478',
+ actorBkg: '#eaf1f6',
+ actorBorder: '#2d5f7f',
+ actorTextColor: '#17213a',
+ noteBkgColor: '#faf1e7',
+ noteBorderColor: '#8a4a1e',
+ noteTextColor: '#17213a',
+ sequenceNumberColor: '#ffffff',
+ activationBkgColor: '#dfe2ea',
+ signalTextColor: '#17213a',
+ labelTextColor: '#17213a'
+ },
+ sequence: { diagramMarginX: 20, diagramMarginY: 16, actorMargin: 40, noteMargin: 18, messageMargin: 32, wrap: true, useMaxWidth: true }
+ });
+ async function renderAll() {
+ const nodes = document.querySelectorAll('.mermaid');
+ for (const node of nodes) {
+ let src = node.innerHTML.trim()
+ .replace(/&amp;/g, '&')
+ .replace(/&lt;/g, '<')
+ .replace(/&gt;/g, '>')
+ .replace(/&quot;/g, '"')
+ .replace(/&#39;/g, "'");
+ try {
+ const id = 'm-' + Math.random().toString(36).slice(2);
+ const { svg, bindFunctions } = await mermaid.render(id, src);
+ node.innerHTML = svg;
+ if (bindFunctions) bindFunctions(node);
+ } catch (err) {
+ console.error('Mermaid render error:', err);
+ node.innerHTML = '<pre style="color:#a33;font-size:12px;white-space:pre-wrap;">' + (err && err.message ? err.message : String(err)) + '</pre>';
+ }
+ }
+ }
+ document.addEventListener('DOMContentLoaded', renderAll);
+ </script>
+</body>
+</html>
