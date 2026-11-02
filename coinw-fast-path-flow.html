@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>CoinW × DLT × Anduin — Fast-Path Execution Flow (Tied-Agent Model)</title>
+ <link rel="preconnect" href="https://fonts.googleapis.com" />
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+ <style>
+ :root {
+ --text: #17213a;
+ --text-muted: #5b6478;
+ --accent: #2d5f7f;
+ --accent-soft: #eaf1f6;
+ --border: #dfe2ea;
+ --bg: #ffffff;
+ --bg-soft: #f6f7fa;
+ --warn: #8a4a1e;
+ --warn-soft: #faf1e7;
+ --ok: #2f5d3e;
+ --ok-soft: #ecf4ee;
+ --fast: #6b4c9a;
+ --fast-soft: #f0ecf8;
+ }
+ * { box-sizing: border-box; }
+ html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+ .page { max-width: 1100px; margin: 0 auto; padding: 48px 56px; }
+ header.doc-header { border-bottom: 2px solid var(--text); padding-bottom: 20px; margin-bottom: 36px; }
+ header.doc-header .eyebrow { text-transform: uppercase; letter-spacing: 0.12em; font-size: 11px; color: var(--accent); font-weight: 600; margin-bottom: 8px; }
+ header.doc-header h1 { font-size: 28px; line-height: 1.25; margin: 0 0 8px 0; font-weight: 700; letter-spacing: -0.01em; }
+ header.doc-header .meta { font-size: 13px; color: var(--text-muted); }
+ h2 { font-size: 20px; font-weight: 700; margin: 48px 0 14px 0; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+ h3 { font-size: 16px; font-weight: 600; margin: 28px 0 10px 0; }
+ h4 { font-size: 14px; font-weight: 600; margin: 20px 0 8px 0; color: var(--accent); }
+ p { margin: 0 0 12px 0; }
+ strong { font-weight: 600; }
+ .lead { font-size: 15px; color: var(--text-muted); margin-bottom: 24px; }
+ table.legend { width: 100%; border-collapse: collapse; margin: 12px 0 24px 0; font-size: 13px; }
+ table.legend thead th { text-align: left; background: var(--accent-soft); font-weight: 600; padding: 10px 12px; border: 1px solid var(--border); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+ table.legend td { padding: 10px 12px; border: 1px solid var(--border); vertical-align: top; }
+ .info-box { background: var(--accent-soft); border-left: 3px solid var(--accent); padding: 14px 18px; margin: 16px 0 24px 0; border-radius: 2px; font-size: 13.5px; }
+ .info-box.warn { background: var(--warn-soft); border-left-color: var(--warn); }
+ .info-box.ok { background: var(--ok-soft); border-left-color: var(--ok); }
+ .info-box.fast { background: var(--fast-soft); border-left-color: var(--fast); }
+ .info-box h4 { margin: 0 0 8px 0; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+ .info-box.warn h4 { color: var(--warn); }
+ .info-box.ok h4 { color: var(--ok); }
+ .info-box.fast h4 { color: var(--fast); }
+ .info-box ul { margin: 8px 0 0 0; padding-left: 20px; }
+ .info-box li { margin-bottom: 4px; }
+ .diagram-wrap { background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 20px; margin: 8px 0 28px 0; overflow-x: auto; }
+ .mermaid { text-align: center; }
+ .recipe { border: 1px solid var(--border); border-radius: 4px; padding: 16px 18px; margin-bottom: 20px; background: var(--bg-soft); }
+ .recipe h4 { margin-top: 0; color: var(--text); text-transform: none; letter-spacing: 0; }
+ .recipe ol { margin: 8px 0 0 0; padding-left: 22px; font-size: 13px; }
+ .recipe li { margin-bottom: 6px; }
+ code { font-family: 'JetBrains Mono', monospace; font-size: 0.92em; background: var(--bg-soft); padding: 1px 6px; border-radius: 3px; }
+ .tag { display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 8px; border-radius: 3px; margin-left: 6px; vertical-align: middle; }
+ .tag-fast { background: var(--fast-soft); color: var(--fast); }
+ .tag-reg { background: var(--accent-soft); color: var(--accent); }
+ footer.doc-footer { border-top: 1px solid var(--border); margin-top: 56px; padding-top: 16px; font-size: 12px; color: var(--text-muted); text-align: center; }
+ @media print { html, body { font-size: 10.5pt; } .page { max-width: none; padding: 12mm 10mm; } }
+ @page { size: A4 landscape; margin: 10mm; }
+ </style>
+</head>
+<body>
+ <div class="page">
+
+ <header class="doc-header">
+ <div class="eyebrow">CoinW × DLT × Anduin — Integration Proposal</div>
+ <h1>Fast-Path Execution: Latency-Optimized Flow for Securitized Perps on CoinW (Tied-Agent Model)</h1>
+ <div class="meta">November 2026 · Working draft v0.1 — adapts the BingX fast-path flow (v0.2) to the
+ tied-agent structure: the client contracts directly with Anduin; DLT is not a hop in the order chain</div>
+ </header>
+
+ <p class="lead">
+ This flow is built on the <strong>tied-agent model</strong>: CoinW acts as tied agent of DLT
+ (frontend, order capture &amp; transmission, point-of-sale disclosure), and the client's securities
+ trade is <strong>contracted directly with Anduin</strong> — the issuer is the principal to every
+ cert trade. There is therefore <strong>no broker in between</strong>: no hop runs through DLT,
+ neither on the latency-critical fast path <em>nor on the order chain itself</em>. Two tracks remain:
+ (1) the quote stream goes MM → Anduin → CoinW directly, with Anduin as a thin validating proxy;
+ (2) on order entry, CoinW fires a parallel <strong>hedge trigger</strong> straight to Anduin so the
+ MM has already executed by the time the client order — transmitted by CoinW directly to Anduin —
+ is matched and booked. The model is <strong>not RFQ</strong> — there is no per-order quote request
+ and response. Anduin <strong>STPs / proxies everything straight into the MM</strong>; the MM's only
+ job is to make sure the order executes, and <strong>all order and execution records are mirrored to
+ DLT</strong> for oversight and reporting.
+ </p>
+
+ <h2>1 · The principle — two tracks per order</h2>
+
+ <table class="legend">
+ <thead>
+ <tr><th style="width:18%">Track</th><th style="width:44%">What runs on it</th><th>Latency requirement</th></tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td><strong>Fast path</strong> <span class="tag tag-fast">operational</span></td>
+ <td>Quote streaming (MM → Anduin → CoinW) and the hedge trigger on order entry
+ (CoinW → Anduin → MM). Carries <strong>no client order and no securities trade</strong> —
+ it is the issuer's own hedging machinery, fed by an early signal from the distribution
+ frontend.</td>
+ <td>Milliseconds — co-located, WS/FIX, no intermediate consumer.</td>
+ </tr>
+ <tr>
+ <td><strong>Regulatory path</strong> <span class="tag tag-reg">legal</span></td>
+ <td>The client order and the securities trade: CoinW (tied agent of DLT) <strong>RTO →
+ Anduin</strong> directly — the issuer is the counterparty of the cert trade, booked
+ principal-to-client at Anduin. DLT receives a <strong>T+0 mirror of every order and
+ execution record</strong> (surveillance, reporting, fee accrual) but is not a hop.</td>
+ <td>Not latency-critical — the price is already locked by the fast path when the
+ order is matched; this track confirms and books.</td>
+ </tr>
+ </tbody>
+ </table>
+
+ <div class="info-box ok">
+ <h4>Why DLT is not a hop at all in this model</h4>
+ <p style="margin:0 0 8px 0">
+ In the tied-agent structure, DLT's functions are all <strong>off the hot path by nature</strong>:
+ </p>
+ <ul>
+ <li><strong>Client contract:</strong> the cert trade is a bilateral contract client ↔ Anduin
+ (issuer as principal). No executing-broker or back-to-back leg exists to route through DLT.</li>
+ <li><strong>CoinW's transmission</strong> of the order to Anduin is tied-agent RTO performed
+ <em>under DLT's responsibility</em> — DLT is legally accountable for CoinW's conduct without
+ sitting in the message chain.</li>
+ <li><strong>DLT's own duties</strong> — KYC/AML, appropriateness, product governance, transaction
+ reporting, surveillance — operate on onboarding data and on the T+0 record mirror, none of which
+ is latency-critical.</li>
+ <li><strong>Assets:</strong> tied agents are prohibited from holding client money or instruments,
+ and DLT never touches assets either — settlement is client ↔ Anduin only.</li>
+ </ul>
+ </div>
+
+ <div class="info-box fast">
+ <h4>Why this kills the latency problem</h4>
+ <p style="margin:0">
+ In a brokered baseline, the MM quotes a price at T<sub>0</sub> and fills the hedge at
+ T<sub>0</sub> + (multiple order hops) — the gap is MM risk, priced into the spread. In the fast
+ path, the time between the user clicking and the MM filling is <strong>two co-located hops</strong>
+ (CoinW → Anduin → MM, with Anduin proxying the MM's own execution API). The MM prices against a
+ gap of milliseconds, not of a full multi-party round trip — so it can quote tighter spreads with
+ less slippage reserve. And because the order chain here is CoinW → Anduin direct, even the
+ booking confirmation is one hop, not three.
+ </p>
+ </div>
+
+ <h2>2 · Quoting flow — straight MM → Anduin → CoinW</h2>
+
+ <p class="lead">
+ The MM streams the cert books (or perp books, per the integration flows doc) to Anduin,
+ which <strong>proxies the stream directly to CoinW</strong> — rendered to the user as the
+ <strong>reference price</strong>. Inline validation of the stream against Anduin's published levels
+ is <strong>optional — Anduin is willing to skip it</strong> and run the checks asynchronously on
+ the archived stream instead, keeping the proxy a pure pass-through; every tick lands in the
+ insert-only quote archive either way. DLT receives a non-latency-critical mirror of the same
+ stream for surveillance and reconciliation.
+ </p>
+
+ <div class="diagram-wrap">
+ <div class="mermaid">
+sequenceDiagram
+ autonumber
+ participant MM as CoinW MM
+ participant ADN as Anduin&lt;br/&gt;(issuer · validating proxy)
+ participant CW as CoinW UI / API&lt;br/&gt;(tied agent of DLT)
+ participant DLT as DLT&lt;br/&gt;(oversight — async)
+ actor U as User
+
+ Note over MM,U: Quoting flow — continuous, co-located
+ MM--&gt;&gt;ADN: Cert books keyed to Anduin's published levels (WS/FIX)
+ opt Inline validation — Anduin is willing to skip this step
+ ADN-&gt;&gt;ADN: Validate vs Final Terms formula + levels
+ end
+ ADN-&gt;&gt;ADN: Write tick to insert-only quote archive (async, off the hot path)
+ ADN--&gt;&gt;CW: Proxied book stream — direct
+ CW-&gt;&gt;U: Perp-style screen renders reference price,&lt;br/&gt;liq. level, funding (fees per distribution agreement)
+ ADN--)DLT: Mirror of the quote stream (async)&lt;br/&gt;surveillance + reconciliation only
+ </div>
+ </div>
+
+ <h2>3 · Execution flow — hedge trigger first, direct order transmission</h2>
+
+ <p class="lead">
+ On order entry CoinW does two things <strong>simultaneously</strong>: it fires the hedge trigger to
+ Anduin (fast path) and transmits the client order to Anduin (regulatory path — tied-agent RTO,
+ direct, since the client contracts with Anduin as principal). Both carry the same
+ <code>client_order_ref</code>. There is <strong>no RFQ step</strong> — Anduin STPs / proxies the
+ order straight into the MM, whose only job is to execute. Anduin matches the arriving client order
+ to the locked MM fill by reference, fixes the cert execution price per the Final Terms formula, and
+ books the trade principal-to-client T+0. The full order and execution record is mirrored to DLT.
+ </p>
+
+ <div class="diagram-wrap">
+ <div class="mermaid">
+sequenceDiagram
+ autonumber
+ participant MM as CoinW MM
+ participant ADN as Anduin&lt;br/&gt;(issuer · principal)
+ participant CW as CoinW UI / API&lt;br/&gt;(tied agent of DLT)
+ participant DLT as DLT&lt;br/&gt;(oversight — async)
+ actor U as User
+
+ U-&gt;&gt;CW: Buy 10 certs BTC-LONG (delta 1 BTC)
+ CW-&gt;&gt;CW: Assign client_order_ref
+
+ par Fast path — hedge trigger (ms)
+ CW-&gt;&gt;ADN: Hedge trigger: client_order_ref,&lt;br/&gt;series_id, qty, side, limit tolerance
+ ADN-&gt;&gt;MM: Hedge order (Anduin proxies the&lt;br/&gt;MM execution API — thin pass-through)
+ MM-&gt;&gt;MM: Execute vs own book / underlying venue
+ MM--&gt;&gt;ADN: Fill: execution price, qty, timestamp
+ ADN-&gt;&gt;ADN: Price locked for client_order_ref
+ and Regulatory path — client order (direct)
+ CW-&gt;&gt;ADN: Tied-agent RTO — transmit client order&lt;br/&gt;directly to Anduin (client_order_ref)
+ end
+
+ ADN-&gt;&gt;ADN: Match client_order_ref to locked MM fill →&lt;br/&gt;cert execution price per Final Terms formula
+ ADN-&gt;&gt;ADN: Book cert trade client ↔ Anduin,&lt;br/&gt;principal-to-client, T+0
+ ADN--&gt;&gt;CW: Execution confirmation (price, fills, hedge ref)
+ CW--&gt;&gt;U: Position open — perp-style card
+ ADN--)DLT: T+0 mirror: order record + execution +&lt;br/&gt;hedge ref — reporting, surveillance, fee accrual
+ Note over ADN: Token ledger movement + hedge trade recorded —&lt;br/&gt;book records only · physical settlement runs via&lt;br/&gt;CoinW custody accounts (integration flows doc)
+ </div>
+ </div>
+
+ <div class="recipe">
+ <h4>Timing summary</h4>
+ <ol>
+ <li><strong>t=0</strong> — user clicks. CoinW stamps <code>client_order_ref</code>.</li>
+ <li><strong>t+ms</strong> — hedge trigger reaches the MM via Anduin's proxy; MM executes against
+ the price it is itself streaming. Slippage window ≈ co-located round trip.</li>
+ <li><strong>t+ms</strong> — client order arrives at Anduin directly from CoinW (same co-located
+ pair of hops); Anduin matches it to the locked fill and books principal-to-client T+0.</li>
+ <li><strong>t+ms+ε</strong> — execution details back to the user. The DLT record mirror runs
+ async and never gates anything: the user's price <em>and</em> confirmation are both from the
+ co-located path.</li>
+ </ol>
+ </div>
+
+ <h2>4 · How fast this is</h2>
+
+ <table class="legend">
+ <thead>
+ <tr><th style="width:34%">Leg</th><th>Brokered baseline (BingX-style chain)</th><th>Tied-agent fast path (this doc)</th></tr>
+ </thead>
+ <tbody>
+ <tr><td>Quote: MM tick → user screen</td>
+ <td>MM → Anduin → DLT → venue → user (3 server hops)</td>
+ <td><strong>MM → Anduin → CoinW → user</strong> (2 hops, co-located)</td></tr>
+ <tr><td>Order: user click → MM execution</td>
+ <td>venue → DLT → Anduin → MM (3 hops, sequential)</td>
+ <td><strong>CoinW → Anduin → MM</strong> (2 hops, co-located) — single-digit milliseconds</td></tr>
+ <tr><td>Securities trade booking</td>
+ <td>DLT books back-to-back as executing broker; confirmation replays through DLT</td>
+ <td><strong>Client ↔ Anduin direct, booked at Anduin T+0</strong>; DLT gets the record mirror async</td></tr>
+ <tr><td>MM pricing risk window</td>
+ <td>Full order-chain round trip</td>
+ <td>Co-located round trip (ms) → tighter spreads, smaller slippage reserve</td></tr>
+ </tbody>
+ </table>
+
+ <div class="info-box fast">
+ <h4>Bottom line</h4>
+ <p style="margin:0">
+ With co-location and Anduin as a pure pass-through proxy, click-to-fill is <strong>two
+ intra-datacenter hops — single-digit milliseconds</strong>, the same order of magnitude as the MM
+ filling against its own book natively. In the tied-agent model even the confirmation is fast:
+ the order chain is CoinW → Anduin direct, so there is no regulatory replay leg — DLT's oversight
+ runs entirely on the asynchronous T+0 record mirror and never touches pricing or confirmation.
+ </p>
+ </div>
+
+ <footer class="doc-footer">
+ Working draft v0.1 · CoinW × DLT × Anduin — fast-path execution flow, tied-agent model · November 2026 ·
+ Adapts: BingX fast-path flow (v0.2, Oct 2026) · Companion: CoinW cert integration flows, CoinW Securitized
+ Perps Listing Primer. All names, parameters and endpoint shapes indicative; finalized during onboarding.
+ </footer>
+
+ </div>
+
+ <script type="module">
+ import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+ mermaid.initialize({
+ startOnLoad: false,
+ theme: 'neutral',
+ securityLevel: 'loose',
+ themeVariables: {
+ fontFamily: 'Inter, sans-serif',
+ fontSize: '12px',
+ primaryColor: '#eaf1f6',
+ primaryTextColor: '#17213a',
+ primaryBorderColor: '#2d5f7f',
+ lineColor: '#5b6478',
+ actorBkg: '#eaf1f6',
+ actorBorder: '#2d5f7f',
+ actorTextColor: '#17213a',
+ noteBkgColor: '#faf1e7',
+ noteBorderColor: '#8a4a1e',
+ noteTextColor: '#17213a',
+ sequenceNumberColor: '#ffffff',
+ activationBkgColor: '#dfe2ea',
+ signalTextColor: '#17213a',
+ labelTextColor: '#17213a'
+ },
+ sequence: { diagramMarginX: 20, diagramMarginY: 16, actorMargin: 40, noteMargin: 18, messageMargin: 32, wrap: true, useMaxWidth: true }
+ });
+ async function renderAll() {
+ const nodes = document.querySelectorAll('.mermaid');
+ for (const node of nodes) {
+ let src = node.innerHTML.trim()
+ .replace(/&amp;/g, '&')
+ .replace(/&lt;/g, '<')
+ .replace(/&gt;/g, '>')
+ .replace(/&quot;/g, '"')
+ .replace(/&#39;/g, "'");
+ try {
+ const id = 'm-' + Math.random().toString(36).slice(2);
+ const { svg, bindFunctions } = await mermaid.render(id, src);
+ node.innerHTML = svg;
+ if (bindFunctions) bindFunctions(node);
+ } catch (err) {
+ console.error('Mermaid render error:', err);
+ node.innerHTML = '<pre style="color:#a33;font-size:12px;white-space:pre-wrap;">' + (err && err.message ? err.message : String(err)) + '</pre>';
+ }
+ }
+ }
+ document.addEventListener('DOMContentLoaded', renderAll);
+ </script>
+</body>
+</html>
