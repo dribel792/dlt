@@ -3,7 +3,7 @@
 <head>
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
- <title>CoinW × DLT × Anduin — Fast-Path Execution Flow (Tied-Agent Model)</title>
+ <title>CoinW × Anduin — Fast-Path Execution Flow (Direct Issuer Model)</title>
  <link rel="preconnect" href="https://fonts.googleapis.com" />
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -68,25 +68,23 @@
  <div class="page">
 
  <header class="doc-header">
- <div class="eyebrow">CoinW × DLT × Anduin — Integration Proposal</div>
- <h1>Fast-Path Execution: Latency-Optimized Flow for Securitized Perps on CoinW (Tied-Agent Model)</h1>
- <div class="meta">November 2026 · Working draft v0.1 — adapts the BingX fast-path flow (v0.2) to the
- tied-agent structure: the client contracts directly with Anduin; DLT is not a hop in the order chain</div>
+ <div class="eyebrow">CoinW × Anduin — Integration Proposal</div>
+ <h1>Fast-Path Execution: Latency-Optimized Flow for Securitized Perps on CoinW</h1>
+ <div class="meta">November 2026 · Working draft v0.1 — direct issuer model: the client contracts
+ directly with Anduin; CoinW provides the frontend and order transmission</div>
  </header>
 
  <p class="lead">
- This flow is built on the <strong>tied-agent model</strong>: CoinW acts as tied agent of DLT
- (frontend, order capture &amp; transmission, point-of-sale disclosure), and the client's securities
- trade is <strong>contracted directly with Anduin</strong> — the issuer is the principal to every
- cert trade. There is therefore <strong>no broker in between</strong>: no hop runs through DLT,
- neither on the latency-critical fast path <em>nor on the order chain itself</em>. Two tracks remain:
+ This flow is built on the <strong>direct issuer model</strong>: CoinW provides the frontend
+ (order capture &amp; transmission, point-of-sale display), and the client's securities trade is
+ <strong>contracted directly with Anduin</strong> — the issuer is the principal to every cert trade.
+ There is <strong>no broker in between</strong>. Two tracks per order:
  (1) the quote stream goes MM → Anduin → CoinW directly, with Anduin as a thin validating proxy;
  (2) on order entry, CoinW fires a parallel <strong>hedge trigger</strong> straight to Anduin so the
  MM has already executed by the time the client order — transmitted by CoinW directly to Anduin —
  is matched and booked. The model is <strong>not RFQ</strong> — there is no per-order quote request
  and response. Anduin <strong>STPs / proxies everything straight into the MM</strong>; the MM's only
- job is to make sure the order executes, and <strong>all order and execution records are mirrored to
- DLT</strong> for oversight and reporting.
+ job is to make sure the order executes.
  </p>
 
  <h2>1 · The principle — two tracks per order</h2>
@@ -105,11 +103,10 @@
  <td>Milliseconds — co-located, WS/FIX, no intermediate consumer.</td>
  </tr>
  <tr>
- <td><strong>Regulatory path</strong> <span class="tag tag-reg">legal</span></td>
- <td>The client order and the securities trade: CoinW (tied agent of DLT) <strong>RTO →
- Anduin</strong> directly — the issuer is the counterparty of the cert trade, booked
- principal-to-client at Anduin. DLT receives a <strong>T+0 mirror of every order and
- execution record</strong> (surveillance, reporting, fee accrual) but is not a hop.</td>
+ <td><strong>Order path</strong> <span class="tag tag-reg">contractual</span></td>
+ <td>The client order and the securities trade: CoinW transmits the order
+ <strong>directly to Anduin</strong> — the issuer is the counterparty of the cert trade,
+ booked principal-to-client at Anduin, T+0.</td>
  <td>Not latency-critical — the price is already locked by the fast path when the
  order is matched; this track confirms and books.</td>
  </tr>
@@ -117,34 +114,27 @@
  </table>
 
  <div class="info-box ok">
- <h4>Why DLT is not a hop at all in this model</h4>
- <p style="margin:0 0 8px 0">
- In the tied-agent structure, DLT's functions are all <strong>off the hot path by nature</strong>:
- </p>
- <ul>
+ <h4>Why the chain is this short</h4>
+ <ul style="margin-top:0">
  <li><strong>Client contract:</strong> the cert trade is a bilateral contract client ↔ Anduin
- (issuer as principal). No executing-broker or back-to-back leg exists to route through DLT.</li>
- <li><strong>CoinW's transmission</strong> of the order to Anduin is tied-agent RTO performed
- <em>under DLT's responsibility</em> — DLT is legally accountable for CoinW's conduct without
- sitting in the message chain.</li>
- <li><strong>DLT's own duties</strong> — KYC/AML, appropriateness, product governance, transaction
- reporting, surveillance — operate on onboarding data and on the T+0 record mirror, none of which
- is latency-critical.</li>
- <li><strong>Assets:</strong> tied agents are prohibited from holding client money or instruments,
- and DLT never touches assets either — settlement is client ↔ Anduin only.</li>
+ (issuer as principal). No intermediary booking leg exists anywhere in the chain.</li>
+ <li><strong>CoinW</strong> captures and transmits orders and renders the trading screen — it is
+ never counterparty to the cert trade and never holds the instrument.</li>
+ <li><strong>Assets:</strong> settlement runs client ↔ Anduin only; no party in the chain holds
+ anything for anyone in the trade flow.</li>
  </ul>
  </div>
 
  <div class="info-box fast">
  <h4>Why this kills the latency problem</h4>
  <p style="margin:0">
- In a brokered baseline, the MM quotes a price at T<sub>0</sub> and fills the hedge at
+ In a multi-hop baseline, the MM quotes a price at T<sub>0</sub> and fills the hedge at
  T<sub>0</sub> + (multiple order hops) — the gap is MM risk, priced into the spread. In the fast
  path, the time between the user clicking and the MM filling is <strong>two co-located hops</strong>
  (CoinW → Anduin → MM, with Anduin proxying the MM's own execution API). The MM prices against a
  gap of milliseconds, not of a full multi-party round trip — so it can quote tighter spreads with
- less slippage reserve. And because the order chain here is CoinW → Anduin direct, even the
- booking confirmation is one hop, not three.
+ less slippage reserve. And because the order path is CoinW → Anduin direct, even the booking
+ confirmation is one hop.
  </p>
  </div>
 
@@ -156,8 +146,7 @@
  <strong>reference price</strong>. Inline validation of the stream against Anduin's published levels
  is <strong>optional — Anduin is willing to skip it</strong> and run the checks asynchronously on
  the archived stream instead, keeping the proxy a pure pass-through; every tick lands in the
- insert-only quote archive either way. DLT receives a non-latency-critical mirror of the same
- stream for surveillance and reconciliation.
+ insert-only quote archive either way.
  </p>
 
  <div class="diagram-wrap">
@@ -166,8 +155,7 @@ sequenceDiagram
  autonumber
  participant MM as CoinW MM
  participant ADN as Anduin&lt;br/&gt;(issuer · validating proxy)
- participant CW as CoinW UI / API&lt;br/&gt;(tied agent of DLT)
- participant DLT as DLT&lt;br/&gt;(oversight — async)
+ participant CW as CoinW UI / API&lt;br/&gt;(distribution frontend)
  actor U as User
 
  Note over MM,U: Quoting flow — continuous, co-located
@@ -178,7 +166,6 @@ sequenceDiagram
  ADN-&gt;&gt;ADN: Write tick to insert-only quote archive (async, off the hot path)
  ADN--&gt;&gt;CW: Proxied book stream — direct
  CW-&gt;&gt;U: Perp-style screen renders reference price,&lt;br/&gt;liq. level, funding (fees per distribution agreement)
- ADN--)DLT: Mirror of the quote stream (async)&lt;br/&gt;surveillance + reconciliation only
  </div>
  </div>
 
@@ -186,12 +173,11 @@ sequenceDiagram
 
  <p class="lead">
  On order entry CoinW does two things <strong>simultaneously</strong>: it fires the hedge trigger to
- Anduin (fast path) and transmits the client order to Anduin (regulatory path — tied-agent RTO,
- direct, since the client contracts with Anduin as principal). Both carry the same
- <code>client_order_ref</code>. There is <strong>no RFQ step</strong> — Anduin STPs / proxies the
- order straight into the MM, whose only job is to execute. Anduin matches the arriving client order
- to the locked MM fill by reference, fixes the cert execution price per the Final Terms formula, and
- books the trade principal-to-client T+0. The full order and execution record is mirrored to DLT.
+ Anduin (fast path) and transmits the client order to Anduin (order path — direct, since the client
+ contracts with Anduin as principal). Both carry the same <code>client_order_ref</code>. There is
+ <strong>no RFQ step</strong> — Anduin STPs / proxies the order straight into the MM, whose only job
+ is to execute. Anduin matches the arriving client order to the locked MM fill by reference, fixes
+ the cert execution price per the Final Terms formula, and books the trade principal-to-client T+0.
  </p>
 
  <div class="diagram-wrap">
@@ -200,8 +186,7 @@ sequenceDiagram
  autonumber
  participant MM as CoinW MM
  participant ADN as Anduin&lt;br/&gt;(issuer · principal)
- participant CW as CoinW UI / API&lt;br/&gt;(tied agent of DLT)
- participant DLT as DLT&lt;br/&gt;(oversight — async)
+ participant CW as CoinW UI / API&lt;br/&gt;(distribution frontend)
  actor U as User
 
  U-&gt;&gt;CW: Buy 10 certs BTC-LONG (delta 1 BTC)
@@ -213,15 +198,14 @@ sequenceDiagram
  MM-&gt;&gt;MM: Execute vs own book / underlying venue
  MM--&gt;&gt;ADN: Fill: execution price, qty, timestamp
  ADN-&gt;&gt;ADN: Price locked for client_order_ref
- and Regulatory path — client order (direct)
- CW-&gt;&gt;ADN: Tied-agent RTO — transmit client order&lt;br/&gt;directly to Anduin (client_order_ref)
+ and Order path — client order (direct)
+ CW-&gt;&gt;ADN: Transmit client order&lt;br/&gt;directly to Anduin (client_order_ref)
  end
 
  ADN-&gt;&gt;ADN: Match client_order_ref to locked MM fill →&lt;br/&gt;cert execution price per Final Terms formula
  ADN-&gt;&gt;ADN: Book cert trade client ↔ Anduin,&lt;br/&gt;principal-to-client, T+0
  ADN--&gt;&gt;CW: Execution confirmation (price, fills, hedge ref)
  CW--&gt;&gt;U: Position open — perp-style card
- ADN--)DLT: T+0 mirror: order record + execution +&lt;br/&gt;hedge ref — reporting, surveillance, fee accrual
  Note over ADN: Token ledger movement + hedge trade recorded —&lt;br/&gt;book records only · physical settlement runs via&lt;br/&gt;CoinW custody accounts (integration flows doc)
  </div>
  </div>
@@ -234,9 +218,8 @@ sequenceDiagram
  the price it is itself streaming. Slippage window ≈ co-located round trip.</li>
  <li><strong>t+ms</strong> — client order arrives at Anduin directly from CoinW (same co-located
  pair of hops); Anduin matches it to the locked fill and books principal-to-client T+0.</li>
- <li><strong>t+ms+ε</strong> — execution details back to the user. The DLT record mirror runs
- async and never gates anything: the user's price <em>and</em> confirmation are both from the
- co-located path.</li>
+ <li><strong>t+ms+ε</strong> — execution details back to the user. The user's price <em>and</em>
+ confirmation both come off the co-located path.</li>
  </ol>
  </div>
 
@@ -244,18 +227,18 @@ sequenceDiagram
 
  <table class="legend">
  <thead>
- <tr><th style="width:34%">Leg</th><th>Brokered baseline (BingX-style chain)</th><th>Tied-agent fast path (this doc)</th></tr>
+ <tr><th style="width:34%">Leg</th><th>Multi-hop brokered baseline</th><th>Direct fast path (this doc)</th></tr>
  </thead>
  <tbody>
  <tr><td>Quote: MM tick → user screen</td>
- <td>MM → Anduin → DLT → venue → user (3 server hops)</td>
+ <td>MM → issuer → broker → venue → user (3 server hops)</td>
  <td><strong>MM → Anduin → CoinW → user</strong> (2 hops, co-located)</td></tr>
  <tr><td>Order: user click → MM execution</td>
- <td>venue → DLT → Anduin → MM (3 hops, sequential)</td>
+ <td>venue → broker → issuer → MM (3 hops, sequential)</td>
  <td><strong>CoinW → Anduin → MM</strong> (2 hops, co-located) — single-digit milliseconds</td></tr>
  <tr><td>Securities trade booking</td>
- <td>DLT books back-to-back as executing broker; confirmation replays through DLT</td>
- <td><strong>Client ↔ Anduin direct, booked at Anduin T+0</strong>; DLT gets the record mirror async</td></tr>
+ <td>intermediary books back-to-back; confirmation replays through the broker</td>
+ <td><strong>Client ↔ Anduin direct, booked at Anduin T+0</strong> — confirmation is one hop back</td></tr>
  <tr><td>MM pricing risk window</td>
  <td>Full order-chain round trip</td>
  <td>Co-located round trip (ms) → tighter spreads, smaller slippage reserve</td></tr>
@@ -267,16 +250,16 @@ sequenceDiagram
  <p style="margin:0">
  With co-location and Anduin as a pure pass-through proxy, click-to-fill is <strong>two
  intra-datacenter hops — single-digit milliseconds</strong>, the same order of magnitude as the MM
- filling against its own book natively. In the tied-agent model even the confirmation is fast:
- the order chain is CoinW → Anduin direct, so there is no regulatory replay leg — DLT's oversight
- runs entirely on the asynchronous T+0 record mirror and never touches pricing or confirmation.
+ filling against its own book natively. And because the order path is CoinW → Anduin direct,
+ the confirmation is equally fast: there is no replay leg anywhere — nothing in the chain exists
+ that could touch pricing or delay confirmation.
  </p>
  </div>
 
  <footer class="doc-footer">
- Working draft v0.1 · CoinW × DLT × Anduin — fast-path execution flow, tied-agent model · November 2026 ·
- Adapts: BingX fast-path flow (v0.2, Oct 2026) · Companion: CoinW cert integration flows, CoinW Securitized
- Perps Listing Primer. All names, parameters and endpoint shapes indicative; finalized during onboarding.
+ Working draft v0.1 · CoinW × Anduin — fast-path execution flow, direct issuer model · November 2026 ·
+ Companion: CoinW cert integration flows, CoinW Securitized Perps Listing Primer. All names, parameters
+ and endpoint shapes indicative; finalized during onboarding.
  </footer>
 
  </div>
