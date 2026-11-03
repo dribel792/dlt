@@ -3,7 +3,7 @@
 <head>
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
- <title>CoinW × Anduin — Fast-Path Execution Flow (Direct Issuer Model)</title>
+ <title>Anduin × Partner — Fast-Path Execution Flow (Direct Issuer Model)</title>
  <link rel="preconnect" href="https://fonts.googleapis.com" />
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -68,20 +68,20 @@
  <div class="page">
 
  <header class="doc-header">
- <div class="eyebrow">CoinW × Anduin — Integration Proposal</div>
- <h1>Fast-Path Execution: Latency-Optimized Flow for Securitized Perps on CoinW</h1>
+ <div class="eyebrow">Anduin × Partner — Integration Proposal</div>
+ <h1>Fast-Path Execution: Latency-Optimized Flow for Securitized Perps via Partner Venue</h1>
  <div class="meta">November 2026 · Working draft v0.1 — direct issuer model: the client contracts
- directly with Anduin; CoinW provides the frontend and order transmission</div>
+ directly with Anduin; the partner venue provides the frontend and order transmission</div>
  </header>
 
  <p class="lead">
- This flow is built on the <strong>direct issuer model</strong>: CoinW provides the frontend
+ This flow is built on the <strong>direct issuer model</strong>: the partner venue provides the frontend
  (order capture &amp; transmission, point-of-sale display), and the client's securities trade is
  <strong>contracted directly with Anduin</strong> — the issuer is the principal to every cert trade.
  There is <strong>no broker in between</strong>. Two tracks per order:
- (1) the quote stream goes MM → Anduin → CoinW directly, with Anduin as a thin validating proxy;
- (2) on order entry, CoinW fires a parallel <strong>hedge trigger</strong> straight to Anduin so the
- MM has already executed by the time the client order — transmitted by CoinW directly to Anduin —
+ (1) the quote stream goes MM → Anduin → Partner directly, with Anduin as a thin validating proxy;
+ (2) on order entry, the partner fires a parallel <strong>hedge trigger</strong> straight to Anduin so the
+ MM has already executed by the time the client order — transmitted by the partner directly to Anduin —
  is matched and booked. The model is <strong>not RFQ</strong> — there is no per-order quote request
  and response. Anduin <strong>STPs / proxies everything straight into the MM</strong>; the MM's only
  job is to make sure the order executes.
@@ -96,15 +96,15 @@
  <tbody>
  <tr>
  <td><strong>Fast path</strong> <span class="tag tag-fast">operational</span></td>
- <td>Quote streaming (MM → Anduin → CoinW) and the hedge trigger on order entry
- (CoinW → Anduin → MM). Carries <strong>no client order and no securities trade</strong> —
+ <td>Quote streaming (MM → Anduin → Partner) and the hedge trigger on order entry
+ (Partner → Anduin → MM). Carries <strong>no client order and no securities trade</strong> —
  it is the issuer's own hedging machinery, fed by an early signal from the distribution
  frontend.</td>
  <td>Milliseconds — co-located, WS/FIX, no intermediate consumer.</td>
  </tr>
  <tr>
  <td><strong>Order path</strong> <span class="tag tag-reg">contractual</span></td>
- <td>The client order and the securities trade: CoinW transmits the order
+ <td>The client order and the securities trade: the partner transmits the order
  <strong>directly to Anduin</strong> — the issuer is the counterparty of the cert trade,
  booked principal-to-client at Anduin, T+0.</td>
  <td>Not latency-critical — the price is already locked by the fast path when the
@@ -118,7 +118,7 @@
  <ul style="margin-top:0">
  <li><strong>Client contract:</strong> the cert trade is a bilateral contract client ↔ Anduin
  (issuer as principal). No intermediary booking leg exists anywhere in the chain.</li>
- <li><strong>CoinW</strong> captures and transmits orders and renders the trading screen — it is
+ <li><strong>The partner venue</strong> captures and transmits orders and renders the trading screen — it is
  never counterparty to the cert trade and never holds the instrument.</li>
  <li><strong>Assets:</strong> settlement runs client ↔ Anduin only; no party in the chain holds
  anything for anyone in the trade flow.</li>
@@ -131,18 +131,18 @@
  In a multi-hop baseline, the MM quotes a price at T<sub>0</sub> and fills the hedge at
  T<sub>0</sub> + (multiple order hops) — the gap is MM risk, priced into the spread. In the fast
  path, the time between the user clicking and the MM filling is <strong>two co-located hops</strong>
- (CoinW → Anduin → MM, with Anduin proxying the MM's own execution API). The MM prices against a
+ (Partner → Anduin → MM, with Anduin proxying the MM's own execution API). The MM prices against a
  gap of milliseconds, not of a full multi-party round trip — so it can quote tighter spreads with
- less slippage reserve. And because the order path is CoinW → Anduin direct, even the booking
+ less slippage reserve. And because the order path is Partner → Anduin direct, even the booking
  confirmation is one hop.
  </p>
  </div>
 
- <h2>2 · Quoting flow — straight MM → Anduin → CoinW</h2>
+ <h2>2 · Quoting flow — straight MM → Anduin → Partner</h2>
 
  <p class="lead">
  The MM streams the cert books (or perp books, per the integration flows doc) to Anduin,
- which <strong>proxies the stream directly to CoinW</strong> — rendered to the user as the
+ which <strong>proxies the stream directly to the partner</strong> — rendered to the user as the
  <strong>reference price</strong>. Inline validation of the stream against Anduin's published levels
  is <strong>optional — Anduin is willing to skip it</strong> and run the checks asynchronously on
  the archived stream instead, keeping the proxy a pure pass-through; every tick lands in the
@@ -153,9 +153,9 @@
  <div class="mermaid">
 sequenceDiagram
  autonumber
- participant MM as CoinW MM
+ participant MM as Market Maker
  participant ADN as Anduin&lt;br/&gt;(issuer · validating proxy)
- participant CW as CoinW UI / API&lt;br/&gt;(distribution frontend)
+ participant CW as Partner UI / API&lt;br/&gt;(distribution frontend)
  actor U as User
 
  Note over MM,U: Quoting flow — continuous, co-located
@@ -172,7 +172,7 @@ sequenceDiagram
  <h2>3 · Execution flow — hedge trigger first, direct order transmission</h2>
 
  <p class="lead">
- On order entry CoinW does two things <strong>simultaneously</strong>: it fires the hedge trigger to
+ On order entry the partner does two things <strong>simultaneously</strong>: it fires the hedge trigger to
  Anduin (fast path) and transmits the client order to Anduin (order path — direct, since the client
  contracts with Anduin as principal). Both carry the same <code>client_order_ref</code>. There is
  <strong>no RFQ step</strong> — Anduin STPs / proxies the order straight into the MM, whose only job
@@ -184,9 +184,9 @@ sequenceDiagram
  <div class="mermaid">
 sequenceDiagram
  autonumber
- participant MM as CoinW MM
+ participant MM as Market Maker
  participant ADN as Anduin&lt;br/&gt;(issuer · principal)
- participant CW as CoinW UI / API&lt;br/&gt;(distribution frontend)
+ participant CW as Partner UI / API&lt;br/&gt;(distribution frontend)
  actor U as User
 
  U-&gt;&gt;CW: Buy 10 certs BTC-LONG (delta 1 BTC)
@@ -206,17 +206,17 @@ sequenceDiagram
  ADN-&gt;&gt;ADN: Book cert trade client ↔ Anduin,&lt;br/&gt;principal-to-client, T+0
  ADN--&gt;&gt;CW: Execution confirmation (price, fills, hedge ref)
  CW--&gt;&gt;U: Position open — perp-style card
- Note over ADN: Token ledger movement + hedge trade recorded —&lt;br/&gt;book records only · physical settlement runs via&lt;br/&gt;CoinW custody accounts (integration flows doc)
+ Note over ADN: Token ledger movement + hedge trade recorded —&lt;br/&gt;book records only · physical settlement runs via&lt;br/&gt;partner custody accounts (integration flows doc)
  </div>
  </div>
 
  <div class="recipe">
  <h4>Timing summary</h4>
  <ol>
- <li><strong>t=0</strong> — user clicks. CoinW stamps <code>client_order_ref</code>.</li>
+ <li><strong>t=0</strong> — user clicks. Partner UI stamps <code>client_order_ref</code>.</li>
  <li><strong>t+ms</strong> — hedge trigger reaches the MM via Anduin's proxy; MM executes against
  the price it is itself streaming. Slippage window ≈ co-located round trip.</li>
- <li><strong>t+ms</strong> — client order arrives at Anduin directly from CoinW (same co-located
+ <li><strong>t+ms</strong> — client order arrives at Anduin directly from the partner (same co-located
  pair of hops); Anduin matches it to the locked fill and books principal-to-client T+0.</li>
  <li><strong>t+ms+ε</strong> — execution details back to the user. The user's price <em>and</em>
  confirmation both come off the co-located path.</li>
@@ -232,10 +232,10 @@ sequenceDiagram
  <tbody>
  <tr><td>Quote: MM tick → user screen</td>
  <td>MM → issuer → broker → venue → user (3 server hops)</td>
- <td><strong>MM → Anduin → CoinW → user</strong> (2 hops, co-located)</td></tr>
+ <td><strong>MM → Anduin → Partner → user</strong> (2 hops, co-located)</td></tr>
  <tr><td>Order: user click → MM execution</td>
  <td>venue → broker → issuer → MM (3 hops, sequential)</td>
- <td><strong>CoinW → Anduin → MM</strong> (2 hops, co-located) — single-digit milliseconds</td></tr>
+ <td><strong>Partner → Anduin → MM</strong> (2 hops, co-located) — single-digit milliseconds</td></tr>
  <tr><td>Securities trade booking</td>
  <td>intermediary books back-to-back; confirmation replays through the broker</td>
  <td><strong>Client ↔ Anduin direct, booked at Anduin T+0</strong> — confirmation is one hop back</td></tr>
@@ -250,15 +250,15 @@ sequenceDiagram
  <p style="margin:0">
  With co-location and Anduin as a pure pass-through proxy, click-to-fill is <strong>two
  intra-datacenter hops — single-digit milliseconds</strong>, the same order of magnitude as the MM
- filling against its own book natively. And because the order path is CoinW → Anduin direct,
+ filling against its own book natively. And because the order path is Partner → Anduin direct,
  the confirmation is equally fast: there is no replay leg anywhere — nothing in the chain exists
  that could touch pricing or delay confirmation.
  </p>
  </div>
 
  <footer class="doc-footer">
- Working draft v0.1 · CoinW × Anduin — fast-path execution flow, direct issuer model · November 2026 ·
- Companion: CoinW cert integration flows, CoinW Securitized Perps Listing Primer. All names, parameters
+ Working draft v0.1 · Anduin × Partner — fast-path execution flow, direct issuer model · November 2026 ·
+ Companion: cert integration flows, Securitized Perps Listing Primer. All names, parameters
  and endpoint shapes indicative; finalized during onboarding.
  </footer>
 
