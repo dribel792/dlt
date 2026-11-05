@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DLT-Anduin × Revolut — Crypto Margin Lending · Liquidity Provider Brief</title>
+<style>
+  :root {
+    --bg: #f7f8fa;
+    --paper: #ffffff;
+    --ink: #111827;
+    --muted: #5b6475;
+    --line: #e3e6ec;
+    --accent: #2f5bea;
+    --accent-soft: #eaf0ff;
+    --green: #129a63;
+    --green-soft: #e6f6ef;
+    --blue: #2f5bea;
+    --purple: #7a4fd6;
+    --purple-soft: #f1ecfc;
+    --amber: #c27a00;
+    --amber-soft: #fff5e0;
+    --red: #c2410c;
+    --red-soft: #fdeee6;
+    --grey: #8a93a5;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+  .page { max-width: 1040px; margin: 0 auto; padding: 48px 28px 80px; }
+  header { margin-bottom: 40px; }
+  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
+  h1 { font-size: 2.1rem; line-height: 1.2; letter-spacing: -.02em; margin: 10px 0 12px; }
+  .sub { color: var(--muted); max-width: 760px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 18px; font-size: 12.5px; color: var(--muted); }
+  .meta b { color: var(--ink); font-weight: 600; }
+  section { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 30px 32px; margin-bottom: 22px; }
+  h2 { font-size: 1.25rem; letter-spacing: -.01em; margin-bottom: 4px; display: flex; align-items: baseline; gap: 10px; }
+  h2 .n { font-size: 12px; font-weight: 700; color: var(--accent); background: var(--accent-soft); padding: 2px 8px; border-radius: 6px; }
+  h3 { font-size: 1rem; margin: 22px 0 8px; }
+  .lead { color: var(--muted); margin-bottom: 18px; }
+  p + p { margin-top: 10px; }
+  ul, ol { padding-left: 20px; }
+  li { margin: 4px 0; }
+  .grid { display: grid; gap: 14px; }
+  .g2 { grid-template-columns: repeat(2, 1fr); }
+  .g3 { grid-template-columns: repeat(3, 1fr); }
+  .g4 { grid-template-columns: repeat(4, 1fr); }
+  @media (max-width: 820px) { .g2, .g3, .g4 { grid-template-columns: 1fr; } section { padding: 22px 18px; } }
+  .card { border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; background: #fcfcfd; }
+  .card h4 { font-size: .92rem; margin-bottom: 6px; }
+  .card p, .card li { font-size: .88rem; color: #374151; }
+  .kpi { border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; }
+  .kpi .v { font-size: 1.55rem; font-weight: 750; letter-spacing: -.02em; }
+  .kpi .l { font-size: .8rem; color: var(--muted); }
+  .callout { border-left: 4px solid var(--accent); background: var(--accent-soft); padding: 14px 18px; border-radius: 0 10px 10px 0; margin: 16px 0; font-size: .92rem; }
+  .callout.green { border-color: var(--green); background: var(--green-soft); }
+  .callout.amber { border-color: var(--amber); background: var(--amber-soft); }
+  table { width: 100%; border-collapse: collapse; font-size: .88rem; margin-top: 8px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: .74rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 650; background: #fafbfc; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .pill { display: inline-block; font-size: 11.5px; font-weight: 650; padding: 2px 9px; border-radius: 999px; white-space: nowrap; }
+  .p-low { background: var(--green-soft); color: var(--green); }
+  .p-lm { background: var(--amber-soft); color: var(--amber); }
+  .p-med { background: var(--red-soft); color: var(--red); }
+  .fig { margin: 18px 0 6px; border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: #fff; overflow-x: auto; }
+  .fig svg { display: block; width: 100%; height: auto; min-width: 760px; }
+  .cap { font-size: .8rem; color: var(--muted); margin-top: 6px; }
+  .steps { counter-reset: s; list-style: none; padding: 0; }
+  .steps li { counter-increment: s; position: relative; padding: 10px 0 10px 44px; border-bottom: 1px dashed var(--line); }
+  .steps li:last-child { border-bottom: 0; }
+  .steps li::before { content: counter(s); position: absolute; left: 0; top: 9px; width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 13px; display: grid; place-items: center; }
+  .steps b { font-weight: 650; }
+  .ref { font-size: .76rem; color: var(--grey); white-space: nowrap; }
+  code { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: .85em; background: #f2f4f7; padding: 1px 5px; border-radius: 4px; }
+  footer { font-size: .78rem; color: var(--muted); margin-top: 28px; }
+  @media print {
+    body { background: #fff; font-size: 12.5px; }
+    section { break-inside: avoid; border: 0; padding: 12px 0; }
+    .fig svg { min-width: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <div class="eyebrow">Confidential · Liquidity Provider Brief</div>
+  <h1>Secured crypto lending to Revolut retail clients<br/>Structure, fund flows &amp; risk profile</h1>
+  <p class="sub">DLT-Anduin (legal entity TBD) is the lender of record for crypto-denominated margin loans offered to Revolut retail clients in the UK and EEA. This brief explains where LP capital sits at every point, how loans are secured and liquidated, and the loss-absorbing layers that sit in front of LP principal.</p>
+  <div class="meta">
+    <span>Prepared by <b>DLT-Anduin</b></span>
+    <span>Platform partner <b>Revolut Ltd (UK) / Revolut Digital Assets Europe Ltd (EEA)</b></span>
+    <span>Assets <b>USDC · BTC · ETH · SOL</b></span>
+    <span>Version <b>v0.1 · Nov 2026 · draft, subject to final contract terms</b></span>
+  </div>
+</header>
+
+<!-- ───────── 1. Summary ───────── -->
+<section>
+  <h2><span class="n">1</span>Summary</h2>
+  <p class="lead">The LP funds a closed-loop programme: capital only ever moves between the LP and DLT-Anduin's dedicated account at Revolut. Every loan is over-collateralised, liquidated automatically, and backed by Revolut-funded protection layers before the LP is exposed.</p>
+
+  <div class="grid g4">
+    <div class="kpi"><div class="v">Closed loop</div><div class="l">One whitelisted route in, one out. LP ⇄ DLT-Anduin account at Revolut, nothing else.</div></div>
+    <div class="kpi"><div class="v">In-kind</div><div class="l">Loans are repaid in the asset that was lent. No price exposure on principal.</div></div>
+    <div class="kpi"><div class="v">5% → 17.5%+</div><div class="l">Price move from liquidation trigger covered before the LP is touched (BTC; ETH 20%, SOL 22.5% if Revolut executes late).</div></div>
+    <div class="kpi"><div class="v">120 s</div><div class="l">Contractual liquidation SLA. Revolut pays for any delay beyond it.</div></div>
+  </div>
+
+  <h3>Why the risk is low</h3>
+  <div class="grid g2">
+    <div class="card"><h4>1 · Collateral first</h4><p>The borrowed funds and the client's own deposit stay in a Revolut margin account, held <i>for the benefit of DLT-Anduin</i>. The client can't withdraw them while a loan is outstanding, and they can't be used for anything else. <span class="ref">cl. 8.1–8.2</span></p></div>
+    <div class="card"><h4>2 · Automated liquidation</h4><p>Revolut checks every portfolio every second. A liquidation fires after 3 consecutive ticks below maintenance margin and must be executed within 120 seconds. <span class="ref">Sch. 3</span></p></div>
+    <div class="card"><h4>3 · Revolut guarantee</h4><p>If the liquidation price falls below the client's bankruptcy price, Revolut pays the shortfall up to a fixed cap. If Revolut breaches the 120 s SLA, it pays execution losses up to a much higher cap. Revolut's own balance sheet backs these payments. <span class="ref">Sch. 3</span></p></div>
+    <div class="card"><h4>4 · Liquidation Fund</h4><p>A Revolut-owned fund, filled with client liquidation fees, sits in the repayment waterfall for any remaining shortfall. Its target size grows with the loan book. <span class="ref">cl. 9</span></p></div>
+  </div>
+</section>
+
+<!-- ───────── 2. Parties ───────── -->
+<section>
+  <h2><span class="n">2</span>Parties &amp; roles</h2>
+  <table>
+    <thead><tr><th>Party</th><th>Role</th><th>What it does / does not do</th></tr></thead>
+    <tbody>
+      <tr><td><b>Liquidity Provider (LP)</b></td><td>Funds DLT-Anduin's crypto liquidity commitment</td><td>Holds undrawn liquidity in DLT-Anduin's account on the LP platform. Delivers assets only to DLT-Anduin's whitelisted Revolut deposit address.</td></tr>
+      <tr><td><b>DLT-Anduin</b></td><td>Lender of record to each retail client</td><td>Contracts directly with each client through the Client Terms. Keeps a dedicated, sole-purpose Revolut Business (R4B) account. Cannot withdraw manually from the Lending or Reserve Pools. <span class="ref">cl. 4.2, 6.2–6.3</span></td></tr>
+      <tr><td><b>Revolut Ltd / RDAEL</b></td><td>Intermediary, custodian, liquidation agent</td><td>Handles onboarding and KYC, custodies all collateral, runs pool rebalancing, monitors margin and executes liquidations. Takes <b>no title</b> to the pool assets. Runs the Liquidation Fund and pays SLA compensation. <span class="ref">cl. 5, 7.1, 8, 9</span></td></tr>
+      <tr><td><b>Retail client</b></td><td>Borrower</td><td>Borrows to buy or sell crypto spot on Revolut. Liability is limited to the collateral (non-recourse). <span class="ref">cl. 4.3–4.4</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ───────── 3. Fund flow ───────── -->
+<section>
+  <h2><span class="n">3</span>Where LP capital sits: fund flow</h2>
+  <p class="lead">LP capital is always in one of four places: (a) undrawn at the LP, (b) in DLT-Anduin's R4B account, (c) in DLT-Anduin's Reserve or Lending Pool at Revolut, or (d) lent to a client and secured by collateral in a Revolut margin account. (b), (c) and (d) are all inside Revolut's custody perimeter.</p>
+
+  <div class="fig">
+  <svg viewBox="0 0 1010 560" xmlns="http://www.w3.org/2000/svg" font-family="Inter, Segoe UI, system-ui, sans-serif">
+    <defs>
+      <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2f5bea"/></marker>
+      <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#129a63"/></marker>
+      <marker id="ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7a4fd6"/></marker>
+      <marker id="ak" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5b6475"/></marker>
+    </defs>
+
+    <!-- Revolut perimeter -->
+    <rect x="232" y="30" width="598" height="510" rx="16" fill="#f5f7ff" stroke="#2f5bea" stroke-dasharray="6 5" stroke-width="1.5"/>
+    <text x="250" y="56" font-size="13" font-weight="700" fill="#2f5bea">REVOLUT CUSTODY PERIMETER</text>
+    <text x="250" y="73" font-size="11" fill="#5b6475">Revolut Ltd (UK) · RDAEL (EEA): Revolut automates transfers, takes no title to pool assets</text>
+
+    <!-- LP -->
+    <rect x="18" y="205" width="170" height="120" rx="12" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="103" y="236" font-size="14" font-weight="700" text-anchor="middle">Liquidity Provider</text>
+    <text x="103" y="256" font-size="11.5" fill="#5b6475" text-anchor="middle">DLT-Anduin facility account</text>
+    <text x="103" y="276" font-size="11.5" fill="#5b6475" text-anchor="middle">undrawn liquidity</text>
+    <rect x="38" y="292" width="130" height="22" rx="11" fill="#e6f6ef"/>
+    <text x="103" y="307" font-size="10.5" font-weight="650" fill="#129a63" text-anchor="middle">1 whitelisted address</text>
+
+    <!-- R4B -->
+    <rect x="262" y="205" width="150" height="120" rx="12" fill="#fff" stroke="#2f5bea" stroke-width="1.5"/>
+    <text x="337" y="236" font-size="14" font-weight="700" text-anchor="middle">DLT-Anduin R4B</text>
+    <text x="337" y="254" font-size="14" font-weight="700" text-anchor="middle">account</text>
+    <text x="337" y="276" font-size="11" fill="#5b6475" text-anchor="middle">dedicated, sole purpose</text>
+    <text x="337" y="292" font-size="11" fill="#5b6475" text-anchor="middle">fixed in/out addresses</text>
+
+    <!-- Reserve -->
+    <rect x="455" y="92" width="150" height="90" rx="12" fill="#fff" stroke="#2f5bea" stroke-width="1.5"/>
+    <text x="530" y="122" font-size="14" font-weight="700" text-anchor="middle">Reserve Pool</text>
+    <text x="530" y="141" font-size="11" fill="#5b6475" text-anchor="middle">DLT-Anduin-owned buffer</text>
+    <text x="530" y="158" font-size="11" fill="#129a63" font-weight="650" text-anchor="middle">earns 3% (SOL 6%) p.a.</text>
+
+    <!-- Lending -->
+    <rect x="455" y="225" width="150" height="90" rx="12" fill="#fff" stroke="#2f5bea" stroke-width="1.5"/>
+    <text x="530" y="255" font-size="14" font-weight="700" text-anchor="middle">Lending Pools</text>
+    <text x="530" y="274" font-size="11" fill="#5b6475" text-anchor="middle">one per asset</text>
+    <text x="530" y="291" font-size="11" fill="#5b6475" text-anchor="middle">auto lower / upper limits</text>
+
+    <!-- Liquidation fund -->
+    <rect x="455" y="420" width="150" height="90" rx="12" fill="#faf7ff" stroke="#7a4fd6" stroke-width="1.5"/>
+    <text x="530" y="450" font-size="14" font-weight="700" text-anchor="middle">Liquidation Fund</text>
+    <text x="530" y="469" font-size="11" fill="#5b6475" text-anchor="middle">Revolut-owned</text>
+    <text x="530" y="486" font-size="11" fill="#5b6475" text-anchor="middle">funded by liquidation fees</text>
+
+    <!-- Margin accounts -->
+    <rect x="655" y="205" width="150" height="130" rx="12" fill="#fff" stroke="#2f5bea" stroke-width="1.5"/>
+    <text x="730" y="234" font-size="14" font-weight="700" text-anchor="middle">Client Margin</text>
+    <text x="730" y="252" font-size="14" font-weight="700" text-anchor="middle">Accounts</text>
+    <text x="730" y="274" font-size="11" fill="#5b6475" text-anchor="middle">collateral + loan proceeds</text>
+    <text x="730" y="290" font-size="11" fill="#5b6475" text-anchor="middle">for DLT-Anduin's benefit</text>
+    <text x="730" y="306" font-size="11" fill="#5b6475" text-anchor="middle">withdrawal-locked</text>
+
+    <!-- Clients -->
+    <rect x="862" y="215" width="130" height="110" rx="12" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="927" y="250" font-size="14" font-weight="700" text-anchor="middle">Retail clients</text>
+    <text x="927" y="270" font-size="11" fill="#5b6475" text-anchor="middle">UK · ES · AT · PT</text>
+    <text x="927" y="287" font-size="11" fill="#5b6475" text-anchor="middle">KYC by Revolut</text>
+    <text x="927" y="304" font-size="11" fill="#5b6475" text-anchor="middle">non-recourse</text>
+
+    <!-- arrows -->
+    <!-- LP -> R4B -->
+    <line x1="188" y1="238" x2="258" y2="238" stroke="#129a63" stroke-width="2.2" marker-end="url(#ag)"/>
+    <text x="223" y="229" font-size="11" font-weight="700" fill="#129a63" text-anchor="middle">① draw</text>
+    <!-- R4B -> LP -->
+    <line x1="262" y1="296" x2="192" y2="296" stroke="#129a63" stroke-width="2.2" marker-end="url(#ag)"/>
+    <text x="227" y="315" font-size="11" font-weight="700" fill="#129a63" text-anchor="middle">⑥ return</text>
+    <!-- R4B -> Reserve -->
+    <path d="M337,205 C337,150 400,137 451,137" fill="none" stroke="#2f5bea" stroke-width="2" marker-end="url(#ab)"/>
+    <text x="262" y="172" font-size="11" font-weight="700" fill="#2f5bea">② allocate</text>
+    <!-- Reserve -> Lending -->
+    <line x1="530" y1="182" x2="530" y2="221" stroke="#2f5bea" stroke-width="2" marker-end="url(#ab)"/>
+    <text x="538" y="207" font-size="11" font-weight="700" fill="#2f5bea">③ top-up</text>
+    <!-- R4B <-> Lending -->
+    <line x1="412" y1="258" x2="451" y2="258" stroke="#2f5bea" stroke-width="2" marker-end="url(#ab)"/>
+    <line x1="455" y1="285" x2="416" y2="285" stroke="#2f5bea" stroke-width="2" marker-end="url(#ab)"/>
+    <text x="433" y="318" font-size="9.5" fill="#2f5bea" text-anchor="middle">rebalance</text>
+    <!-- Lending -> Margin -->
+    <line x1="605" y1="250" x2="651" y2="250" stroke="#2f5bea" stroke-width="2.2" marker-end="url(#ab)"/>
+    <text x="628" y="242" font-size="11" font-weight="700" fill="#2f5bea" text-anchor="middle">④ loan</text>
+    <!-- Margin -> Lending -->
+    <line x1="655" y1="295" x2="609" y2="295" stroke="#129a63" stroke-width="2.2" marker-end="url(#ag)"/>
+    <text x="630" y="335" font-size="10.5" font-weight="700" fill="#129a63" text-anchor="middle">⑤ repay</text>
+    <text x="630" y="349" font-size="10" fill="#129a63" text-anchor="middle">+ interest</text>
+    <!-- Margin -> Fund (liq fees) -->
+    <path d="M730,335 C730,410 680,455 609,460" fill="none" stroke="#7a4fd6" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#ap)"/>
+    <text x="700" y="425" font-size="10.5" fill="#7a4fd6">liquidation fees</text>
+    <!-- Fund -> Lending (shortfall) -->
+    <line x1="530" y1="420" x2="530" y2="319" stroke="#7a4fd6" stroke-width="2" marker-end="url(#ap)"/>
+    <text x="538" y="378" font-size="10.5" font-weight="700" fill="#7a4fd6">shortfall cover</text>
+    <!-- Clients <-> Margin -->
+    <line x1="862" y1="255" x2="809" y2="255" stroke="#5b6475" stroke-width="1.8" marker-end="url(#ak)"/>
+    <line x1="805" y1="290" x2="858" y2="290" stroke="#5b6475" stroke-width="1.8" marker-end="url(#ak)"/>
+    <text x="834" y="246" font-size="10" fill="#5b6475" text-anchor="middle">deposit</text>
+    <text x="834" y="308" font-size="10" fill="#5b6475" text-anchor="middle">trade</text>
+
+    <!-- legend -->
+    <g font-size="11" fill="#374151">
+      <line x1="250" y1="525" x2="276" y2="525" stroke="#129a63" stroke-width="2.2"/><text x="282" y="529">LP capital in / out</text>
+      <line x1="400" y1="525" x2="426" y2="525" stroke="#2f5bea" stroke-width="2.2"/><text x="432" y="529">automated by Revolut</text>
+      <line x1="580" y1="525" x2="606" y2="525" stroke="#7a4fd6" stroke-width="2.2"/><text x="612" y="529">loss-absorption layer</text>
+    </g>
+  </svg>
+  </div>
+  <p class="cap">Figure 1: Capital locations and permitted movements. No arrow leaves the closed loop: Revolut moves assets only between DLT-Anduin's own accounts and secured client loans.</p>
+
+  <ol class="steps">
+    <li><b>Draw.</b> Revolut sends an automated <i>Pull Request</i> when DLT-Anduin's R4B balance can't cover a pool top-up. DLT-Anduin passes it to the LP, and the LP delivers to the <b>single whitelisted address</b>, DLT-Anduin's R4B deposit address. Revolut accepts deliveries only from wallet addresses agreed in writing. <span class="ref">cl. 6.1, 6.5, 7.2(f), Sch. 2</span></li>
+    <li><b>Allocate.</b> Revolut moves assets from the R4B account into the Reserve Pool up to the Schedule 1 level (currently GBP 7.5m equivalent). The Reserve Pool <b>earns interest paid by Revolut</b>: 3% p.a. on BTC/ETH/USDC, 6% on SOL. <span class="ref">cl. 5.10, 7.2(c), Sch. 1</span></li>
+    <li><b>Top up.</b> When a Lending Pool falls below its Lower Threshold, Revolut refills it from the R4B account or the Reserve Pool. The threshold is dynamic: when utilisation is &lt;65% for a day or &gt;90% for an hour, it resets to max(17% of outstanding loans, 200k USDC). <span class="ref">cl. 7.2(a),(d),(g)</span></li>
+    <li><b>Lend.</b> When a client opens a margin trade, the loan goes from the Lending Pool into the client's Margin Account. The loan proceeds (e.g. the BTC bought) stay there as collateral alongside the client's own deposit. <span class="ref">cl. 8.1, def. "Collateral"</span></li>
+    <li><b>Repay.</b> When the position closes, or is liquidated, principal goes back to the Lending Pool in the asset that was lent. DLT-Anduin's share of client interest (80%) is credited to the Lending Pool too. <span class="ref">cl. 11.1–11.2</span></li>
+    <li><b>Return.</b> When a Lending Pool exceeds its Upper Threshold, Revolut sends the surplus back to DLT-Anduin's R4B account. From there, assets go back only to the LP's whitelisted address. <span class="ref">cl. 7.2(b)</span></li>
+  </ol>
+
+  <div class="callout green"><b>Closed-loop controls offered to the LP.</b> (i) The LP-side facility account has exactly one whitelisted withdrawal address: DLT-Anduin's R4B deposit address. (ii) DLT-Anduin's R4B account is contractually limited to this programme. (iii) DLT-Anduin whitelists only the LP deposit address for outbound transfers from R4B. (iv) DLT-Anduin can't withdraw manually from the pools; assets leave them only through Revolut's automated rebalancing. <span class="ref">cl. 6.2–6.3</span></div>
+</section>
+
+<!-- ───────── 4. Funding sequence ───────── -->
+<section>
+  <h2><span class="n">4</span>Funding &amp; rebalancing sequence</h2>
+  <p class="lead">Who sends what to whom, and when.</p>
+  <div class="fig">
+  <svg viewBox="0 0 1000 470" xmlns="http://www.w3.org/2000/svg" font-family="Inter, Segoe UI, system-ui, sans-serif">
+    <defs>
+      <marker id="sb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2f5bea"/></marker>
+      <marker id="sg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#129a63"/></marker>
+    </defs>
+    <g font-size="13" font-weight="700" text-anchor="middle">
+      <rect x="40" y="14" width="170" height="38" rx="9" fill="#111827"/><text x="125" y="38" fill="#fff">Liquidity Provider</text>
+      <rect x="290" y="14" width="170" height="38" rx="9" fill="#111827"/><text x="375" y="38" fill="#fff">DLT-Anduin</text>
+      <rect x="540" y="14" width="170" height="38" rx="9" fill="#2f5bea"/><text x="625" y="38" fill="#fff" font-size="11.5">DLT-Anduin R4B @ Revolut</text>
+      <rect x="790" y="14" width="170" height="38" rx="9" fill="#2f5bea"/><text x="875" y="38" fill="#fff" font-size="12">Reserve / Lending</text>
+    </g>
+    <g stroke="#cfd5df" stroke-width="1.5" stroke-dasharray="4 4">
+      <line x1="125" y1="52" x2="125" y2="460"/><line x1="375" y1="52" x2="375" y2="460"/>
+      <line x1="625" y1="52" x2="625" y2="460"/><line x1="875" y1="52" x2="875" y2="460"/>
+    </g>
+    <g font-size="11.5">
+      <!-- 1 -->
+      <line x1="871" y1="90" x2="629" y2="90" stroke="#2f5bea" stroke-width="2" marker-end="url(#sb)"/>
+      <text x="750" y="82" text-anchor="middle" fill="#2f5bea" font-weight="650">pool below threshold → draw R4B balance</text>
+      <!-- 2 -->
+      <line x1="621" y1="135" x2="379" y2="135" stroke="#2f5bea" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#sb)"/>
+      <text x="500" y="127" text-anchor="middle" fill="#2f5bea" font-weight="650">R4B insufficient → automated Pull Request</text>
+      <!-- 3 -->
+      <line x1="371" y1="180" x2="129" y2="180" stroke="#5b6475" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#sb)"/>
+      <text x="250" y="172" text-anchor="middle" fill="#374151" font-weight="650">drawdown request (API)</text>
+      <!-- 4 -->
+      <line x1="129" y1="228" x2="621" y2="228" stroke="#129a63" stroke-width="2.4" marker-end="url(#sg)"/>
+      <text x="375" y="220" text-anchor="middle" fill="#129a63" font-weight="700">assets → single whitelisted R4B address (within Liquidity SLA)</text>
+      <!-- 5 -->
+      <line x1="629" y1="272" x2="871" y2="272" stroke="#2f5bea" stroke-width="2" marker-end="url(#sb)"/>
+      <text x="750" y="264" text-anchor="middle" fill="#2f5bea" font-weight="650">Revolut allocates to Reserve / Lending</text>
+      <!-- 6 -->
+      <rect x="700" y="295" width="290" height="44" rx="8" fill="#f5f7ff" stroke="#dbe3ff"/>
+      <text x="845" y="314" text-anchor="middle" fill="#374151">… loans drawn / repaid continuously …</text>
+      <text x="845" y="330" text-anchor="middle" fill="#5b6475" font-size="10.5">80% of client interest credited to Lending Pool</text>
+      <!-- 7 -->
+      <line x1="871" y1="370" x2="629" y2="370" stroke="#2f5bea" stroke-width="2" marker-end="url(#sb)"/>
+      <text x="750" y="362" text-anchor="middle" fill="#2f5bea" font-weight="650">above Upper Threshold → surplus to R4B</text>
+      <!-- 8 -->
+      <line x1="621" y1="418" x2="129" y2="418" stroke="#129a63" stroke-width="2.4" marker-end="url(#sg)"/>
+      <text x="375" y="410" text-anchor="middle" fill="#129a63" font-weight="700">repayment → LP whitelisted deposit address only</text>
+    </g>
+  </svg>
+  </div>
+  <p class="cap">Figure 2: Drawdown and repayment sequence. Solid blue = automated by Revolut. Dashed = request messages. Green = LP asset movements.</p>
+
+  <table>
+    <thead><tr><th>Parameter</th><th>Value</th><th>Source</th></tr></thead>
+    <tbody>
+      <tr><td>Aggregated Liquidity Commitment (total facility)</td><td>GBP 40,000,000</td><td class="ref">Sch. 1</td></tr>
+      <tr><td>Reserve Pool</td><td>GBP 7,500,000 equivalent; Revolut may adjust monthly on notice</td><td class="ref">Sch. 1, def.</td></tr>
+      <tr><td>Default Lending Pool Lower Threshold</td><td>GBP 150,000 equivalent per asset</td><td class="ref">Sch. 1</td></tr>
+      <tr><td>Dynamic Lower Threshold (utilisation &lt;65% / &gt;90%)</td><td>max(17% of outstanding loans, 200k USDC)</td><td class="ref">cl. 7.2(g)</td></tr>
+      <tr><td>Guaranteed Minimum Allocation to DLT-Anduin</td><td>33% of all drawn capital on the platform, with cash true-up if missed</td><td class="ref">cl. 7.3</td></tr>
+      <tr><td>Client interest split</td><td>80% DLT-Anduin / 20% Revolut</td><td class="ref">Sch. 1</td></tr>
+      <tr><td>Reserve Pool interest (paid by Revolut)</td><td>3% BTC / ETH / USDC · 6% SOL p.a., monthly in arrears</td><td class="ref">cl. 5.10, Sch. 1</td></tr>
+      <tr><td>Pull Request delivery time</td><td>[● per Liquidity SLA, Schedule 2]</td><td class="ref">Sch. 2</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ───────── 5. Loan lifecycle ───────── -->
+<section>
+  <h2><span class="n">5</span>Life of a client loan</h2>
+  <p class="lead">Worked example: a client deposits 100 USDC and borrows 900 USDC to buy 1,000 USDC of BTC (10× notional). Maintenance margin ratio (MMR) is 3%.</p>
+
+  <ol class="steps">
+    <li><b>Onboarding.</b> Revolut onboards the client and runs KYC/CDD. The client accepts DLT-Anduin's Client Terms, so DLT-Anduin becomes the lender of record. No credit check is needed: the loan is secured purely by collateral. <span class="ref">cl. 4.2, 5.3</span></li>
+    <li><b>Draw.</b> 900 USDC moves from DLT-Anduin's USDC Lending Pool into the client's Margin Account. The client buys 1,000 USDC of BTC (900 borrowed + 100 own).</li>
+    <li><b>Lock.</b> The full 1,000 USDC of BTC is <b>collateral held for DLT-Anduin's benefit</b>. The client can't withdraw it, and it can't be used for anything else. <span class="ref">cl. 8.2</span></li>
+    <li><b>Monitor.</b> Every second Revolut computes <code>Margin Balance = assets × (1 − haircut) − (loan + accrued interest)</code> and compares it with <code>Maintenance Margin = position value × MMR</code>.</li>
+    <li><b>Close.</b> When the client closes, the position is sold. The 900 USDC principal and accrued interest go back first; the client gets the remainder. Revolut collects interest and credits DLT-Anduin's 80% to the Lending Pool. <span class="ref">cl. 11</span></li>
+    <li><b>Liquidate.</b> If the margin balance stays below the maintenance margin for 3 consecutive seconds, liquidation is triggered (t₁). With 900 debt and a 3% MMR, that happens at a position value of <b>≈ 927.8</b> (equity 27.8 = 3% of 927.8). Revolut must execute within <b>120 seconds</b> (t₂). <span class="ref">Sch. 3</span></li>
+  </ol>
+
+  <h3>Outcomes for the lender</h3>
+  <table>
+    <thead><tr><th>Scenario</th><th class="num">Sale price</th><th class="num">Debt</th><th>Who absorbs the move</th><th>Lender outcome</th></tr></thead>
+    <tbody>
+      <tr><td>Client closes in profit</td><td class="num">1,100</td><td class="num">900</td><td>Client keeps 200 profit less interest</td><td><span class="pill p-low">Repaid + interest</span></td></tr>
+      <tr><td>Client closes at a loss, above trigger</td><td class="num">950</td><td class="num">900</td><td>Client's 100 deposit absorbs the 50 loss</td><td><span class="pill p-low">Repaid + interest</span></td></tr>
+      <tr><td>Liquidation in SLA, orderly</td><td class="num">915</td><td class="num">900</td><td>Client collateral</td><td><span class="pill p-low">Repaid + interest</span></td></tr>
+      <tr><td>Liquidation in SLA, gap through bankruptcy (−4.1% from trigger)</td><td class="num">890</td><td class="num">900</td><td>Client collateral to 900, then <b>Revolut Tranche 1</b> pays 10 (cap 18.6)</td><td><span class="pill p-low">Repaid in full</span></td></tr>
+      <tr><td>Revolut late (&gt;120 s): price at t₂ still 910, executed at 800</td><td class="num">800</td><td class="num">900</td><td>Client to 900, then <b>Revolut Tranche 2</b> pays 100 execution loss (cap 134.5)</td><td><span class="pill p-low">Repaid in full</span></td></tr>
+      <tr><td>Extreme gap inside 120 s (−7.3% from trigger)</td><td class="num">860</td><td class="num">900</td><td>Client to 900, Revolut T1 pays 18.6, Liquidation Fund covers the remaining 21.4</td><td><span class="pill p-lm">Repaid if fund has balance; else 2.4% of principal at risk</span></td></tr>
+    </tbody>
+  </table>
+  <p class="cap">Numbers ignore interest and fees for clarity. Debt includes accrued interest in practice, and the SLA payout formula covers the full client debt: <code>credited = min(client debt, recovery + Revolut guarantee)</code>.</p>
+</section>
+
+<!-- ───────── 6. Loss waterfall ───────── -->
+<section>
+  <h2><span class="n">6</span>Loss-absorption waterfall</h2>
+  <p class="lead">How far price can move against a position, measured from the liquidation trigger, and who absorbs each slice. Example: BTC with a 3% MMR.</p>
+
+  <div class="fig">
+  <svg viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg" font-family="Inter, Segoe UI, system-ui, sans-serif">
+    <!-- scale: 0% at x=200, 25% at x=960 => 30.4 px per % -->
+    <defs>
+      <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <rect width="8" height="8" fill="#ece4fb"/><line x1="0" y1="0" x2="0" y2="8" stroke="#c9b5f0" stroke-width="3"/>
+      </pattern>
+    </defs>
+    <g font-size="12" fill="#374151">
+      <text x="186" y="78" text-anchor="end" font-weight="700">Executed within</text>
+      <text x="186" y="94" text-anchor="end" font-weight="700">120 s SLA</text>
+      <text x="186" y="168" text-anchor="end" font-weight="700">Executed late</text>
+      <text x="186" y="184" text-anchor="end" font-weight="700">(SLA breach)</text>
+    </g>
+    <!-- Row 1 -->
+    <rect x="200" y="60" width="91.2" height="44" fill="#129a63"/>
+    <rect x="291.2" y="60" width="60.8" height="44" fill="#2f5bea"/>
+    <rect x="352" y="60" width="608" height="44" fill="#d9dde5"/>
+    <text x="245.6" y="87" font-size="11.5" fill="#fff" font-weight="700" text-anchor="middle">Client</text>
+    <text x="321.6" y="87" font-size="11" fill="#fff" font-weight="700" text-anchor="middle">Revolut</text>
+    <text x="656" y="80" font-size="11.5" fill="#374151" font-weight="650" text-anchor="middle">Liquidation Fund (if balance) → then LP</text>
+    <text x="656" y="96" font-size="10.5" fill="#5b6475" text-anchor="middle">requires a &gt;5% BTC move inside 2 minutes with on-time execution</text>
+    <!-- Row 2 -->
+    <rect x="200" y="150" width="91.2" height="44" fill="#129a63"/>
+    <rect x="291.2" y="150" width="440.8" height="44" fill="#7a4fd6"/>
+    <rect x="732" y="150" width="228" height="44" fill="#d9dde5"/>
+    <text x="245.6" y="177" font-size="11.5" fill="#fff" font-weight="700" text-anchor="middle">Client</text>
+    <text x="511.6" y="177" font-size="12" fill="#fff" font-weight="700" text-anchor="middle">Revolut (Tranche 1 + Tranche 2), own balance sheet</text>
+    <text x="846" y="170" font-size="11" fill="#374151" font-weight="650" text-anchor="middle">Liq. Fund → LP</text>
+    <!-- axis -->
+    <line x1="200" y1="225" x2="960" y2="225" stroke="#9aa3b2"/>
+    <g font-size="11" fill="#5b6475" text-anchor="middle">
+      <line x1="200" y1="221" x2="200" y2="229" stroke="#9aa3b2"/><text x="200" y="245">0%</text>
+      <line x1="291.2" y1="221" x2="291.2" y2="229" stroke="#9aa3b2"/><text x="291.2" y="245">3%</text>
+      <line x1="352" y1="221" x2="352" y2="229" stroke="#9aa3b2"/><text x="352" y="245">5%</text>
+      <line x1="504" y1="221" x2="504" y2="229" stroke="#9aa3b2"/><text x="504" y="245">10%</text>
+      <line x1="732" y1="221" x2="732" y2="229" stroke="#9aa3b2"/><text x="732" y="245">17.5%</text>
+      <line x1="808" y1="221" x2="808" y2="229" stroke="#9aa3b2"/><text x="808" y="245">20%</text>
+      <line x1="960" y1="221" x2="960" y2="229" stroke="#9aa3b2"/><text x="960" y="245">25%</text>
+    </g>
+    <text x="580" y="275" font-size="11.5" fill="#374151" text-anchor="middle">Adverse price move from liquidation trigger (t₁), BTC</text>
+    <!-- markers -->
+    <g font-size="10" fill="#5b6475">
+      <text x="291.2" y="50" text-anchor="middle">bankruptcy price (= MMR)</text>
+      <text x="352" y="140" text-anchor="middle" fill="#2f5bea">LC₁ 5%</text>
+      <text x="732" y="140" text-anchor="middle" fill="#7a4fd6">LC₂ 17.5%</text>
+    </g>
+  </svg>
+  </div>
+  <p class="cap">Figure 3: Loss layers for BTC. ETH: LC₂ = 20%. SOL: LC₂ = 22.5%. LC₁ = 5% for all. The late-execution row assumes the price at the 120 s deadline was within the 5% band; any market loss beyond 5% that occurs <i>inside</i> the window is handled as in row 1.</p>
+
+  <table>
+    <thead><tr><th>Layer</th><th>Covers</th><th>Funded by</th><th class="ref">Ref</th></tr></thead>
+    <tbody>
+      <tr><td><b>1 · Client collateral</b></td><td>Every loss down to the bankruptcy price, which is where client equity hits zero (≈ MMR below trigger)</td><td>Client's own deposit + loan proceeds, locked at Revolut</td><td class="ref">cl. 8, 9.3(a)</td></tr>
+      <tr><td><b>2 · Revolut Tranche 1: market loss</b></td><td>Shortfall below bankruptcy, up to <b>LC₁ − MMR</b> of position value at trigger (5% total move)</td><td>In order: surplus from other liquidations, client's free margin, Liquidation Fund, <b>Revolut own funds</b></td><td class="ref">Sch. 3 §4</td></tr>
+      <tr><td><b>3 · Liquidation Fund</b></td><td>Remaining shortfall after collateral</td><td>100% of client liquidation fees until it reaches the Minimum Fund Threshold</td><td class="ref">cl. 9.2–9.3, 9.6</td></tr>
+      <tr><td><b>4 · Revolut Tranche 2: execution loss</b></td><td>Every loss caused by executing after 120 s, up to <b>LC₂ − MMR − Tranche 1</b> (17.5% BTC / 20% ETH / 22.5% SOL)</td><td>As tranche 1, including <b>Revolut own funds</b></td><td class="ref">Sch. 3 §4, cl. 9.3(c)</td></tr>
+      <tr><td><b>5 · Lender</b></td><td>Residual only</td><td>-</td><td class="ref">cl. 9.5</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout"><b>Why the liquidation timer matters.</b> The SLA separates <i>market</i> risk, which is a fast gap the engine can't outrun, from <i>operational</i> risk, which covers outages, slow execution and thin order books. Revolut fully owns operational risk up to LC₂. That converts the most common real-world cause of lender losses on margin books into a Revolut obligation.</div>
+</section>
+
+<!-- ───────── 7. Liquidation fund ───────── -->
+<section>
+  <h2><span class="n">7</span>The Liquidation Fund (insurance fund) explained</h2>
+  <div class="grid g2">
+    <div>
+      <p><b>What it is.</b> A pool that pays when a liquidated account's collateral doesn't fully cover the loan. It works like the insurance fund on a derivatives exchange: profitable liquidations pay into it, and bad debt from gapped liquidations is paid out of it. Losses from individual accounts are mutualised across the whole book instead of hitting the lender.</p>
+      <p><b>How it fills.</b> Clients pay a liquidation fee when they are liquidated. While the fund is below its Minimum Fund Threshold, <b>100%</b> of those fees go into it. <span class="ref">cl. 9.6</span></p>
+      <p><b>How big it gets.</b> The target scales with the book: <code>Minimum Fund Threshold = 10% × 90th-percentile aggregate open-position value over the last 12 months</code>. Example: if open positions peak around GBP 50m, the target is about GBP 5m.</p>
+    </div>
+    <div>
+      <p><b>Above the target.</b> Revolut may withdraw anything above the threshold as its own profit. So the threshold works as a <i>target level</i>: the fund keeps rebuilding towards it but isn't built up indefinitely.</p>
+      <p><b>Ownership.</b> Revolut owns and manages the fund, as a single consolidated fund for UK and EEA. It sits <i>in front of</i> the lender in the repayment order: collateral → Liquidation Fund → SLA compensation. <span class="ref">cl. 9.1, 9.3</span></p>
+      <p><b>Start-up.</b> The fund starts at zero on the Effective Date and grows with activity. In the early phase, lender protection comes mainly from collateral and Revolut's SLA guarantee, which Revolut's own funds back from day one.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── 8. Risk assessment ───────── -->
+<section>
+  <h2><span class="n">8</span>Risk assessment for the LP</h2>
+  <p class="lead">Each risk, the structural mitigant, and the residual rating after mitigation.</p>
+  <table>
+    <thead><tr><th style="width:18%">Risk</th><th style="width:52%">Mitigants</th><th style="width:30%">Residual</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><b>Client default / market gap</b></td>
+        <td>Over-collateralised at all times. Per-second monitoring, automated liquidation, 120 s SLA. Revolut-funded cover to 5% (on time) and 17.5–22.5% (late). Liquidation Fund behind it. Client loss is limited to collateral, so there are no consumer collection processes.</td>
+        <td><span class="pill p-low">Low</span> Exposure is limited to &gt;5% gaps inside a 2-minute window, after the Liquidation Fund.</td>
+      </tr>
+      <tr>
+        <td><b>Asset price risk on principal</b></td>
+        <td>Loans are lent and repaid <b>in kind</b>: BTC lent, BTC returned. The LP takes no directional exposure to the lent asset.</td>
+        <td><span class="pill p-low">Low</span></td>
+      </tr>
+      <tr>
+        <td><b>Misdirection / loss of funds in transit</b></td>
+        <td>One whitelisted address in each direction. Revolut accepts only agreed wallet addresses. The R4B account is dedicated to the programme. DLT-Anduin can't withdraw manually from the pools.</td>
+        <td><span class="pill p-low">Low</span></td>
+      </tr>
+      <tr>
+        <td><b>Custodian risk (Revolut)</b></td>
+        <td>Revolut is a large regulated group with segregated client-asset custody. It acquires no title to pool assets. DLT-Anduin can revoke Revolut's transfer authority if Revolut becomes insolvent or commits an unremedied breach. Real-time visibility of collateral and pool ratios. <span class="ref">cl. 7.1, 8.3</span></td>
+        <td><span class="pill p-low">Low</span></td>
+      </tr>
+      <tr>
+        <td><b>Counterparty risk on DLT-Anduin</b></td>
+        <td>DLT-Anduin is a single-purpose lender. LP capital is either undrawn at the LP or inside Revolut custody, either in DLT-Anduin's ring-fenced accounts or secured against collateral. DLT-Anduin can offer the LP: security over the R4B account and programme receivables, a live reporting feed, and drawdown/concentration limits. Granting security needs Revolut's prior consent under the draft agreement; DLT-Anduin is requesting it. <span class="ref">cl. 20.2</span></td>
+        <td><span class="pill p-lm">Low–Medium</span> Depends on the security package agreed.</td>
+      </tr>
+      <tr>
+        <td><b>Liquidity call risk</b></td>
+        <td>Draws follow predictable, threshold-based rules. The Reserve Pool absorbs intraday demand before any Pull Request. Total commitment is capped at GBP 40m. Revolut can change the Reserve Pool size at most monthly, on notice.</td>
+        <td><span class="pill p-low">Low</span> The LP must meet the Schedule 2 delivery SLA.</td>
+      </tr>
+      <tr>
+        <td><b>Regulatory / termination</b></td>
+        <td>Crypto-secured consumer credit falls under the Consumer Credit Directive exemption for crypto-secured loans (EEA). On termination, open loans run off, are reassigned to another lending pool, or are liquidated in tranches. They stay collateralised throughout. <span class="ref">cl. 14.7, 18</span></td>
+        <td><span class="pill p-low">Low</span> Run-off rather than loss.</td>
+      </tr>
+      <tr>
+        <td><b>Compliance freeze</b></td>
+        <td>Revolut may freeze an individual client account for AML or sanctions reasons. This affects timing for that loan only, not principal. <span class="ref">cl. 5.8</span></td>
+        <td><span class="pill p-low">Low</span></td>
+      </tr>
+      <tr>
+        <td><b>Contractual cap on Revolut's liability</b></td>
+        <td>The draft agreement has a general GBP 250k aggregate liability cap (cl. 13.3). Revolut has confirmed the cap is open for negotiation, and DLT-Anduin is agreeing an express carve-out so that Schedule 3 SLA compensation and Liquidation Fund obligations sit outside it.</td>
+        <td><span class="pill p-lm">Low–Medium</span> Falls to Low once the carve-out is agreed.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout green"><b>Overall: low risk.</b> The LP's principal is senior to client collateral, a Revolut-funded market-loss tranche, a mutualised Liquidation Fund and a Revolut-funded operational-loss tranche. A loss needs a &gt;5% move in BTC (or the relevant asset) inside the 2-minute execution window <i>and</i> an exhausted Liquidation Fund at the same time. Historically, moves of that speed have been limited to a handful of market-wide dislocations.</div>
+</section>
+
+<!-- ───────── 9. Economics ───────── -->
+<section>
+  <h2><span class="n">9</span>Economics</h2>
+  <div class="grid g3">
+    <div class="card"><h4>Paid on reserve</h4><p>The Reserve Pool earns interest from Revolut: 3% p.a. on BTC/ETH/USDC and 6% on SOL. So capital parked as reserve earns a yield even when it isn't lent out.</p></div>
+    <div class="card"><h4>Paid on drawn loans</h4><p>DLT-Anduin receives 80% of all client interest on loans it funds. Retail margin rates sit well above wholesale crypto lending rates.</p></div>
+    <div class="card"><h4>Volume floor</h4><p>Revolut guarantees DLT-Anduin at least 33% of all drawn capital on the platform. If that isn't met, Revolut pays the missing commission in cash.</p></div>
+  </div>
+  <p style="margin-top:16px">Proposed LP terms: <b>[● rate on drawn capital]</b> and <b>[● rate on committed / reserve capital]</b>, tenor aligned to the 12-month minimum term of the Revolut agreement with 6-month renewals.</p>
+</section>
+
+<!-- ───────── 10. Glossary ───────── -->
+<section>
+  <h2><span class="n">10</span>Glossary of SLA terms</h2>
+  <table>
+    <tbody>
+      <tr><td style="width:24%"><b>t₁ · Trigger</b></td><td>Margin balance below maintenance margin for 3 consecutive one-second ticks.</td></tr>
+      <tr><td><b>t₂ · SLA deadline</b></td><td>t₁ + 120 seconds.</td></tr>
+      <tr><td><b>t₃ · Execution</b></td><td>Actual time the position or collateral is sold.</td></tr>
+      <tr><td><b>R</b></td><td>Risk parameter: MMR for positions, haircut for collateral.</td></tr>
+      <tr><td><b>P<sub>b</sub> · Bankruptcy price</b></td><td>p(t₁) × (1 − R) for longs, × (1 + R) for shorts. Below this price, client equity is zero.</td></tr>
+      <tr><td><b>LC₁</b></td><td>Liability cap on market losses: 5% of position value at t₁.</td></tr>
+      <tr><td><b>LC₂</b></td><td>Liability cap on total losses when the SLA is breached: 17.5% BTC, 20% ETH, 22.5% SOL.</td></tr>
+      <tr><td><b>Lender payout</b></td><td><code>min(client debt, |N|·worst(p(t₃), P<sub>b</sub>) + (Cover₁ + Cover₂)·|N|·p(t₁))</code></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer>
+  This document summarises the draft Liquidity Partnership Agreement between DLT-Anduin and Revolut Ltd and its Liquidation SLA methodology. It is for discussion only and does not constitute an offer. Clause references are to the draft agreement. Figures marked [●] are to be confirmed.
+</footer>
+
+</div>
+</body>
+</html>
