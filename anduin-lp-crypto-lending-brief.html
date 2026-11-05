@@ -105,7 +105,7 @@
 <!-- ───────── 1. Summary ───────── -->
 <section>
   <h2><span class="n">1</span>Summary</h2>
-  <p class="lead">The LP funds a closed-loop programme: capital only ever moves between the LP and DLT-Anduin's dedicated account at Revolut. Every loan is over-collateralised, liquidated automatically, and backed by Revolut-funded protection layers before the LP is exposed.</p>
+  <p class="lead">The LP funds a closed-loop programme: capital only ever moves between the LP and DLT-Anduin's dedicated account at Revolut. Every loan is fully secured by the asset the client buys, plus the client's own deposit as first loss. Loans are liquidated automatically and backed by Revolut-funded protection layers before the LP is exposed.</p>
 
   <div class="grid g4">
     <div class="kpi"><div class="v">Closed loop</div><div class="l">One whitelisted route in, one out. LP ⇄ DLT-Anduin account at Revolut, nothing else.</div></div>
@@ -453,7 +453,7 @@
     <tbody>
       <tr>
         <td><b>Client default / market gap</b></td>
-        <td>Over-collateralised at all times. Per-second monitoring, automated liquidation, 120 s SLA. Revolut-funded cover to 5% (on time) and 17.5–22.5% (late). Liquidation Fund behind it. Client loss is limited to collateral, so there are no consumer collection processes.</td>
+        <td>Secured by the purchased position, with the client's deposit (e.g. 10% at 10x) as first loss. Per-second monitoring, automated liquidation, 120 s SLA. Revolut-funded cover to 5% (on time) and 17.5–22.5% (late). Liquidation Fund behind it. Client loss is limited to collateral, so there are no consumer collection processes.</td>
         <td><span class="pill p-low">Low</span> Exposure is limited to &gt;5% gaps inside a 2-minute window, after the Liquidation Fund.</td>
       </tr>
       <tr>
