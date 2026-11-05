@@ -110,7 +110,7 @@
   <div class="grid g4">
     <div class="kpi"><div class="v">Closed loop</div><div class="l">One whitelisted route in, one out. LP ⇄ DLT-Anduin account at Revolut, nothing else.</div></div>
     <div class="kpi"><div class="v">In-kind</div><div class="l">Loans are repaid in the asset that was lent. No price exposure on principal.</div></div>
-    <div class="kpi"><div class="v">5% → 17.5%+</div><div class="l">Price move from liquidation trigger covered before the LP is touched (BTC; ETH 20%, SOL 22.5% if Revolut executes late).</div></div>
+    <div class="kpi"><div class="v">5% / 17.5%</div><div class="l">Revolut covers losses up to a 5% price move past the liquidation trigger. If it liquidates later than 120 s, that cover rises to 17.5% (BTC; 20% ETH, 22.5% SOL). The LP only loses beyond that, and only once the Liquidation Fund is used up.</div></div>
     <div class="kpi"><div class="v">120 s</div><div class="l">Contractual liquidation SLA. Revolut pays for any delay beyond it.</div></div>
   </div>
 
@@ -174,8 +174,7 @@
     <!-- Reserve -->
     <rect x="455" y="92" width="150" height="90" rx="12" fill="#fff" stroke="#2f5bea" stroke-width="1.5"/>
     <text x="530" y="122" font-size="14" font-weight="700" text-anchor="middle">Reserve Pool</text>
-    <text x="530" y="141" font-size="11" fill="#5b6475" text-anchor="middle">DLT-Anduin-owned buffer</text>
-    <text x="530" y="158" font-size="11" fill="#129a63" font-weight="650" text-anchor="middle">earns 3% (SOL 6%) p.a.</text>
+    <text x="530" y="148" font-size="11" fill="#5b6475" text-anchor="middle">DLT-Anduin-owned buffer</text>
 
     <!-- Lending -->
     <rect x="455" y="225" width="150" height="90" rx="12" fill="#fff" stroke="#2f5bea" stroke-width="1.5"/>
@@ -252,10 +251,10 @@
 
   <ol class="steps">
     <li><b>Draw.</b> Revolut sends an automated <i>Pull Request</i> when DLT-Anduin's R4B balance can't cover a pool top-up. DLT-Anduin passes it to the LP, and the LP delivers to the <b>single whitelisted address</b>, DLT-Anduin's R4B deposit address. Revolut accepts deliveries only from wallet addresses agreed in writing. <span class="ref">cl. 6.1, 6.5, 7.2(f), Sch. 2</span></li>
-    <li><b>Allocate.</b> Revolut moves assets from the R4B account into the Reserve Pool up to the Schedule 1 level (currently GBP 7.5m equivalent). The Reserve Pool <b>earns interest paid by Revolut</b>: 3% p.a. on BTC/ETH/USDC, 6% on SOL. <span class="ref">cl. 5.10, 7.2(c), Sch. 1</span></li>
+    <li><b>Allocate.</b> Revolut moves assets from the R4B account into the Reserve Pool up to the Schedule 1 level (currently GBP 7.5m equivalent). <span class="ref">cl. 7.2(c), Sch. 1</span></li>
     <li><b>Top up.</b> When a Lending Pool falls below its Lower Threshold, Revolut refills it from the R4B account or the Reserve Pool. The threshold is dynamic: when utilisation is &lt;65% for a day or &gt;90% for an hour, it resets to max(17% of outstanding loans, 200k USDC). <span class="ref">cl. 7.2(a),(d),(g)</span></li>
     <li><b>Lend.</b> When a client opens a margin trade, the loan goes from the Lending Pool into the client's Margin Account. The loan proceeds (e.g. the BTC bought) stay there as collateral alongside the client's own deposit. <span class="ref">cl. 8.1, def. "Collateral"</span></li>
-    <li><b>Repay.</b> When the position closes, or is liquidated, principal goes back to the Lending Pool in the asset that was lent. DLT-Anduin's share of client interest (80%) is credited to the Lending Pool too. <span class="ref">cl. 11.1–11.2</span></li>
+    <li><b>Repay.</b> When the position closes, or is liquidated, principal goes back to the Lending Pool in the asset that was lent. DLT-Anduin's share of client interest is credited to the Lending Pool too. <span class="ref">cl. 11.1–11.2</span></li>
     <li><b>Return.</b> When a Lending Pool exceeds its Upper Threshold, Revolut sends the surplus back to DLT-Anduin's R4B account. From there, assets go back only to the LP's whitelisted address. <span class="ref">cl. 7.2(b)</span></li>
   </ol>
 
@@ -301,7 +300,7 @@
       <!-- 6 -->
       <rect x="700" y="295" width="290" height="44" rx="8" fill="#f5f7ff" stroke="#dbe3ff"/>
       <text x="845" y="314" text-anchor="middle" fill="#374151">… loans drawn / repaid continuously …</text>
-      <text x="845" y="330" text-anchor="middle" fill="#5b6475" font-size="10.5">80% of client interest credited to Lending Pool</text>
+      <text x="845" y="330" text-anchor="middle" fill="#5b6475" font-size="10.5">DLT-Anduin interest share credited to Lending Pool</text>
       <!-- 7 -->
       <line x1="871" y1="370" x2="629" y2="370" stroke="#2f5bea" stroke-width="2" marker-end="url(#sb)"/>
       <text x="750" y="362" text-anchor="middle" fill="#2f5bea" font-weight="650">above Upper Threshold → surplus to R4B</text>
@@ -321,8 +320,6 @@
       <tr><td>Default Lending Pool Lower Threshold</td><td>GBP 150,000 equivalent per asset</td><td class="ref">Sch. 1</td></tr>
       <tr><td>Dynamic Lower Threshold (utilisation &lt;65% / &gt;90%)</td><td>max(17% of outstanding loans, 200k USDC)</td><td class="ref">cl. 7.2(g)</td></tr>
       <tr><td>Guaranteed Minimum Allocation to DLT-Anduin</td><td>33% of all drawn capital on the platform, with cash true-up if missed</td><td class="ref">cl. 7.3</td></tr>
-      <tr><td>Client interest split</td><td>80% DLT-Anduin / 20% Revolut</td><td class="ref">Sch. 1</td></tr>
-      <tr><td>Reserve Pool interest (paid by Revolut)</td><td>3% BTC / ETH / USDC · 6% SOL p.a., monthly in arrears</td><td class="ref">cl. 5.10, Sch. 1</td></tr>
       <tr><td>Pull Request delivery time</td><td>[● per Liquidity SLA, Schedule 2]</td><td class="ref">Sch. 2</td></tr>
     </tbody>
   </table>
@@ -338,7 +335,7 @@
     <li><b>Draw.</b> 900 USDC moves from DLT-Anduin's USDC Lending Pool into the client's Margin Account. The client buys 1,000 USDC of BTC (900 borrowed + 100 own).</li>
     <li><b>Lock.</b> The full 1,000 USDC of BTC is <b>collateral held for DLT-Anduin's benefit</b>. The client can't withdraw it, and it can't be used for anything else. <span class="ref">cl. 8.2</span></li>
     <li><b>Monitor.</b> Every second Revolut computes <code>Margin Balance = assets × (1 − haircut) − (loan + accrued interest)</code> and compares it with <code>Maintenance Margin = position value × MMR</code>.</li>
-    <li><b>Close.</b> When the client closes, the position is sold. The 900 USDC principal and accrued interest go back first; the client gets the remainder. Revolut collects interest and credits DLT-Anduin's 80% to the Lending Pool. <span class="ref">cl. 11</span></li>
+    <li><b>Close.</b> When the client closes, the position is sold. The 900 USDC principal and accrued interest go back first; the client gets the remainder. Revolut collects interest and credits DLT-Anduin's share to the Lending Pool. <span class="ref">cl. 11</span></li>
     <li><b>Liquidate.</b> If the margin balance stays below the maintenance margin for 3 consecutive seconds, liquidation is triggered (t₁). With 900 debt and a 3% MMR, that happens at a position value of <b>≈ 927.8</b> (equity 27.8 = 3% of 927.8). Revolut must execute within <b>120 seconds</b> (t₂). <span class="ref">Sch. 3</span></li>
   </ol>
 
@@ -506,8 +503,7 @@
 <section>
   <h2><span class="n">9</span>Economics</h2>
   <div class="grid g3">
-    <div class="card"><h4>Paid on reserve</h4><p>The Reserve Pool earns interest from Revolut: 3% p.a. on BTC/ETH/USDC and 6% on SOL. So capital parked as reserve earns a yield even when it isn't lent out.</p></div>
-    <div class="card"><h4>Paid on drawn loans</h4><p>DLT-Anduin receives 80% of all client interest on loans it funds. Retail margin rates sit well above wholesale crypto lending rates.</p></div>
+    <div class="card"><h4>Paid on drawn loans</h4><p>DLT-Anduin receives a share of client interest on every loan it funds. Retail margin rates sit well above wholesale crypto lending rates.</p></div>
     <div class="card"><h4>Volume floor</h4><p>Revolut guarantees DLT-Anduin at least 33% of all drawn capital on the platform. If that isn't met, Revolut pays the missing commission in cash.</p></div>
   </div>
   <p style="margin-top:16px">Proposed LP terms: <b>[● rate on drawn capital]</b> and <b>[● rate on committed / reserve capital]</b>, tenor aligned to the 12-month minimum term of the Revolut agreement with 6-month renewals.</p>
