@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DLT Product &amp; Technical Operating Primer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap">
+<style>
+  :root{
+    --bg:#f6f8fb; --surface:#ffffff; --border:#e3e7ee; --ink:#0E1A22;
+    --text:var(--ink); --muted:#5b6577;
+    --petrol-deep:#062536; --petrol:#0E4A66; --petrol-mid:#11617E;
+    --mint:#7BD4C6; --blue:#3b6cd9; --blue-soft:rgba(59,108,217,0.08); --blue-border:rgba(59,108,217,0.28);
+    --green:#1f9f6c; --green-soft:rgba(31,159,108,0.08); --green-border:rgba(31,159,108,0.32);
+    --yellow:#d4922a; --yellow-soft:rgba(212,146,42,0.09); --yellow-border:rgba(212,146,42,0.36);
+    --red:#c94a4a; --red-soft:rgba(201,74,74,0.07); --red-border:rgba(201,74,74,0.32);
+    --purple:#6b50d9;
+    --font-display:'Helvetica Neue','Inter Tight',system-ui,sans-serif;
+    --font-body:'Inter Tight','Helvetica Neue',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.58;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:48px 28px 90px}
+  header.doc{border-bottom:3px solid var(--petrol);padding-bottom:22px;margin-bottom:30px}
+  .eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);font-weight:700}
+  h1{font-family:var(--font-display);font-size:36px;line-height:1.1;margin:.35em 0 .25em;font-weight:800;color:var(--petrol-deep)}
+  .lede{color:var(--muted);font-size:16.5px;max-width:800px}
+  .meta{display:flex;gap:22px;flex-wrap:wrap;margin-top:14px;font-size:13px;color:var(--muted)}
+  .meta b{color:var(--petrol)}
+  h2{font-family:var(--font-display);font-size:24px;margin:56px 0 10px;color:var(--petrol-deep);font-weight:800;border-left:4px solid var(--blue);padding-left:12px;scroll-margin-top:20px}
+  h2 .num{color:var(--blue);margin-right:6px}
+  h3{font-family:var(--font-display);font-size:18px;margin:30px 0 6px;color:var(--petrol);font-weight:700;scroll-margin-top:20px}
+  h4{font-size:13px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:20px 0 4px;font-weight:700}
+  p{margin:.5em 0}
+  a{color:var(--blue)}
+  strong{color:var(--ink)}
+  ul,ol{margin:.4em 0 .8em;padding-left:22px}
+  li{margin:.32em 0}
+  code{font-size:12.5px;background:#eef1f6;border-radius:4px;padding:1px 5px}
+
+  .toc{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px 22px;columns:2;column-gap:36px;font-size:14px}
+  .toc a{text-decoration:none;color:var(--petrol);display:block;padding:2px 0;break-inside:avoid}
+  .toc a:hover{color:var(--blue)}
+  @media(max-width:720px){.toc{columns:1}}
+
+  .callout{background:var(--blue-soft);border:1px solid var(--blue-border);border-left:4px solid var(--blue);border-radius:8px;padding:14px 18px;margin:18px 0;color:var(--petrol-deep);font-size:15px}
+  .callout.warn{background:var(--yellow-soft);border-color:var(--yellow-border);border-left-color:var(--yellow)}
+  .callout.red{background:var(--red-soft);border-color:var(--red-border);border-left-color:var(--red)}
+  .callout.green{background:var(--green-soft);border-color:var(--green-border);border-left-color:var(--green)}
+  .callout .k{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;margin-bottom:4px;color:var(--petrol)}
+
+  .thesis{background:var(--petrol-deep);color:#e8eef2;border-radius:12px;padding:24px 26px;margin:22px 0}
+  .thesis .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mint);font-weight:700}
+  .thesis .v{font-family:var(--font-display);font-size:21px;font-weight:800;color:#fff;margin:6px 0 10px;line-height:1.3}
+  .thesis ul{margin:0;color:#c9d6de;font-size:14.5px}
+  .thesis strong{color:#fff}
+
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:16px 0}
+  .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:16px 0}
+  @media(max-width:820px){.grid3,.grid2{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--border);border-top:4px solid var(--blue);border-radius:10px;padding:16px 16px}
+  .card.c1{border-top-color:var(--petrol)} .card.c2{border-top-color:var(--green)} .card.c3{border-top-color:var(--purple)} .card.c4{border-top-color:var(--yellow)} .card.c5{border-top-color:var(--red)}
+  .card .tag{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .card .name{font-family:var(--font-display);font-size:16px;font-weight:800;color:var(--petrol-deep);margin:3px 0 6px;line-height:1.2}
+  .card p,.card li{font-size:13.5px;color:#2c3746}
+
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px;background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+  th{background:var(--petrol-deep);color:#fff;font-family:var(--font-display);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:700}
+  tr:last-child td{border-bottom:none}
+  td.prod{font-weight:700;color:var(--petrol-deep)}
+  .tbl-wrap{overflow-x:auto}
+
+  .pill{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;border-radius:20px;padding:2px 9px;white-space:nowrap;border:1px solid}
+  .p-high{color:var(--red);background:var(--red-soft);border-color:var(--red-border)}
+  .p-med{color:var(--yellow);background:var(--yellow-soft);border-color:var(--yellow-border)}
+  .p-low{color:var(--muted);background:#f0f2f6;border-color:var(--border)}
+  .p-lowmed{color:#9a7a2c;background:#faf6ec;border-color:#e6d6ae}
+  .p-live{color:var(--green);background:var(--green-soft);border-color:var(--green-border)}
+  .p-tbd{color:var(--purple);background:rgba(107,80,217,.07);border-color:rgba(107,80,217,.3)}
+
+  .phases{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:16px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--surface)}
+  @media(max-width:820px){.phases{grid-template-columns:1fr}}
+  .phase{padding:16px 16px;border-right:1px solid var(--border)}
+  .phase:last-child{border-right:none}
+  .phase .ph{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--blue)}
+  .phase .pt{font-family:var(--font-display);font-weight:800;color:var(--petrol-deep);font-size:15px;margin:2px 0 6px}
+  .phase ul{font-size:13.3px;padding-left:18px;margin:0}
+  .phase.now{background:#fbfcfe}
+  .phase.tgt{background:var(--green-soft)}
+
+  .flow{display:flex;align-items:stretch;gap:0;margin:16px 0;flex-wrap:wrap}
+  .flow .step{flex:1;min-width:150px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:11px 12px;font-size:13px;position:relative}
+  .flow .step b{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);margin-bottom:3px}
+  .flow .arr{display:flex;align-items:center;padding:0 6px;color:var(--muted);font-weight:800}
+
+  .roles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:16px 0}
+  @media(max-width:820px){.roles{grid-template-columns:1fr}}
+
+  .timeline{position:relative;margin:20px 0 10px;padding-left:22px;border-left:3px solid var(--border)}
+  .tl{position:relative;margin:0 0 16px}
+  .tl:before{content:"";position:absolute;left:-30px;top:5px;width:13px;height:13px;border-radius:50%;background:var(--blue);border:3px solid var(--bg)}
+  .tl.g:before{background:var(--green)} .tl.y:before{background:var(--yellow)} .tl.p:before{background:var(--purple)}
+  .tl .when{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--blue)}
+  .tl .what{font-size:14.5px}
+
+  .qa{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin:14px 0}
+  .qa .q{font-weight:800;color:var(--petrol-deep);font-size:15px}
+  .qa .a{margin-top:6px;font-size:14.3px}
+  .verdict{display:inline-block;font-weight:800;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--green);margin-right:6px}
+  .verdict.c{color:var(--yellow)}
+
+  .agenda{counter-reset:ag;list-style:none;padding:0}
+  .agenda li{counter-increment:ag;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 16px 12px 52px;position:relative;margin:8px 0}
+  .agenda li:before{content:counter(ag);position:absolute;left:14px;top:11px;width:26px;height:26px;border-radius:50%;background:var(--petrol);color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
+
+  footer.doc{margin-top:56px;border-top:1px solid var(--border);padding-top:16px;color:var(--muted);font-size:12.5px}
+  @media print{body{background:#fff}.wrap{padding:0}h2{break-after:avoid}.card,.qa,table{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="doc">
+  <div class="eyebrow">DLT Finance · Product &amp; Technical Operating Primer</div>
+  <h1>How DLT positions itself, product by product — and how we run each one technically</h1>
+  <p class="lede">A working reference for anyone joining the product and trading side of DLT and for the Head of Product. It covers every product line we run or are building, what role DLT plays in each, where we can take shortcuts, what the temporary solutions look like, and what the end state is. It also sets priorities and maps clients to product lines with expected go-live dates.</p>
+  <div class="meta">
+    <span><b>Status:</b> Living document. Update the tables when dates or scope change</span>
+    <span><b>Version:</b> v1.0 · November 2026</span>
+    <span><b>Audience:</b> Head of Product, new joiners (product, trading, ops, engineering)</span>
+  </div>
+</header>
+
+<nav class="toc">
+  <a href="#s0">0 · The one-page version</a>
+  <a href="#s1">1 · Priorities, clients &amp; go-live dates</a>
+  <a href="#s2">2 · Spot trading (four flows)</a>
+  <a href="#s2a">&nbsp;&nbsp;&nbsp;2.1 Prop spot → move to Uphold</a>
+  <a href="#s2b">&nbsp;&nbsp;&nbsp;2.2 Hedge-first spot for Uphold</a>
+  <a href="#s2c">&nbsp;&nbsp;&nbsp;2.3 OEMS / prime-broker flows</a>
+  <a href="#s2d">&nbsp;&nbsp;&nbsp;2.4 Nexo spot (until MiCAR)</a>
+  <a href="#s3">3 · Perps (commission broker + best execution)</a>
+  <a href="#s4">4 · Structured products</a>
+  <a href="#s5">5 · ETPs / securitized perps (Anduin)</a>
+  <a href="#s6">6 · Other tokenized securities (xStocks etc.)</a>
+  <a href="#s7">7 · Haruko: the target operating system</a>
+  <a href="#s8">8 · Shortcuts &amp; temporary solutions register</a>
+  <a href="#s9">9 · Roadmap timeline</a>
+  <a href="#s10">10 · Open questions &amp; decisions needed</a>
+  <a href="#s11">11 · Onsite agenda (to be discussed in person)</a>
+  <a href="#s12">12 · Glossary</a>
+</nav>
+
+<!-- ================================================================ -->
+<h2 id="s0"><span class="num">0</span>The one-page version</h2>
+
+<div class="thesis">
+  <div class="k">Positioning in one sentence</div>
+  <div class="v">DLT is the regulated MiFID product layer of the group. We hand non-MiFID spot trading and trading ops to Uphold, and we run every MiFID product (perps, structured products, ETPs, tokenized securities) through one operating system: Haruko.</div>
+  <ul>
+    <li><strong>Get out of what costs us money:</strong> balance-sheet-heavy prop spot (inventory, LP collateral, manual settlement on the legacy platform) moves to Uphold through an API proxy.</li>
+    <li><strong>Put our effort where the licence is the moat:</strong> perps as a commission broker, OTC structured products, securitized perps / ETPs, tokenized securities. Partners cannot do these without a MiFID entity.</li>
+    <li><strong>One view of risk:</strong> every MiFID flow ends up in Haruko (OEMS + PMS). Until then, temporary solutions are fine as long as they can feed Haruko later. We don't build tooling that Haruko will replace.</li>
+    <li><strong>Shortcuts are allowed, but they need an exit:</strong> every temporary solution in §8 has an exit criterion and an owner.</li>
+  </ul>
+</div>
+
+<div class="grid3">
+  <div class="card c1"><div class="tag">Exit / offload</div><div class="name">Prop spot</div><p>Baader, Taiwan Mobile, YouHodler (soon). Proxy Uphold's API and settle from Uphold wallets. No inventory and no LP collateral on DLT's balance sheet.</p></div>
+  <div class="card c2"><div class="tag">Core MiFID</div><div class="name">Perps · Structured · ETPs · Tokenized securities</div><p>Where DLT earns its margin. Best-ex for perps, Nexo as the first client for structured products and ETPs, Anduin as issuer and LP for securitized perps.</p></div>
+  <div class="card c3"><div class="tag">Infrastructure</div><div class="name">Haruko</div><p>OEMS + PMS. Fully available in about 6 months, with flows migrated in stages. It becomes the single source of truth for risk, exposure and trading activity.</p></div>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="s1"><span class="num">1</span>Priorities, clients &amp; go-live dates</h2>
+<p>Priority means engineering and product attention. It does not mean revenue. Dates marked <span class="pill p-tbd">TBC</span> have not been committed yet. The Head of Product should confirm them with the client owner and update this table.</p>
+
+<div class="tbl-wrap">
+<table>
+  <tr><th>Product line</th><th>DLT role</th><th>Clients</th><th>Priority</th><th>Expected go-live / key date</th><th>Platform today → target</th></tr>
+  <tr><td class="prod">Spot: prop (→ Uphold proxy)</td><td>Prop / principal today → API proxy to Uphold</td><td>Baader <span class="pill p-live">live</span><br>Taiwan Mobile <span class="pill p-live">live</span><br>YouHodler <span class="pill p-tbd">onboarding</span></td><td><span class="pill p-med">Medium</span></td><td>Uphold migration: <span class="pill p-tbd">TBC</span>. Target: before YouHodler goes live, so YouHodler is onboarded straight onto the new model</td><td>Legacy platform → Uphold API proxy</td></tr>
+  <tr><td class="prod">Spot: hedge-first liquidations</td><td>Executing broker / riskless principal (hedge first, then fill)</td><td>Uphold</td><td><span class="pill p-lowmed">Low–Mid</span></td><td><span class="pill p-tbd">TBC</span>. Go-live is further out</td><td>DLT hedging engine → Haruko OEMS for routing/algos</td></tr>
+  <tr><td class="prod">Spot: OEMS / prime-broker</td><td>Prime broker (record only, no risk-taking)</td><td>Clients trading via OneZero (and similar) on DLT's B2C2 and other LP accounts</td><td><span class="pill p-low">Low</span></td><td>Existing. No new build until demand picks up</td><td>Manual recording → Haruko booking; settlement via Uphold wallets</td></tr>
+  <tr><td class="prod">Spot: Nexo prop</td><td>Prop (temporary)</td><td>Nexo</td><td><span class="pill p-low">Low (maintain)</span></td><td><b>Ends Q1 2027</b> when Nexo gets its own MiCAR licence</td><td>Keep as-is → wind down</td></tr>
+  <tr><td class="prod">Perps</td><td>Financial commission broker (Finanzkommissionsgeschäft)</td><td>Existing perps partners on the EDX implementation. <span class="pill p-tbd">client list TBC</span></td><td><span class="pill p-high">High</span></td><td>Exchange/orderbook health checks: <b>~6 weeks (late Dec 2026)</b><br>Venue selection / execution policy: <b>mid Q2 2027</b></td><td>EDX single venue → multi-venue with best-ex, routed via Haruko</td></tr>
+  <tr><td class="prod">Structured products (OTC)</td><td>Prop counterparty / pricer</td><td>Nexo (non-German clients): ZIC + DCI. No other clients until Haruko is integrated</td><td><span class="pill p-high">High</span></td><td>Nexo ZIC/DCI: <span class="pill p-tbd">TBC</span><br>Own strategies / other clients: after Haruko (~Q2 2027)</td><td>Nexo monitoring → Haruko risk + own pricing</td></tr>
+  <tr><td class="prod">ETPs / securitized perps</td><td>Prop/MM, back-to-back, or investment broker (per client)</td><td>Nexo (German clients: investment broker only)<br>Pipeline: BingX, CoinW (integration flows drafted)</td><td><span class="pill p-high">High</span></td><td>Nexo: <span class="pill p-tbd">TBC</span>, tied to Anduin programme launch<br>Others: <span class="pill p-tbd">TBC</span></td><td>DLT DB + fair-price engine → Haruko</td></tr>
+  <tr><td class="prod">Tokenized securities (xStocks etc.)</td><td>Prop (preferred) or commission broker</td><td><span class="pill p-tbd">TBC</span></td><td><span class="pill p-med">Medium</span></td><td>Depends on the safekeeping-of-securities licence, expected <b>Q3 2027</b>, and the onsite discussion</td><td>Spot risk approach → Haruko</td></tr>
+  <tr><td class="prod">Haruko integration</td><td>Infrastructure</td><td>All MiFID flows</td><td><span class="pill p-high">High</span></td><td>Staged; <b>full availability ~6 months (≈ May 2027)</b></td><td>-</td></tr>
+</table>
+</div>
+
+<div class="callout"><span class="k">How to read the priorities</span>
+<b>High</b> = the licence-driven core and its infrastructure (perps best-ex, structured products, ETPs, Haruko). <b>Medium</b> = removes cost and operational drag (Uphold migration) or opens new MiFID revenue that still has external dependencies (tokenized securities). <b>Low</b> = keep running and don't invest. If something has to slip, slip from the bottom of the list.</div>
+
+<!-- ================================================================ -->
+<h2 id="s2"><span class="num">2</span>Spot trading: four different flows</h2>
+<p>"Spot" at DLT covers four flows that work very differently. Don't treat them as one product. They differ in risk, settlement and future direction:</p>
+
+<div class="tbl-wrap">
+<table>
+  <tr><th>Flow</th><th>Who takes the risk</th><th>Inventory on DLT balance sheet</th><th>Settlement</th><th>Future</th></tr>
+  <tr><td class="prod">2.1 Prop spot</td><td>DLT</td><td>Yes, significant</td><td>DLT wallets ↔ client wallets; cash trapped at LPs</td><td>Move to Uphold</td></tr>
+  <tr><td class="prod">2.2 Hedge-first</td><td>LP (DLT hedges before filling)</td><td>No (transient only)</td><td>Same as 2.1 target model</td><td>Build when go-live approaches</td></tr>
+  <tr><td class="prod">2.3 OEMS / prime-broker</td><td>Client (DLT carries counterparty risk only)</td><td>No</td><td>Between parties; DLT records</td><td>Maintain; settle via Uphold wallets</td></tr>
+  <tr><td class="prod">2.4 Nexo prop</td><td>DLT</td><td>Yes</td><td>As 2.1</td><td>Ends Q1 2027</td></tr>
+</table>
+</div>
+
+<!-- ---------- 2.1 ---------- -->
+<h3 id="s2a">2.1 Prop spot (Baader, Taiwan Mobile, soon YouHodler) → move to Uphold</h3>
+<p><b>What it is.</b> DLT acts as principal. It quotes clients, holds inventory, hedges with LPs and settles both legs. Of all our flows, this is the hardest to run:</p>
+<ul>
+  <li><b>Heavy post-trade work:</b> settlement runs with every client and every LP, reconciliations, and fiat and crypto legs on different timelines.</li>
+  <li><b>Trapped cash:</b> collateral sits with LPs to support credit lines, so the capital isn't working.</li>
+  <li><b>Inventory risk for little flow:</b> we have to hold significant inventory relative to volume. When crypto falls for a month, that inventory produces <b>negative PnL</b>.</li>
+  <li><b>Legacy platform:</b> execution runs on the old stack, so slippage and operational incidents happen.</li>
+</ul>
+
+<h4>Target model: proxy the Uphold API</h4>
+<div class="flow">
+  <div class="step"><b>1 · Client</b>Sends an RFQ/order to DLT's existing API. The client-facing interface doesn't change.</div><div class="arr">→</div>
+  <div class="step"><b>2 · DLT proxy</b>Applies the client's limits and spread/fee, then forwards the order to the Uphold API.</div><div class="arr">→</div>
+  <div class="step"><b>3 · Uphold</b>Executes from its own liquidity and inventory. DLT holds no inventory.</div><div class="arr">→</div>
+  <div class="step"><b>4 · Settlement</b>Crypto moves directly <b>Uphold wallet ↔ client wallet</b>. DLT records and reconciles.</div>
+</div>
+<p>The result is that all trading and trading ops for this flow go to the parent company, and DLT can put its focus on MiFID products. This also <b>removes most of our post-trade processes</b>, which is the main reason this is Medium priority.</p>
+
+<h4>The open questions, answered as far as we can today</h4>
+<div class="qa">
+  <div class="q">Q1 · Can settlement happen directly from Uphold custody?</div>
+  <div class="a"><span class="verdict">Yes, technically.</span> Uphold can send directly from its custody wallets to the client's whitelisted addresses and receive into them. Legally, the setup decides who is the client's counterparty, and there are two ways to set it up:
+  <ul>
+    <li><b>(a) DLT remains principal, Uphold settles on DLT's behalf.</b> The client contract stays with DLT, and Uphold acts as DLT's execution and settlement provider. This is the least disruptive for clients, who keep their DLT contract. Under MiCA and KWG this is <b>outsourcing of a material function</b>. That means an outsourcing agreement, a notification to BaFin, and DLT keeping control and audit rights over Uphold's settlement process. The client's T&amp;Cs/SSIs have to say that settlement may come from a third-party wallet operated on DLT's behalf.</li>
+    <li><b>(b) DLT becomes an introducer/broker and the client faces Uphold directly.</b> This is cleaner for settlement, but each client needs a contract and KYB with the relevant Uphold entity, and DLT's revenue becomes a fee or rebate. That may be the right answer for some clients and not others.</li>
+  </ul>
+  Recommendation: <b>model (a) as the default</b>, because it keeps relationships and contracts intact, with model (b) available for clients who prefer to face Uphold. Legal/Compliance needs to confirm.</div>
+</div>
+<div class="qa">
+  <div class="q">Q2 · If Uphold settles from its custody, does Uphold have Travel Rule obligations?</div>
+  <div class="a"><span class="verdict c">Yes, very likely.</span> Under the EU Transfer of Funds Regulation (Reg. (EU) 2023/1113), Travel Rule duties sit with the <b>CASP that carries out the transfer</b>. When the coins leave Uphold-controlled custody, Uphold is the originator-side CASP. It has to send originator and beneficiary information, and it has to screen what it receives on inbound transfers. What follows from that:
+  <ul>
+    <li>We need to agree <b>who is named as the originator</b>: DLT (under model (a), DLT is Uphold's customer and the transfer is made for DLT) or the underlying client. Under (a), originator = DLT, beneficiary = the client/its custodian.</li>
+    <li>Find out <b>which Uphold entity</b> runs the wallets and what its regulatory status is (EU CASP under MiCA, or a non-EU entity). A non-EU sender into EU clients still triggers EU-side Travel Rule checks for the receiving CASP. US entities fall under the FinCEN Travel Rule (≥ USD 3,000).</li>
+    <li><b>Protocol interoperability:</b> Baader, Taiwan Mobile and YouHodler have to be able to receive Travel Rule messages from Uphold's provider (Notabene / Sumsub / TRP / etc.). Check this per client early. It is a common reason go-lives slip.</li>
+    <li>For self-hosted client wallets above €1,000, there are proof-of-ownership requirements (signed message or Satoshi test). Uphold has to be able to perform or accept these.</li>
+  </ul>
+  Action: Compliance writes a one-page Travel Rule allocation memo (DLT vs Uphold) <b>before</b> the technical build starts.</div>
+</div>
+<div class="qa">
+  <div class="q">Q3 · What does the migration look like?</div>
+  <div class="a">
+  <ol>
+    <li><b>Legal &amp; contracts:</b> intra-group outsourcing/settlement agreement DLT ↔ Uphold; client T&amp;C/SSI amendments; BaFin outsourcing notification.</li>
+    <li><b>Travel Rule &amp; KYB:</b> Uphold set up as a known counterparty in each client's Travel Rule tool; each client completes KYB on Uphold where required.</li>
+    <li><b>Wallet whitelisting:</b> Uphold gives one set of deposit/withdrawal addresses per asset and chain. Each client whitelists them (most have a 24–72h cooling period, and some need dual approval). In return, clients' addresses are whitelisted at Uphold. Do proof-of-ownership tests per address.</li>
+    <li><b>Fiat leg:</b> decide where cash settles (DLT bank account vs Uphold account). This is often the forgotten part and should be decided first.</li>
+    <li><b>Tech:</b> build the proxy (order translation, client limits, markup, error mapping), a settlement instruction feed from Uphold, and a reconciliation job (Uphold fills ↔ client confirms ↔ on-chain transfers).</li>
+    <li><b>Parallel run:</b> 2–4 weeks per client. Small tickets on the new path, everything else on legacy. Run daily three-way reconciliation.</li>
+    <li><b>Cut-over, client by client:</b> notify the SSI change with notice, switch routing, freeze the old addresses after the last settlement.</li>
+    <li><b>Unwind:</b> sell down or transfer DLT inventory to Uphold, recall collateral from LPs, close LP accounts that are no longer needed, and decommission the legacy spot settlement jobs.</li>
+  </ol>
+  Suggested order: <b>YouHodler first</b>, onboarded straight onto the new model so we never build legacy settlement for them. Then <b>Taiwan Mobile</b>, then <b>Baader</b>. Baader goes last because its process is the most mature and the most regulated, so we should change it once the model is proven.</div>
+</div>
+
+<div class="callout warn"><span class="k">Shortcut / temporary solution</span>
+Until the proxy is live: <b>stop adding inventory</b>. Hedge each client trade back-to-back with an LP straight away, rather than warehousing. That stops most of the negative-PnL bleed in down months without waiting for the migration. A second option, if the settlement agreement takes longer: <b>execution via Uphold, settlement still from DLT wallets</b>, pre-funded by Uphold. It's less clean, but it takes inventory risk off the book early.</div>
+
+<!-- ---------- 2.2 ---------- -->
+<h3 id="s2b">2.2 Hedge-first spot for Uphold (client liquidations)</h3>
+<p><b>What it is.</b> Uphold uses the DLT hedging engine to liquidate its clients' positions. This happens rarely, but when it does it is <b>usually in volatile markets</b>. The rule: <b>DLT hedges first with an LP, gets an execution price, and only then fills Uphold's order at that price</b>. DLT should never be left holding the position.</p>
+
+<h4>Execution logic (spec for the engine)</h4>
+<div class="flow">
+  <div class="step"><b>1 · Receive</b>Uphold sell order (asset, qty, optional limit, urgency/max duration).</div><div class="arr">→</div>
+  <div class="step"><b>2 · Hedge</b>Send an IOC limit to primary LP at mid ± <b>max slippage</b> band.</div><div class="arr">→</div>
+  <div class="step"><b>3 · Partial?</b>Re-send the remainder with max slippage to the <b>same or an alternative venue</b> (ranked by depth/price).</div><div class="arr">→</div>
+  <div class="step"><b>4 · Still open?</b>Switch to a <b>TWAP/VWAP</b> schedule over the allowed window.</div><div class="arr">→</div>
+  <div class="step"><b>5 · Fill Uphold</b>At the VWAP of the hedge fills (+ agreed fee). Report any remainder that wasn't filled.</div>
+</div>
+
+<table>
+  <tr><th>Parameter</th><th>Meaning</th><th>Needs agreement with Uphold</th></tr>
+  <tr><td>max_slippage_bps</td><td>Band around reference mid per child order</td><td>Yes, per asset and per volatility regime</td></tr>
+  <tr><td>venue_ladder</td><td>Ordered list of LPs/venues to retry on</td><td>No (DLT internal)</td></tr>
+  <tr><td>max_retries / retry_interval</td><td>How often to re-send before switching to algo</td><td>No</td></tr>
+  <tr><td>algo_mode, algo_window</td><td>TWAP or VWAP, and the maximum duration</td><td>Yes. Uphold must accept that a fill can take minutes</td></tr>
+  <tr><td>remainder_policy</td><td>What to do if the order still isn't fully filled: return the partial, or keep working until cancelled</td><td><b>Yes. This must be in the contract</b></td></tr>
+  <tr><td>price_reporting</td><td>One average price or per-fill breakdown</td><td>Yes</td></tr>
+</table>
+
+<p><b>Settlement</b> follows the target model in 2.1 (Uphold wallets ↔ LP/DLT accounts). Because Uphold is both the client and the settlement wallet operator, the flow is simpler than the third-party case. Pre-fund or pre-position collateral at the hedge LPs so a liquidation is never blocked by credit lines exactly when markets are moving.</p>
+<div class="callout"><span class="k">Shortcut</span>
+Go-live is further out, so don't build a bespoke algo engine. Version 1 = IOC retry ladder + simple time-sliced TWAP inside the existing hedging engine. Once Haruko's OEMS is connected, move the slicing/VWAP logic to Haruko's algos and keep only the "hedge-first, then fill client" orchestration on our side.</div>
+
+<!-- ---------- 2.3 ---------- -->
+<h3 id="s2c">2.3 OEMS / prime-broker flows (OneZero on DLT's B2C2 and other accounts)</h3>
+<p><b>What it is.</b> Some clients trade through an OEMS such as OneZero directly on DLT's dedicated accounts at B2C2 and other LPs. DLT only <b>records the transactions</b>. It takes no market risk and holds no inventory, and acts as <b>prime broker</b> between the parties.</p>
+<ul>
+  <li><b>"No risk" is not quite true:</b> DLT is still B2C2's counterparty. If a client doesn't settle, DLT owes B2C2. Make sure each client's OEMS session has <b>pre-trade credit limits</b> no larger than its posted collateral, plus a kill switch.</li>
+  <li><b>Target settlement:</b> same model as 2.1. Settlement runs directly between Uphold wallets and client wallets, so DLT isn't moving coins itself.</li>
+  <li><b>Recording:</b> drop-copy from the OEMS/LP into our trade store today, and into Haruko later.</li>
+</ul>
+<p>Low priority because demand is low. Don't build anything new. Keep it safe (limits, reconciliation) and move it to the target settlement model in the same project as 2.1.</p>
+
+<!-- ---------- 2.4 ---------- -->
+<h3 id="s2d">2.4 Nexo spot: prop until Nexo's MiCAR licence</h3>
+<p>For now we still have to do proper prop spot trading for Nexo. That responsibility <b>ends when Nexo receives its own MiCAR licence in Q1 2027</b>.</p>
+<div class="callout warn"><span class="k">Temporary by design</span>
+Keep it running safely and invest nothing. Prepare a wind-down checklist now: final settlement, inventory unwind, closing LP lines dedicated to Nexo, and archiving records for retention. That way the hand-back is a non-event. Watch out for the licence date slipping. Have a rolling 3-month extension clause rather than an open-ended commitment.</div>
+
+<!-- ================================================================ -->
+<h2 id="s3"><span class="num">3</span>Perps: DLT as financial commission broker</h2>
+<p><b>The principle.</b> Clean vanilla perp trading only works if DLT acts as a <b>financial commission broker</b> (Finanzkommissionsgeschäft). We buy and sell in our own name for the client's account. That role comes with <b>best execution</b> obligations (MiFID II Art. 27 / §82 WpHG). Our current setup, executing all user orders on one venue, is <b>not sufficient on its own</b>. Discussions with BaFin require us to change the setup.</p>
+
+<h4>Known requirements (exact specification still TBD)</h4>
+<table>
+  <tr><th>#</th><th>Requirement</th><th>Timeline</th><th>Notes</th></tr>
+  <tr><td>1</td><td>A <b>selection of venues</b> the user can choose from for execution, <i>or</i> clear guidelines explaining why a certain pre-selection was made</td><td><b>Mid Q2 2027</b></td><td>The "documented pre-selection" option is our shortcut. See below</td></tr>
+  <tr><td>2</td><td><b>Monitoring of orderbook and exchange health</b> on the connected venues</td><td><b>~6 weeks (late Dec 2026)</b></td><td>Depth, spread, latency, uptime/incidents, withdrawal status, proof-of-reserves, regulatory events</td></tr>
+  <tr><td>3</td><td>Further items</td><td><span class="pill p-tbd">TBC</span></td><td>Currently being defined by Maxi. This table needs updating once they're agreed</td></tr>
+</table>
+
+<div class="phases">
+  <div class="phase now"><div class="ph">Phase 0 · Today</div><div class="pt">Single venue via EDX</div><ul><li>All orders executed on one venue</li><li>Full reliance on our EDX implementation</li><li>No formal venue health monitoring</li></ul></div>
+  <div class="phase"><div class="ph">Phase 1 · by late Dec 2026</div><div class="pt">Monitor &amp; document</div><ul><li>Venue health dashboard + alerting (requirement 2)</li><li>Written <b>execution policy</b> explaining the current venue choice</li><li>Execution-quality stats per venue (slippage vs reference, fill rates)</li><li>Connect at least one secondary venue, read-only</li></ul></div>
+  <div class="phase tgt"><div class="ph">Phase 2 · by mid Q2 2027</div><div class="pt">Multi-venue best-ex</div><ul><li>User venue choice <i>or</i> rule-based pre-selection (requirement 1)</li><li>Routing + health checks + reporting run through <b>Haruko</b></li><li>Periodic best-ex review evidence for BaFin</li></ul></div>
+</div>
+
+<div class="callout green"><span class="k">Shortcut that is legitimate</span>
+Best execution does <b>not</b> require multiple venues. A firm can use a single venue if its execution policy shows that this venue consistently delivers the best overall result for clients (price, costs, speed, likelihood of execution and settlement). That should be documented with data and reviewed regularly. So the fastest path is: (1) health monitoring + execution-quality data, (2) an execution policy that justifies the pre-selection, (3) add venues gradually. Whether BaFin accepts this in our case is part of the open specification. Confirm with Maxi before relying on it.</div>
+
+<p><b>Transition rule:</b> we will keep improving the product continuously rather than with a big-bang rebuild, and move step by step to a system that meets all requirements. The <b>EDX implementation stays the execution backbone for now</b>. As soon as it's feasible, perps activity moves to <b>Haruko</b> for a consolidated view. New venue connectivity should go through Haruko where possible, so we don't build venue adapters twice.</p>
+
+<!-- ================================================================ -->
+<h2 id="s4"><span class="num">4</span>Structured products</h2>
+<p><b>What they are.</b> Option-based strategies with defined payout profiles, such as <b>Shark Fins</b> (capped upside participation with a knock-out barrier), <b>Covered Calls</b> (long the asset, short a call for yield), <b>Dual Currency Investments</b>, and similar.</p>
+
+<div class="grid2">
+  <div class="card c1"><div class="tag">Form</div><div class="name">OTC derivative contracts, not securities</div><p>Initially there is <b>no issuer</b>. The products are not issued as securities but are bilateral OTC derivative contracts between the parties. That means no prospectus, but it brings OTC-derivative obligations (see the checklist below).</p></div>
+  <div class="card c2"><div class="tag">First launch</div><div class="name">ZIC + DCI with Nexo</div><p>First products are <b>ZIC and DCI</b> with Nexo. Later, DLT builds and prices <b>its own strategies</b>.</p></div>
+</div>
+
+<h4>Nexo flow (non-German clients)</h4>
+<div class="flow">
+  <div class="step"><b>1 · Client</b>A Nexo end-client (not German) requests a ZIC/DCI.</div><div class="arr">→</div>
+  <div class="step"><b>2 · DLT prices</b>DLT faces the client as <b>proprietary trader</b> and prices the option.</div><div class="arr">→</div>
+  <div class="step"><b>3 · Client buys</b>Contract between DLT and the client.</div><div class="arr">→</div>
+  <div class="step"><b>4 · DLT risk</b>Either <b>offset with Nexo</b> straight away or <b>keep the risk in the book</b>, within limits.</div>
+</div>
+
+<div class="phases">
+  <div class="phase now"><div class="ph">Phase 1 · Launch</div><div class="pt">Rely on Nexo monitoring</div><ul><li>DLT has no own monitoring system at launch</li><li>Risk/position monitoring via Nexo's system</li><li><b>That system must be reviewed and checked against regulatory requirements</b> before go-live</li></ul></div>
+  <div class="phase"><div class="ph">Phase 2 · Haruko live</div><div class="pt">Same flow, our own risk view</div><ul><li>Trading flow unchanged</li><li>All transactions fed directly into Haruko</li><li>DLT has its own Greeks, exposure and limits</li></ul></div>
+  <div class="phase tgt"><div class="ph">Phase 3 · After Haruko</div><div class="pt">Own strategies, more clients</div><ul><li>DLT issues complex option structures/payouts itself</li><li>Roll out to other clients</li><li><b>No other clients before the Haruko integration</b></li></ul></div>
+</div>
+
+<div class="callout warn"><span class="k">Regulatory checklist before launch (verify with Compliance)</span>
+<ul style="margin:4px 0 0">
+  <li><b>EMIR reporting:</b> both the client-facing contract and the offsetting trade with Nexo are OTC derivatives and need reporting to a trade repository (EMIR Refit). Decide whether we report ourselves or delegate.</li>
+  <li><b>PRIIPs KID</b> for every product offered to retail clients, before the trade.</li>
+  <li><b>Appropriateness / target market:</b> these are complex products, so the appropriateness test and product governance (target market, distribution strategy) apply.</li>
+  <li><b>Nexo monitoring review:</b> document what we take from Nexo's system (positions, pricing, barrier events, lifecycle), how we check it independently, and what happens if it fails. Treat it as outsourcing.</li>
+  <li><b>Pricing governance:</b> model validation, independent price verification and fair-value documentation, especially when we keep risk in the book.</li>
+  <li><b>Market risk limits</b> for the risk we keep (delta / vega / gamma by underlying), even if they're simple at first.</li>
+</ul></div>
+
+<!-- ================================================================ -->
+<h2 id="s5"><span class="num">5</span>ETPs / leveraged Delta-1 certificates (tokenized / securitized perps)</h2>
+
+<h3>5.1 What the Anduin instruments are</h3>
+<p>Anduin's first product line is the <b>Unlimited Perpetual Knock-Out Certificate</b>, a <b>securitized perp</b>. It is a security token that reproduces the economics and user experience of a perpetual future inside a regulated, prospectus-based transferable security.</p>
+<div class="tbl-wrap">
+<table>
+  <tr><th>Feature</th><th>How it works</th></tr>
+  <tr><td class="prod">Legal form</td><td>Transferable security under MiFID II (security token, not a CFD and not an OTC derivative). Issued under an EU <b>base prospectus</b> with per-series Final Terms. Issuer: an offshore SPV (Anduin Capital, Jersey or Cayman TBC). Approval via CSSF (LU) or FMA (LI), with an EEA passport.</td></tr>
+  <tr><td class="prod">Underlyings</td><td>Crypto (BTC, ETH, majors), precious metals (gold, silver), equities and indices, commodities (oil, copper).</td></tr>
+  <tr><td class="prod">Price reference</td><td>For crypto, the <b>perp mark price</b> of a reference venue chosen per series (e.g. Bybit, Binance, BitMEX, Hyperliquid…).</td></tr>
+  <tr><td class="prod">Leverage</td><td>Implicit. The certificate value = (reference price − financing level) × ratio for long positions, and the reverse for short. The gap between price and financing level sets the leverage, much like choosing leverage on a perp.</td></tr>
+  <tr><td class="prod">Knock-out = liquidation</td><td>If the reference price hits the <b>knock-out barrier</b>, the certificate terminates. For the user this is the equivalent of a liquidation. <b>No margin calls and no negative balance</b>: the most a user can lose is what they paid.</td></tr>
+  <tr><td class="prod">Funding</td><td>Perp funding is passed through by adjusting the financing level, so a holder carries the same cost as a perp position.</td></tr>
+  <tr><td class="prod">Hedging</td><td>Anduin hedges each certificate 1:1 with perp positions at the reference venue / market maker.</td></tr>
+  <tr><td class="prod">Custody &amp; docs</td><td>Designed to be held by a German qualified crypto custodian. PRIIPs KID per series (SRI typically 6–7).</td></tr>
+</table>
+</div>
+<p>Because the certificate's value is a <b>linear function</b> of the underlying (Delta-1), risk management is straightforward. For DLT, the exposure is just the number of certificates held × delta, much like spot inventory.</p>
+
+<h3>5.2 Three roles DLT can play</h3>
+<div class="roles">
+  <div class="card c1"><div class="tag">Role (i)</div><div class="name">Prop trader / market maker</div>
+    <ul>
+      <li>DLT quotes <b>its own prices</b> (spread and/or fee) and runs its own book based on the issuer's book.</li>
+      <li>Hedging is <b>decoupled</b> from client execution. DLT fills the client at the price implied by its hedge venues, then sends the hedge order to Anduin.</li>
+      <li>Risk = units held on the book, using the <b>existing spot approach</b>.</li>
+      <li>Anduin is the <b>only LP</b> (as issuer), so DLT must run a <b>fair market pricing assessment</b>: build its own theoretical certificate price from the reference market (e.g. Bybit mark), compare it with the Anduin quote and the client price, and <b>store every comparison in our database</b>.</li>
+    </ul>
+    <p><b>Revenue:</b> highest. <b>Risk:</b> small residual delta / timing risk.</p>
+  </div>
+  <div class="card c2"><div class="tag">Role (ii)</div><div class="name">Back-to-back</div>
+    <ul>
+      <li>Like prop, but DLT <b>hedges first with Anduin</b> and only then fills the client, so there's no market risk.</li>
+      <li>This would normally bring <b>best-ex</b> requirements. Because Anduin is the <b>only available</b> hedging option, a <b>fair market pricing assessment</b> may be enough. This has to be confirmed with Compliance.</li>
+    </ul>
+    <p><b>Revenue:</b> spread/fee. <b>Risk:</b> none (except failed hedges).</p>
+  </div>
+  <div class="card c3"><div class="tag">Role (iii)</div><div class="name">Investment / contract broker</div>
+    <ul>
+      <li>DLT is <b>not part of the transaction</b>. The end client deals directly with the issuer (Anduin).</li>
+      <li>For <b>German clients</b>, DLT doesn't have to withhold capital gains tax (Kapitalertragsteuer). This was the plan for Nexo from the start.</li>
+      <li>DLT only needs to <b>consume the transaction data</b> between client and Anduin, for reporting and oversight.</li>
+    </ul>
+    <p><b>Revenue:</b> lowest (commission). <b>Risk:</b> none.</p>
+  </div>
+</div>
+
+<h3>5.3 Which role for which client</h3>
+<table>
+  <tr><th>Client segment</th><th>Role</th><th>Why</th></tr>
+  <tr><td class="prod">Nexo, German clients</td><td>Investment broker (iii)</td><td>Avoids capital gains tax withholding; DLT stays out of the flow</td></tr>
+  <tr><td class="prod">Nexo, other clients</td><td><span class="pill p-tbd">TBC</span></td><td>Not yet fully defined. It depends on the requirements each of roles (i)–(iii) brings</td></tr>
+  <tr><td class="prod">Non-German clients (BingX, CoinW pipeline, others)</td><td>Prop (i) or back-to-back (ii)</td><td>DLT shouldn't act only as investment broker here. Being in the flow is where our revenue comes from</td></tr>
+</table>
+
+<div class="callout red"><span class="k">Watch-out: conflicts of interest</span>
+With Anduin as the only LP and possibly a related party, the fair-price assessment is the core control that protects clients, so it has to be <b>systematic, timestamped and auditable</b>. The minimum record per trade: reference mark price, theoretical certificate value, Anduin quote, client price, spread/fee and timestamps. The conflicts-of-interest policy should name the DLT–Anduin relationship explicitly.</div>
+
+<h4>What DLT has to build for ETPs, whatever the role</h4>
+<ul>
+  <li><b>User reports:</b> trade confirmations, periodic statements, costs &amp; charges (ex-ante and ex-post).</li>
+  <li><b>Platform-wide overview</b> for the trading teams: every certificate trade across all partners, positions per partner, knock-out events and funding adjustments.</li>
+  <li><b>Fair-price engine + store</b> (roles i and ii).</li>
+  <li><b>Hedge connector to Anduin</b> (roles i and ii). It reuses the partner API work.</li>
+</ul>
+<p>Once Haruko is fully in place, <b>all trading and risk for ETPs goes into Haruko</b> for one complete view. Build the fair-price store and the trade store so they can be exported to Haruko from day one.</p>
+
+<!-- ================================================================ -->
+<h2 id="s6"><span class="num">6</span>Other tokenized securities (xStocks and similar)</h2>
+<p><b>What they are.</b> Delta-1 tokenized securities with <b>no leverage</b>. Each token tracks one underlying share or ETF one-to-one (e.g. xStocks: tracker certificates issued by a Jersey SPV under an EU base prospectus, backed by the underlying shares held with a custodian). Other examples of the same pattern: Backed bTokens, Ondo Global Markets tokens.</p>
+
+<div class="grid2">
+  <div class="card c2"><div class="tag">Recommended role</div><div class="name">Prop (not commission broker)</div>
+    <p>Like ETPs, DLT could act as prop or as commission broker (FiKo). <b>It should be prop.</b> The reasons:</p>
+    <ul><li>Unlike ETPs, <b>several LPs exist</b>: issuer primary mint/redeem (for authorised participants), CEX listings, OTC desks and on-chain liquidity. So DLT can source competitively without a single-LP problem.</li>
+    <li>Commission broker would mean full best-ex across all these venues. Prop with a documented fair-price check is lighter and earns the spread.</li>
+    <li>No leverage and Delta-1 make it simpler than ETPs. Risk = units × price, using the spot approach.</li></ul>
+  </div>
+  <div class="card c4"><div class="tag">What makes it different from crypto spot</div><div class="name">Specific risks</div>
+    <ul>
+      <li><b>Market hours gap:</b> tokens trade 24/7 but the underlying stock doesn't. On weekends and overnight, the hedge price is stale, so we need wider spreads, smaller limits or a "reference market closed" mode.</li>
+      <li><b>Corporate actions:</b> dividends (paid out or reinvested in the token?), splits, mergers. Each issuer handles them differently, and the book has to follow.</li>
+      <li><b>Issuer / custody risk:</b> the token is only as good as the issuer's backing. Do due diligence on each issuer.</li>
+      <li><b>Chain / token standard:</b> xStocks run on several chains. Decide which ones we support.</li>
+    </ul>
+  </div>
+</div>
+
+<h4>Regulatory and operational checklist</h4>
+<ul>
+  <li><b>Custody licence:</b> whether our crypto custody licence covers these tokens, or whether the <b>safekeeping-of-securities licence (Depotgeschäft), expected Q3 2027,</b> is needed, depends on how each token is classified legally. This is on the onsite agenda (§11).</li>
+  <li><b>PRIIPs KID:</b> tracker certificates are packaged products. The issuer's KID must be available and delivered before the trade.</li>
+  <li><b>Transaction reporting (MiFIR Art. 26):</b> check whether the instrument is admitted to trading on an EU venue. If so, transaction reports are due.</li>
+  <li><b>Tax:</b> for German clients, if DLT holds custody and pays out, withholding obligations apply. The investment-broker route (as with ETPs) avoids this.</li>
+  <li><b>Fair-price check:</b> token price vs underlying (primary exchange price × ratio, FX), stored per trade. It's the same store as for ETPs, so we only build it once.</li>
+  <li><b>Haruko:</b> book, risk and exposure in Haruko like every other MiFID product.</li>
+</ul>
+<div class="callout"><span class="k">Shortcut</span>
+Start with a <b>short list of liquid US large caps and ETFs</b> from one issuer on one chain, quoted <b>only during US market hours</b> (or with a wide fixed spread outside them). That avoids most of the weekend-gap and corporate-action complexity in v1. Widen the scope once Haruko and the custody licence are in place.</div>
+
+<!-- ================================================================ -->
+<h2 id="s7"><span class="num">7</span>Haruko: the target operating system</h2>
+<p><b>What it is.</b> Haruko is an <b>OEMS and PMS</b>: venue connectivity, order and execution management, risk management, and an overall view of exposure across our systems.</p>
+
+<div class="thesis">
+  <div class="k">The rule</div>
+  <div class="v">All activity on MiFID products, whatever the product, is monitored and carried out through Haruko. Haruko has a full view of DLT's risk, exposure and trading activity and becomes the operating system for DLT as a whole.</div>
+</div>
+
+<h4>Indicative migration plan (full availability within ~6 months)</h4>
+<table>
+  <tr><th>Stage</th><th>Window</th><th>Scope</th></tr>
+  <tr><td class="prod">1 · Read-only feeds</td><td>Months 0–1</td><td>Positions and trades from EDX (perps), LPs, Nexo (structured), Anduin (ETPs) streamed into Haruko. No execution yet. First consolidated exposure view</td></tr>
+  <tr><td class="prod">2 · Risk &amp; limits</td><td>Months 1–3</td><td>Exposure dashboards, limit monitoring and alerts. Venue health monitoring for perps if not yet built elsewhere</td></tr>
+  <tr><td class="prod">3 · Execution</td><td>Months 2–4</td><td>Perps routing via Haruko OEMS (multi-venue for best-ex), hedge-first algos for Uphold, ETP hedging to Anduin</td></tr>
+  <tr><td class="prod">4 · Derivatives</td><td>Months 3–6</td><td>Structured products booking, Greeks and pricing in Haruko. This unlocks own strategies and additional structured-product clients</td></tr>
+  <tr><td class="prod">5 · Single source of truth</td><td>Month 6</td><td>Haruko is the system of record for trading and risk. Legacy reports and spreadsheets switched off</td></tr>
+</table>
+<div class="callout"><span class="k">Decision rule for every new build</span>
+Before building any trading, risk or monitoring tool, ask: <b>"Will Haruko do this within 6 months?"</b> If yes, use the simplest temporary solution (export, spreadsheet, small DB table) and design it to feed Haruko. If no, build it, but with a Haruko integration point.</div>
+
+<!-- ================================================================ -->
+<h2 id="s8"><span class="num">8</span>Shortcuts &amp; temporary solutions register</h2>
+<p>Every shortcut has an exit. If a temporary solution has no exit criterion, it's permanent, and that has to be a decision rather than an accident.</p>
+<div class="tbl-wrap">
+<table>
+  <tr><th>Product</th><th>Temporary solution</th><th>Exit criterion</th><th>Target state</th></tr>
+  <tr><td class="prod">Prop spot</td><td>Stop warehousing; hedge each trade back-to-back immediately. Optionally Uphold execution + DLT-wallet settlement</td><td>Uphold proxy + direct settlement live per client</td><td>Uphold proxy, no DLT inventory</td></tr>
+  <tr><td class="prod">Hedge-first</td><td>IOC retry ladder + simple TWAP in the existing engine</td><td>Haruko OEMS algos connected</td><td>Haruko algos + DLT orchestration</td></tr>
+  <tr><td class="prod">OEMS / PB</td><td>Drop-copy recording, credit limits in the OEMS</td><td>Migration to Uphold settlement + Haruko booking</td><td>Recorded in Haruko, settled via Uphold</td></tr>
+  <tr><td class="prod">Nexo spot</td><td>Run as-is, no investment</td><td>Nexo MiCAR licence (Q1 2027)</td><td>Wound down</td></tr>
+  <tr><td class="prod">Perps</td><td>Single venue (EDX) + documented execution policy + health monitoring</td><td>BaFin requirements fully specified and met (mid Q2 2027)</td><td>Multi-venue best-ex via Haruko</td></tr>
+  <tr><td class="prod">Structured</td><td>Rely on Nexo's monitoring (after review)</td><td>Haruko risk integration</td><td>Own pricing and risk in Haruko; multiple clients</td></tr>
+  <tr><td class="prod">ETPs</td><td>Fair-price assessment instead of best-ex (single LP); DLT DB as trade store</td><td>Haruko live; second LP/issuer available (would trigger best-ex)</td><td>All flows in Haruko</td></tr>
+  <tr><td class="prod">Tokenized securities</td><td>Short list, one issuer, one chain, US market hours only</td><td>Safekeeping licence (Q3 2027) + Haruko</td><td>Broad universe, 24/7 with gap pricing</td></tr>
+</table>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="s9"><span class="num">9</span>Roadmap timeline</h2>
+<div class="timeline">
+  <div class="tl"><div class="when">Nov 2026</div><div class="what">Haruko stage 1 starts (read-only feeds). Travel Rule allocation memo DLT ↔ Uphold. Prop spot: stop adding inventory.</div></div>
+  <div class="tl"><div class="when">Late Dec 2026 (~6 weeks)</div><div class="what">Perps: orderbook and exchange health monitoring live; execution policy drafted.</div></div>
+  <div class="tl y"><div class="when">Q1 2027</div><div class="what">Nexo receives its MiCAR licence, so DLT's Nexo prop spot ends. Uphold proxy: YouHodler onboarded on the new model, then Taiwan Mobile (dates TBC). Structured products: Nexo ZIC/DCI launch window (TBC).</div></div>
+  <div class="tl"><div class="when">Mid Q2 2027</div><div class="what">Perps: venue selection / pre-selection guidelines in place (BaFin requirement 1).</div></div>
+  <div class="tl g"><div class="when">≈ May 2027</div><div class="what">Haruko fully available and the system of record for all MiFID flows. This unlocks own structured strategies and further structured-product clients.</div></div>
+  <div class="tl p"><div class="when">Q3 2027</div><div class="what">Safekeeping-of-securities licence expected. This unlocks spot stock / tokenized securities at scale.</div></div>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="s10"><span class="num">10</span>Open questions &amp; decisions needed</h2>
+<table>
+  <tr><th>#</th><th>Question</th><th>Area</th><th>Who decides</th></tr>
+  <tr><td>1</td><td>Uphold settlement model (a) DLT principal + outsourcing vs (b) client faces Uphold, per client</td><td>Spot</td><td>Legal / Head of Product</td></tr>
+  <tr><td>2</td><td>Which Uphold entity runs the wallets; its MiCA/TFR status; Travel Rule originator naming</td><td>Spot</td><td>Compliance</td></tr>
+  <tr><td>3</td><td>Where the fiat leg settles after the Uphold migration</td><td>Spot</td><td>Finance / Ops</td></tr>
+  <tr><td>4</td><td>Hedge-first remainder policy and slippage bands agreed contractually with Uphold</td><td>Spot</td><td>Head of Product + Uphold</td></tr>
+  <tr><td>5</td><td>Remaining BaFin perps requirements (item 3) and whether a documented single-venue pre-selection is acceptable in the interim</td><td>Perps</td><td>Maxi / Compliance</td></tr>
+  <tr><td>6</td><td>Review outcome of Nexo's monitoring system for structured products; EMIR reporting setup</td><td>Structured</td><td>Compliance / Risk</td></tr>
+  <tr><td>7</td><td>Role for Nexo non-German ETP clients: (i), (ii) or (iii)</td><td>ETPs</td><td>Head of Product + Nexo</td></tr>
+  <tr><td>8</td><td>Whether a fair-price assessment replaces best-ex for single-LP back-to-back ETPs</td><td>ETPs</td><td>Compliance</td></tr>
+  <tr><td>9</td><td>Custody licence scope for tokenized securities before Q3 2027</td><td>Tokenized sec.</td><td>Legal</td></tr>
+  <tr><td>10</td><td>Go-live dates marked TBC in §1</td><td>All</td><td>Head of Product</td></tr>
+</table>
+
+<!-- ================================================================ -->
+<h2 id="s11"><span class="num">11</span>Onsite agenda: to be discussed in person</h2>
+<p>These topics are deliberately <b>not</b> settled in writing. They need a face-to-face discussion at the next onsite. The notes below are starting points only.</p>
+<ol class="agenda">
+  <li><b>Local server setup / how partners can distribute MiFID products.</b> Partners have three options:
+    <ul>
+      <li>(a) being appointed as a <b>tied agent by DLT</b> (DLT is liable for the partner and must supervise it);</li>
+      <li>(b) being appointed as a <b>tied agent by a third party</b> (another liability umbrella carries the partner);</li>
+      <li>(c) <b>deploying their UI on a DLT-controlled server</b>, so that DLT can argue it is only a "brand partnership" and the service is provided by DLT.</li>
+    </ul>
+    For each option we need to discuss the trade-offs: liability, supervision effort, time to market and how robust it is with BaFin.</li>
+  <li><b>Best execution</b>: how far it reaches across perps, ETPs and tokenized securities; single-venue justification.</li>
+  <li><b>Prop</b>: where DLT wants to take principal risk and with what limits.</li>
+  <li><b>Investment broker</b>: when DLT steps out of the flow (German clients, tax) and what it still has to record and report.</li>
+  <li><b>How Nexo does spot trading for securities</b>: their current setup and how it fits with our roles.</li>
+  <li><b>Spot stock trading</b> and the <b>safekeeping-of-securities licence</b> (Depotgeschäft) DLT needs, expected in Q3 2027.</li>
+</ol>
+
+<!-- ================================================================ -->
+<h2 id="s12"><span class="num">12</span>Glossary</h2>
+<div class="tbl-wrap">
+<table>
+  <tr><th>Term</th><th>Meaning</th></tr>
+  <tr><td class="prod">MiFID products</td><td>Financial instruments under MiFID II (derivatives, securities). DLT's licence is the moat here</td></tr>
+  <tr><td class="prod">MiCA / MiCAR</td><td>EU Markets in Crypto-Assets Regulation. Covers crypto spot. Nexo will hold its own licence from Q1 2027</td></tr>
+  <tr><td class="prod">Prop / principal</td><td>DLT trades on its own account against the client and carries the risk</td></tr>
+  <tr><td class="prod">Back-to-back</td><td>DLT hedges first, then fills the client at the hedge price. No market risk</td></tr>
+  <tr><td class="prod">Commission broker (FiKo)</td><td>Finanzkommissionsgeschäft. DLT trades in its own name for the client's account. Best-ex applies</td></tr>
+  <tr><td class="prod">Investment broker</td><td>Anlagevermittlung. DLT only arranges the trade, and the client contracts directly with the issuer</td></tr>
+  <tr><td class="prod">Tied agent</td><td>Vertraglich gebundener Vermittler. A partner acting under another firm's licence and liability</td></tr>
+  <tr><td class="prod">Best execution</td><td>The obligation to get the best possible result for the client (price, cost, speed, likelihood of execution)</td></tr>
+  <tr><td class="prod">Fair market pricing assessment</td><td>A documented check that a price is fair against an independent reference, used where only one LP exists</td></tr>
+  <tr><td class="prod">Travel Rule (TFR)</td><td>The obligation to send originator/beneficiary data with crypto transfers (EU Reg. 2023/1113)</td></tr>
+  <tr><td class="prod">OEMS / PMS</td><td>Order &amp; execution management system / portfolio management system (here: Haruko)</td></tr>
+  <tr><td class="prod">EDX</td><td>Our current perps execution implementation</td></tr>
+  <tr><td class="prod">Delta-1</td><td>An instrument whose value moves 1:1 (linearly) with the underlying</td></tr>
+  <tr><td class="prod">Knock-out (KO)</td><td>The barrier at which a leveraged certificate terminates. For the user it's equivalent to a perp liquidation</td></tr>
+  <tr><td class="prod">ZIC / DCI</td><td>First Nexo structured products. DCI = Dual Currency Investment</td></tr>
+  <tr><td class="prod">EMIR</td><td>EU regulation for OTC derivatives. Includes trade-repository reporting</td></tr>
+  <tr><td class="prod">PRIIPs KID</td><td>Key Information Document required for packaged products sold to retail clients</td></tr>
+</table>
+</div>
+
+<footer class="doc">DLT Finance · Internal · Product &amp; Technical Operating Primer v1.0 · November 2026. Regulatory points marked "verify" or "TBC" are working assumptions, not legal advice. Confirm them with Legal/Compliance before relying on them.</footer>
+
+</div>
+</body>
+</html>
