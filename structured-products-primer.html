@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Structured Products on Onchain Underlyings — A Primer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap">
+<style>
+  :root{
+    --bg:#f6f8fb; --surface:#ffffff; --border:#e3e7ee; --ink:#0E1A22;
+    --text:var(--ink); --muted:#5b6577;
+    --petrol-deep:#062536; --petrol:#0E4A66; --petrol-mid:#11617E;
+    --mint:#7BD4C6; --blue:#3b6cd9; --blue-soft:rgba(59,108,217,0.08); --blue-border:rgba(59,108,217,0.28);
+    --green:#1f9f6c; --green-soft:rgba(31,159,108,0.08); --green-border:rgba(31,159,108,0.32);
+    --yellow:#d4922a; --yellow-soft:rgba(212,146,42,0.09); --yellow-border:rgba(212,146,42,0.36);
+    --red:#c94a4a; --red-soft:rgba(201,74,74,0.07); --red-border:rgba(201,74,74,0.32);
+    --purple:#6b50d9;
+    --font-display:'Helvetica Neue','Inter Tight',system-ui,sans-serif;
+    --font-body:'Inter Tight','Helvetica Neue',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.58;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:48px 28px 90px}
+  header.doc{border-bottom:3px solid var(--petrol);padding-bottom:22px;margin-bottom:30px}
+  .eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);font-weight:700}
+  h1{font-family:var(--font-display);font-size:36px;line-height:1.1;margin:.35em 0 .25em;font-weight:800;color:var(--petrol-deep)}
+  .lede{color:var(--muted);font-size:16.5px;max-width:800px}
+  .meta{display:flex;gap:22px;flex-wrap:wrap;margin-top:14px;font-size:13px;color:var(--muted)}
+  .meta b{color:var(--petrol)}
+  h2{font-family:var(--font-display);font-size:24px;margin:56px 0 10px;color:var(--petrol-deep);font-weight:800;border-left:4px solid var(--blue);padding-left:12px;scroll-margin-top:20px}
+  h2 .num{color:var(--blue);margin-right:6px}
+  h3{font-family:var(--font-display);font-size:18px;margin:30px 0 6px;color:var(--petrol);font-weight:700;scroll-margin-top:20px}
+  h4{font-size:13px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:20px 0 4px;font-weight:700}
+  p{margin:.5em 0}
+  a{color:var(--blue)}
+  strong{color:var(--ink)}
+  ul,ol{margin:.4em 0 .8em;padding-left:22px}
+  li{margin:.32em 0}
+  code{font-size:12.5px;background:#eef1f6;border-radius:4px;padding:1px 5px}
+
+  .toc{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px 22px;columns:2;column-gap:36px;font-size:14px}
+  .toc a{text-decoration:none;color:var(--petrol);display:block;padding:2px 0;break-inside:avoid}
+  .toc a:hover{color:var(--blue)}
+  @media(max-width:720px){.toc{columns:1}}
+
+  .callout{background:var(--blue-soft);border:1px solid var(--blue-border);border-left:4px solid var(--blue);border-radius:8px;padding:14px 18px;margin:18px 0;color:var(--petrol-deep);font-size:15px}
+  .callout.warn{background:var(--yellow-soft);border-color:var(--yellow-border);border-left-color:var(--yellow)}
+  .callout.red{background:var(--red-soft);border-color:var(--red-border);border-left-color:var(--red)}
+  .callout.green{background:var(--green-soft);border-color:var(--green-border);border-left-color:var(--green)}
+  .callout .k{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;margin-bottom:4px;color:var(--petrol)}
+
+  .thesis{background:var(--petrol-deep);color:#e8eef2;border-radius:12px;padding:24px 26px;margin:22px 0}
+  .thesis .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mint);font-weight:700}
+  .thesis .v{font-family:var(--font-display);font-size:21px;font-weight:800;color:#fff;margin:6px 0 10px;line-height:1.3}
+  .thesis ul{margin:0;color:#c9d6de;font-size:14.5px}
+  .thesis strong{color:#fff}
+
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:16px 0}
+  .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:16px 0}
+  @media(max-width:820px){.grid3,.grid2{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--border);border-top:4px solid var(--blue);border-radius:10px;padding:16px 16px}
+  .card.c1{border-top-color:var(--petrol)} .card.c2{border-top-color:var(--green)} .card.c3{border-top-color:var(--purple)} .card.c4{border-top-color:var(--yellow)} .card.c5{border-top-color:var(--red)}
+  .card .tag{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .card .name{font-family:var(--font-display);font-size:16px;font-weight:800;color:var(--petrol-deep);margin:3px 0 6px;line-height:1.2}
+  .card p,.card li{font-size:13.5px;color:#2c3746}
+
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px;background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+  th{background:var(--petrol-deep);color:#fff;font-family:var(--font-display);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:700}
+  tr:last-child td{border-bottom:none}
+  td.prod{font-weight:700;color:var(--petrol-deep)}
+  .tbl-wrap{overflow-x:auto}
+
+  .pill{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;border-radius:20px;padding:2px 9px;white-space:nowrap;border:1px solid}
+  .p-high{color:var(--red);background:var(--red-soft);border-color:var(--red-border)}
+  .p-med{color:var(--yellow);background:var(--yellow-soft);border-color:var(--yellow-border)}
+  .p-low{color:var(--muted);background:#f0f2f6;border-color:var(--border)}
+  .p-lowmed{color:#9a7a2c;background:#faf6ec;border-color:#e6d6ae}
+  .p-live{color:var(--green);background:var(--green-soft);border-color:var(--green-border)}
+  .p-tbd{color:var(--purple);background:rgba(107,80,217,.07);border-color:rgba(107,80,217,.3)}
+
+  .phases{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:16px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--surface)}
+  @media(max-width:820px){.phases{grid-template-columns:1fr}}
+  .phase{padding:16px 16px;border-right:1px solid var(--border)}
+  .phase:last-child{border-right:none}
+  .phase .ph{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--blue)}
+  .phase .pt{font-family:var(--font-display);font-weight:800;color:var(--petrol-deep);font-size:15px;margin:2px 0 6px}
+  .phase ul{font-size:13.3px;padding-left:18px;margin:0}
+  .phase.now{background:#fbfcfe}
+  .phase.tgt{background:var(--green-soft)}
+
+  .flow{display:flex;align-items:stretch;gap:0;margin:16px 0;flex-wrap:wrap}
+  .flow .step{flex:1;min-width:150px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:11px 12px;font-size:13px;position:relative}
+  .flow .step b{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);margin-bottom:3px}
+  .flow .arr{display:flex;align-items:center;padding:0 6px;color:var(--muted);font-weight:800}
+
+  .roles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:16px 0}
+  @media(max-width:820px){.roles{grid-template-columns:1fr}}
+
+  .timeline{position:relative;margin:20px 0 10px;padding-left:22px;border-left:3px solid var(--border)}
+  .tl{position:relative;margin:0 0 16px}
+  .tl:before{content:"";position:absolute;left:-30px;top:5px;width:13px;height:13px;border-radius:50%;background:var(--blue);border:3px solid var(--bg)}
+  .tl.g:before{background:var(--green)} .tl.y:before{background:var(--yellow)} .tl.p:before{background:var(--purple)}
+  .tl .when{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--blue)}
+  .tl .what{font-size:14.5px}
+
+  .qa{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin:14px 0}
+  .qa .q{font-weight:800;color:var(--petrol-deep);font-size:15px}
+  .qa .a{margin-top:6px;font-size:14.3px}
+  .verdict{display:inline-block;font-weight:800;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--green);margin-right:6px}
+  .verdict.c{color:var(--yellow)}
+
+  .agenda{counter-reset:ag;list-style:none;padding:0}
+  .agenda li{counter-increment:ag;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 16px 12px 52px;position:relative;margin:8px 0}
+  .agenda li:before{content:counter(ag);position:absolute;left:14px;top:11px;width:26px;height:26px;border-radius:50%;background:var(--petrol);color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
+
+  footer.doc{margin-top:56px;border-top:1px solid var(--border);padding-top:16px;color:var(--muted);font-size:12.5px}
+  @media print{body{background:#fff}.wrap{padding:0}h2{break-after:avoid}.card,.qa,table{break-inside:avoid}}
+  .num-ex{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin:14px 0;font-size:14px}
+  .num-ex .k{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--blue);margin-bottom:6px;display:block}
+  td.r,th.r{text-align:right}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="doc">
+  <div class="eyebrow">DLT Finance · Strategy &amp; Structuring Primer</div>
+  <h1>Structured products on onchain underlyings: collared loans, yield vaults, tranches, ISIN wrappers and prediction baskets</h1>
+  <p class="lede">An explainer for someone new to structuring. It covers the building blocks first, then each product: how it works, a worked example with numbers, who carries which risk, and what can go wrong. The last section shows how the products fit into one platform that we can sell to banks.</p>
+  <div class="meta"><span><b>Status</b> Working draft v0.1</span><span><b>Date</b> 17 Nov 2026</span><span><b>Audience</b> Product, trading, partnerships</span></div>
+</header>
+
+<div class="thesis">
+  <div class="k">The thesis in one line</div>
+  <div class="v">Every idea in this doc is a structured product. We position as the factory that turns onchain liquidity (options, prediction markets, lending vaults) into products a bank can hold on its balance sheet or put on its shelf.</div>
+  <ul>
+    <li><strong>Collared loan</strong> = loan + bought put + sold call</li>
+    <li><strong>Prediction basket</strong> = weighted bundle of binary bets on one theme</li>
+    <li><strong>Insured yield</strong> = senior/junior tranches of a vault</li>
+    <li><strong>Bank-ready yield</strong> = any of the above wrapped in a security with an ISIN</li>
+  </ul>
+</div>
+
+<div class="toc">
+  <a href="#s0">0 · Building blocks you need first</a>
+  <a href="#s1">1 · Collared loan (ZiC-style): how it works</a>
+  <a href="#s2">2 · Funding at scale: the collared-lending vault</a>
+  <a href="#s3">3 · Diversified portfolios, lombard and why 24/7 matters</a>
+  <a href="#s4">4 · Tranching: "insurance" without being an insurer</a>
+  <a href="#s5">5 · Wrapping it in an ISIN</a>
+  <a href="#s6">6 · Prediction-market baskets</a>
+  <a href="#s7">7 · How it fits together: the platform we sell to banks</a>
+  <a href="#s8">8 · Open questions &amp; next steps</a>
+  <a href="#s9">9 · Glossary</a>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="s0"><span class="num">0</span>Building blocks you need first</h2>
+<p>Almost every structured product is built from a few parts. Learn these five and the rest of the doc is just combinations.</p>
+
+<div class="grid2">
+  <div class="card c1"><div class="tag">Block 1</div><div class="name">Call option</div>
+    <p>The right to <strong>buy</strong> an asset at a fixed price (the <em>strike</em>) on a set date (the <em>expiry</em>). You pay a <em>premium</em> for that right.</p>
+    <p><strong>Selling</strong> a call means you collect the premium today. In return you give up any gain above the strike: if the price ends above it, you pay the difference.</p></div>
+  <div class="card c2"><div class="tag">Block 2</div><div class="name">Put option</div>
+    <p>The right to <strong>sell</strong> an asset at the strike. If you <strong>buy</strong> a put, you have a price floor: when the price falls below the strike, the put pays the difference.</p>
+    <p>It works like an insurance policy on the price. The premium is what the policy costs.</p></div>
+  <div class="card c3"><div class="tag">Block 3</div><div class="name">Collar</div>
+    <p><strong>Buy a put</strong> (floor) and <strong>sell a call</strong> (cap) on the same asset. The call premium you collect pays for the put. If the call is worth more than the put, the collar earns you money (a <em>net credit</em>).</p>
+    <p>Result: the value of the asset is held inside a range. You give up gains above the cap and are protected below the floor.</p></div>
+  <div class="card c4"><div class="tag">Block 4</div><div class="name">Binary (digital) contract</div>
+    <p>Pays a fixed amount (e.g. $1) if an event happens and $0 if it doesn't. Prediction markets trade these. A price of $0.30 means the market thinks the event has a ~30% chance.</p></div>
+</div>
+<div class="grid2">
+  <div class="card c5"><div class="tag">Block 5</div><div class="name">Note / certificate with an ISIN</div>
+    <p>A security (legally a debt instrument of the issuer) whose payout is defined by a formula, e.g. "pays the value of this vault" or "pays this basket". The ISIN is its ID number. Because it has one, any bank custody account can hold it, settle it through Clearstream and report on it.</p></div>
+  <div class="card"><div class="tag">Three risks to always ask about</div><div class="name">Market · counterparty · basis</div>
+    <ul>
+      <li><strong>Market risk</strong>: the price moves against you.</li>
+      <li><strong>Counterparty risk</strong>: whoever owes you money (e.g. the party on the other side of your option) fails to pay.</li>
+      <li><strong>Basis risk</strong>: your hedge is on a slightly different thing from what you hold, so the two don't move exactly together.</li>
+    </ul></div>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="s1"><span class="num">1</span>Collared loan (ZiC-style): how it works</h2>
+<p>The client borrows stablecoins against BTC at <strong>0% interest</strong> with <strong>no liquidation before maturity</strong>. In exchange, the client agrees to a price range. Below the floor the collateral is sold at the floor price; above the cap it is sold at the cap price.</p>
+<p>This isn't new. Private banks have sold the same thing to wealthy clients with large single-stock positions for decades, as "collar loans" or "equity monetisation". What's new is offering it to ordinary clients on crypto and tokenized assets.</p>
+
+<h3>The mechanics</h3>
+<div class="flow">
+  <div class="step"><b>1 · Client</b>Locks 0.1 BTC ($10,000 at $100k) and receives a $5,000 USDC loan (50% LTV, 6 months, 0%)</div><div class="arr">→</div>
+  <div class="step"><b>2 · Issuer / hedge desk</b>Buys a put at $70k (floor) and sells a call at $140k (cap) on 0.1 BTC</div><div class="arr">→</div>
+  <div class="step"><b>3 · Premium</b>Call premium − put premium = net credit. It pays the cost of funding the $5,000</div><div class="arr">→</div>
+  <div class="step"><b>4 · Maturity</b>The BTC price is compared with the range and one of three outcomes applies</div>
+</div>
+
+<h3>Worked example: the three outcomes</h3>
+<p>Setup: 0.1 BTC collateral at $100k = $10,000 · loan $5,000 · floor (put strike) $70k · cap (call strike) $140k · 6 months.</p>
+<div class="tbl-wrap"><table>
+  <tr><th>BTC at maturity</th><th>What the options do</th><th>Value available</th><th>Loan repaid</th><th class="r">Client receives</th></tr>
+  <tr><td class="prod">$90,000 (in range)</td><td>Both options expire worthless</td><td>0.1 BTC = $9,000</td><td>$5,000 (in USDC, or by selling 0.05556 BTC)</td><td class="r">0.1 BTC back if repaid in USDC, or 0.04444 BTC ($4,000)</td></tr>
+  <tr><td class="prod">$55,000 (below floor)</td><td>Put pays 0.1 × ($70k − $55k) = $1,500</td><td>BTC sold at $5,500 + put $1,500 = <strong>$7,000</strong></td><td>$5,000</td><td class="r"><strong>$2,000</strong></td></tr>
+  <tr><td class="prod">$180,000 (above cap)</td><td>Short call costs 0.1 × ($180k − $140k) = $4,000</td><td>BTC $18,000 − call $4,000 = <strong>$14,000</strong></td><td>$5,000</td><td class="r"><strong>$9,000</strong> (gives up $4,000 of upside vs. no cap)</td></tr>
+</table></div>
+
+<div class="callout red"><span class="k">Design pitfall: pay the leftover in USDC (or in BTC at spot), never in BTC priced at the strike</span>
+The options protect a <strong>dollar</strong> value. Paying the leftover as a <strong>BTC amount</strong> calculated at the strike price breaks the hedge:
+<ul>
+  <li>At $55k: $2,000 ÷ $70k = 0.02857 BTC, which is worth only <strong>$1,571</strong> at spot. The client gets less than the floor promised.</li>
+  <li>At $180k: $9,000 ÷ $140k = 0.06429 BTC, which is worth <strong>$11,571</strong> at spot. The issuer pays out $2,571 more than the hedge covers, on every such deal.</li>
+</ul>
+The fix is to pay $2,000 / $9,000 in USDC, or the BTC equivalent at the spot price (0.03636 / 0.05 BTC). Also, Deribit options are <strong>cash-settled</strong>: the desk sells the collateral BTC at spot and receives the option payout separately. Nothing is "delivered to the put counterparty".</div>
+
+<h3>Where the "0%" actually comes from</h3>
+<p>Someone has to fund $5,000 for 6 months. At a funding cost of ~4% a year that's about <strong>$100</strong>. The collar pays for it: the premium from the $140k call must cover the $70k put plus the ~$100 funding plus our margin. If it doesn't, the desk adjusts the terms:</p>
+<ul>
+  <li><strong>Lower the cap</strong>, e.g. $130k. The call is more valuable, so we collect more premium.</li>
+  <li><strong>Lower the floor</strong>, e.g. $65k. The put is cheaper.</li>
+  <li><strong>Lower the LTV</strong>, so there is less to fund.</li>
+</ul>
+<p>The client still sees "0% interest". The cost is hidden in the range they accept. That is the whole structuring trick: <strong>turn an interest rate into an option trade the client finds easier to accept</strong>.</p>
+<div class="callout warn"><span class="k">Note on numbers</span>Option premiums depend on volatility, skew and rates on the day. Numbers here show how the structure works; they are not a pricing quote.</div>
+
+<h3>Who carries what</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>Party</th><th>Gets</th><th>Gives up / carries</th></tr>
+  <tr><td class="prod">Client</td><td>Liquidity at 0%, no liquidation during the term, downside floor</td><td>Upside above the cap; loss down to the floor relative to today's price</td></tr>
+  <tr><td class="prod">Issuer / hedge desk</td><td>Collar net credit minus funding cost (the margin)</td><td>Execution at maturity, option counterparty, operational risk</td></tr>
+  <tr><td class="prod">Lender (if external, see §2)</td><td>Yield paid from the net credit</td><td>Counterparty/operational risk of the issuer and hedge desk (price risk is mostly hedged away)</td></tr>
+</table></div>
+
+<!-- ============================================================ -->
+<h2 id="s2"><span class="num">2</span>Funding at scale: the collared-lending vault</h2>
+<p><strong>The problem:</strong> If the issuer funds every loan from its own balance sheet, growth stops at the size of that balance sheet. $50m of loans needs $50m of our own capital.</p>
+<p><strong>The solution:</strong> Outside lenders deposit USDC into a pool (a "vault"). The vault funds the loans, and the lenders are paid from the collar net credit. "Morpho-style" just means the onchain version of this: a smart-contract vault with transparent rules, where anyone can check every loan, its collateral and its hedge.</p>
+
+<div class="flow">
+  <div class="step"><b>Lenders</b>Deposit USDC (funds, treasuries, other platforms)</div><div class="arr">→</div>
+  <div class="step"><b>Vault</b>Lends USDC to clients against BTC/ETH/tokenized stocks, max 50% LTV</div><div class="arr">→</div>
+  <div class="step"><b>Hedge desk</b>Puts a collar on every loan. The net credit flows back to the vault as interest</div><div class="arr">→</div>
+  <div class="step"><b>Lenders</b>Earn yield that comes from option premium, not from the borrower</div>
+</div>
+
+<h3>Is it riskless for the lender?</h3>
+<p>Almost, <strong>as far as price goes</strong>. Even in a crash the floor protects the loan:</p>
+<div class="num-ex"><span class="k">Stress test: BTC −45% (from $100k to $55k)</span>
+Collateral sold at spot = $5,500 + put payout $1,500 = <strong>$7,000</strong> against a $5,000 loan → the lender is covered <strong>1.4×</strong>.
+The loan is only at risk if BTC falls below ~$50k <em>and</em> the put doesn't pay. So the remaining risk is about whether the hedge pays, not about the price.</div>
+
+<p>That is what "safer yield" means here: safer than a normal overcollateralised DeFi loan (Aave/Morpho). There the lender relies on liquidating in time, and a fast crash or an oracle failure can leave bad debt. Here a bought option sets the floor. What remains:</p>
+<div class="tbl-wrap"><table>
+  <tr><th>Remaining risk</th><th>What it means</th><th>Mitigation</th></tr>
+  <tr><td class="prod">Hedge counterparty</td><td>Deribit or the OTC counterparty fails to pay the put</td><td>Spread hedges across venues, use cleared venues, set counterparty limits</td></tr>
+  <tr><td class="prod">Custody</td><td>Collateral lost or frozen at the custodian</td><td>Regulated custodian, segregated wallets, proof of reserves</td></tr>
+  <tr><td class="prod">Execution at maturity</td><td>Selling the BTC at a worse price than the settlement index (slippage)</td><td>Sell in pieces around the index window, small buffer</td></tr>
+  <tr><td class="prod">Basis</td><td>The hedge is on a slightly different underlying, e.g. tokenized stocks hedged with index options (§3)</td><td>Hedge single names where possible, extra haircut on basis</td></tr>
+  <tr><td class="prod">Liquidity mismatch</td><td>Lenders want their money back before the loans mature</td><td>Lock-ups that match loan terms, a withdrawal queue, staggered maturities</td></tr>
+  <tr><td class="prod">Legal / insolvency</td><td>If the issuer goes bankrupt, whose is the collateral?</td><td>A bankruptcy-remote SPV, collateral pledged to a security trustee (§5)</td></tr>
+</table></div>
+<div class="callout"><span class="k">Bottom line</span>The lender's position works like a senior secured loan with a bought put attached. The yield should end up somewhere around "T-bills plus a spread", and the spread pays for counterparty and operational risk, not for market risk. That makes it a natural fit for conservative money (§4–§5).</div>
+
+<!-- ============================================================ -->
+<h2 id="s3"><span class="num">3</span>Diversified portfolios, lombard and why 24/7 matters</h2>
+<h3>Is a balanced portfolio safer collateral than a single asset?</h3>
+<p><strong>Yes.</strong> A mix of stocks, bonds, money-market funds and some BTC swings far less than BTC alone, so a lender can lend more against it. The catch is <strong>hedging</strong>. Nobody lists options on <em>your specific</em> portfolio, so you have three choices:</p>
+<div class="grid3">
+  <div class="card c1"><div class="tag">Option A</div><div class="name">Haircut only (classic lombard)</div><p>Lend a % of each asset's value (e.g. high for government bonds and money-market funds, medium for blue-chip stocks, low for single crypto). No options. If the value falls, margin call, then liquidation.</p><p><strong>Cheap, standard, but liquidation risk is back.</strong></p></div>
+  <div class="card c2"><div class="tag">Option B</div><div class="name">Collar every holding</div><p>Buy a put and sell a call on each stock and coin separately. Precise, but <strong>expensive</strong>: individual puts together cost more than one put on the whole basket, because you pay for crashes that never happen at the same time.</p></div>
+  <div class="card c3"><div class="tag">Option C</div><div class="name">Collar with index options</div><p>Hedge the stock part with options on an index (e.g. Euro Stoxx 50) and BTC with BTC options. Cheap, but <strong>basis risk</strong>: the client's stocks may fall while the index doesn't.</p></div>
+</div>
+<div class="callout green"><span class="k">Practical split</span>
+<strong>Diversified portfolio → classic lombard with haircuts</strong> (Option A).<br>
+<strong>Concentrated position (BTC, ETH, one big stock) → collared loan</strong> (§1).<br>
+Both can sit in the same app. The client posts their whole portfolio, and the engine picks which treatment applies to each part.</div>
+
+<h3>Why 24/7 matters (and where it doesn't)</h3>
+<ul>
+  <li><strong>For collared loans it hardly matters.</strong> Settlement happens only at maturity, so nothing needs to happen on a Sunday.</li>
+  <li><strong>For lombard on mixed collateral it matters a lot.</strong> Example: on Saturday BTC drops 15%. The stock part of the portfolio is still priced at Friday's close, and the stock market can't be traded until Monday. The lender is blind and can't act for two days, so traditional lenders apply bigger haircuts to cover the gap.
+  <br>If the stocks are tokenized and trade 24/7, they can be valued and sold at any time. That means <strong>tighter haircuts, higher LTV and less weekend gap risk</strong>.</li>
+  <li><strong>Client access.</strong> The client can borrow at any time, e.g. Saturday night when they need liquidity. This is a selling point, not the core economics.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="s4"><span class="num">4</span>Tranching: "insurance" without being an insurer</h2>
+<p><strong>Why not just sell insurance on vault yield?</strong> Insurance is limited by capital. To insure $100m you need a lot of money on standby, an insurance licence (Solvency II in the EU), and the losses all arrive together: when a stablecoin depegs, every policy pays out at once.</p>
+<p><strong>Tranching gets the same result without us putting up the capital.</strong> Split one pool into two slices with different rights:</p>
+<ul>
+  <li><strong>Senior tranche:</strong> paid first, gets a fixed, lower return, and loses money last.</li>
+  <li><strong>Junior tranche:</strong> paid last, gets whatever is left over (higher return), and takes losses first.</li>
+</ul>
+<p>The junior investors <em>are</em> the insurers, and the yield the senior gives up pays them. The order in which money flows out is called the <strong>waterfall</strong>.</p>
+
+<h3>Worked example</h3>
+<p>Vault $100m earning 8% a year. Senior $80m promised 5%. Junior $20m gets the rest.</p>
+<div class="tbl-wrap"><table>
+  <tr><th>Scenario</th><th>Vault result</th><th>Senior ($80m)</th><th>Junior ($20m)</th></tr>
+  <tr><td class="prod">Good year</td><td>+$8m income, no losses</td><td>+$4m → <strong>+5%</strong></td><td>+$4m → <strong>+20%</strong></td></tr>
+  <tr><td class="prod">Weak year</td><td>+$5m income</td><td>+$4m → <strong>+5%</strong></td><td>+$1m → <strong>+5%</strong></td></tr>
+  <tr><td class="prod">Loss year</td><td>+$8m income, −$10m loss</td><td>+$4m → <strong>+5%</strong> (untouched)</td><td>20 + 4 − 10 = $14m → <strong>−30%</strong></td></tr>
+  <tr><td class="prod">Disaster</td><td>+$8m income, −$30m loss</td><td>Ends at $78m → <strong>−2.5%</strong></td><td>Wiped out → <strong>−100%</strong></td></tr>
+</table></div>
+<p>The senior only loses money once losses exceed the junior's capital plus the junior's income, about $24m (24% of the vault) in this example. That cushion is called <strong>subordination</strong>, and the loss level at which the senior starts to lose is the <strong>attachment point</strong>.</p>
+
+<div class="callout"><span class="k">Combine with §2</span>Tranche the <strong>collared-lending vault</strong>. Its losses are already small because every loan is hedged, so a senior tranche with 15–20% subordination underneath it is very conservative. That senior tranche is the product to wrap for corporate treasuries and banks (§5). The junior goes to crypto-native funds that want higher yield.</div>
+<div class="callout red"><span class="k">The 2007 lesson</span>Tranching does <strong>not</strong> reduce total risk. It only moves it around. The senior is only as safe as the loss estimates behind it. CDOs blew up because everyone assumed mortgages wouldn't all default together, and in a crisis they did. Size the junior against a real stress scenario (e.g. hedge counterparty fails and BTC −60% in a week), not the average year, and publish the assumptions.</div>
+
+<!-- ============================================================ -->
+<h2 id="s5"><span class="num">5</span>Wrapping it in an ISIN</h2>
+<p><strong>The core point:</strong> institutions don't avoid onchain yield because the yield is bad. They avoid it because they <strong>can't hold it</strong>. A corporate treasurer or a small bank has:</p>
+<ul>
+  <li>a <strong>custody account at their bank</strong> that holds securities, not wallets;</li>
+  <li>an <strong>investment policy</strong> that allows "bonds / notes / funds", not "smart-contract tokens";</li>
+  <li><strong>accounting and auditors</strong> who need a known instrument type, prices and statements;</li>
+  <li><strong>settlement</strong> through Clearstream/Euroclear.</li>
+</ul>
+<p>A note with an ISIN solves all four at once. The yield engine stays onchain; the client only sees a security in their custody account.</p>
+
+<h3>So: do we wrap looped yield in an ISIN?</h3>
+<p><strong>Yes, the wrapper is the product, but put something conservative inside.</strong> Raw leveraged DeFi loops carry depeg, oracle and curator risk that a treasury mandate won't accept, whatever the wrapper. The best thing to put inside is the <strong>senior tranche of the collared-lending vault</strong> (§2 + §4), optionally mixed with tokenized money-market funds. That gives a story a treasurer can sign off: <em>"T-bill-plus yield, secured by hedged collateral, in a normal security."</em></p>
+
+<h3>Wrapper types</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>Wrapper</th><th>What it is</th><th>Fits when</th></tr>
+  <tr><td class="prod">ETN / ETP</td><td>Exchange-listed note that follows a fixed rule (e.g. "value of vault X")</td><td>Rules-based exposure that can be listed on an exchange, broad distribution</td></tr>
+  <tr><td class="prod">AMC (actively managed certificate)</td><td>Note where a named manager can rebalance the strategy inside</td><td>The strategy changes over time (vault allocations, hedge rolls). Common in CH/DE</td></tr>
+  <tr><td class="prod">Crypto security (eWpG)</td><td>German electronic security recorded on a blockchain register</td><td>The buyer wants it both in a custody account <em>and</em> onchain</td></tr>
+</table></div>
+
+<h3>What the investor is actually exposed to</h3>
+<ul>
+  <li><strong>Issuer risk.</strong> A note is the issuer's debt. If the issuer fails, holders are creditors. Fix: issue from a <strong>bankruptcy-remote SPV</strong> and <strong>pledge the underlying assets to a security trustee</strong>, the way physically backed ETCs work. Then holders have a claim on the assets, not just on the issuer.</li>
+  <li><strong>The strategy inside</strong>, i.e. everything in §2 and §4.</li>
+  <li><strong>Liquidity of the note</strong>: whether someone quotes a bid every day. We do, as market maker.</li>
+</ul>
+
+<h3>Paperwork (high level, verify with Legal)</h3>
+<ul>
+  <li><strong>Base prospectus + final terms</strong>, approved by BaFin and passported to other EU countries. This is the same machinery as our certificate programme.</li>
+  <li><strong>PRIIPs KID</strong> if the note is sold to retail clients.</li>
+  <li><strong>MiFID target market</strong>: who it is for and who it is not for.</li>
+  <li>If the vault <em>lends</em>, check whether that is lending business under the KWG (banking licence) and how the note/SPV structure handles it (§8).</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="s6"><span class="num">6</span>Prediction-market baskets</h2>
+<div class="callout green"><span class="k">Decision (Max, 17 Nov 2026)</span>The bets are baskets containing dozens of hedges, each clearly auditable, and we market-make them ourselves. Liquidity and market making are not the constraint. This section explains how the product works on that basis.</div>
+
+<h3>From single bet to basket</h3>
+<p>A single binary ("Will X happen by date Y?") is a blunt hedge. It pays everything or nothing, and depends on one specific wording. A <strong>basket</strong> bundles 10–30 binaries that all point in the same direction (e.g. "AI development slows down"). Each leg gets a <strong>weight</strong>. The basket pays the weighted sum of the legs that resolve "yes".</p>
+<div class="callout"><span class="k">Payoff formula (linear basket)</span>Payout per 100 notional = Σ (weight<sub>i</sub> × outcome<sub>i</sub>) where outcome = 1 if the event happened and 0 if not.<br>Fair price per 100 notional = Σ (weight<sub>i</sub> × probability<sub>i</sub>), with probabilities taken from where each leg trades.</div>
+
+<h3>Worked example: "AI slowdown" basket (illustrative legs and probabilities)</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>#</th><th>Leg (resolves YES if…)</th><th class="r">Weight</th><th class="r">Implied prob.</th><th class="r">Price contribution</th></tr>
+  <tr><td>1</td><td>GPU rental price index (H100/hr) below $1.50 by 30 Jun 2027</td><td class="r">15%</td><td class="r">30%</td><td class="r">4.50</td></tr>
+  <tr><td>2</td><td>NVIDIA data-centre revenue growth &lt; 20% YoY in a reported quarter by Jun 2027</td><td class="r">15%</td><td class="r">20%</td><td class="r">3.00</td></tr>
+  <tr><td>3</td><td>≥ 2 of the top-4 hyperscalers cut capex guidance in H1 2027</td><td class="r">15%</td><td class="r">15%</td><td class="r">2.25</td></tr>
+  <tr><td>4</td><td>A top-5 AI lab raises at a lower valuation (down round) by Jun 2027</td><td class="r">10%</td><td class="r">12%</td><td class="r">1.20</td></tr>
+  <tr><td>5</td><td>US tightens AI chip export rules (new BIS rule) by Jun 2027</td><td class="r">10%</td><td class="r">45%</td><td class="r">4.50</td></tr>
+  <tr><td>6</td><td>EU delays enforcement of AI Act general-purpose-AI obligations</td><td class="r">10%</td><td class="r">35%</td><td class="r">3.50</td></tr>
+  <tr><td>7</td><td>SOX semiconductor index down &gt; 25% from basket start</td><td class="r">15%</td><td class="r">18%</td><td class="r">2.70</td></tr>
+  <tr><td>8</td><td>A ≥ 1 GW US data-centre project announced as cancelled or paused</td><td class="r">10%</td><td class="r">40%</td><td class="r">4.00</td></tr>
+  <tr><td></td><td><strong>Basket</strong></td><td class="r"><strong>100%</strong></td><td class="r"></td><td class="r"><strong>25.65</strong></td></tr>
+</table></div>
+<div class="num-ex"><span class="k">How it plays out</span>
+The buyer pays ~<strong>25.65 per 100</strong> notional (plus our spread). Say legs 1, 3 and 7 come true: payout = 15 + 15 + 15 = <strong>45 per 100</strong>, a gain of ~19 per 100. If nothing happens, the buyer loses the premium, exactly like an insurance premium. If the whole theme plays out, the payout approaches 100.</div>
+
+<h3>Why baskets beat single bets</h3>
+<ul>
+  <li><strong>Smoother hedge:</strong> it pays partly when the theme partly happens, instead of all-or-nothing on one wording.</li>
+  <li><strong>Less wording risk:</strong> one leg resolving on a technicality only moves the basket by its weight.</li>
+  <li><strong>Auditable:</strong> each leg has a fixed resolution source, date and rule, written into the final terms. An independent calculation agent confirms the outcomes.</li>
+  <li><strong>Packaging:</strong> one ISIN, one price, one line on the client's statement, instead of 20 positions across venues.</li>
+</ul>
+
+<h3>Basket designs</h3>
+<div class="grid2">
+  <div class="card c1"><div class="tag">Default</div><div class="name">Linear (weighted sum)</div><p>The payout is the weighted sum of the legs that came true. Each leg is priced and hedged on its own, so it is the simplest to quote, market-make and audit.</p></div>
+  <div class="card c4"><div class="tag">Advanced</div><div class="name">"k-of-n" trigger</div><p>Pays 100 if at least k of the n legs happen, otherwise 0. It's closer to a classic insurance trigger, but the price depends on how <em>correlated</em> the legs are, so it is harder to price and hedge. Phase 2.</p></div>
+</div>
+
+<h3>How we market-make it</h3>
+<ol>
+  <li><strong>Quote:</strong> basket mid = Σ weight × leg mid, using live prices from Polymarket, Kalshi and our own book. Bid/ask = mid ± spread.</li>
+  <li><strong>Hedge:</strong> when a client buys the basket, we buy the matching weight of each leg on the venues, or warehouse legs where the flow from different clients offsets.</li>
+  <li><strong>Manage the remainder:</strong> leftover exposure from legs we can't fully hedge, and correlation between legs, sits in the market-making book under risk limits.</li>
+  <li><strong>Publish:</strong> leg list, weights, resolution sources and a daily indicative value, so anyone can rebuild the price.</li>
+</ol>
+
+<h3>Who buys it</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>Buyer</th><th>Why</th><th>How they access it</th></tr>
+  <tr><td class="prod">Macro / hedge funds</td><td>Cheap, defined-loss exposure to a macro theme</td><td>Directly as a note or OTC</td></tr>
+  <tr><td class="prod">Private banks &amp; wealth managers</td><td>New thematic certificates for their product shelf, a story clients understand</td><td>White-label notes under the bank's name (§7)</td></tr>
+  <tr><td class="prod">Corporates &amp; SMEs (e.g. exporters)</td><td>Hedge geopolitical or trade-policy risk that FX forwards and trade-credit insurance don't cover</td><td>Through their house bank, like they already buy FX hedges</td></tr>
+  <tr><td class="prod">Banks (own book)</td><td>Hedge concentration in the loan book, e.g. heavy lending to exporters into one region</td><td>OTC or note</td></tr>
+</table></div>
+
+<div class="num-ex"><span class="k">Example: sizing a hedge for an exporter</span>
+A German machine builder sells €20m a year into a region. In an escalation scenario, management estimates revenue there falls by ~30%, a <strong>€6m</strong> hit.
+<ol>
+  <li>Pick or build a "regional escalation" basket (tariffs, sanctions, shipping-lane disruption, export-control legs…).</li>
+  <li>Estimate how much the basket pays <em>in the scenario they fear</em>. Say ~60 per 100, because most but not all legs trigger.</li>
+  <li>Notional needed ≈ €6m ÷ 0.60 = <strong>€10m</strong>.</li>
+  <li>Cost = basket price × notional. At a price of 8 per 100 that is <strong>€800k</strong>, the "insurance premium" for €6m of protection.</li>
+</ol>
+The CFO now has a number to compare with alternatives (trade-credit insurance, export guarantees, simply holding more cash). The basket design should map as tightly as possible onto how that company actually loses money.</div>
+
+<div class="callout warn"><span class="k">Verify with Legal</span>In the EU, binaries are derivatives. Sold to retail clients there are ESMA/BaFin product-intervention rules for binary options, and we need to check whether a securitised, prospectus-backed basket note falls inside or outside them. For institutions: MiFID II, and EMIR if traded OTC. Corporates and IFRS 9 hedge accounting: the buyer needs to document the economic link between the basket and their exposure.</div>
+
+<!-- ============================================================ -->
+<h2 id="s7"><span class="num">7</span>How it fits together: the platform we sell to banks</h2>
+<p>The products above share one production line. That is the business: a <strong>structuring and issuance platform for onchain underlyings</strong>.</p>
+<div class="phases">
+  <div class="phase"><div class="ph">Inputs</div><div class="pt">Onchain building blocks</div><ul><li>Options (Deribit, onchain)</li><li>Prediction-market legs</li><li>Lending vaults &amp; collateral</li><li>Tokenized stocks, money-market funds, bonds</li></ul></div>
+  <div class="phase"><div class="ph">Structure</div><div class="pt">Our structuring + hedging</div><ul><li>Collars (§1)</li><li>Vault funding (§2)</li><li>Tranches (§4)</li><li>Baskets (§6)</li></ul></div>
+  <div class="phase tgt"><div class="ph">Output</div><div class="pt">Wrapped &amp; distributed</div><ul><li>ISIN notes / crypto securities (§5)</li><li>White-label for partner banks</li><li>Direct via DLT &amp; exchange partners</li><li>Daily market making</li></ul></div>
+</div>
+
+<h3>The Leonteq model, applied to onchain</h3>
+<p>Leonteq (CH) built a business by letting partner banks issue structured products <strong>under the bank's own name</strong>. The bank owns the client relationship and the shelf, and Leonteq does structuring, pricing, hedging, issuance and lifecycle in the background. Banks pay for this because building a structuring desk themselves is slow and expensive.</p>
+<p>The onchain version is even more compelling for a bank, because <strong>it can't hedge against Polymarket, Deribit or Morpho liquidity itself</strong>, not operationally and not under its risk framework. We can. So what we sell to a bank is:</p>
+<div class="grid3">
+  <div class="card c1"><div class="tag">Sell 1</div><div class="name">Collateral</div><p>Lombard and collared loans on tokenized assets and crypto for the bank's clients, valued 24/7.</p></div>
+  <div class="card c2"><div class="tag">Sell 2</div><div class="name">Shelf products</div><p>Thematic prediction baskets, collared notes and yield notes under the bank's brand.</p></div>
+  <div class="card c3"><div class="tag">Sell 3</div><div class="name">Treasury yield</div><p>The senior-tranche yield note for the bank's own treasury and its corporate clients.</p></div>
+</div>
+<div class="callout"><span class="k">Why a bank says yes (the Kraken × Deutsche Börse logic)</span>Not because of day-one revenue. It's because the bank gets access to a market it can't build into, through a regulated EU counterparty, in instruments its systems already handle. For us the value is distribution and credibility, even before volume arrives.</div>
+
+<!-- ============================================================ -->
+<h2 id="s8"><span class="num">8</span>Open questions &amp; next steps</h2>
+<ol class="agenda">
+  <li><strong>Lending licence.</strong> Is funding collared/lombard loans "Kreditgeschäft" under the KWG for us? Options: a bank partner as lender of record, or lending inside an SPV funded by notes. Legal opinion needed.</li>
+  <li><strong>Issuer entity.</strong> Which entity issues the notes (DLT-Anduin, entity TBD), the SPV structure, and the security trustee.</li>
+  <li><strong>Hedge counterparties.</strong> Deribit plus 1–2 OTC option counterparties, limits and how collateral is posted. Polymarket/Kalshi access for basket legs: entity, onboarding, limits.</li>
+  <li><strong>Calculation agent.</strong> An independent party to confirm basket resolutions and vault values.</li>
+  <li><strong>First pilots.</strong> (a) Collared loan on BTC with the residual paid in USDC; (b) one thematic basket note for a private-bank shelf; (c) a model of the senior tranche on paper with a stress test before raising any money.</li>
+  <li><strong>Binary-options rules.</strong> Do retail-distributed basket notes fall under the ESMA/BaFin restrictions?</li>
+</ol>
+
+<!-- ============================================================ -->
+<h2 id="s9"><span class="num">9</span>Glossary</h2>
+<div class="tbl-wrap"><table>
+  <tr><th>Term</th><th>Meaning</th></tr>
+  <tr><td class="prod">Strike</td><td>The fixed price in an option contract</td></tr>
+  <tr><td class="prod">Premium</td><td>The price paid for an option</td></tr>
+  <tr><td class="prod">Collar</td><td>Bought put + sold call: a floor and a cap</td></tr>
+  <tr><td class="prod">Net credit</td><td>A collar where the call premium received exceeds the put premium paid</td></tr>
+  <tr><td class="prod">Cash-settled</td><td>The option pays the price difference in cash. No asset changes hands</td></tr>
+  <tr><td class="prod">LTV</td><td>Loan-to-value: loan ÷ collateral value</td></tr>
+  <tr><td class="prod">Haircut</td><td>The share of an asset's value a lender won't lend against (LTV = 100% − haircut)</td></tr>
+  <tr><td class="prod">Lombard loan</td><td>A loan secured by a securities portfolio</td></tr>
+  <tr><td class="prod">Basis risk</td><td>The hedge and the exposure don't move exactly together</td></tr>
+  <tr><td class="prod">Vault</td><td>A pooled smart-contract fund with fixed rules for how money is deployed</td></tr>
+  <tr><td class="prod">Tranche</td><td>A slice of a pool with its own priority for payments and losses</td></tr>
+  <tr><td class="prod">Waterfall</td><td>The order in which income is paid and losses are absorbed across tranches</td></tr>
+  <tr><td class="prod">Subordination / attachment point</td><td>The cushion of junior capital beneath a tranche / the loss level at which a tranche starts losing</td></tr>
+  <tr><td class="prod">Binary / digital</td><td>A contract paying a fixed amount if an event happens, else zero</td></tr>
+  <tr><td class="prod">Calculation agent</td><td>The party that determines payouts under the product terms</td></tr>
+  <tr><td class="prod">ISIN</td><td>The international ID number of a security</td></tr>
+  <tr><td class="prod">ETN / ETP / AMC</td><td>Listed note / exchange-traded product / actively managed certificate</td></tr>
+  <tr><td class="prod">eWpG</td><td>German Electronic Securities Act: allows securities issued on a blockchain register</td></tr>
+  <tr><td class="prod">SPV</td><td>Special purpose vehicle: a separate legal entity, set up so it is protected if the sponsor goes bankrupt</td></tr>
+  <tr><td class="prod">PRIIPs KID</td><td>Key Information Document required for packaged products sold to retail clients</td></tr>
+</table></div>
+
+<footer class="doc">DLT Finance · Internal working draft · Structured Products on Onchain Underlyings — Primer v0.1 · 17 November 2026. All numbers are illustrative and show how the structures work; they are not pricing. Regulatory points marked "verify" are working assumptions, not legal advice. Confirm them with Legal/Compliance before relying on them.</footer>
+
+</div>
+</body>
+</html>
