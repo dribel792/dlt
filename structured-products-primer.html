@@ -128,9 +128,9 @@
 
 <header class="doc">
   <div class="eyebrow">DLT Finance · Strategy &amp; Structuring Primer</div>
-  <h1>Structured products on onchain underlyings: collared loans, yield vaults, tranches, ISIN wrappers and prediction baskets</h1>
-  <p class="lede">An explainer for someone new to structuring. It covers the building blocks first, then each product: how it works, a worked example with numbers, who carries which risk, and what can go wrong. The last section shows how the products fit into one platform that we can sell to banks.</p>
-  <div class="meta"><span><b>Status</b> Working draft v0.1</span><span><b>Date</b> 17 Nov 2026</span><span><b>Audience</b> Product, trading, partnerships</span></div>
+  <h1>Structured products on onchain underlyings: collared loans, yield vaults, tranches, ISIN wrappers, prediction baskets, credit lines and card receivables</h1>
+  <p class="lede">An explainer for someone new to structuring. It covers the building blocks first, then each product: how it works, a worked example with numbers, who carries which risk, and what can go wrong. Then it covers what tokenization actually changes, two large-scale products (a universal credit line and tokenized card receivables), and how everything fits into one platform that we can sell to banks.</p>
+  <div class="meta"><span><b>Status</b> Working draft v0.2</span><span><b>Date</b> 18 Nov 2026</span><span><b>Audience</b> Product, trading, partnerships</span></div>
 </header>
 
 <div class="thesis">
@@ -141,6 +141,8 @@
     <li><strong>Prediction basket</strong> = weighted bundle of binary bets on one theme</li>
     <li><strong>Insured yield</strong> = senior/junior tranches of a vault</li>
     <li><strong>Bank-ready yield</strong> = any of the above wrapped in a security with an ISIN</li>
+    <li><strong>Universal credit line</strong> = lombard haircuts + collars across everything a client holds, pledged where it sits</li>
+    <li><strong>Card-receivables token</strong> = a credit card master trust, tranched, with the waterfall in code</li>
   </ul>
 </div>
 
@@ -152,9 +154,12 @@
   <a href="#s4">4 · Tranching: "insurance" without being an insurer</a>
   <a href="#s5">5 · Wrapping it in an ISIN</a>
   <a href="#s6">6 · Prediction-market baskets</a>
-  <a href="#s7">7 · How it fits together: the platform we sell to banks</a>
-  <a href="#s8">8 · Open questions &amp; next steps</a>
-  <a href="#s9">9 · Glossary</a>
+  <a href="#s7">7 · What tokenization actually changes</a>
+  <a href="#s8">8 · Large-scale product: the universal credit line</a>
+  <a href="#s9">9 · Card receivables as a token</a>
+  <a href="#s10">10 · How it fits together: the platform we sell to banks</a>
+  <a href="#s11">11 · Open questions &amp; next steps</a>
+  <a href="#s12">12 · Glossary</a>
 </div>
 
 <!-- ============================================================ -->
@@ -263,6 +268,18 @@ The loan is only at risk if BTC falls below ~$50k <em>and</em> the put doesn't p
 </table></div>
 <div class="callout"><span class="k">Bottom line</span>The lender's position works like a senior secured loan with a bought put attached. The yield should end up somewhere around "T-bills plus a spread", and the spread pays for counterparty and operational risk, not for market risk. That makes it a natural fit for conservative money (§4–§5).</div>
 
+<h3>The lender's position as a token: selling it before maturity</h3>
+<p>A lender who funds a collared loan holds a <strong>claim</strong>: "$X plus interest at maturity, secured by the BTC and its collar." Today that claim sits in a ledger entry and the lender is stuck with it until the loan matures. If the claim is a token, it behaves like a small bond and can be passed on:</p>
+<div class="num-ex"><span class="k">Example: selling a loan position early</span>
+A lender funds a <strong>$1m</strong>, 12-month collared loan at ~5% (paid from the collar net credit). After 3 months they need the cash back. They sell the loan token to a fund for about <strong>$1.01m</strong> (principal plus the ~$12.5k of interest earned so far, minus a small discount for the buyer). The fund holds it for the remaining 9 months and collects the rest of the interest. The borrower notices nothing: the loan, the collateral and the hedge stay exactly where they are. Only the name of the creditor changes.</div>
+<p>What else the token allows:</p>
+<ul>
+  <li><strong>Pooling:</strong> 100 such loans go into the vault and lenders hold vault shares instead of single loans (the vault token itself is transferable, which is how a lender exits without a withdrawal queue).</li>
+  <li><strong>Re-use as collateral:</strong> the loan or vault token is itself high-quality collateral (hedged, overcollateralised) that can back a further loan.</li>
+  <li><strong>Tranching:</strong> the pool can be split into senior and junior slices for different buyers (§4).</li>
+</ul>
+<p>Why it matters: lenders who can exit early accept <strong>lower yields and longer terms</strong>, so the borrower gets cheaper money. A secondary market is what turns a private loan book into an investable asset class.</p>
+
 <!-- ============================================================ -->
 <h2 id="s3"><span class="num">3</span>Diversified portfolios, lombard and why 24/7 matters</h2>
 <h3>Is a balanced portfolio safer collateral than a single asset?</h3>
@@ -277,6 +294,20 @@ The loan is only at risk if BTC falls below ~$50k <em>and</em> the put doesn't p
 <strong>Concentrated position (BTC, ETH, one big stock) → collared loan</strong> (§1).<br>
 Both can sit in the same app. The client posts their whole portfolio, and the engine picks which treatment applies to each part.</div>
 
+<h3>"Collateral can move": a real-world example</h3>
+<div class="num-ex"><span class="k">€200k share portfolio, €100k loan wanted</span>
+<strong>Today:</strong> the shares sit at a neobroker. Only the broker's partner bank can lend against them, on its own terms (rate, LTV). To borrow from a cheaper lender, the client would have to transfer the whole depot: days to weeks, a new custody agreement with the new lender, and the old broker has no reason to make it easy. In practice nobody does it, so <strong>the bank where your assets sit has a monopoly on your loan</strong>.<br><br>
+<strong>Tokenized:</strong> the shares stay where they are. A pledge is recorded on the token (or the tokens move into a pledge contract in the client's own name). Lender B sees the position and its live price and pays out in minutes. Lenders A, B and C can all quote, so they <strong>compete on rate and LTV</strong>. When the loan is repaid, the pledge is released and nothing ever moved.</div>
+
+<h3>Does pledging lock the assets? (How it works in real life)</h3>
+<p>The asset is locked against being <strong>moved away</strong>, not against being <strong>sold</strong>. This is how a margin account at a broker already works: you can sell shares inside it, and the cash proceeds simply stay in the account as collateral. Onchain the rules are explicit:</p>
+<div class="grid2">
+  <div class="card c1"><div class="tag">Stays with the client</div><div class="name">Ownership and its rights</div><ul><li>Dividends, coupons and staking rewards still go to the client.</li><li>Voting rights stay with the client.</li><li>Price gains belong to the client.</li></ul></div>
+  <div class="card c2"><div class="tag">Sell-to-repay</div><div class="name">Selling a pledged asset</div><p>One atomic step: the buyer pays → the loan is repaid from the proceeds → the pledge is released → the rest goes to the client. Nobody has to trust anybody in between, and the lender never sees its collateral leave before it is repaid.</p></div>
+  <div class="card c3"><div class="tag">Substitution</div><div class="name">Swapping collateral</div><p>The client takes ETH out and puts a tokenized T-bill fund in, as long as the LTV after the swap is still within limits. The engine checks it in the same transaction.</p></div>
+  <div class="card c5"><div class="tag">The only real limit</div><div class="name">No transfer while the loan is open</div><p>The pledged asset can't be sent to another wallet or another broker without either repaying, or the lender consenting (the pledge travels with it).</p></div>
+</div>
+
 <h3>Why 24/7 matters (and where it doesn't)</h3>
 <ul>
   <li><strong>For collared loans it hardly matters.</strong> Settlement happens only at maturity, so nothing needs to happen on a Sunday.</li>
@@ -284,6 +315,7 @@ Both can sit in the same app. The client posts their whole portfolio, and the en
   <br>If the stocks are tokenized and trade 24/7, they can be valued and sold at any time. That means <strong>tighter haircuts, higher LTV and less weekend gap risk</strong>.</li>
   <li><strong>Client access.</strong> The client can borrow at any time, e.g. Saturday night when they need liquidity. This is a selling point, not the core economics.</li>
 </ul>
+<div class="callout warn"><span class="k">Honest caveat on tokenized stocks at weekends</span>A tokenized stock can be <em>priced</em> on a Sunday, but while the home exchange is closed the token trades thinly and its price is a guess about Monday's open. So the 24/7 benefit is real for crypto, tokenized money-market funds and gold, and only <strong>partial</strong> for stocks. The haircut engine should know which market is open and widen haircuts on closed-market assets accordingly.</div>
 
 <!-- ============================================================ -->
 <h2 id="s4"><span class="num">4</span>Tranching: "insurance" without being an insurer</h2>
@@ -294,6 +326,8 @@ Both can sit in the same app. The client posts their whole portfolio, and the en
   <li><strong>Junior tranche:</strong> paid last, gets whatever is left over (higher return), and takes losses first.</li>
 </ul>
 <p>The junior investors <em>are</em> the insurers, and the yield the senior gives up pays them. The order in which money flows out is called the <strong>waterfall</strong>.</p>
+<div class="callout"><span class="k">The simplest picture: a stack of champagne glasses</span>Losses are poured in from the bottom, income from the top. Income fills the senior glass first, then the junior. Losses empty the junior glass first; only when it is empty does the senior start to lose. Same pool, same loans: the only thing tranching changes is <strong>who gets hit first</strong>. Often there is a middle slice too (the <strong>mezzanine</strong>), which is hit after the junior and before the senior. §9 has a three-slice example on card receivables.</div>
+<p><strong>Why bother?</strong> Because different buyers want different things from the same pool. A pension fund or bank treasury wants a small, steady return and almost no chance of loss: it buys the senior. A hedge fund wants a high return and can accept losses: it buys the junior. Without tranching, one pool can only serve one kind of buyer; with it, the same assets are sold to both, and usually at a better total price.</p>
 
 <h3>Worked example</h3>
 <p>Vault $100m earning 8% a year. Senior $80m promised 5%. Junior $20m gets the rest.</p>
@@ -343,7 +377,7 @@ Both can sit in the same app. The client posts their whole portfolio, and the en
   <li><strong>Base prospectus + final terms</strong>, approved by BaFin and passported to other EU countries. This is the same machinery as our certificate programme.</li>
   <li><strong>PRIIPs KID</strong> if the note is sold to retail clients.</li>
   <li><strong>MiFID target market</strong>: who it is for and who it is not for.</li>
-  <li>If the vault <em>lends</em>, check whether that is lending business under the KWG (banking licence) and how the note/SPV structure handles it (§8).</li>
+  <li>If the vault <em>lends</em>, check whether that is lending business under the KWG (banking licence) and how the note/SPV structure handles it (§11).</li>
 </ul>
 
 <!-- ============================================================ -->
@@ -396,7 +430,7 @@ The buyer pays ~<strong>25.65 per 100</strong> notional (plus our spread). Say l
 <div class="tbl-wrap"><table>
   <tr><th>Buyer</th><th>Why</th><th>How they access it</th></tr>
   <tr><td class="prod">Macro / hedge funds</td><td>Cheap, defined-loss exposure to a macro theme</td><td>Directly as a note or OTC</td></tr>
-  <tr><td class="prod">Private banks &amp; wealth managers</td><td>New thematic certificates for their product shelf, a story clients understand</td><td>White-label notes under the bank's name (§7)</td></tr>
+  <tr><td class="prod">Private banks &amp; wealth managers</td><td>New thematic certificates for their product shelf, a story clients understand</td><td>White-label notes under the bank's name (§10)</td></tr>
   <tr><td class="prod">Corporates &amp; SMEs (e.g. exporters)</td><td>Hedge geopolitical or trade-policy risk that FX forwards and trade-credit insurance don't cover</td><td>Through their house bank, like they already buy FX hedges</td></tr>
   <tr><td class="prod">Banks (own book)</td><td>Hedge concentration in the loan book, e.g. heavy lending to exporters into one region</td><td>OTC or note</td></tr>
 </table></div>
@@ -414,7 +448,168 @@ The CFO now has a number to compare with alternatives (trade-credit insurance, e
 <div class="callout warn"><span class="k">Verify with Legal</span>In the EU, binaries are derivatives. Sold to retail clients there are ESMA/BaFin product-intervention rules for binary options, and we need to check whether a securitised, prospectus-backed basket note falls inside or outside them. For institutions: MiFID II, and EMIR if traded OTC. Corporates and IFRS 9 hedge accounting: the buyer needs to document the economic link between the basket and their exposure.</div>
 
 <!-- ============================================================ -->
-<h2 id="s7"><span class="num">7</span>How it fits together: the platform we sell to banks</h2>
+<h2 id="s7"><span class="num">7</span>What tokenization actually changes</h2>
+<p>The payoffs don't change. A collar pays the same whether the collateral is a token or a line in a custody account. What tokenization changes is the <strong>plumbing</strong>, and that's what decides which products are economic at all. Three things:</p>
+<div class="grid3">
+  <div class="card c1"><div class="tag">Unlock 1</div><div class="name">Collateral can move</div><p>Assets can be pledged, valued and sold anywhere, at any time, without moving the depot (§3). Lenders compete for the same collateral.</p></div>
+  <div class="card c2"><div class="tag">Unlock 2</div><div class="name">Fixed costs fall</div><p>The payment order, settlement and reporting become code instead of trustees, paying agents and spreadsheets. Smaller deals become economic.</p></div>
+  <div class="card c3"><div class="tag">Unlock 3</div><div class="name">Settlement is atomic</div><p>Asset and cash swap in one step. Neither side carries the other's risk during settlement (sell-to-repay, loan maturity, note redemption).</p></div>
+</div>
+
+<h3>"Fixed costs fall": a securitization example</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>Cost item (illustrative)</th><th class="r">Traditional</th><th class="r">Tokenized</th><th>What changes</th></tr>
+  <tr><td class="prod">Legal (structure, true-sale, prospectus)</td><td class="r">€0.5–1m</td><td class="r">€150–300k</td><td>Reusable templates per programme; still needs real opinions</td></tr>
+  <tr><td class="prod">Rating</td><td class="r">€150–300k</td><td class="r">€0–150k</td><td>Optional for private/professional deals; loan-level data is live</td></tr>
+  <tr><td class="prod">Trustee, paying agent, cash manager</td><td class="r">€100–150k / yr</td><td class="r">€20–40k / yr</td><td>The waterfall runs in a smart contract; a trustee is still named, but has less to do</td></tr>
+  <tr><td class="prod">Investor reporting, audit of the waterfall</td><td class="r">€100–150k / yr</td><td class="r">~€20k / yr</td><td>Every payment and loan is visible onchain in real time</td></tr>
+  <tr><td class="prod">Servicer (collecting from borrowers)</td><td class="r">~1–2% of pool / yr</td><td class="r">~1–2% of pool / yr</td><td><strong>No change.</strong> Collections happen offchain, in the real world</td></tr>
+</table></div>
+<div class="num-ex"><span class="k">What that means at different deal sizes</span>
+<strong>€1bn deal:</strong> ~€1.5m upfront ≈ 0.15%. Fine either way, which is why big banks don't need tokenization for their own deals.<br>
+<strong>€10m deal:</strong> ~€1.5m upfront ≈ <strong>15%</strong> traditionally. Dead on arrival. Tokenized, ~€300k ≈ 3%, spread over a few years. <strong>Viable.</strong><br>
+That is the real market: <strong>originators too small for a classic securitization</strong> (fintech lenders, neobanks, BNPL providers, SME lenders) who today depend on expensive bank warehouse lines.</div>
+
+<h3>Product by product: how much does tokenization help?</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>Product</th><th>Gain</th><th>Why</th></tr>
+  <tr><td class="prod">Lombard / universal credit line (§3, §8)</td><td><span class="pill p-high">Big</span></td><td>Collateral pledged where it sits, valued 24/7, sold at weekends → tighter haircuts, higher LTV, lenders compete. The core unlock.</td></tr>
+  <tr><td class="prod">Collared-lending vault (§2)</td><td><span class="pill p-high">Big</span></td><td>Without tokenization it's a fund with a licence, quarterly reports and lock-ups. Onchain: every loan and hedge is verifiable live, lenders anywhere can fund it, and they exit by selling the vault token.</td></tr>
+  <tr><td class="prod">Tranching / securitization (§4, §9)</td><td><span class="pill p-high">Big</span></td><td>Waterfall in code → €5–20m deals become economic; investors see loan-level performance daily instead of monthly.</td></tr>
+  <tr><td class="prod">Collared loan (§1)</td><td><span class="pill p-med">Moderate</span></td><td>Already runs well on internal ledgers. Tokenization widens accepted collateral (tokenized stocks, money-market funds, gold), makes maturity settlement atomic, and makes the lender's claim tradeable (§2).</td></tr>
+  <tr><td class="prod">Prediction baskets (§6)</td><td><span class="pill p-med">Moderate</span></td><td>Legs are already onchain. A tokenized basket is auditable, settles automatically and can be used as collateral elsewhere.</td></tr>
+  <tr><td class="prod">ISIN wrapper (§5)</td><td><span class="pill p-low">None, by design</span></td><td>It exists because tokenization is incomplete: the bridge for institutions that can't hold tokens yet. An eWpG crypto security covers both worlds.</td></tr>
+</table></div>
+
+<!-- ============================================================ -->
+<h2 id="s8"><span class="num">8</span>Large-scale product: the universal credit line</h2>
+<div class="thesis">
+  <div class="k">The pitch in one line</div>
+  <div class="v">One credit line against everything a client owns in tokenized form, pledged where it sits, valued 24/7, sold white-label through the banks and brokers that already hold the client.</div>
+  <ul>
+    <li>Combines §3 (haircut lombard for the diversified part) and §1 (collars for concentrated positions) in one engine.</li>
+    <li>Every asset that gets tokenized automatically becomes something a client can borrow against. The market grows with tokenization itself.</li>
+  </ul>
+</div>
+
+<h3>Why it's large</h3>
+<ul>
+  <li><strong>US margin debt</strong> alone passed $1 trillion in 2025. European private banks run large lombard books on top. Securities-backed lending is one of the most profitable, lowest-loss businesses in wealth management.</li>
+  <li>Today it is <strong>locked to the custodian</strong>: you can only borrow from the bank that holds your assets. Tokenization breaks that lock (§3), so the business moves to whoever runs the best <strong>collateral engine</strong>, not whoever holds the depot.</li>
+  <li>Retail and mass-affluent clients are underserved: most brokers either offer no lombard at all or only at poor LTVs.</li>
+</ul>
+
+<h3>How it works</h3>
+<div class="flow">
+  <div class="step"><b>1 · Connect</b>Client links holdings: wallet, tokenized-stock account, tokenized money-market fund, gold token</div><div class="arr">→</div>
+  <div class="step"><b>2 · Pledge</b>Assets are pledged in place (§3). Ownership, dividends and votes stay with the client</div><div class="arr">→</div>
+  <div class="step"><b>3 · Price</b>Engine values the whole portfolio 24/7 and sets a haircut per asset, wider when the home market is closed</div><div class="arr">→</div>
+  <div class="step"><b>4 · Draw</b>Client draws any amount up to the limit, anytime, and pays interest only on what is drawn</div><div class="arr">→</div>
+  <div class="step"><b>5 · Protect</b>Margin call → automatic partial sale (sell-to-repay) of the most liquid assets first</div>
+</div>
+
+<div class="tbl-wrap"><table>
+  <tr><th>Asset class (illustrative)</th><th class="r">Max LTV</th><th>Treatment</th></tr>
+  <tr><td class="prod">Tokenized money-market fund / T-bills</td><td class="r">90%</td><td>Haircut only</td></tr>
+  <tr><td class="prod">Tokenized government bonds</td><td class="r">80–85%</td><td>Haircut only</td></tr>
+  <tr><td class="prod">Tokenized gold</td><td class="r">75%</td><td>Haircut only</td></tr>
+  <tr><td class="prod">Diversified tokenized ETFs / blue-chip stocks</td><td class="r">60–70%</td><td>Haircut; wider haircut when the home exchange is closed</td></tr>
+  <tr><td class="prod">BTC / ETH (diversified share)</td><td class="r">50%</td><td>Haircut, 24/7 liquidation</td></tr>
+  <tr><td class="prod">Concentrated position (&gt;30–40% of portfolio)</td><td class="r">50–60%</td><td>Offered as a <strong>collared tranche</strong> (§1): no liquidation, floor and cap instead</td></tr>
+</table></div>
+<p>Portfolio effect: a client with €100k spread across all of the above gets a higher combined LTV than the sum of single-asset LTVs would suggest, because not everything falls at once. That's where the edge over single-asset crypto lenders comes from, and it's exactly what custodian-locked lombard can't do across custodians.</p>
+
+<div class="num-ex"><span class="k">Worked example</span>
+Client holds €40k tokenized MMF, €30k tokenized ETFs, €20k BTC, €10k tokenized gold = <strong>€100k</strong>.<br>
+Limit = 40×0.90 + 30×0.65 + 20×0.50 + 10×0.75 = 36 + 19.5 + 10 + 7.5 = <strong>€73k</strong>.<br>
+The client draws €40k at, say, base rate + 2.5%. On Saturday BTC drops 20%: the portfolio falls by €4k, the limit by €2k to €71k. The drawn €40k is still far inside the limit, so nothing happens. If they had drawn the full €73k, the engine would sell ~€4k of BTC on Saturday (each €1 sold repays €1 but removes €0.50 of limit) instead of waiting for Monday.</div>
+
+<h3>Business model</h3>
+<div class="grid3">
+  <div class="card c1"><div class="tag">Revenue</div><div class="name">Net interest margin</div><p>Rate charged minus funding cost. Securities-backed lending typically earns a healthy spread with very low credit losses.</p></div>
+  <div class="card c2"><div class="tag">Revenue</div><div class="name">Platform / white-label fee</div><p>The bank or broker pays per active credit line or a share of the margin for running the engine.</p></div>
+  <div class="card c3"><div class="tag">Revenue</div><div class="name">Hedging &amp; collars</div><p>Margin on collars for concentrated positions (§1) and on liquidations executed through our book.</p></div>
+</div>
+
+<h3>Who funds it (in stages)</h3>
+<ol>
+  <li><strong>Partner bank balance sheet</strong> as lender of record. Solves the licence question on day one.</li>
+  <li><strong>Lender vault</strong> (§2) funds a growing share, with lenders exiting via the vault token.</li>
+  <li><strong>Senior tranche</strong> of the credit-line pool sold to institutions in an ISIN wrapper (§4, §5). The junior stays with us or crypto-native funds.</li>
+</ol>
+
+<h3>Go-to-market</h3>
+<ul>
+  <li><strong>We don't sell to retail directly.</strong> We sell "your clients can borrow against what they hold" to neobrokers, crypto exchanges and private banks, white-labelled. They own the client; we run collateral, pricing, liquidation and funding.</li>
+  <li><strong>Moat:</strong> licences + risk models + 24/7 hedging and liquidation. Crypto-native lenders lack the licences and multi-asset risk models; incumbents lack the onchain rails.</li>
+  <li><strong>Who wins long term:</strong> the collateral engine everyone plugs into, i.e. the default lender of choice for tokenized assets.</li>
+</ul>
+
+<div class="callout warn"><span class="k">Pushback and risks</span>
+<ul>
+  <li><strong>Most portfolios aren't tokenized yet.</strong> The MVP must start where tokens exist today: crypto, tokenized T-bill funds (e.g. BlackRock BUIDL, Franklin BENJI), tokenized gold. Tokenized stocks come as they scale.</li>
+  <li><strong>Licence:</strong> lending is Kreditgeschäft under the KWG and outside MiCA. Retail lombard is consumer credit: check the new Consumer Credit Directive (CCD2, applies from Nov 2026). Verify with Legal.</li>
+  <li><strong>Legal pledge:</strong> the pledge must be enforceable against the custodian/issuer of each token type (eWpG crypto securities vs. tokens issued abroad). Different per asset; needs opinions.</li>
+  <li><strong>Liquidation at weekends</strong> is only as good as weekend liquidity in each token (§3 caveat).</li>
+</ul></div>
+
+<!-- ============================================================ -->
+<h2 id="s9"><span class="num">9</span>Card receivables as a token</h2>
+<p><strong>Is it real?</strong> Yes. Credit card securitization is one of the oldest and largest asset-backed markets in the US. And the onchain version has been proven: <strong>Figure</strong> originated and securitized billions of dollars of home-equity loans (HELOCs) on its own blockchain (Provenance) and went public in 2025 on that model.</p>
+
+<h3>How a card securitization works (the master trust)</h3>
+<p>Card balances are <strong>revolving</strong>: clients pay down and spend again every month. So the structure isn't a fixed pool of loans but a <strong>master trust</strong> that keeps buying new receivables:</p>
+<div class="flow">
+  <div class="step"><b>1 · Originator</b>Card issuer sells its card receivables to a bankruptcy-remote trust (true sale)</div><div class="arr">→</div>
+  <div class="step"><b>2 · Revolving period</b>Clients' repayments are used to buy new receivables. Investors only receive interest</div><div class="arr">→</div>
+  <div class="step"><b>3 · Amortization</b>After e.g. 3 years, repayments go to investors and the notes are paid down</div><div class="arr">→</div>
+  <div class="step"><b>Servicer</b>(usually the issuer) collects payments and chases arrears throughout</div>
+</div>
+
+<h3>Why investors are protected: excess spread</h3>
+<div class="num-ex"><span class="k">Excess spread, illustrative per year on the pool</span>
+Card interest and fees collected: <strong>~22%</strong><br>
+− Losses (charge-offs): ~4–5%<br>
+− Investor coupon (blended): ~5–6%<br>
+− Servicing fee: ~2%<br>
+= <strong>Excess spread ≈ 9–11%</strong>. That's the first cushion. Losses would have to roughly triple before investors lose a cent of principal, and only then do the junior slices start absorbing them.</div>
+<p><strong>Early-amortization trigger:</strong> if excess spread falls towards zero (e.g. a 3-month average below 0%), the revolving period stops automatically and every repayment goes straight to investors. Onchain, this trigger is a rule in the contract that anyone can check, instead of a monthly servicer report.</p>
+
+<h3>Tranching it: three-slice example</h3>
+<p>Take <strong>$100m</strong> of card receivables and cut them into three slices (same logic as §4):</p>
+<div class="tbl-wrap"><table>
+  <tr><th>Slice</th><th class="r">Size</th><th class="r">Coupon (illustr.)</th><th>Loses money when…</th><th>Natural buyer</th></tr>
+  <tr><td class="prod">Senior</td><td class="r">$75m</td><td class="r">~5%</td><td>losses exceed $25m (after excess spread)</td><td>Bank treasuries, insurers, pension funds</td></tr>
+  <tr><td class="prod">Mezzanine</td><td class="r">$15m</td><td class="r">~8%</td><td>losses exceed $10m</td><td>Credit funds, asset managers</td></tr>
+  <tr><td class="prod">Junior</td><td class="r">$10m</td><td class="r">~15%+ (residual)</td><td>first dollar of loss beyond excess spread</td><td>Hedge funds; the originator keeps part of it (risk retention)</td></tr>
+</table></div>
+<div class="num-ex"><span class="k">Scenario: losses of 6% ($6m) beyond what excess spread covers</span>
+Junior loses $6m (60% of its slice). Mezzanine and senior lose <strong>nothing</strong>. The senior would only be touched if losses passed $25m, i.e. a default wave several times worse than the 2008–09 peak in US card charge-offs (~10%).</div>
+
+<h3>What tokenization adds here</h3>
+<ul>
+  <li><strong>Small originators can securitize.</strong> €10–50m deals become viable (§7), so fintechs, neobanks and BNPL lenders get cheaper funding than warehouse lines.</li>
+  <li><strong>Loan-level transparency:</strong> investors see delinquencies, payments and the excess spread daily, not in a monthly PDF. That should lower the yield investors demand.</li>
+  <li><strong>The waterfall and triggers are code:</strong> nobody can "forget" to trip early amortization.</li>
+  <li><strong>Secondary market:</strong> slices trade as tokens, so investors aren't locked in until maturity.</li>
+</ul>
+
+<h3>Use case: US consumer debt, tokenized for EU investors</h3>
+<p>US card receivables yield more than European ones, and US issuers have a deep pool. Packaging them as a token (or eWpG crypto security) for EU investors is a natural cross-border product, but there is one big regulatory gate:</p>
+<div class="callout red"><span class="k">The EU Securitisation Regulation gate (verify with Legal)</span>
+<ul>
+  <li><strong>Risk retention:</strong> EU institutional investors (banks, insurers, funds) may only buy a securitization if the originator keeps at least <strong>5%</strong> of the risk, and they must verify it. Many US originators don't structure for that, which legally rules their deals out for EU institutions.</li>
+  <li><strong>Disclosure and due diligence:</strong> EU investors must get loan-level data and documents to EU standards and do their own due diligence before buying. Onchain data helps a lot here.</li>
+  <li><strong>Retail is effectively closed:</strong> selling securitizations to EU retail requires a suitability test and, for smaller portfolios, caps the allocation and sets a minimum ticket. Treat it as a <strong>professional-investor product</strong>.</li>
+  <li>The EU has proposed loosening some of these rules (2025 reform proposal), which helps the timing but doesn't remove risk retention.</li>
+</ul></div>
+<div class="grid2">
+  <div class="card c2"><div class="tag">What works</div><div class="name">Professional-only, EU-compliant</div><ul><li>Partner with a US originator willing to hold 5% and deliver EU-standard data.</li><li>Sell the <strong>senior and mezzanine</strong> slices to EU professionals, optionally in an ISIN wrapper (§5).</li><li>Hedge USD→EUR inside the structure, or issue a EUR-hedged class.</li></ul></div>
+  <div class="card c5"><div class="tag">Watch out</div><div class="name">What stays hard</div><ul><li>US consumer-protection law governs servicing and collections; that stays offchain and with the US servicer.</li><li>True sale and bankruptcy remoteness under US law.</li><li>FX hedge cost eats part of the yield pick-up.</li><li>Concentration in one originator's underwriting quality.</li></ul></div>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="s10"><span class="num">10</span>How it fits together: the platform we sell to banks</h2>
 <p>The products above share one production line. That is the business: a <strong>structuring and issuance platform for onchain underlyings</strong>.</p>
 <div class="phases">
   <div class="phase"><div class="ph">Inputs</div><div class="pt">Onchain building blocks</div><ul><li>Options (Deribit, onchain)</li><li>Prediction-market legs</li><li>Lending vaults &amp; collateral</li><li>Tokenized stocks, money-market funds, bonds</li></ul></div>
@@ -426,14 +621,18 @@ The CFO now has a number to compare with alternatives (trade-credit insurance, e
 <p>Leonteq (CH) built a business by letting partner banks issue structured products <strong>under the bank's own name</strong>. The bank owns the client relationship and the shelf, and Leonteq does structuring, pricing, hedging, issuance and lifecycle in the background. Banks pay for this because building a structuring desk themselves is slow and expensive.</p>
 <p>The onchain version is even more compelling for a bank, because <strong>it can't hedge against Polymarket, Deribit or Morpho liquidity itself</strong>, not operationally and not under its risk framework. We can. So what we sell to a bank is:</p>
 <div class="grid3">
-  <div class="card c1"><div class="tag">Sell 1</div><div class="name">Collateral</div><p>Lombard and collared loans on tokenized assets and crypto for the bank's clients, valued 24/7.</p></div>
+  <div class="card c1"><div class="tag">Sell 1</div><div class="name">Collateral</div><p>The universal credit line (§8): lombard and collared loans on tokenized assets and crypto for the bank's clients, valued 24/7.</p></div>
   <div class="card c2"><div class="tag">Sell 2</div><div class="name">Shelf products</div><p>Thematic prediction baskets, collared notes and yield notes under the bank's brand.</p></div>
   <div class="card c3"><div class="tag">Sell 3</div><div class="name">Treasury yield</div><p>The senior-tranche yield note for the bank's own treasury and its corporate clients.</p></div>
+</div>
+<div class="grid2">
+  <div class="card c4"><div class="tag">Sell 4</div><div class="name">Securitization factory</div><p>Small-ticket securitizations for originators (card, consumer, SME loans) with the waterfall in code (§9). Banks distribute the senior slices; we structure and run it.</p></div>
+  <div class="card c2"><div class="tag">Sell 5</div><div class="name">Secondary market</div><p>Trading in loan tokens, vault shares and tranche tokens (§2), so investors can exit early. Market making by us.</p></div>
 </div>
 <div class="callout"><span class="k">Why a bank says yes (the Kraken × Deutsche Börse logic)</span>Not because of day-one revenue. It's because the bank gets access to a market it can't build into, through a regulated EU counterparty, in instruments its systems already handle. For us the value is distribution and credibility, even before volume arrives.</div>
 
 <!-- ============================================================ -->
-<h2 id="s8"><span class="num">8</span>Open questions &amp; next steps</h2>
+<h2 id="s11"><span class="num">11</span>Open questions &amp; next steps</h2>
 <ol class="agenda">
   <li><strong>Lending licence.</strong> Is funding collared/lombard loans "Kreditgeschäft" under the KWG for us? Options: a bank partner as lender of record, or lending inside an SPV funded by notes. Legal opinion needed.</li>
   <li><strong>Issuer entity.</strong> Which entity issues the notes (DLT-Anduin, entity TBD), the SPV structure, and the security trustee.</li>
@@ -441,10 +640,14 @@ The CFO now has a number to compare with alternatives (trade-credit insurance, e
   <li><strong>Calculation agent.</strong> An independent party to confirm basket resolutions and vault values.</li>
   <li><strong>First pilots.</strong> (a) Collared loan on BTC with the residual paid in USDC; (b) one thematic basket note for a private-bank shelf; (c) a model of the senior tranche on paper with a stress test before raising any money.</li>
   <li><strong>Binary-options rules.</strong> Do retail-distributed basket notes fall under the ESMA/BaFin restrictions?</li>
+  <li><strong>Pledge enforceability.</strong> How a pledge on each token type (eWpG crypto security, foreign-issued tokenized stock, MMF token, crypto) is created, registered and enforced, and whether sell-to-repay works legally as designed.</li>
+  <li><strong>Consumer credit.</strong> Does a retail universal credit line fall under CCD2 and what does that require (creditworthiness checks, disclosures)?</li>
+  <li><strong>Credit line MVP.</strong> Pick the first asset set (crypto + tokenized MMF + gold), a partner bank as lender of record, and one white-label distribution partner.</li>
+  <li><strong>Card-receivables pilot.</strong> Find one originator (US or EU) willing to hold 5% risk retention and deliver EU-standard data; model a €20–50m deal end to end, including the FX hedge.</li>
 </ol>
 
 <!-- ============================================================ -->
-<h2 id="s9"><span class="num">9</span>Glossary</h2>
+<h2 id="s12"><span class="num">12</span>Glossary</h2>
 <div class="tbl-wrap"><table>
   <tr><th>Term</th><th>Meaning</th></tr>
   <tr><td class="prod">Strike</td><td>The fixed price in an option contract</td></tr>
@@ -467,9 +670,20 @@ The CFO now has a number to compare with alternatives (trade-credit insurance, e
   <tr><td class="prod">eWpG</td><td>German Electronic Securities Act: allows securities issued on a blockchain register</td></tr>
   <tr><td class="prod">SPV</td><td>Special purpose vehicle: a separate legal entity, set up so it is protected if the sponsor goes bankrupt</td></tr>
   <tr><td class="prod">PRIIPs KID</td><td>Key Information Document required for packaged products sold to retail clients</td></tr>
+  <tr><td class="prod">Pledge</td><td>A security right over an asset: the owner keeps it, but can't move it away until the loan is repaid</td></tr>
+  <tr><td class="prod">Sell-to-repay</td><td>Selling a pledged asset where the buyer's payment repays the loan and releases the pledge in one step</td></tr>
+  <tr><td class="prod">Collateral substitution</td><td>Swapping one pledged asset for another while the loan stays open</td></tr>
+  <tr><td class="prod">Mezzanine</td><td>The middle tranche: hit by losses after the junior, before the senior</td></tr>
+  <tr><td class="prod">Master trust</td><td>A securitization vehicle for revolving receivables (e.g. credit cards) that keeps buying new receivables</td></tr>
+  <tr><td class="prod">Revolving / amortization period</td><td>Phase where repayments buy new receivables / phase where repayments pay investors down</td></tr>
+  <tr><td class="prod">Excess spread</td><td>Pool income minus losses, investor coupons and fees: the first loss cushion</td></tr>
+  <tr><td class="prod">Early amortization</td><td>Trigger that stops the revolving period and pays investors down early when performance worsens</td></tr>
+  <tr><td class="prod">Risk retention</td><td>EU rule: the originator must keep at least 5% of the securitized risk</td></tr>
+  <tr><td class="prod">Servicer</td><td>The party that collects payments from borrowers and manages arrears</td></tr>
+  <tr><td class="prod">Warehouse line</td><td>A bank credit line that funds loans before they are securitized</td></tr>
 </table></div>
 
-<footer class="doc">DLT Finance · Internal working draft · Structured Products on Onchain Underlyings — Primer v0.1 · 17 November 2026. All numbers are illustrative and show how the structures work; they are not pricing. Regulatory points marked "verify" are working assumptions, not legal advice. Confirm them with Legal/Compliance before relying on them.</footer>
+<footer class="doc">DLT Finance · Internal working draft · Structured Products on Onchain Underlyings — Primer v0.2 · 18 November 2026. All numbers are illustrative and show how the structures work; they are not pricing. Regulatory points marked "verify" are working assumptions, not legal advice. Confirm them with Legal/Compliance before relying on them.</footer>
 
 </div>
 </body>
