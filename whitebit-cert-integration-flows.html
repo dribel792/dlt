@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Whitebit × DLT × Issuer — Technical Integration & Flow of Funds</title>
+ <link rel="preconnect" href="https://fonts.googleapis.com" />
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+ <style>
+ :root {
+ --text: #17213a;
+ --text-muted: #5b6478;
+ --accent: #2d5f7f;
+ --accent-soft: #eaf1f6;
+ --border: #dfe2ea;
+ --bg: #ffffff;
+ --bg-soft: #f6f7fa;
+ --warn: #8a4a1e;
+ --warn-soft: #faf1e7;
+ --ok: #2f5d3e;
+ --ok-soft: #ecf4ee;
+ }
+ * { box-sizing: border-box; }
+ html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+ .page { max-width: 1100px; margin: 0 auto; padding: 48px 56px; }
+ header.doc-header { border-bottom: 2px solid var(--text); padding-bottom: 20px; margin-bottom: 36px; }
+ header.doc-header .eyebrow { text-transform: uppercase; letter-spacing: 0.12em; font-size: 11px; color: var(--accent); font-weight: 600; margin-bottom: 8px; }
+ header.doc-header h1 { font-size: 28px; line-height: 1.25; margin: 0 0 8px 0; font-weight: 700; letter-spacing: -0.01em; }
+ header.doc-header .meta { font-size: 13px; color: var(--text-muted); }
+ h2 { font-size: 20px; font-weight: 700; margin: 48px 0 14px 0; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+ h3 { font-size: 16px; font-weight: 600; margin: 28px 0 10px 0; }
+ h4 { font-size: 14px; font-weight: 600; margin: 20px 0 8px 0; color: var(--accent); }
+ p { margin: 0 0 12px 0; }
+ strong { font-weight: 600; }
+ .lead { font-size: 15px; color: var(--text-muted); margin-bottom: 24px; }
+ table.legend { width: 100%; border-collapse: collapse; margin: 12px 0 24px 0; font-size: 13px; }
+ table.legend thead th { text-align: left; background: var(--accent-soft); font-weight: 600; padding: 10px 12px; border: 1px solid var(--border); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+ table.legend td { padding: 10px 12px; border: 1px solid var(--border); vertical-align: top; }
+ .info-box { background: var(--accent-soft); border-left: 3px solid var(--accent); padding: 14px 18px; margin: 16px 0 24px 0; border-radius: 2px; font-size: 13.5px; }
+ .info-box.warn { background: var(--warn-soft); border-left-color: var(--warn); }
+ .info-box.ok { background: var(--ok-soft); border-left-color: var(--ok); }
+ .info-box h4 { margin: 0 0 8px 0; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+ .info-box.warn h4 { color: var(--warn); }
+ .info-box.ok h4 { color: var(--ok); }
+ .info-box ul { margin: 8px 0 0 0; padding-left: 20px; }
+ .info-box li { margin-bottom: 4px; }
+ .scenario { background: var(--bg-soft); border-left: 3px solid var(--accent); padding: 12px 16px; margin: 12px 0 16px 0; font-size: 13.5px; }
+ .scenario strong { color: var(--accent); }
+ .diagram-wrap { background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 20px; margin: 8px 0 28px 0; overflow-x: auto; }
+ .mermaid { text-align: center; }
+ .diagram-wrap .mermaid .note .noteText, .diagram-wrap .mermaid .noteText { fill: #17213a !important; }
+ .recipe { border: 1px solid var(--border); border-radius: 4px; padding: 16px 18px; margin-bottom: 20px; background: var(--bg-soft); }
+ .recipe h4 { margin-top: 0; color: var(--text); text-transform: none; letter-spacing: 0; }
+ .recipe ol { margin: 8px 0 0 0; padding-left: 22px; font-size: 13px; }
+ .recipe li { margin-bottom: 6px; }
+ code { font-family: 'JetBrains Mono', monospace; font-size: 0.92em; background: var(--bg-soft); padding: 1px 6px; border-radius: 3px; }
+ .tag { display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 8px; border-radius: 3px; margin-left: 6px; vertical-align: middle; }
+ .tag-open { background: var(--warn-soft); color: var(--warn); }
+ .tag-flow1 { background: var(--accent-soft); color: var(--accent); }
+ .tag-flow2 { background: #f0ecf8; color: #6b4c9a; }
+ footer.doc-footer { border-top: 1px solid var(--border); margin-top: 56px; padding-top: 16px; font-size: 12px; color: var(--text-muted); text-align: center; }
+ @media print { html, body { font-size: 10.5pt; } .page { max-width: none; padding: 12mm 10mm; } }
+ @page { size: A4 landscape; margin: 10mm; }
+ </style>
+</head>
+<body>
+ <div class="page">
+
+ <header class="doc-header">
+ <div class="eyebrow">Whitebit × DLT × Issuer — Integration Proposal</div>
+ <h1>Securitized Perps on Whitebit: Technical Integration Flow &amp; Flow of Funds</h1>
+ <div class="meta">November 2026 · Working draft v0.1 — companion to the Securitized Perps Listing Primer; adapts the KO Certificate Trading Flow (July 2026) to the Whitebit relationship</div>
+ </header>
+
+ <h2>A0 · What is being sold here — three claims up front</h2>
+
+ <div class="info-box ok">
+ <h4>1 · The instrument</h4>
+ <p style="margin:0">
+ What is sold is a <strong>securitized perp</strong>: legally, an open-ended <strong>knock-out
+ certificate</strong> — a transferable security under MiFID II, issued off an EU-passported base
+ prospectus with Final Terms and a PRIIPs KID per series, settled as a token held in custody.
+ Economically, <strong>one certificate is a perp position</strong>: same price formula
+ (price = (mark − strike) × ratio), same 8-hour funding (applied by moving the strike), and the
+ knock-out barrier <strong>is</strong> the liquidation level.
+ </p>
+ </div>
+
+ <div class="info-box ok">
+ <h4>2 · It mirrors perps 100% — and adds what perps can't offer in the EU</h4>
+ <ul style="margin-top:0">
+ <li><strong>1:1 perp economics.</strong> Entry price, funding, PnL and liquidation produce the
+ <strong>same numbers</strong> a perp produces. KO = liquidation — same level, same outcome. A user
+ who knows perps already knows this product.</li>
+ <li><strong>&gt;30× leverage, legally, to EU retail.</strong> As a prospectus-regulated security the
+ product is not caught by the CFD-style leverage caps — leverage well beyond 30× can be offered
+ compliantly in the EU.</li>
+ <li><strong>B-book economics stay with Whitebit.</strong> The MM leg is the Whitebit MM or the
+ Whitebit global orderbook — <strong>all flow can go back to Whitebit</strong>, which keeps the
+ internalization economics of a b-book while the client-facing product is a fully regulated
+ security.</li>
+ </ul>
+ </div>
+
+ <div class="info-box ok">
+ <h4>3 · The flows below are vanilla perps flows</h4>
+ <p style="margin:0">
+ Everything the reader sees in Parts A and B — quote streaming, order entry, execution, funding,
+ liquidation, margin and PnL rebalancing — is <strong>exactly the flow of vanilla perps
+ trading</strong>. The securities layer (prospectus, series docs, token settlement, the broker hop)
+ runs in the back office and changes nothing about how the product trades or how the screen looks.
+ </p>
+ </div>
+
+ <p class="lead">
+ This document answers the two questions from the kick-off: <strong>what does the integration look
+ like on a technical level — who does what in this relationship</strong> — and <strong>what does the
+ flow of funds look like</strong>. Part A presents the two options for pricing-data provision and
+ execution (Flow 1: perp books in, the Issuer builds the cert book · Flow 2: cert books in, full STP).
+ Part B presents the flow of funds with <strong>Whitebit's MiCAR entity</strong> as custodian.
+ Names and payload shapes are indicative; the goal is to agree the shape.
+ </p>
+
+ <h2>A1 · Actors — who does what</h2>
+
+ <table class="legend">
+ <thead>
+ <tr><th style="width:17%">Party</th><th style="width:46%">Role &amp; responsibility</th><th>What they run technically</th></tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td><strong>Whitebit</strong> (frontend)</td>
+ <td>Operates the client-facing derivatives UI / API. Owns the user experience and order entry.
+ The legal setup of this role has <strong>two options</strong> (see box below): tied-agent
+ appointment from DLT, or deployment of Whitebit's derivatives-trading UI on a
+ <strong>local server owned by DLT</strong>. No execution, no pricing, no risk in either option.</td>
+ <td>UI/API (perp-style surface per the Listing Primer), order entry, rendering of the
+ quote / levels / docs feeds.</td>
+ </tr>
+ <tr>
+ <td><strong>Whitebit Tied Agent Entity</strong> <span class="tag tag-flow1">Option 1 only</span></td>
+ <td>The Whitebit entity appointed by DLT as its tied agent — the legal face of the distribution.
+ Holds an account at the Whitebit MiCAR entity and <strong>receives its share of the trading fee
+ from DLT</strong>. In Option 2 this entity does not exist in the chain; Whitebit's remuneration
+ takes the form of a platform / licence fee instead.</td>
+ <td>No real-time systems in the flow.</td>
+ </tr>
+ <tr>
+ <td><strong>DLT</strong> (broker)</td>
+ <td>Executing broker. <strong>Option 1:</strong> tied-agent principal — appoints the Whitebit Tied
+ Agent Entity as its tied agent, which makes Whitebit's retail order transmission in a security
+ lawful. <strong>Option 2:</strong> operates the order entry itself on its own local server
+ (running Whitebit's deployed UI), so no order transmission by Whitebit takes place and no
+ tied-agent appointment is needed. In both options DLT consumes the Issuer's quote stream and
+ serves it to the UI; receives the orders and passes them to the Issuer <strong>as STP / prop
+ (back-to-back, riskless principal), adding its spread or fee at this hop</strong>. Records every
+ cert trade at <strong>T+0</strong>; regulatory reporting counterparty; <strong>collects the
+ trading fee and credits the agreed share to Whitebit</strong>. Since no other venue lists these
+ tokens, back-to-back execution against the Issuer satisfies best execution.</td>
+ <td>Market-data redistribution (WS/FIX in from the Issuer, stream out to the UI), order routing,
+ T+0 securities trade book, reporting rail, fee accounting; in Option 2 additionally the
+ <strong>local server hosting the deployed derivatives UI</strong>.</td>
+ </tr>
+ <tr>
+ <td><strong>Issuer</strong></td>
+ <td>Issuer of record. Owns the golden record per series, generates and publishes Final Terms +
+ PRIIPs KID, mints the tokens, is the counterparty of every client cert trade, runs the 8h
+ funding sync (strike/barrier), monitors and declares knock-outs, computes residual values.
+ <strong>Flow 1:</strong> consumes perp books from the MM leg and constructs the cert books itself;
+ hedges every fill with a perp trade on the MM leg. <strong>Flow 2:</strong> consumes cert books
+ from the MM and STPs every order to the MM. Flat market risk in both.</td>
+ <td>Registry + doc-gen, token contracts, golden record DB, pricing/booking engine (Flow 1) or
+ STP router (Flow 2), lifecycle daemon (funding + KO), WS/FIX market-data service to DLT,
+ public levels/docs endpoints, append-only archive.</td>
+ </tr>
+ <tr>
+ <td><strong>MM leg</strong> (Whitebit MM / Global Orderbook)</td>
+ <td>Liquidity to the Issuer. <strong>Flow 1:</strong> streams perp books (WS/FIX) and takes the
+ Issuer's perp hedge trades — this can be the <strong>Whitebit MM or directly the Whitebit global
+ orderbook</strong>. <strong>Flow 2:</strong> streams cert books incl. the underlying markets and
+ takes the STP'd cert orders directly — this requires the <strong>Whitebit MM</strong> (a desk
+ that prices and deals the security bilaterally; an orderbook cannot stream cert books). Manages
+ the resulting market risk at its own discretion. Either way the liquidity leg is Whitebit-side,
+ so the flow economics stay inside Whitebit — the internalization story from the Listing
+ Primer.</td>
+ <td>Pricing engine (perps or certs) / matching engine, WS/FIX market-data + execution API towards
+ the Issuer, own hedging infrastructure, margin account management (see Part B).</td>
+ </tr>
+ <tr>
+ <td><strong>Whitebit MiCAR entity</strong> (custodian)</td>
+ <td>Whitebit's EU MiCAR entity and the <strong>custodian of the assets</strong>. User, DLT, the
+ Issuer and (in Option 1) the Whitebit Tied Agent Entity all hold accounts at the Whitebit MiCAR
+ entity. All client-side money and token movements are book entries between these accounts;
+ assets never leave the custody perimeter.</td>
+ <td>Account/booking API, "leverage trading" assignment flags, statements, rebalancing files.</td>
+ </tr>
+ </tbody>
+ </table>
+
+ <div class="info-box">
+ <h4>Distribution setup — two options</h4>
+ <ul style="margin-top:0">
+ <li><strong>Option 1 — Tied agent.</strong> DLT appoints a Whitebit entity as its
+ <strong>tied agent</strong>. Whitebit operates the UI under that appointment and
+ <strong>RTOs / STPs orders to DLT</strong>; the Whitebit Tied Agent Entity receives the agreed
+ share of the trading fee from DLT.</li>
+ <li><strong>Option 2 — DLT-hosted local server.</strong> Whitebit's derivatives-trading UI is
+ <strong>deployed on a local server owned and operated by DLT</strong>. Clients interact directly
+ with DLT's system; Whitebit transmits no orders, so <strong>no tied-agent appointment is
+ required</strong>. Whitebit's role is technology licensor (UI), liquidity (MM leg) and custodian
+ (MiCAR entity); its remuneration shifts from a tied-agent fee share to a platform / licence
+ fee.</li>
+ </ul>
+ <p style="margin:8px 0 0 0">Everything downstream of order entry — the broker hop, the Issuer leg,
+ the MM leg and the flow of funds in Part B — is <strong>identical in both options</strong>.</p>
+ </div>
+
+ <h2>A2 · Pricing &amp; execution — two options</h2>
+
+ <p class="lead">
+ Both options use the same order chain (Whitebit UI → DLT → Issuer) and the same fee logic (DLT adds
+ and collects). They differ in <strong>what the MM leg streams</strong> and therefore in
+ <strong>who prices the certificate and who carries which risk</strong>.
+ </p>
+
+ <table class="legend">
+ <thead>
+ <tr><th style="width:22%"></th><th>Flow 1 — perp books in <span class="tag tag-flow1">Issuer prices</span></th><th>Flow 2 — cert books in <span class="tag tag-flow2">MM prices</span></th></tr>
+ </thead>
+ <tbody>
+ <tr><td><strong>Market data in</strong></td>
+ <td>Perp books of the reference markets, WS/FIX from the Whitebit MM or the global orderbook to the Issuer.</td>
+ <td>Cert books (incl. underlying markets), WS/FIX from the Whitebit MM to the Issuer.</td></tr>
+ <tr><td><strong>Cert book construction</strong></td>
+ <td><strong>The Issuer</strong> derives the cert book from the perp book via the Final Terms formula on current levels.</td>
+ <td><strong>The MM</strong> constructs the cert book, keyed to the Issuer's published levels; the Issuer validates and passes through.</td></tr>
+ <tr><td><strong>Execution leg to the MM</strong></td>
+ <td>Perp <strong>hedge trade</strong> per client fill; the MM leg confirms the perp execution price; the Issuer derives and confirms the cert execution price to DLT.</td>
+ <td>Cert order <strong>STP'd</strong> to the MM; the MM confirms the cert execution price directly.</td></tr>
+ <tr><td><strong>Issuer's residual risk</strong></td>
+ <td>Flat post-hedge; carries the quote-to-hedge latency/slippage gap.</td>
+ <td>Fully riskless — instrument-level back-to-back per fill.</td></tr>
+ <tr><td><strong>MM requirements</strong></td>
+ <td>Any perp liquidity source works — no securities knowledge needed.</td>
+ <td>MM must price and deal the security itself (bilateral professional-counterparty dealing under the MM agreement).</td></tr>
+ <tr><td><strong>Who can be the MM leg</strong></td>
+ <td>Whitebit MM <strong>or the Whitebit global orderbook directly</strong>.</td>
+ <td>Whitebit MM.</td></tr>
+ </tbody>
+ </table>
+
+ <h3>A2.1 Flow 1 — the Issuer builds the cert book from the perp books</h3>
+ <div class="diagram-wrap">
+ <div class="mermaid">
+sequenceDiagram
+ autonumber
+ participant MM as MM leg<br/>(Whitebit MM / Global Orderbook)
+ participant ISS as Issuer<br/>(cert pricing)
+ participant DLT as DLT<br/>(broker)
+ participant WB as Whitebit UI / API<br/>(tied agent of DLT or DLT-hosted)
+ actor U as User
+
+ Note over MM,U: Pricing flow — continuous
+ MM-->>ISS: Perp books of the reference markets (WS/FIX)
+ ISS->>ISS: Construct cert book per series<br/>(Final Terms formula on current levels)
+ ISS-->>DLT: Cert book stream (WS/FIX)
+ DLT->>DLT: Add DLT spread / fee
+ DLT-->>WB: Stream to the UI
+ WB->>U: Perp-style screen renders price,<br/>liq. level, funding
+
+ Note over MM,U: Execution flow — per order
+ U->>WB: Buy 10 certs BTC-LONG (delta 1 BTC)
+ WB->>DLT: Order entry / transmission to DLT
+ DLT->>ISS: STP / prop — back-to-back vs the Issuer<br/>(+ DLT spread or fee at this hop)
+ ISS->>MM: Hedge trade — 1 BTC perp long
+ MM-->>ISS: Perp execution price confirmed
+ ISS->>ISS: Derive cert execution price<br/>from the perp fill + formula
+ ISS-->>DLT: Cert execution price confirmed
+ DLT-->>WB: Execution information (T+0 booked, fee collected)
+ WB-->>U: Position open — perp-style card
+ Note over ISS: Issuer records the token ledger movement + hedge trade —<br/>a book record only, NOT a physical movement of assets<br/>(physical settlement runs via the Whitebit MiCAR entity, Part B) ·<br/>DLT records the securities trade T+0
+ </div>
+ </div>
+
+ <h3>A2.2 Flow 2 — MM streams cert books, full STP</h3>
+ <div class="diagram-wrap">
+ <div class="mermaid">
+sequenceDiagram
+ autonumber
+ participant MM as MM leg<br/>(Whitebit MM)
+ participant ISS as Issuer<br/>(STP router)
+ participant DLT as DLT<br/>(broker)
+ participant WB as Whitebit UI / API<br/>(tied agent of DLT or DLT-hosted)
+ actor U as User
+
+ Note over MM,U: Pricing flow — continuous
+ MM-->>ISS: Cert books incl. underlying markets (WS/FIX)<br/>keyed to the Issuer's published levels
+ ISS->>ISS: Validate vs own formula + levels
+ ISS-->>DLT: Cert book stream (WS/FIX)
+ DLT->>DLT: Add DLT spread / fee
+ DLT-->>WB: Stream to the UI
+ WB->>U: Perp-style screen
+
+ Note over MM,U: Execution flow — per order
+ U->>WB: Buy 10 certs BTC-LONG (delta 1 BTC)
+ WB->>DLT: Order entry / transmission to DLT
+ DLT->>ISS: STP / prop — back-to-back vs the Issuer<br/>(+ DLT spread or fee at this hop)
+ ISS->>MM: STP order to the MM
+ MM-->>ISS: Cert execution price confirmed
+ ISS-->>DLT: Execution confirmed (back-to-back)
+ DLT-->>WB: Execution information (T+0 booked, fee collected)
+ WB-->>U: Position open — perp-style card
+ Note over MM: MM warehouses or hedges the resulting delta<br/>at its own discretion
+ Note over ISS: Issuer records the token ledger movement + MM fill —<br/>a book record only, NOT a physical movement of assets<br/>(physical settlement runs via the Whitebit MiCAR entity, Part B)
+ </div>
+ </div>
+
+ <h3>A2.3 Flow ownership, fees &amp; infrastructure</h3>
+ <table class="legend">
+ <thead>
+ <tr><th>Flow</th><th>Owned / operated by</th><th>Notes</th></tr>
+ </thead>
+ <tbody>
+ <tr><td>Perp / cert book feed (MM leg → Issuer)</td><td>Whitebit MM / Global Orderbook</td><td>WS or FIX; bilateral under the MM agreement.</td></tr>
+ <tr><td>Cert quote stream (Issuer → DLT)</td><td>Issuer</td><td>WS or FIX; every published quote lands in the Issuer's insert-only archive (regulatory record, price-pinning evidence).</td></tr>
+ <tr><td>UI price stream (DLT → Whitebit UI)</td><td>DLT</td><td>DLT's spread / fee applied before the user sees the price.</td></tr>
+ <tr><td>Order flow (UI → DLT → Issuer → MM leg)</td><td>Each party owns its hop</td><td>UI: order entry (tied-agent RTO in Option 1; direct entry on DLT's system in Option 2) · DLT: STP/prop back-to-back · Issuer: hedge (Flow 1) or STP (Flow 2). No OCS in this setup.</td></tr>
+ <tr><td><strong>Trading fees</strong></td><td><strong>Collected by DLT</strong></td><td>Added at the DLT hop; <strong>the agreed share is credited onward to Whitebit</strong> (tied-agent remuneration in Option 1, platform / licence fee in Option 2 — split: commercial term). The Issuer's economics sit in the issuer spread, not the fee.</td></tr>
+ <tr><td>Levels / docs endpoints</td><td>Issuer</td><td>Authoritative strike/barrier per funding sync; Final Terms + KID URLs rendered in the UI (KID one click from the ticket).</td></tr>
+ </tbody>
+ </table>
+
+ <div class="info-box">
+ <h4>Hosting</h4>
+ <p style="margin:0">
+ All of this activity can be hosted in the <strong>same datacenter for latency optimization</strong> —
+ but every hop must run through the <strong>respective party's own servers</strong> (the order
+ gateway serving the UI, DLT's broker stack, the Issuer's stack, the MM's engine). Co-location
+ compresses latency; it does not collapse the chain into one operator — each entity demonstrably
+ operates its own system. Option 2's local server is exactly this principle applied to the frontend:
+ the order-entry system runs on <strong>DLT-owned infrastructure</strong>, with Whitebit as the
+ technology provider.
+ </p>
+ </div>
+
+ <h2>B · Flow of funds — Whitebit MiCAR entity as custodian</h2>
+
+ <p class="lead">
+ <strong>Whitebit is the MiCAR entity</strong> in this relationship: its MiCAR-licensed entity is the
+ <strong>custodian of the assets</strong>. <strong>User, DLT, the Issuer and (in Option 1) the
+ Whitebit Tied Agent Entity each hold an account at the Whitebit MiCAR entity.</strong> Client-side
+ cash and token movements are book entries between these accounts. The margin relationship towards
+ the MM leg (Whitebit MM / global orderbook) runs alongside it and is trued up by a periodic
+ rebalancing (T+1 as the working example).
+ </p>
+
+ <h3>B1 · The full picture</h3>
+ <div class="diagram-wrap">
+ <div class="mermaid">
+sequenceDiagram
+ autonumber
+ actor U as User
+ participant UA as User Acct<br/>@ Whitebit MiCAR
+ participant DA as DLT Acct<br/>@ Whitebit MiCAR
+ participant TA as Whitebit Acct<br/>@ Whitebit MiCAR
+ participant IA as Issuer Acct<br/>@ Whitebit MiCAR
+ participant WMM as Whitebit MM / Orderbook<br/>(margin / hedge venue)
+
+ Note over U,WMM: Setup — before any order
+ U->>UA: Deposit funds
+ U->>UA: Assign funds to "leverage trading"<br/>(book-only earmark in custody)
+ UA-->>DA: Assignment info shared with DLT<br/>(POSOF checks where needed)
+ UA-->>WMM: Whitebit mirrors the assigned amount on the MM leg<br/>as available margin / collateral capacity for the Issuer
+
+ Note over U,WMM: Purchase (detail in B2)
+ UA->>DA: Funds incl. FEE signed over to DLT
+ DA->>IA: Funds excl. fee credited to the Issuer
+ DA->>TA: Fee share credited to Whitebit<br/>(TA remuneration or platform fee)
+ IA->>UA: Certs to the user (DvP)
+ IA->>WMM: Issuer pledges funds to Whitebit
+
+ Note over U,WMM: T+1 rebalance (detail in B3)
+ WMM->>IA: Positive realized PnL moved back to custody
+ IA->>WMM: Negative realized PnL topped up to the MM leg
+ </div>
+ </div>
+
+ <h3>B2 · Purchase (worked example: 10 certs à 700 USDC, fee 0.06%)</h3>
+ <div class="recipe">
+ <h4>Sequence</h4>
+ <ol>
+ <li>User buys 10 certs via the UI; the order runs the chain of Part A (order entry → DLT
+ STP/prop → Issuer → MM leg).</li>
+ <li><strong>Cash leg:</strong> at the time of purchase the user's funds are <strong>credited to
+ DLT including the fee</strong> (7,000 + 4.20 USDC), then <strong>credited onward to the Issuer
+ without the fee</strong> (7,000 USDC). T+0 book entries at the Whitebit MiCAR entity.</li>
+ <li><strong>Fee split:</strong> DLT retains its share and <strong>credits the agreed part of the
+ fee to Whitebit's account</strong> (tied-agent remuneration in Option 1, platform / licence fee
+ in Option 2).</li>
+ <li><strong>Security leg (DvP):</strong> 10 certs move Issuer Account → User Account.</li>
+ <li><strong>Pledge:</strong> the Issuer <strong>pledges the received funds to Whitebit</strong> —
+ this is the collateral backing the margin capacity Whitebit mirrored on the MM leg at
+ assignment (see B1 setup; utilized portion).</li>
+ <li><strong>MM leg:</strong> the Issuer's hedge (Flow 1) or STP'd cert order (Flow 2) executes on
+ the Whitebit MM / global orderbook against that margin.</li>
+ </ol>
+ </div>
+
+ <div class="diagram-wrap">
+ <div class="mermaid">
+sequenceDiagram
+ autonumber
+ actor U as User
+ participant WB as Whitebit UI
+ participant DLTb as DLT (broker)
+ participant ISS as Issuer
+ participant UA as User Acct @ Whitebit MiCAR
+ participant DA as DLT Acct @ Whitebit MiCAR
+ participant TA as Whitebit Acct @ Whitebit MiCAR
+ participant IA as Issuer Acct @ Whitebit MiCAR
+ participant WMM as Whitebit MM / Orderbook
+
+ U->>WB: Buy 10 certs BTC-LONG
+ WB->>DLTb: Order entry / transmission to DLT
+ DLTb->>ISS: STP / prop (+ spread or fee)
+ UA->>DA: T+0 book — 7,004.20 USDC<br/>(price incl. FEE signed over to DLT)
+ DA->>IA: T+0 book — 7,000 USDC<br/>(price excl. fee credited to the Issuer)
+ DA->>TA: T+0 book — fee share to Whitebit
+ IA->>UA: T+0 book — 10 certs to the user (DvP)
+ IA->>WMM: Issuer pledges funds to Whitebit<br/>(backs the mirrored margin, utilized portion)
+ ISS->>WMM: Hedge trade (Flow 1) or STP'd cert order (Flow 2)
+ WMM-->>ISS: Execution confirmed
+ DLTb-->>WB: Execution information
+ WB-->>U: Position open — perp-style card
+ Note over DLTb: Securities trade booked T+0 — reporting feed
+ </div>
+ </div>
+
+ <h3>B3 · T+1 rebalancing of realized PnL</h3>
+ <div class="recipe">
+ <h4>Sequence (T+1 as the working example — cadence is a parameter)</h4>
+ <ol>
+ <li>Over the day, client sells / knock-outs realize PnL on the Issuer's positions at the Whitebit
+ MM / global orderbook.</li>
+ <li><strong>Positive realized PnL on the MM leg is moved back to custody</strong> (MM leg → Issuer
+ Account @ Whitebit MiCAR) — from there it funds client sale proceeds / KO residual payouts.</li>
+ <li><strong>Negative realized PnL is topped up in the other direction</strong> (Issuer Account @
+ Whitebit MiCAR → MM leg), keeping the margin account whole.</li>
+ <li>The mirrored margin capacity is re-trued to the current sum of user leverage-trading
+ assignments; the Issuer's pledge is re-trued to utilized positions.</li>
+ </ol>
+ </div>
+
+ <div class="diagram-wrap">
+ <div class="mermaid">
+flowchart LR
+ subgraph DAY["During the day"]
+ T1["Client trades settle T+0<br/>as book entries @ Whitebit MiCAR"]
+ T2["Hedge / STP legs execute<br/>on the MM leg vs margin"]
+ end
+ subgraph REB["T+1 rebalance"]
+ P["Positive realized PnL<br/>MM leg → Issuer Acct @ Whitebit MiCAR"]
+ N["Negative realized PnL<br/>Issuer Acct @ Whitebit MiCAR → MM leg"]
+ R["Mirror + pledge re-trued to<br/>assignments / utilized positions"]
+ end
+ DAY --> REB
+ </div>
+ </div>
+
+ <h3>B4 · Who books what</h3>
+ <table class="legend">
+ <thead>
+ <tr><th>Ledger</th><th>Kept by</th><th>Content / cadence</th></tr>
+ </thead>
+ <tbody>
+ <tr><td>Client positions &amp; balances (display)</td><td>Whitebit (UI layer — Whitebit-run or DLT-hosted)</td>
+ <td>Real-time rendering; authoritative balances are the Whitebit MiCAR entity's.</td></tr>
+ <tr><td>Securities trade book + fee ledger</td><td>DLT (broker)</td>
+ <td>Every cert purchase / sale / KO redemption at <strong>T+0</strong>; fee collection and the
+ share credited to Whitebit; regulatory reporting feed; POSOF records.</td></tr>
+ <tr><td>Golden record · token register · quote archive · hedge/STP ledger · pledge register</td><td>Issuer</td>
+ <td>Series parameters and docs, every token ledger movement, every published quote (insert-only),
+ every MM execution linked to its triggering trade, pledge amounts outstanding to Whitebit.</td></tr>
+ <tr><td>Custody book + leverage-trading assignments</td><td>Whitebit MiCAR entity</td>
+ <td>T+0 book entries across the accounts; assignment earmarks; statements; T+1 rebalancing
+ files.</td></tr>
+ <tr><td>Margin account (Issuer)</td><td>Whitebit MM / Global Orderbook</td>
+ <td>Mirrored capacity, pledged collateral, open positions, realized PnL pending rebalance.</td></tr>
+ </tbody>
+ </table>
+
+ <footer class="doc-footer">
+ Working draft v0.1 · Whitebit × DLT × Issuer — technical integration &amp; flow of funds ·
+ November 2026 · Companion to: Securitized Perps Listing Primer, KO Certificate
+ Trading Flow (July 2026). All names, numbers and endpoint shapes indicative; finalized during onboarding.
+ </footer>
+
+ </div>
+
+ <script type="module">
+ import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+ mermaid.initialize({
+ startOnLoad: false,
+ theme: 'neutral',
+ securityLevel: 'loose',
+ themeVariables: {
+ fontFamily: 'Inter, sans-serif',
+ fontSize: '12px',
+ primaryColor: '#eaf1f6',
+ primaryTextColor: '#17213a',
+ primaryBorderColor: '#2d5f7f',
+ lineColor: '#5b6478',
+ actorBkg: '#eaf1f6',
+ actorBorder: '#2d5f7f',
+ actorTextColor: '#17213a',
+ noteBkgColor: '#faf1e7',
+ noteBorderColor: '#8a4a1e',
+ noteTextColor: '#17213a',
+ sequenceNumberColor: '#ffffff',
+ activationBkgColor: '#dfe2ea',
+ signalTextColor: '#17213a',
+ labelTextColor: '#17213a'
+ },
+ sequence: { diagramMarginX: 20, diagramMarginY: 16, actorMargin: 40, noteMargin: 18, messageMargin: 32, wrap: true, useMaxWidth: true }
+ });
+ async function renderAll() {
+ const nodes = document.querySelectorAll('.mermaid');
+ for (const node of nodes) {
+ let src = node.innerHTML.trim()
+ .replace(/&amp;/g, '&')
+ .replace(/&lt;/g, '<')
+ .replace(/&gt;/g, '>')
+ .replace(/&quot;/g, '"')
+ .replace(/&#39;/g, "'");
+ try {
+ const id = 'm-' + Math.random().toString(36).slice(2);
+ const { svg, bindFunctions } = await mermaid.render(id, src);
+ node.innerHTML = svg;
+ if (bindFunctions) bindFunctions(node);
+ } catch (err) {
+ console.error('Mermaid render error:', err);
+ node.innerHTML = '<pre style="color:#a33;font-size:12px;white-space:pre-wrap;">' + (err && err.message ? err.message : String(err)) + '</pre>';
+ }
+ }
+ }
+ document.addEventListener('DOMContentLoaded', renderAll);
+ </script>
+</body>
+</html>
